@@ -41,6 +41,14 @@ class PostController
 		$recentPosts = $this->_postManager->getRecentPosts();
 		require('./view/frontend/postView.php');
 	}
+
+	public function addComment($postId, $email, $content)
+	{	
+		
+		$this->_commentManager->addComment($postId, $email, $content);
+		$this->postView($postId);
+	}
+
 }
 
 

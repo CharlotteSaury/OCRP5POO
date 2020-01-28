@@ -68,7 +68,8 @@ class PostManager extends Manager
 
 	public function getPostInfos($postId)
 	{
-		$sql = ('SELECT post.title AS title, 
+		$sql = ('SELECT post.id AS postId,
+			post.title AS title, 
 			post.chapo AS chapo, 
 			DATE_FORMAT(post.date_creation, \'%d-%m-%Y à %Hh%i\') AS date_creation, 
 			DATE_FORMAT(post.date_update, \'%d-%m-%Y à %Hh%i\') AS date_update,

@@ -9,6 +9,7 @@ require_once('controller\CommentController.php');
 use controller\HomeController;
 use controller\PostController;
 use controller\CommentController;
+use Exception;
 
 
 class Router 
@@ -22,6 +23,18 @@ class Router
 		$this->_homeController = new HomeController();
 		$this->_postController = new PostController();
 		$this->_commentController = new CommentController();
+	}
+
+	private function getParameter($table, $name)
+	{
+		if (isset($table[$name]))
+		{
+			return htmlspecialchars($table[$name]);
+		}
+		else
+		{
+			throw new Exception ("Paramètre " . $name . " absent.");
+		}
 	}
 
 	public function routerRequest()
@@ -38,7 +51,7 @@ class Router
 						{
 							if ($_GET['page']>0)
 							{
-								$current_page = htmlspecialchars($_GET['page']);
+								$current_page =htmlspecialchars($_GET['page']);
 							}
 							else
 							{
@@ -66,16 +79,27 @@ class Router
 
 					elseif (($_GET['action'] == 'postView')) 
 					{
-						if ((isset($_GET['id'])) && ($_GET['id'])>0) 
+						$postId = $this->getParameter($_GET, 'id');
+						if ($postId>0) 
 						{
-							$postId = $_GET['id'];
 							$infos = new PostController();
 							$infos->postView($postId);
 						}
 						else 
 						{
-							throw new Exception('Aucun identifiant de post envoyé');
+							throw new Exception('Identifiant de billet non valide');
 						}	
+					}
+
+					elseif ($_GET['action'] == "addComment") 
+					{
+						$postId = $this->getParameter($_POST, 'postId');
+						$email = $this->getParameter($_POST, 'email');
+						$content = $this->getParameter($_POST, 'content');
+
+						$infos = new PostController();
+						$infos->addComment($postId, $email, $content);
+						
 					}
 
 					elseif ($_GET['action'] == 'home') 
@@ -83,6 +107,7 @@ class Router
 						$infos = new HomeController();
 						$infos->indexView();
 					}
+
 					else 
 					{
 						throw new Exception('Action inconnue');
