@@ -104,5 +104,23 @@ class CommentManager extends Manager
 		$req = $this->dbRequest($sql);
 		return $req;
 	}
+
+	public function approveComment($commentId)
+	{
+		$sql = 'UPDATE comment SET status=1	WHERE comment.id = :commentId';
+
+		$req = $this->dbRequest($sql, array($commentId));
+		$req->bindValue('commentId', $commentId, \PDO::PARAM_INT);
+		$req->execute();
+	}
+
+	public function deleteComment($commentId)
+	{
+		$sql = 'DELETE FROM comment	WHERE comment.id = :commentId';
+
+		$req = $this->dbRequest($sql, array($commentId));
+		$req->bindValue('commentId', $commentId, \PDO::PARAM_INT);
+		$req->execute();
+	}
 }
 

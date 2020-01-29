@@ -122,6 +122,38 @@ class Router
 						$infos->adminCommentsView();
 					}
 
+					elseif (($_GET['action'] == 'approveComment') || ($_GET['action'] == 'approveCommentDashboard'))
+					{
+						$commentId = $this->getParameter($_GET, 'id');
+						
+						$infos = new AdminController();						
+						if ($_GET['action'] == 'approveCommentDashboard')
+						{
+							$dashboard = 1;
+							$infos->approveComment($commentId, $dashboard);
+						}
+						else
+						{
+							$infos->approveComment($commentId);
+						}					
+					}
+
+					elseif (($_GET['action'] == 'deleteComment') || ($_GET['action'] == 'deleteCommentDashboard'))
+					{
+						$commentId = $this->getParameter($_GET, 'id');
+						
+						$infos = new AdminController();						
+						if ($_GET['action'] == 'deleteCommentDashboard')
+						{
+							$dashboard = 1;
+							$infos->deleteComment($commentId, $dashboard);
+						}
+						else
+						{
+							$infos->deleteComment($commentId);
+						}					
+					}
+
 					else 
 					{
 						throw new Exception('Action inconnue');

@@ -25,7 +25,7 @@ class AdminController
 		$this->_userManager = new UserManager();
 	}
 
-	public function dashboardView()
+	public function dashboardView($message = null)
 	{
 		$publishedPostsNb = $this->_postManager->getPublishedPostsNb();
 		$totalPostsNb = $this->_postManager->getTotalPostsNb();
@@ -39,10 +39,40 @@ class AdminController
 		require('./view/backend/dashboardView.php');
 	}
 
-	public function adminCommentsView()
+	public function adminCommentsView($message = null)
 	{
 		$allComments = $this->_commentManager->getComments();
 		require('./view/backend/adminCommentsView.php');
+	}
+
+	public function approveComment($commentId, $dashboard = null)
+	{
+		$this->_commentManager->approveComment($commentId);
+		$message = "Commentaire approuvé ! ";
+
+		if ($dashboard != null)
+		{
+			$this->dashboardView($message);
+		}
+		else
+		{
+			$this->adminCommentsView($message);
+		}
+	}
+
+	public function deleteComment($commentId, $dashboard = null)
+	{
+		$this->_commentManager->deleteComment($commentId);
+		$message = "Commentaire supprimé ! ";
+
+		if ($dashboard != null)
+		{
+			$this->dashboardView($message);
+		}
+		else
+		{
+			$this->adminCommentsView($message);
+		}
 	}
 }
 

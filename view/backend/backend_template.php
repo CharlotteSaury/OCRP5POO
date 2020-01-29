@@ -160,8 +160,14 @@
                     <div class="container-fluid">
 
                         <!-- Page Heading -->
-                        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <div class="mb-4">
                             <h1 class="h3 mb-0 text-gray-800"><?= $contentTitle ?></h1>
+                            <?php
+                            if (isset($message))
+                            {
+                                echo '<div class="adminMessage text-center">' . $message . '</div>';
+                            }
+                            ?>
                         </div>
 
                         <!-- Content -->

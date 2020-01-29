@@ -141,6 +141,8 @@
 
 <div class="row">
 
+    <!-- Comments panel -->
+
     <div class="col-lg-6">
         <div class="card shadow mb-4">
 
@@ -184,15 +186,33 @@
                                     <a href="adminPostView.php" class="btn btn-outline-dark btn-sm" title="Voir l'article concerné">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Approuver">
+                                    <a href="index.php?action=approveCommentDashboard&amp;id=<?= htmlspecialchars($donnees['commentId']); ?>" class="btn btn-outline-dark btn-sm" title="Approuver">
                                         <i class="fas fa-check"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Supprimer">
+                                    </a>
+                                    <a data-toggle="modal" data-target="#deleteCommentModal" class="btn btn-outline-dark btn-sm" title="Supprimer">
                                         <i class="fas fa-times"></i>
-                                    </button>
+                                    </a>
                                 </td>
                             </tr>
-                            
+                            <!-- deleteComment Modal-->
+                            <div class="modal fade" id="deleteCommentModal" tabindex="-1" role="dialog" aria-labelledby="deleteCommentLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteCommentLabel">Voulez-vous vraiment supprimer ce commentaire ?</h5>
+                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">Cliquez sur "Valider" pour supprimer définitivement ce commentaire</div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+                                            <a class="btn btn-primary-custom" href="index.php?action=deleteCommentDashboard&amp;id=<?= htmlspecialchars($donnees['commentId']); ?>">Valider</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <?php
                             }
                             $recentComments->closeCursor();
@@ -204,6 +224,11 @@
             </div>
         </div>
     </div>
+
+    
+
+
+    <!-- Users panel -->
 
     <div class="col-lg-6">
         <div class="card shadow mb-4">
