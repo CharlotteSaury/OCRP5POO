@@ -22,12 +22,13 @@ class PostController
 		$this->_commentManager = new CommentManager();
 	}
 
-	public function listPostView($current_page, $postsNb)
+	public function listPostView($current_page, $postsPerPage)
 	{
-		$page_number = $this->_postManager->getPagination($postsNb);
-		$first_post = $this->_postManager->getFirstPost($current_page, $postsNb);
-		$posts = $this->_postManager->getPosts($first_post, $postsNb);
-		$recentPosts = $this->_postManager->getRecentPosts();
+		$publishedPostsNb = $this->_postManager->getPublishedPostsNb();
+		$page_number = $this->_postManager->getPagination($postsPerPage, $publishedPostsNb);
+		$first_post = $this->_postManager->getFirstPost($current_page, $postsPerPage);
+		$posts = $this->_postManager->getPosts($first_post, $postsPerPage);
+		$recentPosts = $this->_postManager->getRecentPosts(1);
 		$categories = $this->_postManager->getCategories();
 		require('./view/frontend/postListView.php');
 	}
@@ -38,13 +39,13 @@ class PostController
 		$postContents = $this->_postManager->getPostContents($postId);
 		$postComments = $this->_commentManager->getpostComments($postId);
 		$postCategories = $this->_postManager->getPostCategories($postId);
-		$recentPosts = $this->_postManager->getRecentPosts();
+		$recentPosts = $this->_postManager->getRecentPosts(1);
 		require('./view/frontend/postView.php');
 	}
 
 	public function addComment($postId, $email, $content)
 	{	
-		
+
 		$this->_commentManager->addComment($postId, $email, $content);
 		$this->postView($postId);
 	}

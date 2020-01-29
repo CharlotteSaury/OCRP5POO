@@ -152,7 +152,7 @@
 		<!-- Footer -->
 	    <footer class="bg-black small text-center text-white-50">
 	    	<div class="text-center" id="footerLinks">
-	    		<a href="../backend/dashboardView.php">ADMIN</a> | 
+	    		<a href="index.php?action=admin">ADMIN</a> | 
 	    		<a href="#">MENTIONS LEGALES</a> | 
 	    		<a href="#">POLITIQUE DE CONFIDENTIALITE</a>
 	    		

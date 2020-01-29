@@ -48,12 +48,24 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="table-success-custom">
-                    <th scope="row">44</th>
-                    <td><a href="adminPostView.php">Fusce neque</a></td>
-                    <td>Charlotte S</td>
-                    <td>Sed in</td>
-                    <td>29/12/2019</td>
+                <?php
+
+                while ($donnees = $allComments->fetch())
+                {
+                    if ($donnees['status'] == 1)
+                    {
+                        echo '<tr>';
+                    }
+                    else
+                    {
+                        echo '<tr class="table-success-custom">';
+                    }
+                ?>
+                    <th scope="row"><?= htmlspecialchars($donnees['commentId']); ?></th>
+                    <td><a href="#"><?= htmlspecialchars($donnees['postTitle']); ?></a></td>
+                    <td><?= htmlspecialchars($donnees['first_name']); ?> <?= substr(($donnees['last_name']),0,1); ?></td>
+                    <td><?= htmlspecialchars($donnees['content']); ?></td>
+                    <td><?= htmlspecialchars($donnees['commentDate']); ?></td>
                     <td>
                         <a href="adminPostView.php" class="btn btn-outline-dark btn-sm" title="Voir l'article">
                             <i class="fas fa-eye"></i>
@@ -66,71 +78,12 @@
                         </button>
                     </td>
                 </tr>
-                <tr class="table-success-custom">
-                    <th scope="row">43</th>
-                    <td><a href="adminPostView.php">Fusce</td>
-                    </a>                                                    <td>Charlotte S</td>
-                    <td>Suspendisse faucibus nunc</td>
-                    <td>25/12/2019</td>
-                    <td>
-                        <a href="adminPostView.php" class="btn btn-outline-dark btn-sm" title="Voir l'article">
-                            <i class="fas fa-eye"></i>
-                        </a>
-                        <button type="button" class="btn btn-outline-dark btn-sm" title="Approuver">
-                            <i class="fas fa-check"></i>
-                        </button>
-                        <button type="button" class="btn btn-outline-dark btn-sm" title="Supprimer">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr class="table-success-custom">
-                    <th scope="row">42</th>
-                    <td><a href="adminPostView.php">Fusce neque</a></td>
-                    <td>Céline D</td>
-                    <td>Maecenas vestibulum mollis diam</td>
-                    <td>19/12/2019</td>
-                    <td>
-                        <a href="adminPostView.php" class="btn btn-outline-dark btn-sm" title="Voir l'article">
-                            <i class="fas fa-eye"></i>
-                        </a>
-                        <button type="button" class="btn btn-outline-dark btn-sm" title="Approuver">
-                            <i class="fas fa-check"></i>
-                        </button>
-                        <button type="button" class="btn btn-outline-dark btn-sm" title="Supprimer">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">41</th>
-                    <td><a href="adminPostView.php">Qsfd eque</</td>
-                        <td>Céline D</td>
-                        <td>Maecenas vestibulum mollis diam</td>
-                        <td>19/12/2019</td>
-                        <td>                                <a href="adminPostView.php" class="btn btn-outline-dark btn-sm" title="Voir l'article">
-                            <i class="fas fa-eye"></i>
-                        </a>        
-                        <button type="button" class="btn btn-outline-dark btn-sm" title="Supprimer">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">40</th>
-                    <td><a href="adminPostView.php">Fusce neque</a></td>
-                    <td>Céline D</td>
-                    <td>Maecenas vestibulum mollis diam</td>
-                    <td>19/12/2019</td>
-                    <td>
-                        <a href="adminPostView.php" class="btn btn-outline-dark btn-sm" title="Voir l'article">
-                            <i class="fas fa-eye"></i>
-                        </a>
-                        <button type="button" class="btn btn-outline-dark btn-sm" title="Supprimer">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </td>
-                </tr>
+
+                <?php
+                }
+                $allComments->closeCursor();
+                ?>
+
             </tbody>
         </table>
     </div>

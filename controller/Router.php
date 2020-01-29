@@ -5,10 +5,12 @@ namespace controller;
 require_once('controller\HomeController.php');
 require_once('controller\PostController.php');
 require_once('controller\CommentController.php');
+require_once('controller\AdminController.php');
 
 use controller\HomeController;
 use controller\PostController;
 use controller\CommentController;
+use controller\AdminController;
 use Exception;
 
 
@@ -64,9 +66,9 @@ class Router
 							$current_page = 1;
 						}
 
-						if (isset($_GET['postsNb']))
+						if (isset($_GET['postsPerPage']))
 						{
-							$postsNb = htmlspecialchars($_GET['postsNb']);
+							$postsNb = htmlspecialchars($_GET['postsPerPage']);
 						}
 						else
 						{
@@ -108,11 +110,24 @@ class Router
 						$infos->indexView();
 					}
 
+					elseif ($_GET['action'] == 'admin')
+					{
+						$infos = new AdminController();
+						$infos->dashboardView();
+					}
+
+					elseif ($_GET['action'] == 'adminComments')
+					{
+						$infos = new AdminController();
+						$infos->adminCommentsView();
+					}
+
 					else 
 					{
 						throw new Exception('Action inconnue');
 					}
 				}
+
 				else
 				{
 					$infos = new HomeController();

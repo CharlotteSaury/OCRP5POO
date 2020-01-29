@@ -13,14 +13,14 @@
         <title><?= $title ?></title>
 
         <!-- Custom fonts for this template-->
-        <link href="../../public/vendor/startbootstrap-sb-admin-2/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+        <link href="public/vendor/startbootstrap-sb-admin-2/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
         <!-- Custom styles for this template-->
-        <link href="../../public/vendor/startbootstrap-sb-admin-2/css/sb-admin-2.css" rel="stylesheet">
+        <link href="public/vendor/startbootstrap-sb-admin-2/css/sb-admin-2.css" rel="stylesheet">
 
         <!-- Custom css -->
-        <link rel="stylesheet" type="text/css" href="../../public/css/style.css">
+        <link rel="stylesheet" type="text/css" href="public/css/style.css">
 
         <!-- jquery -->
         <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
@@ -45,7 +45,7 @@
 
                 <!-- Nav Item - Dashboard -->
                 <li class="nav-item active">
-                    <a class="nav-link" href="dashboardView.php">
+                    <a class="nav-link" href="index.php?action=admin">
                         <i class="fas fa-fw fa-tachometer-alt"></i><span>Tableau de bord</span>
                     </a>
                 </li>
@@ -74,7 +74,7 @@
 
                 <!-- Nav Item - Comments -->
                 <li class="nav-item">
-                    <a class="nav-link" href="adminCommentsView.php">
+                    <a class="nav-link" href="index.php?action=adminComments">
                         <i class="fas fa-comments"></i>
                         <span>Commentaires</span></a>
                 </li>
@@ -99,7 +99,7 @@
                 <div class="adminProfileNavCard text-center mb-4">
 
                     <a href="profileView.php">
-                        <img class="my-4" src="../../public/images/photo.jpg" alt="User profil picture" />
+                        <img class="my-4" src="public/images/photo.jpg" alt="User profil picture" />
                     </a>
                     <a href="editProfileView.php" class="btn btn-primary-custom">
                       <i class="fas fa-user mr-1"></i> Modifier mon profil</a>
@@ -135,7 +135,7 @@
                                 <li class="nav-item dropdown no-arrow">
                                   <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="mr-3 d-none d-lg-inline text-primary-custom font-weight-bold">Bonjour, Charlotte Saury</span>
-                                    <img class="img-profile rounded-circle" src="../../public/images/photo.jpg">
+                                    <img class="img-profile rounded-circle" src="public/images/photo.jpg">
                                   </a>
                                   <!-- Dropdown - User Information -->
                                   <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -214,24 +214,24 @@
         </div>
 
         <!-- Bootstrap core JavaScript-->
-        <script src="../../public/vendor/startbootstrap-sb-admin-2/vendor/jquery/jquery.min.js"></script>
-        <script src="../../public/vendor/startbootstrap-sb-admin-2/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="public/vendor/startbootstrap-sb-admin-2/vendor/jquery/jquery.min.js"></script>
+        <script src="public/vendor/startbootstrap-sb-admin-2/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
         <!-- Core plugin JavaScript-->
-        <script src="../../public/vendor/startbootstrap-sb-admin-2/vendor/jquery-easing/jquery.easing.min.js"></script>
+        <script src="public/vendor/startbootstrap-sb-admin-2/vendor/jquery-easing/jquery.easing.min.js"></script>
 
         <!-- Custom scripts for all pages-->
-        <script src="../../public/vendor/startbootstrap-sb-admin-2/js/sb-admin-2.min.js"></script>
+        <script src="public/vendor/startbootstrap-sb-admin-2/js/sb-admin-2.min.js"></script>
 
         <!-- Page level plugins -->
-        <script src="../../public/vendor/startbootstrap-sb-admin-2/vendor/chart.js/Chart.min.js"></script>
+        <script src="public/vendor/startbootstrap-sb-admin-2/vendor/chart.js/Chart.min.js"></script>
 
         <!-- Page level custom scripts -->
-        <script src="../../public/vendor/startbootstrap-sb-admin-2/js/demo/chart-area-demo.js"></script>
-        <script src="../../public/vendor/startbootstrap-sb-admin-2/js/demo/chart-pie-demo.js"></script>
+        <script src="public/vendor/startbootstrap-sb-admin-2/js/demo/chart-area-demo.js"></script>
+        <script src="public/vendor/startbootstrap-sb-admin-2/js/demo/chart-pie-demo.js"></script>
 
         <!-- Custom JS -->
-        <script type="text/javascript" src="../../public/js/customjs.js" rel="stylesheet" />"></script>
+        <script type="text/javascript" src="public/js/customjs.js" rel="stylesheet" />"></script>
 
 
     </body>

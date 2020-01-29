@@ -21,7 +21,6 @@ class CommentController
 		$this->_postManager = new PostManager();
 	}
 
-
 }
 
 

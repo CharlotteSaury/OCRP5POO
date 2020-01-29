@@ -61,5 +61,48 @@ class CommentManager extends Manager
 		$req->bindValue('content', $content);
 		$req->execute();
 	}
+
+	public function getTotalCommentsNb()
+	{
+		$sql = ('SELECT COUNT(*) AS commentsNb FROM comment');
+		$req = $this->dbRequest($sql);
+
+		$totalCommentsNb = $req->fetch();
+		$commentsNb = $totalCommentsNb['commentsNb'];
+		return $commentsNb;
+	}
+
+	public function getApprovedCommentsNb()
+	{
+		$sql = ('SELECT COUNT(*) AS commentsNb FROM comment WHERE comment.status=1');
+		$req = $this->dbRequest($sql);
+
+		$approvedCommentsNb = $req->fetch();
+		$commentsNb = $approvedCommentsNb['commentsNb'];
+		return $commentsNb;
+	}
+
+	public function getComments($commentsNb = null)
+	{
+		$sql = 'SELECT comment.id AS commentId, 
+			comment.content AS content, 
+			DATE_FORMAT(comment.comment_date,\'%d-%m-%Y à %Hh%i\') AS commentDate, 
+			comment.status AS status,
+			user.first_name as first_name, 
+			user.last_name AS last_name,
+			post.title AS postTitle
+			FROM comment 
+			JOIN user on comment.user_id = user.id
+			JOIN post on comment.post_id = post.id
+			ORDER BY comment.id DESC';
+
+		if ($commentsNb !== null)
+		{
+			$sql.= ' LIMIT ' . $commentsNb;
+		}
+		
+		$req = $this->dbRequest($sql);
+		return $req;
+	}
 }
 
