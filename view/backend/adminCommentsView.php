@@ -62,24 +62,35 @@
                     }
                 ?>
                     <th scope="row"><?= htmlspecialchars($donnees['commentId']); ?></th>
-                    <td><a href="#"><?= htmlspecialchars($donnees['postTitle']); ?></a></td>
+                    <td><a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($donnees['postId']); ?>"><?= htmlspecialchars($donnees['postTitle']); ?></a></td>
                     <td><?= htmlspecialchars($donnees['first_name']); ?> <?= substr(($donnees['last_name']),0,1); ?></td>
                     <td><?= htmlspecialchars($donnees['content']); ?></td>
                     <td><?= htmlspecialchars($donnees['commentDate']); ?></td>
                     <td>
-                        <a href="adminPostView.php" class="btn btn-outline-dark btn-sm" title="Voir l'article">
+                        <a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($donnees['postId']); ?>" class="btn btn-outline-dark btn-sm" title="Voir l'article">
                             <i class="fas fa-eye"></i>
                         </a>
+
+                        <?php
+                        if ($donnees['status'] == 0)
+                        {
+                        ?>
+
                         <a href="index.php?action=approveComment&amp;id=<?= htmlspecialchars($donnees['commentId']); ?>" class="btn btn-outline-dark btn-sm" title="Approuver">
                             <i class="fas fa-check"></i>
                         </a>
-                        <a data-toggle="modal" data-target="#deleteCommentModal" class="btn btn-outline-dark btn-sm" title="Supprimer">
+
+                        <?php
+                        }
+                        ?>
+
+                        <a data-toggle="modal" data-target="#deleteCommentModal<?= htmlspecialchars($donnees['commentId']); ?>" class="btn btn-outline-dark btn-sm" title="Supprimer">
                             <i class="fas fa-times"></i>
                         </a>
                     </td>
                 </tr>
                 <!-- deleteComment Modal-->
-                <div class="modal fade" id="deleteCommentModal" tabindex="-1" role="dialog" aria-labelledby="deleteCommentLabel" aria-hidden="true">
+                <div class="modal fade" id="deleteCommentModal<?= htmlspecialchars($donnees['commentId']); ?>" tabindex="-1" role="dialog" aria-labelledby="deleteCommentLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">

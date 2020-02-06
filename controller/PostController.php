@@ -37,7 +37,7 @@ class PostController
 	{
 		$postInfos = $this->_postManager->getPostInfos($postId);
 		$postContents = $this->_postManager->getPostContents($postId);
-		$postComments = $this->_commentManager->getpostComments($postId);
+		$postComments = $this->_commentManager->getpostComments($postId, 1);
 		$postCategories = $this->_postManager->getPostCategories($postId);
 		$recentPosts = $this->_postManager->getRecentPosts(1);
 		require('./view/frontend/postView.php');

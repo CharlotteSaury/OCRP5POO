@@ -111,17 +111,53 @@
                                 <td><?= substr(htmlspecialchars($donnees['chapo']), 0, 50); ?>...</td>
                                 <td><?= $donnees['date_creation']; ?></td>
                                 <td>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Voir">
+                                <?php 
+                                if ($donnees['status'] == 1)
+                                {
+                                    ?>
+
+                                    <a href="index.php?action=publishPostDashboard&amp;id=<?= htmlspecialchars($donnees['postId']); ?>&amp;status=<?= htmlspecialchars($donnees['status']); ?>" class="mr-2" title="Ne plus publier"><i class="fas fa-toggle-on"></i></a>
+
+                                    <?php
+                                }
+                                else
+                                {
+                                    ?>
+
+                                    <a href="index.php?action=publishPostDashboard&amp;id=<?= htmlspecialchars($donnees['postId']); ?>&amp;status=<?= htmlspecialchars($donnees['status']); ?>" class="mr-2"><i class="fas fa-toggle-off" title="Publier"></i></a>
+
+                                    <?php
+                                }
+                                ?>
+                                    <a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($donnees['postId']); ?>" class="btn btn-outline-dark btn-sm" title="Voir">
                                         <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Modifier">
+                                    </a>
+                                    <a href="index.php?action=editPostView&amp;id=<?= htmlspecialchars($donnees['postId']); ?>" class="btn btn-outline-dark btn-sm" title="Modifier">
                                         <i class="fas fa-pencil-alt"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Supprimer">
+                                    </a>
+                                    <a data-toggle="modal" data-target="#deletePostModal<?= htmlspecialchars($donnees['postId']); ?>" class="btn btn-outline-dark btn-sm" title="Supprimer">
                                         <i class="fas fa-trash-alt"></i>
-                                    </button>
+                                    </a>
                                 </td>
                             </tr>
+                            <!-- deletePost Modal-->
+                            <div class="modal fade" id="deletePostModal<?= htmlspecialchars($donnees['postId']); ?>" tabindex="-1" role="dialog" aria-labelledby="deletePostLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deletePostLabel">Voulez-vous vraiment supprimer ce post ?</h5>
+                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">Cliquez sur "Valider" pour supprimer définitivement ce post.</div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+                                            <a class="btn btn-primary-custom" href="index.php?action=deletePostDashboard&amp;id=<?= htmlspecialchars($donnees['postId']); ?>">Valider</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <?php
                             }
@@ -183,19 +219,30 @@
                                 <td><?= substr(htmlspecialchars($donnees['content']), 0, 50); ?></td>
                                 <td><?= $donnees['commentDate']; ?></td>
                                 <td>
-                                    <a href="adminPostView.php" class="btn btn-outline-dark btn-sm" title="Voir l'article concerné">
+                                    <a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($donnees['postId']); ?>"class="btn btn-outline-dark btn-sm" title="Voir l'article concerné">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="index.php?action=approveCommentDashboard&amp;id=<?= htmlspecialchars($donnees['commentId']); ?>" class="btn btn-outline-dark btn-sm" title="Approuver">
-                                        <i class="fas fa-check"></i>
-                                    </a>
-                                    <a data-toggle="modal" data-target="#deleteCommentModal" class="btn btn-outline-dark btn-sm" title="Supprimer">
+                                    
+                                    <?php
+                                    if ($donnees['status'] == 0)
+                                    {
+                                    ?>
+
+                                        <a href="index.php?action=approveCommentDashboard&amp;id=<?= htmlspecialchars($donnees['commentId']); ?>" class="btn btn-outline-dark btn-sm" title="Approuver">
+                                            <i class="fas fa-check"></i>
+                                        </a>
+                                    
+                                    <?php
+                                    }
+                                    ?>
+                                    
+                                    <a data-toggle="modal" data-target="#deleteCommentModal<?= htmlspecialchars($donnees['commentId']); ?>" class="btn btn-outline-dark btn-sm" title="Supprimer">
                                         <i class="fas fa-times"></i>
                                     </a>
                                 </td>
                             </tr>
                             <!-- deleteComment Modal-->
-                            <div class="modal fade" id="deleteCommentModal" tabindex="-1" role="dialog" aria-labelledby="deleteCommentLabel" aria-hidden="true">
+                            <div class="modal fade" id="deleteCommentModal<?= htmlspecialchars($donnees['commentId']); ?>" tabindex="-1" role="dialog" aria-labelledby="deleteCommentLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -261,17 +308,15 @@
                                 <td><?= htmlspecialchars($donnees['email']); ?></td>
                                 <td><?= htmlspecialchars($donnees['role']); ?></td>
                                 <td>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Voir">
+                                    <a href="index.php?action=profileUser&amp;id=<?= htmlspecialchars($donnees['userId']); ?>" class="btn btn-outline-dark btn-sm" title="Voir">
                                         <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Modifier">
+                                    </a>
+                                    <a href="index.php?action=editUser&amp;id=<?= htmlspecialchars($donnees['userId']); ?>" class="btn btn-outline-dark btn-sm" title="Modifier">
                                         <i class="fas fa-pencil-alt"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Supprimer">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
+                                    </a>
                                 </td>
                             </tr>
+
 
                             <?php
                             }

@@ -50,106 +50,35 @@
                 </tr>
             </thead>                                      
             <tbody>
+
+                <?php
+                while ($donnees = $allUsers->fetch())
+                {
+                ?> 
                 <tr>
-                    <th scope="row">5</th>
-                    <td><a href="profileView.php">Celiiine</a></td>
-                    <td>celiiine@email.fr</td>
-                    <td>user</td>
-                    <td>29/12/19</td>
-                    <td>-</td>
-                    <td>12</td>
+                    <th scope="row"><?= htmlspecialchars($donnees['userId']); ?></th>
+                    <td><a href="index.php?action=profileUser&amp;id=<?= htmlspecialchars($donnees['userId']); ?>"><?= htmlspecialchars($donnees['pseudo']); ?></a></td>
+                    <td><?= htmlspecialchars($donnees['email']); ?></td>
+                    <td><?= htmlspecialchars($donnees['role']); ?></td>
+                    <td><?= htmlspecialchars($donnees['register_date']); ?></td>
+                    <td><?= htmlspecialchars($donnees['postsNb']); ?></td>
+                    <td><?= htmlspecialchars($donnees['commentsNb']); ?></td>
                     <td>
-                        <a href="profileView.php" class="btn btn-outline-dark btn-sm" title="Voir">
+                        <a href="index.php?action=profileUser&amp;id=<?= htmlspecialchars($donnees['userId']); ?>" class="btn btn-outline-dark btn-sm" title="Voir">
                             <i class="fas fa-eye"></i>
                         </a>
-                        <button type="button" class="btn btn-outline-dark btn-sm" title="Modifier">
+                        <a href="index.php?action=editUser&amp;id=<?= htmlspecialchars($donnees['userId']); ?>" class="btn btn-outline-dark btn-sm" title="Modifier">
                             <i class="fas fa-pencil-alt"></i>
-                        </button>
-                        <button type="button" class="btn btn-outline-dark btn-sm" title="Supprimer">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">4</th>
-                    <td><a href="profileView.php">georgesClooney</a></td>
-                    <td>clooney@hollywood.com</td>
-                    <td>user</td>
-                    <td>29/12/19</td>
-                    <td>-</td>
-                    <td>12</td>
-                    <td>
-                        <a href="profileView.php" class="btn btn-outline-dark btn-sm" title="Voir">
-                            <i class="fas fa-eye"></i>
                         </a>
-                        <button type="button" class="btn btn-outline-dark btn-sm" title="Modifier">
-                            <i class="fas fa-pencil-alt"></i>
-                        </button>
-                        <button type="button" class="btn btn-outline-dark btn-sm" title="Supprimer">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
                     </td>
                 </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td><a href="profileView.php">JoeDé</a></td>
-                    <td>joe.dalton@email.com</td>
-                    <td>user</td>
-                    <td>29/12/19</td>
-                    <td>-</td>
-                    <td>12</td>
-                    <td>
-                        <a href="profileView.php" class="btn btn-outline-dark btn-sm" title="Voir">
-                            <i class="fas fa-eye"></i>
-                        </a>
-                        <button type="button" class="btn btn-outline-dark btn-sm" title="Modifier">
-                            <i class="fas fa-pencil-alt"></i>
-                        </button>
-                        <button type="button" class="btn btn-outline-dark btn-sm" title="Supprimer">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td><a href="profileView.php">Charlotte S</a></td>
-                    <td>saury.charlotte@wanadoo.fr</td>
-                    <td>admin</td>
-                    <td>29/12/19</td> 
-                    <td>5</td>                                           
-                    <td>12</td>
-                    <td>                                        
-                        <a href="profileView.php" class="btn btn-outline-dark btn-sm" title="Voir">
-                            <i class="fas fa-eye"></i>
-                        </a>
-                        <button type="button" class="btn btn-outline-dark btn-sm" title="Modifier">
-                            <i class="fas fa-pencil-alt"></i>
-                        </button>
-                        <button type="button" class="btn btn-outline-dark btn-sm" title="Supprimer">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">1</th>
-                    <td><a href="profileView.php">jacadi</a></td>
-                    <td>jacadi@email.fr</td>
-                    <td>user</td>
-                    <td>29/12/19</td>
-                    <td>-</td>
-                    <td>12</td>
-                    <td>
-                        <a href="profileView.php" class="btn btn-outline-dark btn-sm" title="Voir">
-                            <i class="fas fa-eye"></i>
-                        </a>
-                        <button type="button" class="btn btn-outline-dark btn-sm" title="Modifier">
-                            <i class="fas fa-pencil-alt"></i>
-                        </button>
-                        <button type="button" class="btn btn-outline-dark btn-sm" title="Supprimer">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </td>
-                </tr>
+
+                
+                <?php
+                }
+                $allUsers->closeCursor();
+                ?>
+
             </tbody>
         </table>
     </div>

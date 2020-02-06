@@ -46,8 +46,17 @@
             <div class="col-lg-11 bg-black justify-content-center no-gutters mb-4 py-auto mx-auto">
                 <div class="post-text d-flex h-100 flex-column justify-content-between  px-2 px-md-4 py-3 py-md-5">
                     <div class="d-flex flex-md-row flex-column">
-                        <div class="post-list-picture col-md-4 col-12" style="background-image: url('<?= htmlspecialchars($donnees['mainImg_url']); ?>');">     
-                        </div>
+
+                        <?php
+                        if ($donnees['main_image'] != null)
+                        {
+                        ?>
+                            <div class="post-list-picture col-md-4 col-12" style="background-image: url('<?= htmlspecialchars($donnees['main_image']); ?>');">     
+                            </div>
+                        <?php
+                        }
+                        ?>
+                        
                         <div class="post-chapo col-md-8 col-12 text-center text-lg-left ml-md-3 pt-4">
                             <h4 class="text-white"><?= htmlspecialchars($donnees['title']); ?></h4>
                             <p class="mb-0 text-white-50"><?= substr(htmlspecialchars($donnees['chapo']), 0, 200); ?>... - <a href="index.php?action=postView&amp;id=<?= $donnees['postId']; ?>">En savoir plus</a></p>

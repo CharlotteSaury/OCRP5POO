@@ -36,7 +36,7 @@
             <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
                 <!-- Sidebar - Brand -->
-                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="dashboardView.php">
+                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php?action=admin">
                     <div class="sidebar-brand-text mx-3">Charlotte S</div>
                 </a>
 
@@ -66,8 +66,8 @@
                     </a>
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            <a class="collapse-item" href="adminPostsView.php">Tous les articles</a>
-                            <a class="collapse-item" href="newPostView.php"><i class="fas fa-plus mr-1"></i> Ajouter</a>
+                            <a class="collapse-item" href="index.php?action=adminPosts">Tous les articles</a>
+                            <a class="collapse-item" href="index.php?action=adminNewPost"><i class="fas fa-plus mr-1"></i> Ajouter</a>
                         </div>
                     </div>
                 </li>
@@ -81,7 +81,7 @@
 
                 <!-- Nav Item - users -->
                 <li class="nav-item">
-                    <a class="nav-link" href="adminUsersView.php">
+                    <a class="nav-link" href="index.php?action=adminUsers">
                         <i class="fas fa-users"></i>
                         <span>Utilisateurs</span></a>
                 </li>
@@ -237,7 +237,7 @@
         <script src="public/vendor/startbootstrap-sb-admin-2/js/demo/chart-pie-demo.js"></script>
 
         <!-- Custom JS -->
-        <script type="text/javascript" src="public/js/customjs.js" rel="stylesheet" />"></script>
+        <!--<script type="text/javascript" src="public/js/customjs.js" rel="stylesheet" />"></script>-->
 
 
     </body>

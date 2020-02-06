@@ -6,19 +6,30 @@ require_once("model/Manager.php");
 
 class CommentManager extends Manager
 {
-	public function getPostComments($postId)
+	public function getPostComments($postId, $status = null)
 	{
-		$sql = ('SELECT post.id AS postId, 
+		$sql = 'SELECT post.id AS postId, 
+			comment.id AS commentId,
 			comment.content AS commentContent, 
 			DATE_FORMAT(comment.comment_date,\'%d-%m-%Y à %Hh%i\') AS commentDate, 
+			comment.status AS status,
 			user.first_name as first_name, 
 			user.last_name AS last_name, 
 			user.avatar AS avatar
 			FROM comment 
 			JOIN user on comment.user_id = user.id
-			JOIN post on comment.post_id = post.id
-			WHERE comment.status=1 AND post.id= :id
-			ORDER BY commentDate DESC');
+			JOIN post on comment.post_id = post.id';
+
+		if ($status != null)
+		{
+			$sql .= ' WHERE comment.status=1 AND post.id= :id
+			ORDER BY comment.comment_date DESC';
+		}
+		else
+		{
+			$sql .= ' AND post.id= :id
+			ORDER BY comment.comment_date DESC';
+		}
 
 		$req = $this->dbRequest($sql, array($postId));
 		$req->bindValue(':id', $postId, \PDO::PARAM_INT);
@@ -90,7 +101,8 @@ class CommentManager extends Manager
 			comment.status AS status,
 			user.first_name as first_name, 
 			user.last_name AS last_name,
-			post.title AS postTitle
+			post.title AS postTitle,
+			post.id AS postId
 			FROM comment 
 			JOIN user on comment.user_id = user.id
 			JOIN post on comment.post_id = post.id
@@ -102,6 +114,17 @@ class CommentManager extends Manager
 		}
 		
 		$req = $this->dbRequest($sql);
+		return $req;
+	}
+
+	public function getPostCommentsNb($postId)
+	{
+		$sql = ('SELECT COUNT(*) AS commentsNb FROM comment WHERE comment.post_id = :postId');
+
+		$req = $this->dbRequest($sql, array($postId));
+		$req->bindValue('postId', $postId, \PDO::PARAM_INT);
+		$req->execute();
+
 		return $req;
 	}
 

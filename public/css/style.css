@@ -53,6 +53,14 @@ a:focus, a:hover {
   background-color: #467370 !important;
 }
 
+.fa-toggle-on {
+	color: #64a19d;
+}
+
+.fa-toggle-off {
+	color: red;
+}
+
 /******** TABLES ********/
 
 .table-success-custom {

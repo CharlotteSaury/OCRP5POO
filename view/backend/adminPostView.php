@@ -10,53 +10,97 @@
 
 <?php ob_start(); ?>
 
-
+<?php
+while ($donnees = $postInfos->fetch())
+{
+?>
 <div class="row adminPostView">
     <div class="col-11 mx-auto my-3">
         <div class="d-flex flex-row justify-content-between">
-            <h2 class="mb-4">Titre de l'article</h2>
+            <h2 class="mb-4"><?= htmlspecialchars($donnees['title']); ?></h2>
             <div>
-                <a href="editPostView.php" class="btn btn-outline-dark btn-sm" title="Modifier">
+                <?php 
+                if ($donnees['status'] == 1)
+                {
+                ?>
+
+                    <a href="index.php?action=publishPost&amp;id=<?= htmlspecialchars($donnees['postId']); ?>&amp;status=<?= htmlspecialchars($donnees['status']); ?>" title="Ne plus publier" class="mr-2"><i class="fas fa-toggle-on"></i></a>
+                    
+                <?php
+                }
+                else
+                {
+                ?>
+
+                    <a href="index.php?action=publishPost&amp;id=<?= htmlspecialchars($donnees['postId']); ?>&amp;status=<?= htmlspecialchars($donnees['status']); ?>" title="Publier"  class="mr-2"><i class="fas fa-toggle-off"></i></a>
+                    
+                <?php
+                }
+                ?>
+                <a href="index.php?action=editPostView&amp;id=<?= htmlspecialchars($donnees['postId']); ?>" class="btn btn-outline-dark btn-sm" title="Modifier">
                     <i class="fas fa-pencil-alt"></i>
                 </a>
-                <button type="button" class="btn btn-outline-dark btn-sm" title="Supprimer">
+                <a href="index.php?action=deletePost&amp;id=<?= htmlspecialchars($donnees['postId']); ?>" class="btn btn-outline-dark btn-sm" title="Supprimer">
                     <i class="fas fa-trash-alt"></i>
-                </button>
+                </a>
             </div>
         </div>
-        
-
 
         <hr class="d-none d-lg-block ml-0">
 
         <div class="post-content post-content-text text-black-50 text-justify">
-            <p class="">Posté par <strong>Auteur</strong></p>
-            <p class="mb-0">le 23/12/2019</p>
-            <p class="mb-0">Dernière modification le 23/12/2019</p>
-        </div>
-
-        <hr class="d-none d-lg-block ml-0">
-
-        <div class="post-content post-content-text text-black-50 text-justify">
-            <p class=""><strong>Chapô : </strong>Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. Vestibulum facilisis..</p>
+            <p class="">Posté par <strong><?= htmlspecialchars($donnees['first_name']); ?> <?= htmlspecialchars($donnees['last_name']); ?></strong></p>
+            <p class="mb-0">le <?= htmlspecialchars($donnees['date_creation']); ?></p>
+            <p class="mb-0">Dernière modification le <?= htmlspecialchars($donnees['date_update']); ?></p>
         </div>
 
         <hr class="d-none d-lg-block ml-0">
 
         <div class="post-content post-content-text text-black-50 text-justify">
-            <p class="">Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. Vestibulum facilisis, purus nec pulvinar iaculis, ligula mi congue nunc, vitae euismod ligula urna in dolor. Praesena mi congue nunc, vitt ac sem eget est egestas volutpat. Curabitur a felis in nunc fringilla tristique.</p>
-            <p class="">Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. Vestibulum facilisis, purus nec pulvinar iaculis, ligula mi congue nunc, vitae euismod ligula urna in dolor. Praesent ac sem egetigula mi congue nunc, vitae euismod ligula urna in dolor. Praesent ac sem eget est egestas volutpat. Curabitur a felis in nunc fringilla tristique est egestas volutpat. Curabitur a felis in nunc fringilla tristique.</p>
+            <p class=""><strong>Chapô : </strong><?= htmlspecialchars($donnees['chapo']); ?></p>
         </div>
 
-        <div class="my-4 text-center">   
-            <img class="admin-post-img" src="../../public/images/post-3.jpg" />  
-        </div>
+        <hr class="d-none d-lg-block ml-0">
 
-        <div class="post-content post-content-text text-black-50 text-justify">    
-            <p class="">Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. Vestibulum facilisis, purus nec pulvinar iaculis, ligula mi congue nunc, vitae euismod ligula urna in dolor. Praesent ac sem eget est egestas volutpat. Curabitur a felis in nunc fringilla tristique.</p> 
-            <p class="">Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. Vestibulum facilisis, purus nec pulvinar iaculis, ligula mi congue nunc, vitae euismod ligula urna in dolor. Praesent aigula mi congue nunc, vitae euismod ligula urna in dolor. Praesent ac sem eget est egestas volutpat. Curabitur a felis in nunc fringilla tristiquec sem eget est egestas volutpat. Curabitur a felis in nunc fringilla tristique.</p> 
-            <p class="">Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. Vestibulum facilisis, purus nec pulvinar iaculis, ligula mi congue nunc, vitae euismod ligula urna in dolor. Praesent ac sem ega mi congue nunc, vitet est egestas volutpat. Curabitur a felis in nunc fringilla tristique.</p>
-        </div>
+        <?php
+
+            if ($donnees['main_image'] != null)
+            {
+            ?>
+
+                <div class="my-4 text-center">
+                    <p class=""><strong>Image principale : </strong></p>  
+                    <img class="admin-post-img" src="<?= htmlspecialchars($donnees['main_image']); ?>" />  
+                </div>
+
+            <?php
+            }
+        }
+        $postInfos->closeCursor();
+
+        while ($donnees = $postContents->fetch())
+        {
+            if ($donnees['content_type'] == 1) 
+            {
+            ?>
+                <div class="my-4 text-center">   
+                    <img class="admin-post-img" src="<?= htmlspecialchars($donnees['content']); ?>" />  
+                </div>
+
+            <?php
+            }
+            else
+            {
+            ?> 
+                <div class="post-content post-content-text text-black-50 text-justify">
+                    <p><?= htmlspecialchars($donnees['content']); ?></p>
+                </div>                        
+            <?php
+            }
+        }
+        $postContents->closeCursor();
+        ?>
+
         <hr class="d-none d-lg-block ml-0"> 
     </div>
 </div>
@@ -65,9 +109,16 @@
     <div class="col-11 mx-auto">
         <h4 class="mb-4">Catégories</h4>
         <div class="">
-            <a class="btn btn-outline-secondary" href="#">Développement</a>
-            <a class="btn btn-outline-secondary" href="#">PHP</a>
-            <a class="btn btn-outline-secondary" href="#">WordPress</a>            
+
+            <?php
+            while ($donnees = $postCategories->fetch())
+            {
+                echo '<a class="btn btn-outline-secondary mr-2" href="#">' . htmlspecialchars($donnees["categoryName"]) . '</a>';     
+            }
+
+            $postCategories->closeCursor();
+            ?> 
+
         </div>
     </div>
 </div>
@@ -81,48 +132,56 @@
         <hr class="d-none d-lg-block ml-0">
 
         <div class="comments mt-5">
-            <div class="comment-content text-black-50 text-justify mb-4">
-                <div class="comment-infos">
-                    <p class=""><strong>Céline Dion</strong> - le 23/12/2019 à 10h12</p>
-                </div>
-                <div class="comment-text">
-                    <p class="mb-0">Nam at tortor in tellus interdum sagittis. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Praesent adipiscing. Suspendisse eu ligula. Sed aliquam ultrices maurisNam at tortor in tellus interdum sagittis. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Praesent adipiscing. Suspendisse eu ligula. Sed aliquam ultrices mauris.Nam at tortor in tellus interdum sagittis. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Praesent adipiscing. Suspendisse eu ligula. Sed aliquam ultrices mauris..</p>
-                </div>
-            </div>
-            
-            <div class="comment-content text-black-50 text-justify mb-4">
-                <div class="comment-infos">
-                    <p class=""><strong>Charlotte SAURY</strong> - le 20/12/2019 à 10h12</p>
-                </div>
-                <div class="comment-text">
-                    <p class="mb-0">Nam anim. Praesent adipiscing. Suspendisse eu ligula. Sed aliquam ultrices mauris..</p>
-                </div>
-            </div>
-            
-            
-            <div class="comment-content text-black-50 text-justify mb-4 unapproved-comment">
-                <div class="comment-infos">
-                    <p class=""><strong>Céline Dion</strong> - le 13/12/2019 à 23h59</p>
-                </div>
-                <div class="comment-text">
-                    <p class="mb-0">Nam at tortor in tellus interdum sagittis. Aenean leo ligula, porttitdipiscing. Suspendisse eu ligula. Sed aliquam ultrices mauris.Nam at tortor in tellus interdum sagittis. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Praesent adipiscing. Suspendisse eu ligula. Sed aliquam ultrices mauris..</p>
-                </div>
-                <div class="mt-2">
-                    <button type="button" class="btn btn-outline-dark btn-sm" title="Approuver">
-                        <i class="fas fa-check"></i>
-                    </button>
-                    <button type="button" class="btn btn-outline-dark btn-sm" title="Supprimer">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            </div>
+
+            <?php
+            while ($donnees = $postComments->fetch())
+            {
+                if ($donnees['status'] == 0)
+                {
+
+                    echo '<div class="comment-content text-black-50 text-justify mt-4 mt-4 unapproved-comment">';
+                }
+                else
+                {
+                    echo '<div class="comment-content text-black-50 text-justify mt-4">';
+                }
+                ?>
+
+                    <div class="comment-infos">
+                        <p class=""><strong><?= htmlspecialchars($donnees["first_name"]); ?> <?= htmlspecialchars($donnees["last_name"]); ?></strong> - le <?= htmlspecialchars($donnees["commentDate"]); ?></p>
+                    </div>
+                    <div class="comment-text">
+                        <p class="mb-0"><?= htmlspecialchars($donnees["commentContent"]); ?></p>
+                    </div>
+                
+                <?php
+                if ($donnees['status'] == 0)
+                {
+                ?>
+                    <div class="mt-2">
+                        <a href='index.php?action=approveComment&id=<?= htmlspecialchars($donnees["commentId"]); ?>' class="btn btn-outline-dark btn-sm" title="Approuver">
+                            <i class="fas fa-check"></i>
+                        </a>
+                        <a href='index.php?action=deleteComment&id=<?= htmlspecialchars($donnees["commentId"]); ?>' class="btn btn-outline-dark btn-sm" title="Supprimer">
+                            <i class="fas fa-times"></i>
+                        </a>
+                    </div>
+                </div>   
+                <?php
+                }
+
+            }
+            $postComments->closeCursor();
+            ?>
             
             
         </div>
-    </div>  
 
-</div>
-            
+
+    </div>
+</div>  
+
+
 
 
 

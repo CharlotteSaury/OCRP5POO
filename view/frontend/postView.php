@@ -53,7 +53,15 @@
                 <h2 class="mb-4"><?= htmlspecialchars($donnees['title']); ?></h2>
                 <hr class="d-none d-lg-block ml-0">
 
-                <?php 
+                <?php
+
+                    if ($donnees['main_image'] != null)
+                    {
+                    ?>
+                        <div class="post-picture my-3" style="background-image: url('<?= htmlspecialchars($donnees['main_image']); ?>');">     
+                        </div>
+                    <?php
+                    } 
                 }
 
                 $postInfos->closeCursor();
@@ -61,7 +69,7 @@
                 while ($donnees = $postContents->fetch())
                 {
 
-                    if (($donnees['content_type'] == 1) || ($donnees['content_type'] == 3)) 
+                    if (($donnees['content_type'] == 1)) 
                     {
                     ?>
                         <div class="post-picture my-3" style="background-image: url('<?= htmlspecialchars($donnees['content']); ?>');">     
