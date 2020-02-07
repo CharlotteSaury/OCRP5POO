@@ -213,7 +213,7 @@
                     <div class="modal-body">Cliquez sur "Se déconnecter" si vous souhaitez vous déconnecter du tableau de bord</div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                        <a class="btn btn-primary-custom" href="../frontend/indexView.php">Se déconnecter</a>
+                        <a class="btn btn-primary-custom" href="index.php">Se déconnecter</a>
                     </div>
                 </div>
             </div>

@@ -54,7 +54,7 @@
                     		<a class="nav-link js-scroll-trigger" href="index.php#contact-form">Me contacter</a>
                   		</li>
                         <li class="nav-item">
-                            <a class="nav-link js-scroll-trigger" href="connexionView.php">Se connecter</a>
+                            <a class="nav-link js-scroll-trigger" href="index.php?action=connexionView">Se connecter</a>
                         </li>
                 	</ul>
               	</div>

@@ -6,11 +6,13 @@ require_once('controller\HomeController.php');
 require_once('controller\PostController.php');
 require_once('controller\CommentController.php');
 require_once('controller\AdminController.php');
+require_once('controller\UserController.php');
 
 use controller\HomeController;
 use controller\PostController;
 use controller\CommentController;
 use controller\AdminController;
+use controller\UserController;
 use Exception;
 
 
@@ -110,6 +112,45 @@ class Router
 						$infos->indexView();
 					}
 
+					elseif ($_GET['action'] == 'connexionView')
+					{
+						$infos = new UserController();
+						$infos->connexionView();
+					}
+
+					elseif ($_GET['action'] == 'inscriptionView')
+					{
+						$infos = new UserController();
+						$infos->inscriptionView();
+					}
+
+					elseif ($_GET['action'] == 'inscription')
+					{
+						$pseudo = $this->getParameter($_POST, 'pseudo');
+						$pass1 = $this->getParameter($_POST, 'pass1');
+						$pass2 = $this->getParameter($_POST, 'pass2');
+						$email = $this->getParameter($_POST, 'email');
+
+						if ($pass1 == $pass2)
+						{
+							$pass = password_hash($pass1, PASSWORD_DEFAULT);
+							
+							$infos = new UserController();
+							$infos->checkPseudo($pseudo);
+							$infos->checkEmail($email);
+							$infos->newUser($pseudo, $pass, $email);
+							$message = 'Merci pour votre inscription ! Un email de confirmation vous a été envoyé afin de confirmer votre adresse email. Merci de vous reporter à cet email pour activer votre compte ! ';
+							$infos->inscriptionView($message);
+
+						}
+						else
+						{
+							$message = 'Les mots de passe saisis sont différents ! ';
+							$infos->inscriptionView($message);
+						}	
+						
+					}
+
 					elseif ($_GET['action'] == 'admin')
 					{
 						$infos = new AdminController();
@@ -190,10 +231,13 @@ class Router
 
 						elseif (isset($_POST['updatePicture']))
 						{
+							var_dump($_POST);
 							$postId = $this->getParameter($_POST, 'postId');
-							$contentId = $this->getParameter($_POST, 'contentId');
-							$url = $this->getParameter($_POST, 'content');
-							var_dump($postId, $contentId, $url);
+							$contentId = substr($this->getParameter($_POST, 'action') , 12);
+							$url = $this->getParameter($_POST, 'content' . $contentId);
+
+							var_dump($postId, $contentId, $url); 
+
 							$infos = new AdminController();
 							$infos->editPostPicture($postId, $contentId, $url);
 						}
@@ -224,25 +268,25 @@ class Router
 
 						elseif (isset($_POST['editContent']))
 						{
-							$newPostcontents = [];
-							var_dump($_POST);
+							$postId = $this->getParameter($_POST, 'postId');
+							$newParagraphs = [];
 
 							foreach ($_POST as $key => $value)
 							{
-								if (!is_numeric($_POST[$key]))
+								if (is_numeric($key))
 								{
-									$newPostcontents[$key] = $value;
+									$newParagraphs[$key] = $value;
 								}
 							}
-							var_dump($newPostcontents);
-							/*
+
 							$infos = new AdminController();
-							$infos->editPost($newPostcontents);
-							*/
+							$infos->editParagraph($postId, $newParagraphs);
 						}
 
 						
 					}
+
+					
 
 					elseif ($_GET['action'] == 'deleteContent')
 					{

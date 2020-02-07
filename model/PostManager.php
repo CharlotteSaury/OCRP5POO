@@ -286,26 +286,29 @@ class PostManager extends Manager
 		$req->execute();
 	}
 
-	/*public function addContent($postId, $type)
+	public function addParagraph($postId)
 	{
-		if ($type == 1)
-		{
-			$content = 'https://tse3.mm.bing.net/th?id=OIP.xbQ4ZibJdSu0no9kDhLueQHaFM&pid=Api';
-		}
-		else
-		{
-			$content = ' ';
-		}
-		
 		$sql = 'INSERT INTO content (post_id, content_type_id, content) 
-				VALUES (:postId, :content_type_id, :content)';
+				VALUES (:postId, 2, "")';
 
-		$req = $this->dbRequest($sql, array($postId, $type));
+		$req = $this->dbRequest($sql, array($postId));
 		$req->bindValue('postId', $postId, \PDO::PARAM_INT);
-		$req->bindValue('content_type_id', $type, \PDO::PARAM_INT);
-		$req->bindValue('content', $content);
 		$req->execute();
-	}*/
+	}
+
+	public function editParagraph($newParagraphs)
+	{
+		foreach ($newParagraphs AS $key => $value)
+		{
+			$sql = 'UPDATE content SET content.content = :content 
+				WHERE content.id = :contentId';
+
+			$req = $this->dbRequest($sql, array($value, $key));
+			$req->bindValue('content', $value);
+			$req->bindValue('contentId', $key, \PDO::PARAM_INT);
+			$req->execute();
+		}
+	}
 
 	public function addPicture($postId, $content)
 	{

@@ -172,11 +172,11 @@ while ($donnees = $postInfos->fetch())
                                         <input type="hidden" name="postId" value="<?= htmlspecialchars($donnees['postId']); ?>"/>
                                         <input type="hidden" name="contentId" value="<?= htmlspecialchars($donnees['contentId']); ?>"/>
                                         <label for="avatarUrl" hidden>Url :</label>
-                                        <input type="text" class="form-control" name="content" placeholder="url"/>
+                                        <input type="text" class="form-control" name="content<?= htmlspecialchars($donnees['contentId']); ?>" placeholder="url"/>
                                     </div>
                                     <div class="modal-footer">
                                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                        <button type="submit" name="updatePicture" class="btn btn-primary-custom" >Valider</button>
+                                        <button type="submit" name="updatePicture<?= htmlspecialchars($donnees['contentId']); ?>" class="btn btn-primary-custom" >Valider</button>
                                     </div>
                                 </div>
                             </div>
@@ -196,7 +196,7 @@ while ($donnees = $postInfos->fetch())
                                     <div class="modal-body">Cliquez sur "Valider" pour supprimer définitivement ce contenu</div>
                                     <div class="modal-footer">
                                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                        <button type="submit" name="deleteContent" class="btn btn-primary-custom" >Valider</button>
+                                        <a href="index.php?action=deleteContent&amp;id=<?= htmlspecialchars($donnees['postId']); ?>&amp;content=<?= htmlspecialchars($donnees['contentId']); ?>" class="btn btn-primary-custom" >Valider</a>
                                     </div>
                                 </div>
                             </div>
@@ -210,8 +210,10 @@ while ($donnees = $postInfos->fetch())
 
                         <div class="form-group d-flex">                        
 
-                            <textarea class="form-control" name="<?= htmlspecialchars($donnees['contentId']); ?>"><?= htmlspecialchars($donnees['content']); ?></textarea>  
-                            <input type="submit" name="editContent" class="btn btn-outline-dark btn-sm mx-2" title="Enregistrer les modifications" value="Enregistrer"/>
+                            <textarea class="form-control" name="<?= htmlspecialchars($donnees['contentId']); ?>"><?= htmlspecialchars($donnees['content']); ?></textarea>
+                            
+                            <input type="submit" name="editContent" class="btn btn-outline-success btn-sm mx-2" title="Enregistrer les modifications" value="Enregistrer"/>
+                            
                             <a data-toggle="modal" data-target="#deleteContentModal<?= htmlspecialchars($donnees['contentId']); ?>" class="btn btn-outline-dark btn-sm mr-2" title="Supprimer">
                                 <i class="fas fa-trash-alt"></i>
                             </a>

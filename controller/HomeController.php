@@ -10,10 +10,14 @@ class HomeController
 
 {
 	// Home page
+
 	public function indexView() 
 	{
 		require('./view/frontend/indexView.php');
 	}
+
+	
+	
 }
 
 

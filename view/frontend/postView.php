@@ -53,6 +53,8 @@
                 <h2 class="mb-4"><?= htmlspecialchars($donnees['title']); ?></h2>
                 <hr class="d-none d-lg-block ml-0">
 
+                <p><?= htmlspecialchars($donnees['chapo']); ?></p>
+
                 <?php
 
                     if ($donnees['main_image'] != null)

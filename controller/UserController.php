@@ -1,35 +1,67 @@
 <?php
 
+namespace controller;
+
 require_once('./model/Manager.php');
 require_once('./model/PostManager.php');
 require_once('./model/CommentManager.php');
+require_once('./model/UserManager.php');
 
-function indexView() 
+use model\PostManager;
+use model\CommentManager;
+use model\UserManager;
+use Exception;
+
+class UserController
+
 {
-	require('./view/frontend/indexView.php');
-}
 
-function listPostView($current_page, $postsNb)
-{
-	$postManager = new \Model\PostManager();
+	private $_postManager;
+	private $_commentManager;
+	private $_userManager;
 
-	$page_number = $postManager->getPagination($postsNb);
-	$first_post = $postManager->getFirstPost($current_page, $postsNb);
-	$posts = $postManager->getPosts($first_post, $postsNb);
-	$recentPosts = $postManager->getRecentPosts();
-	$categories = $postManager->getCategories();
-	require('./view/frontend/postListView.php');
-}
+	public function __construct()
+	{
+		$this->_postManager = new PostManager();
+		$this->_commentManager = new CommentManager();
+		$this->_userManager = new UserManager();
+	}
 
-function postView()
-{
-	$postManager = new \Model\PostManager();
-	$commentManager = new \Model\CommentManager();
+	public function inscriptionView($message = null) 
+	{
+		require('./view/frontend/inscriptionView.php');
+	}
 
-	$postInfos = $postManager->getPostInfos($_GET['id']);
-	$postContents = $postManager->getPostContents($_GET['id']);
-	$postComments = $commentManager->getpostComments($_GET['id']);
-	$postCategories = $postManager->getPostCategories($_GET['id']);
-	$recentPosts = $postManager->getRecentPosts();
-	require('./view/frontend/postView.php');
+	public function connexionView($message = null) 
+	{
+		require('./view/frontend/connexionView.php');
+	}
+
+	public function newUser($pseudo, $pass, $email)
+	{
+		$this->_userManager->addUser($pseudo, $pass, $email);
+	}
+
+	public function checkPseudo($pseudo)
+	{
+		$pseudoExists = $this->_userManager->pseudoExists($pseudo);
+		if ($pseudoExists == 1)
+		{
+			$message = "Ce pseudo n'est pas disponible !";
+			$this->inscriptionView($message);
+		}
+		
+	}
+
+	public function checkEmail($email)
+	{
+		$emailExists = $this->_userManager->emailExists($email);
+		if ($emailExists == 1)
+		{
+			$message = "Cet email est déjà associé à un compte. Essayez de vous connecter !";
+			$this->inscriptionView($message);
+		}
+		
+	}
+
 }

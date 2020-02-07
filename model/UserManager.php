@@ -6,6 +6,43 @@ require_once("model/Manager.php");
 
 class UserManager extends Manager
 {
+	public function addUser ($pseudo, $pass, $email)
+	{
+		$sql = 'INSERT INTO user (pseudo, email, password, user_role_id, register_date)
+				VALUES (:pseudo, :email, :pass, 2, NOW())';
+
+		$req = $this->dbRequest($sql, array($pseudo, $email, $pass));
+		$req->bindValue('pseudo', $pseudo);
+		$req->bindValue('email', $email);
+		$req->bindValue('pass', $pass);
+
+		$req->execute();
+	}
+
+	public function pseudoExists($pseudo)
+	{
+		$sql = 'SELECT COUNT(*) AS nbUser FROM user WHERE pseudo = :pseudo';
+		
+		$req = $this->dbRequest($sql, array($pseudo));
+		$req->bindValue('pseudo', $pseudo);
+		$req->execute();
+
+		$pseudoExists = $req->fetch(\PDO::FETCH_ASSOC);
+		return $pseudoExists['nbUser'];
+	}
+
+	public function emailExists($email)
+	{
+		$sql = 'SELECT COUNT(*) AS nbUser FROM user WHERE email = :email';
+		
+		$req = $this->dbRequest($sql, array($email));
+		$req->bindValue('email', $email);
+		$req->execute();
+
+		$emailExists = $req->fetch(\PDO::FETCH_ASSOC);
+		return $emailExists['nbUser'];
+	}
+
 	public function getUserNb()
 	{
 		$sql = ('SELECT COUNT(*) AS usersNb FROM user');

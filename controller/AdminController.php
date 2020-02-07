@@ -125,10 +125,17 @@ class AdminController
 
 	public function addParagraph($postId)
 	{
-		$type = 2;
-		$this->_postManager->addContent($postId, $type);
+		$this->_postManager->addParagraph($postId);
 		$this->_postManager->dateUpdate($postId);
 		$message = 'Bloc paragraphe ajouté ! ';
+		$this->editPostView($postId, $message);
+	}
+
+	public function editParagraph($postId, $newParagraphs)
+	{
+		$this->_postManager->editParagraph($newParagraphs);
+		$this->_postManager->dateUpdate($postId);
+		$message = 'Bloc paragraphe enregistré ! ';
 		$this->editPostView($postId, $message);
 	}
 
