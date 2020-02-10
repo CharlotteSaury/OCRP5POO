@@ -46,8 +46,17 @@
             <div class="col-lg-11 bg-black justify-content-center no-gutters mb-4 py-auto mx-auto">
                 <div class="post-text d-flex h-100 flex-column justify-content-between  px-2 px-md-4 py-3 py-md-5">
                     <div class="d-flex flex-md-row flex-column">
-                        <div class="post-list-picture col-md-4 col-12" style="background-image: url('<?= htmlspecialchars($donnees['mainImg_url']); ?>');">     
-                        </div>
+
+                        <?php
+                        if ($donnees['main_image'] != null)
+                        {
+                        ?>
+                            <div class="post-list-picture col-md-4 col-12" style="background-image: url('<?= htmlspecialchars($donnees['main_image']); ?>');">     
+                            </div>
+                        <?php
+                        }
+                        ?>
+                        
                         <div class="post-chapo col-md-8 col-12 text-center text-lg-left ml-md-3 pt-4">
                             <h4 class="text-white"><?= htmlspecialchars($donnees['title']); ?></h4>
                             <p class="mb-0 text-white-50"><?= substr(htmlspecialchars($donnees['chapo']), 0, 200); ?>... - <a href="index.php?action=postView&amp;id=<?= $donnees['postId']; ?>">En savoir plus</a></p>
@@ -84,7 +93,7 @@
                             <?php 
                             if (isset($_GET['page']) && ($_GET['page'] > 1))
                             {
-                                echo '<a class="page-link" href="index.php?action=listPosts&page=' . ((int)htmlspecialchars($_GET['page'])-1) . '&amp;postsNb=' . $postsNb . '#posts-list" aria-label="Previous">';
+                                echo '<a class="page-link" href="index.php?action=listPosts&page=' . ((int)htmlspecialchars($_GET['page'])-1) . '&amp;postsPerPage=' . $postsPerPage . '#posts-list" aria-label="Previous">';
                             ?>
                                     <span aria-hidden="true">&laquo;</span>
                                     <span class="sr-only">Previous</span>
@@ -105,9 +114,9 @@
                         </li>
 
                         <?php
-                        for( $page=1 ; $page<=$page_number ; $page++)
+                        for ($page=1 ; $page<=$page_number ; $page++)
                         {
-                            echo '<li class="page-item"><a class="page-link" href="index.php?action=listPosts&amp;page='. $page . '&amp;postsNb=' . $postsNb . '#posts-list">' . $page . '</a></li>';
+                            echo '<li class="page-item"><a class="page-link" href="index.php?action=listPosts&amp;page='. $page . '&amp;postsPerPage=' . $postsPerPage . '#posts-list">' . $page . '</a></li>';
                         }
 
                         ?>
@@ -116,7 +125,7 @@
                             <?php 
                             if (isset($_GET['page']) && ($_GET['page'] < $page_number))
                             {
-                                echo '<a class="page-link" href="index.php?action=listPosts&page=' . ((int)htmlspecialchars($_GET['page'])+1) . '&amp;postsNb=' . $postsNb . '#posts-list" aria-label="Next">';
+                                echo '<a class="page-link" href="index.php?action=listPosts&page=' . ((int)htmlspecialchars($_GET['page'])+1) . '&amp;postsPerPage=' . $postsPerPage . '#posts-list" aria-label="Next">';
                             ?>
                                     <span aria-hidden="true">&raquo;</span>
                                     <span class="sr-only">Next</span>
@@ -125,7 +134,7 @@
                             }
                             elseif (!isset($_GET['page']) && $page_number > 1) 
                             {
-                                echo '<a class="page-link" href="index.php?action=listPosts&page=2&amp;postsNb=' . $postsNb . '#posts-list" aria-label="Next">';
+                                echo '<a class="page-link" href="index.php?action=listPosts&page=2&amp;postsPerPage=' . $postsPerPage . '#posts-list" aria-label="Next">';
                             ?>
                                     <span aria-hidden="true">&raquo;</span>
                                     <span class="sr-only">Next</span>
@@ -158,13 +167,13 @@
                 <h4 class="mb-4">Nombre de posts par page</h4>
                 <form action="index.php#posts-list" method="GET">
                     <input type="hidden" name="action" value="listPosts"/>
-                    <label for="postsNb" hidden>Nombre de posts par page</label>
-                    <select class="form-control block" id="postsNb" name="postsNb">
+                    <label for="postsPerPage" hidden>Nombre de posts par page</label>
+                    <select class="form-control block" id="postsPerPage" name="postsPerPage">
                         <?php
-                        if (isset($_GET['postsNb']))
+                        if (isset($_GET['postsPerPage']))
                         {
-                            echo '<option selected disabled>' . htmlspecialchars($_GET['postsNb']) . '</option>';
-                            switch ($_GET['postsNb'])
+                            echo '<option selected disabled>' . htmlspecialchars($_GET['postsPerPage']) . '</option>';
+                            switch ($_GET['postsPerPage'])
                             {
                                 case 3:
                                     echo '<option value="5">5</option>';
@@ -210,7 +219,7 @@
                 </div>
             </div>
 
-            <div class="blog-right-col-div post-categories">
+            <!--<div class="blog-right-col-div post-categories">
                 <h4 class="mb-4">Tri par catégorie</h4>
                 <form action="index.php#posts-list" method='GET'>
                     <input type="hidden" name="action" value="listPosts"/>
@@ -228,7 +237,7 @@
                     ?>
                     <input  class="btn btn-primary-custom" type="submit" value="Trier" />
                 </form>
-            </div>  
+            </div>-->
         </div>
     </div>
 

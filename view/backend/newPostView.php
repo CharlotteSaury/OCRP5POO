@@ -31,7 +31,8 @@
                 <textarea class="form-control" id="new-post-content" rows="3"  required></textarea>
             </div>
             <div class="my-2">
-                <button type="button" id="add-post-content" class="d-none d-sm-inline-block btn btn-sm btn-light shadow-sm"><i class="fas fa-plus fa-sm mr-1"></i> Ajouter un contenu</a>
+                <button type="submit" name="addParagraph" class="d-none d-sm-inline-block btn btn-sm btn-light shadow-sm"><i class="fas fa-plus fa-sm mr-1"></i> Ajouter un paragraphe</button>
+                <button type="submit" name="addPicture" class="d-none d-sm-inline-block btn btn-sm btn-light shadow-sm"><i class="fas fa-plus fa-sm mr-1"></i> Ajouter une image</button>
             </div>
             <div class="form-group form-inline">
                 <label for="new-post-category">Sélectionner / Ajouter une catégorie</label>
@@ -39,8 +40,8 @@
                 <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-light shadow-sm"><i class="fas fa-plus"></i></button>
             </div>                
             <div class="mt-4">
-                <button type="submit" class="btn btn-primary-custom">Enregistrer en tant que brouillon</button>
-                <button type="submit" class="btn btn-primary-custom">Publier</button>
+                <button type="submit" name="newPost" class="btn btn-primary-custom">Enregistrer en tant que brouillon</button>
+                <button type="submit" name="newPublishedPost" class="btn btn-primary-custom">Publier</button>
             </div>
                                 
         </form>

@@ -13,14 +13,14 @@
         <title><?= $title ?></title>
 
         <!-- Custom fonts for this template-->
-        <link href="../../public/vendor/startbootstrap-sb-admin-2/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+        <link href="public/vendor/startbootstrap-sb-admin-2/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
         <!-- Custom styles for this template-->
-        <link href="../../public/vendor/startbootstrap-sb-admin-2/css/sb-admin-2.css" rel="stylesheet">
+        <link href="public/vendor/startbootstrap-sb-admin-2/css/sb-admin-2.css" rel="stylesheet">
 
         <!-- Custom css -->
-        <link rel="stylesheet" type="text/css" href="../../public/css/style.css">
+        <link rel="stylesheet" type="text/css" href="public/css/style.css">
 
         <!-- jquery -->
         <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
@@ -36,7 +36,7 @@
             <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
                 <!-- Sidebar - Brand -->
-                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="dashboardView.php">
+                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php?action=admin">
                     <div class="sidebar-brand-text mx-3">Charlotte S</div>
                 </a>
 
@@ -45,7 +45,7 @@
 
                 <!-- Nav Item - Dashboard -->
                 <li class="nav-item active">
-                    <a class="nav-link" href="dashboardView.php">
+                    <a class="nav-link" href="index.php?action=admin">
                         <i class="fas fa-fw fa-tachometer-alt"></i><span>Tableau de bord</span>
                     </a>
                 </li>
@@ -66,22 +66,22 @@
                     </a>
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            <a class="collapse-item" href="adminPostsView.php">Tous les articles</a>
-                            <a class="collapse-item" href="newPostView.php"><i class="fas fa-plus mr-1"></i> Ajouter</a>
+                            <a class="collapse-item" href="index.php?action=adminPosts">Tous les articles</a>
+                            <a class="collapse-item" href="index.php?action=adminNewPost"><i class="fas fa-plus mr-1"></i> Ajouter</a>
                         </div>
                     </div>
                 </li>
 
                 <!-- Nav Item - Comments -->
                 <li class="nav-item">
-                    <a class="nav-link" href="adminCommentsView.php">
+                    <a class="nav-link" href="index.php?action=adminComments">
                         <i class="fas fa-comments"></i>
                         <span>Commentaires</span></a>
                 </li>
 
                 <!-- Nav Item - users -->
                 <li class="nav-item">
-                    <a class="nav-link" href="adminUsersView.php">
+                    <a class="nav-link" href="index.php?action=adminUsers">
                         <i class="fas fa-users"></i>
                         <span>Utilisateurs</span></a>
                 </li>
@@ -99,7 +99,7 @@
                 <div class="adminProfileNavCard text-center mb-4">
 
                     <a href="profileView.php">
-                        <img class="my-4" src="../../public/images/photo.jpg" alt="User profil picture" />
+                        <img class="my-4" src="public/images/photo.jpg" alt="User profil picture" />
                     </a>
                     <a href="editProfileView.php" class="btn btn-primary-custom">
                       <i class="fas fa-user mr-1"></i> Modifier mon profil</a>
@@ -135,7 +135,7 @@
                                 <li class="nav-item dropdown no-arrow">
                                   <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="mr-3 d-none d-lg-inline text-primary-custom font-weight-bold">Bonjour, Charlotte Saury</span>
-                                    <img class="img-profile rounded-circle" src="../../public/images/photo.jpg">
+                                    <img class="img-profile rounded-circle" src="public/images/photo.jpg">
                                   </a>
                                   <!-- Dropdown - User Information -->
                                   <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -160,8 +160,14 @@
                     <div class="container-fluid">
 
                         <!-- Page Heading -->
-                        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <div class="mb-4">
                             <h1 class="h3 mb-0 text-gray-800"><?= $contentTitle ?></h1>
+                            <?php
+                            if (isset($message))
+                            {
+                                echo '<div class="adminMessage text-center">' . $message . '</div>';
+                            }
+                            ?>
                         </div>
 
                         <!-- Content -->
@@ -207,31 +213,31 @@
                     <div class="modal-body">Cliquez sur "Se déconnecter" si vous souhaitez vous déconnecter du tableau de bord</div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                        <a class="btn btn-primary-custom" href="../frontend/indexView.php">Se déconnecter</a>
+                        <a class="btn btn-primary-custom" href="index.php">Se déconnecter</a>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Bootstrap core JavaScript-->
-        <script src="../../public/vendor/startbootstrap-sb-admin-2/vendor/jquery/jquery.min.js"></script>
-        <script src="../../public/vendor/startbootstrap-sb-admin-2/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="public/vendor/startbootstrap-sb-admin-2/vendor/jquery/jquery.min.js"></script>
+        <script src="public/vendor/startbootstrap-sb-admin-2/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
         <!-- Core plugin JavaScript-->
-        <script src="../../public/vendor/startbootstrap-sb-admin-2/vendor/jquery-easing/jquery.easing.min.js"></script>
+        <script src="public/vendor/startbootstrap-sb-admin-2/vendor/jquery-easing/jquery.easing.min.js"></script>
 
         <!-- Custom scripts for all pages-->
-        <script src="../../public/vendor/startbootstrap-sb-admin-2/js/sb-admin-2.min.js"></script>
+        <script src="public/vendor/startbootstrap-sb-admin-2/js/sb-admin-2.min.js"></script>
 
         <!-- Page level plugins -->
-        <script src="../../public/vendor/startbootstrap-sb-admin-2/vendor/chart.js/Chart.min.js"></script>
+        <script src="public/vendor/startbootstrap-sb-admin-2/vendor/chart.js/Chart.min.js"></script>
 
         <!-- Page level custom scripts -->
-        <script src="../../public/vendor/startbootstrap-sb-admin-2/js/demo/chart-area-demo.js"></script>
-        <script src="../../public/vendor/startbootstrap-sb-admin-2/js/demo/chart-pie-demo.js"></script>
+        <script src="public/vendor/startbootstrap-sb-admin-2/js/demo/chart-area-demo.js"></script>
+        <script src="public/vendor/startbootstrap-sb-admin-2/js/demo/chart-pie-demo.js"></script>
 
         <!-- Custom JS -->
-        <script type="text/javascript" src="../../public/js/customjs.js" rel="stylesheet" />"></script>
+        <!--<script type="text/javascript" src="public/js/customjs.js" rel="stylesheet" />"></script>-->
 
 
     </body>

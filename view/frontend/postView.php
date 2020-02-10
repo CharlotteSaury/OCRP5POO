@@ -53,7 +53,17 @@
                 <h2 class="mb-4"><?= htmlspecialchars($donnees['title']); ?></h2>
                 <hr class="d-none d-lg-block ml-0">
 
-                <?php 
+                <p><?= htmlspecialchars($donnees['chapo']); ?></p>
+
+                <?php
+
+                    if ($donnees['main_image'] != null)
+                    {
+                    ?>
+                        <div class="post-picture my-3" style="background-image: url('<?= htmlspecialchars($donnees['main_image']); ?>');">     
+                        </div>
+                    <?php
+                    } 
                 }
 
                 $postInfos->closeCursor();
@@ -61,7 +71,7 @@
                 while ($donnees = $postContents->fetch())
                 {
 
-                    if (($donnees['content_type'] == 1) || ($donnees['content_type'] == 3)) 
+                    if (($donnees['content_type'] == 1)) 
                     {
                     ?>
                         <div class="post-picture my-3" style="background-image: url('<?= htmlspecialchars($donnees['content']); ?>');">     
@@ -74,14 +84,12 @@
                     ?> 
                         <div class="post-content post-content-text text-black-50 text-justify">
                             <p><?= htmlspecialchars($donnees['content']); ?></p>
-                        </div>
-
-                    <?php
+                        </div>                        
+                <?php
                     }
                 }
-                $postContents -> closeCursor();
-                ?>               
-         
+                $postContents->closeCursor();
+                ?>
             </div>
 
             <!-- Comments section -->
@@ -91,16 +99,18 @@
                 <hr class="d-none d-lg-block ml-0">
 
                 <div class="comment-form">
-                    <form>
+                    <form method="POST" action="index.php?action=addComment">
                         <div class="form-row">
-                            <textarea class="form-control mt-4 mb-4 pb-5" placeholder="Votre commentaire"></textarea>
+                            <textarea class="form-control mt-4 mb-4 pb-5" name="content" placeholder="Votre commentaire"></textarea>
                         </div>
                         <div class="form-row">
                             <div class="col">
-                                <input type="text" class="form-control" placeholder="Pseudo *" required>
+                                <input type="text" class="form-control" name="email" placeholder="Email *" required>
                             </div>
-                            <div class="col-8">
-                                <input type="email" class="form-control" placeholder="Email *" required>
+                            <div class="col">
+
+                                <input type="hidden" name="postId" value="<?= $postId; ?>" />
+                            
                             </div>
                         </div>
                         <input class="btn btn-primary-custom my-4" type="submit" value="Commenter"/>
@@ -108,6 +118,9 @@
                 </div>
 
                 <?php
+
+
+
 
                 while ($donnees = $postComments -> fetch())
                 {

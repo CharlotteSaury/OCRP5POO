@@ -1,4 +1,4 @@
-$(function(){
+/*$(function(){
   
     $('#add-post-content').click(function(){
 
@@ -21,5 +21,5 @@ $(function(){
         });  
     });
       
-});
+});*/
 

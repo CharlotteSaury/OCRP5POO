@@ -53,6 +53,14 @@ a:focus, a:hover {
   background-color: #467370 !important;
 }
 
+.fa-toggle-on {
+	color: #64a19d;
+}
+
+.fa-toggle-off {
+	color: red;
+}
+
 /******** TABLES ********/
 
 .table-success-custom {
@@ -110,6 +118,17 @@ a:focus, a:hover {
 	background-color: #161616;
 }
 
+
+/* //////// Message div /////// */
+
+.adminMessage {
+	background-color: rgba(100,161,157,0.3);
+	border: 0.0625rem dashed #161616;
+	border-radius: 0.5rem;
+	padding: 1rem 0.5rem;
+	margin: 1rem 0;
+	color: #161616;
+}
 
 /* //////////////////////////////// */
 /* /////// backend Views ////////// */

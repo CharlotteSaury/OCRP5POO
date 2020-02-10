@@ -21,7 +21,7 @@
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-primary-custom text-uppercase mb-1">Nombre de posts</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">9</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $publishedPostsNb ?> publiés / <?= $totalPostsNb ?></div>
                     </div>
                     <div class="col-auto">
                         <i class="fas fa-newspaper fa-2x text-gray-300"></i>
@@ -38,7 +38,7 @@
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-primary-custom text-uppercase mb-1">Nombre de commentaires</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">12</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $approvedCommentsNb ?> approuvés / <?= $totalCommentsNb ?></div>
                     </div>
                     <div class="col-auto">
                         <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -55,7 +55,7 @@
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-primary-custom text-uppercase mb-1">Nombre d'utilisateurs</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $usersNb ?></div>
                     </div>
                     <div class="col-auto">
                         <i class="fas fa-users fa-2x text-gray-300"></i>
@@ -92,60 +92,79 @@
                         </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th scope="row">10</th>
-                                <td>Charlotte S</td>
-                                <td>Sed in</td>
-                                <td>Fusce vulputate eleifend sapien. Sed aliquam ultrices mauris...</td>
-                                <td>29/12/2019</td>
+                            <?php
+
+                            while ($donnees = $recentPosts->fetch())
+                            {
+                                if ($donnees['status'] == 1)
+                                {
+                                    echo '<tr>';
+                                }
+                                else
+                                {
+                                    echo '<tr class="table-success-custom">';
+                                }
+                            ?>
+                                <th scope="row"><?= htmlspecialchars($donnees['postId']); ?></th>
+                                <td><?= htmlspecialchars($donnees['first_name']); ?> <?= htmlspecialchars($donnees['last_name']); ?></td>
+                                <td><?= htmlspecialchars($donnees['title']); ?></td>
+                                <td><?= substr(htmlspecialchars($donnees['chapo']), 0, 50); ?>...</td>
+                                <td><?= $donnees['date_creation']; ?></td>
                                 <td>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Voir">
+                                <?php 
+                                if ($donnees['status'] == 1)
+                                {
+                                    ?>
+
+                                    <a href="index.php?action=publishPostDashboard&amp;id=<?= htmlspecialchars($donnees['postId']); ?>&amp;status=<?= htmlspecialchars($donnees['status']); ?>" class="mr-2" title="Ne plus publier"><i class="fas fa-toggle-on"></i></a>
+
+                                    <?php
+                                }
+                                else
+                                {
+                                    ?>
+
+                                    <a href="index.php?action=publishPostDashboard&amp;id=<?= htmlspecialchars($donnees['postId']); ?>&amp;status=<?= htmlspecialchars($donnees['status']); ?>" class="mr-2"><i class="fas fa-toggle-off" title="Publier"></i></a>
+
+                                    <?php
+                                }
+                                ?>
+                                    <a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($donnees['postId']); ?>" class="btn btn-outline-dark btn-sm" title="Voir">
                                         <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Modifier">
+                                    </a>
+                                    <a href="index.php?action=editPostView&amp;id=<?= htmlspecialchars($donnees['postId']); ?>" class="btn btn-outline-dark btn-sm" title="Modifier">
                                         <i class="fas fa-pencil-alt"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Supprimer">
+                                    </a>
+                                    <a data-toggle="modal" data-target="#deletePostModal<?= htmlspecialchars($donnees['postId']); ?>" class="btn btn-outline-dark btn-sm" title="Supprimer">
                                         <i class="fas fa-trash-alt"></i>
-                                    </button>
+                                    </a>
                                 </td>
                             </tr>
-                            <tr>
-                                <th scope="row">9</th>
-                                <td>Charlotte S</td>
-                                <td>Suspendisse faucibus nunc</td>
-                                <td>Ut leo. Proin sapien ipsum, porta a, auctor quis, euismod ut, mi...</td>
-                                <td>25/12/2019</td>
-                                <td>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Voir">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Modifier">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Supprimer">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">8</th>
-                                <td>Céline D</td>
-                                <td>Maecenas vestibulum mollis diam</td>
-                                <td>Sed aliquam ultrices mauris. Donec interdum, metus et...</td>
-                                <td>19/12/2019</td>
-                                <td>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Voir">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Modifier">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Supprimer">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </td>
-                            </tr>
+                            <!-- deletePost Modal-->
+                            <div class="modal fade" id="deletePostModal<?= htmlspecialchars($donnees['postId']); ?>" tabindex="-1" role="dialog" aria-labelledby="deletePostLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deletePostLabel">Voulez-vous vraiment supprimer ce post ?</h5>
+                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">Cliquez sur "Valider" pour supprimer définitivement ce post.</div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+                                            <a class="btn btn-primary-custom" href="index.php?action=deletePostDashboard&amp;id=<?= htmlspecialchars($donnees['postId']); ?>">Valider</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <?php
+                            }
+
+                            $recentPosts->closeCursor();
+
+                            ?>
                         </tbody>
                     </table>
                 </div>
@@ -157,6 +176,8 @@
 <!-- Comments-Users Row -->
 
 <div class="row">
+
+    <!-- Comments panel -->
 
     <div class="col-lg-6">
         <div class="card shadow mb-4">
@@ -171,100 +192,90 @@
                 <div class="card-body">
                     <table class="table table-hover">
                         <thead>
-                           <tr>
-                            <th scope="col">Id</th>
-                            <th scope="col">Auteur</th>
-                            <th scope="col">Contenu</th>
-                            <th scope="col">Date</th>
-                            <th scope="col">Action</th>
-                        </tr>
+                            <tr>
+                                <th scope="col">Id</th>
+                                <th scope="col">Auteur</th>
+                                <th scope="col">Contenu</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Action</th>
+                            </tr>
                         </thead>
                         <tbody>
-                            <tr class="table-success-custom">
-                                <th scope="row">44</th>
-                                <td>Charlotte S</td>
-                                <td>Sed in</td>
-                                <td>29/12/2019</td>
+                            <?php
+
+                            while ($donnees = $recentComments->fetch())
+                            {
+                                if ($donnees['status'] == 1)
+                                {
+                                    echo '<tr>';
+                                }
+                                else
+                                {
+                                    echo '<tr class="table-success-custom">';
+                                }
+                            ?>
+                                <th scope="row"><?= htmlspecialchars($donnees['commentId']); ?></th>
+                                <td><?= htmlspecialchars($donnees['first_name']); ?> <?= htmlspecialchars($donnees['last_name']); ?></td>
+                                <td><?= substr(htmlspecialchars($donnees['content']), 0, 50); ?></td>
+                                <td><?= $donnees['commentDate']; ?></td>
                                 <td>
-                                    <a href="adminPostView.php" class="btn btn-outline-dark btn-sm" title="Voir l'article concerné">
+                                    <a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($donnees['postId']); ?>"class="btn btn-outline-dark btn-sm" title="Voir l'article concerné">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Approuver">
-                                        <i class="fas fa-check"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Supprimer">
+                                    
+                                    <?php
+                                    if ($donnees['status'] == 0)
+                                    {
+                                    ?>
+
+                                        <a href="index.php?action=approveCommentDashboard&amp;id=<?= htmlspecialchars($donnees['commentId']); ?>" class="btn btn-outline-dark btn-sm" title="Approuver">
+                                            <i class="fas fa-check"></i>
+                                        </a>
+                                    
+                                    <?php
+                                    }
+                                    ?>
+                                    
+                                    <a data-toggle="modal" data-target="#deleteCommentModal<?= htmlspecialchars($donnees['commentId']); ?>" class="btn btn-outline-dark btn-sm" title="Supprimer">
                                         <i class="fas fa-times"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr class="table-success-custom">
-                                <th scope="row">43</th>
-                                <td>Charlotte S</td>
-                                <td>Suspendisse faucibus nunc</td>
-                                <td>25/12/2019</td>
-                                <td>
-                                    <a href="adminPostView.php" class="btn btn-outline-dark btn-sm" title="Voir l'article concerné">
-                                        <i class="fas fa-eye"></i>
                                     </a>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Approuver">
-                                        <i class="fas fa-check"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Supprimer">
-                                        <i class="fas fa-times"></i>
-                                    </button>
                                 </td>
                             </tr>
-                            <tr class="table-success-custom">
-                                <th scope="row">42</th>
-                                <td>Céline D</td>
-                                <td>Maecenas vestibulum mollis diam</td>
-                                <td>19/12/2019</td>
-                                <td>
-                                    <a href="adminPostView.php" class="btn btn-outline-dark btn-sm" title="Voir l'article concerné">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Approuver">
-                                        <i class="fas fa-check"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Supprimer">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">41</th>
-                                <td>Céline D</td>
-                                <td>Maecenas vestibulum mollis diam</td>
-                                <td>19/12/2019</td>
-                                <td>                               
-                                    <a href="adminPostView.php" class="btn btn-outline-dark btn-sm" title="Voir l'article concerné">
-                                        <i class="fas fa-eye"></i>
-                                    </a>         
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Supprimer">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">40</th>
-                                <td>Céline D</td>
-                                <td>Maecenas vestibulum mollis diam</td>
-                                <td>19/12/2019</td>
-                                <td>
-                                    <a href="adminPostView.php" class="btn btn-outline-dark btn-sm" title="Voir l'article concerné">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Supprimer">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </td>
-                            </tr>
+                            <!-- deleteComment Modal-->
+                            <div class="modal fade" id="deleteCommentModal<?= htmlspecialchars($donnees['commentId']); ?>" tabindex="-1" role="dialog" aria-labelledby="deleteCommentLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteCommentLabel">Voulez-vous vraiment supprimer ce commentaire ?</h5>
+                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">Cliquez sur "Valider" pour supprimer définitivement ce commentaire</div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+                                            <a class="btn btn-primary-custom" href="index.php?action=deleteCommentDashboard&amp;id=<?= htmlspecialchars($donnees['commentId']); ?>">Valider</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <?php
+                            }
+                            $recentComments->closeCursor();
+                            ?>
+
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
+
+    
+
+
+    <!-- Users panel -->
 
     <div class="col-lg-6">
         <div class="card shadow mb-4">
@@ -286,91 +297,32 @@
                         </tr>
                         </thead>
                         <tbody>
+                            <?php
+
+                            while ($donnees = $recentUsers->fetch())
+                            {
+                            ?>
                             <tr>
-                                <th scope="row">18</th>
-                                <td>Celiiine</td>
-                                <td>celiiine@email.fr</td>
-                                <td>user</td>
+                                <th scope="row"><?= htmlspecialchars($donnees['userId']); ?></th>
+                                <td><?= htmlspecialchars($donnees['pseudo']); ?></td>
+                                <td><?= htmlspecialchars($donnees['email']); ?></td>
+                                <td><?= htmlspecialchars($donnees['role']); ?></td>
                                 <td>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Voir">
+                                    <a href="index.php?action=profileUser&amp;id=<?= htmlspecialchars($donnees['userId']); ?>" class="btn btn-outline-dark btn-sm" title="Voir">
                                         <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Modifier">
+                                    </a>
+                                    <a href="index.php?action=editUser&amp;id=<?= htmlspecialchars($donnees['userId']); ?>" class="btn btn-outline-dark btn-sm" title="Modifier">
                                         <i class="fas fa-pencil-alt"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Supprimer">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
+                                    </a>
                                 </td>
                             </tr>
-                            <tr>
-                                <th scope="row">17</th>
-                                <td>georgesClooney</td>
-                                <td>clooney@hollywood.com</td>
-                                <td>user</td>
-                                <td>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Voir">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Modifier">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Supprimer">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">16</th>
-                                <td>JoeDé</td>
-                                <td>joe.dalton@email.com</td>
-                                <td>user</td>
-                                <td>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Voir">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Modifier">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Supprimer">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">15</th>
-                                <td>Charlotte S</td>
-                                <td>saury.charlotte@wanadoo.fr</td>
-                                <td>admin</td>
-                                <td>                                        
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Voir">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Modifier">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Supprimer">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">14</th>
-                                <td>jacadi</td>
-                                <td>jacadi@email.fr</td>
-                                <td>user</td>
-                                <td>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Voir">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Modifier">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm" title="Supprimer">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </td>
-                            </tr>
+
+
+                            <?php
+                            }
+                            $recentUsers->closeCursor();
+                            ?>
+                            
                         </tbody>
                     </table>
                 </div>

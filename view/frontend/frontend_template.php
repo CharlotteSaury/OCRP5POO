@@ -54,7 +54,7 @@
                     		<a class="nav-link js-scroll-trigger" href="index.php#contact-form">Me contacter</a>
                   		</li>
                         <li class="nav-item">
-                            <a class="nav-link js-scroll-trigger" href="connexionView.php">Se connecter</a>
+                            <a class="nav-link js-scroll-trigger" href="index.php?action=connexionView">Se connecter</a>
                         </li>
                 	</ul>
               	</div>
@@ -152,7 +152,7 @@
 		<!-- Footer -->
 	    <footer class="bg-black small text-center text-white-50">
 	    	<div class="text-center" id="footerLinks">
-	    		<a href="../backend/dashboardView.php">ADMIN</a> | 
+	    		<a href="index.php?action=admin">ADMIN</a> | 
 	    		<a href="#">MENTIONS LEGALES</a> | 
 	    		<a href="#">POLITIQUE DE CONFIDENTIALITE</a>
 	    		
