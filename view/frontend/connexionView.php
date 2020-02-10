@@ -11,6 +11,14 @@
         <div class="mx-auto text-center">
             <h1 class="mx-auto my-0 text-uppercase">Bienvenue !</h1>
             <h2 class="text-white-50 mx-auto mt-2 mb-5">Se connecter | <a href="index.php?action=inscriptionView">S'inscrire</a></h2>
+
+            <?php
+            if (isset($message))
+            {
+                echo '<div class="adminMessage text-white-50 text-center">' . $message . '</div>';
+            }
+            ?>
+
             <form class="form-inline d-flex flex-column">
                 <input type="text" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="inscriptionPseudo" placeholder="Votre pseudo..." required>
                 <input type="password" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="loginPass" placeholder="Votre mot de passe..." required>
@@ -19,7 +27,6 @@
                     <input type="checkbox" class="form-check-input" name="rememberme" />
                     <label class="form-check-label text-white-50" for="rememberme" >Se souvenir de moi</label>
                 </div>
-                <p><?= $message; ?></p>
                 <button type="submit" class="btn btn-primary-custom mx-auto">Se connecter</button>
                 <p class="text-white-50">Pas encore membre ? <a href="index.php?action=inscriptionView">Je m'inscris !</a></p>
 

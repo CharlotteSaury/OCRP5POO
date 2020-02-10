@@ -8,15 +8,22 @@ class UserManager extends Manager
 {
 	public function addUser ($pseudo, $pass, $email)
 	{
-		$sql = 'INSERT INTO user (pseudo, email, password, user_role_id, register_date)
-				VALUES (:pseudo, :email, :pass, 2, NOW())';
+		// Activation_code generation
+		$permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz';
+		$random_code = substr(str_shuffle($permitted_chars), 0, 10);
+		$activation_code = password_hash($random_code, PASSWORD_DEFAULT);
 
-		$req = $this->dbRequest($sql, array($pseudo, $email, $pass));
+		$sql = 'INSERT INTO user (pseudo, email, password, user_role_id, register_date, activation_code)
+				VALUES (:pseudo, :email, :pass, 2, NOW(), :activation_code)';
+
+		$req = $this->dbRequest($sql, array($pseudo, $email, $pass, $activation_code));
 		$req->bindValue('pseudo', $pseudo);
 		$req->bindValue('email', $email);
 		$req->bindValue('pass', $pass);
+		$req->bindValue('activation_code', $activation_code);
 
 		$req->execute();
+		return $activation_code;
 	}
 
 	public function pseudoExists($pseudo)
@@ -41,6 +48,27 @@ class UserManager extends Manager
 
 		$emailExists = $req->fetch(\PDO::FETCH_ASSOC);
 		return $emailExists['nbUser'];
+	}
+
+	public function getUserCode($email)
+	{
+		$sql = 'SELECT activation_code from user WHERE email = :email';
+
+		$req = $this->dbRequest($sql, array($email));
+		$req->bindValue('email', $email);
+		$req->execute();
+		$donnees = $req->fetch(\PDO::FETCH_ASSOC);
+
+		return $activation_code = $donnees['activation_code'];
+	}
+
+	public function userActivation($email)
+	{
+		$sql = 'UPDATE user SET activation_code = null WHERE email = :email';
+
+		$req = $this->dbRequest($sql, array($email));
+		$req->bindValue('email', $email);
+		$req->execute();
 	}
 
 	public function getUserNb()

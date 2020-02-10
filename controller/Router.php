@@ -138,7 +138,8 @@ class Router
 							$infos = new UserController();
 							$infos->checkPseudo($pseudo);
 							$infos->checkEmail($email);
-							$infos->newUser($pseudo, $pass, $email);
+							$activation_code = $infos->newUser($pseudo, $pass, $email);
+							$infos->sendEmailActivation($email, $pseudo, $activation_code);
 							$message = 'Merci pour votre inscription ! Un email de confirmation vous a été envoyé afin de confirmer votre adresse email. Merci de vous reporter à cet email pour activer votre compte ! ';
 							$infos->inscriptionView($message);
 
@@ -148,6 +149,26 @@ class Router
 							$message = 'Les mots de passe saisis sont différents ! ';
 							$infos->inscriptionView($message);
 						}	
+						
+					}
+
+					
+					elseif ($_GET['action'] == 'activation')
+					{
+						$email = $this->getParameter($_GET, 'email');
+						$key = $this->getParameter($_GET, 'key');
+						$infos = new UserController();
+
+						if ($infos->userActivated($email))
+						{
+							$message = 'Votre compte est déjà activé, vous pouvez vous connecter ! ';
+							$infos->connexionView($message);
+						}
+						else
+						{
+							$message = $infos->userActivation($email, $key);
+							$infos->connexionView($message);
+						}
 						
 					}
 
