@@ -53,13 +53,86 @@
                   		<li class="nav-item">
                     		<a class="nav-link js-scroll-trigger" href="index.php#contact-form">Me contacter</a>
                   		</li>
-                        <li class="nav-item">
-                            <a class="nav-link js-scroll-trigger" href="index.php?action=connexionView">Se connecter</a>
-                        </li>
+
+                        <?php
+
+                        if (isset($_SESSION['id']) && isset($_SESSION['pseudo']))
+                        {
+                            ?>
+                            <li class="nav-item dropdown no-arrow nav-avatar">
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Bonjour, <?= htmlspecialchars($_SESSION['pseudo']); ?><img class="img-profile rounded-circle ml-2" src="<?= htmlspecialchars($_SESSION['avatar']); ?>" />
+                                    
+                                </a>
+                                <!-- Dropdown - User Information -->
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                                    <a class="dropdown-item" href="index.php?action=profileUser&id=<?= $_SESSION['id']; ?>">
+                                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                      Mon profil
+                                    </a>
+
+                                    <?php
+
+                                    if ($_SESSION['role'] == 1)
+                                    {
+                                        ?>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="index.php?action=admin">
+                                            <i class="fas fa-user-cog fa-sm fa-fw mr-2 text-gray-400"></i>
+                                            Admin
+                                        </a>
+
+                                        <?php
+
+                                    }
+                                    ?>
+
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                      Se déconnecter
+                                    </a>
+                                </div>
+                            </li>
+
+                            <?php
+                        }
+                        else
+                        {
+                            ?>
+                            <li class="nav-item">
+                                <a class="nav-link js-scroll-trigger" href="index.php?action=connexionView">Se connecter</a>
+                            </li>
+                            <?php
+                        }
+
+                        ?>
+                        
+                        
                 	</ul>
               	</div>
             </div>
+
         </nav>
+
+        <!-- Logout Modal-->
+        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Voulez-vous vraiment quitter cette page ?</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">Cliquez sur "Se déconnecter" si vous souhaitez vous déconnecter du tableau de bord</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+                        <a class="btn btn-primary-custom" href="index.php?action=deconnexion">Se déconnecter</a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 	    <!-- Header -->
 
@@ -127,20 +200,22 @@
                                 <i class="fas fa-mobile-alt fa-2x text-primary mb-2"></i>
                                 <h4 class="text-uppercase m-1">Tel</h4>
                                 <hr class="my-4">
-                                <div class="small text-black-50">+(00)33 6 48 08 35 40</div>
+                                <div class="small text-black-50">
+                                    <a href="tel:+33 6 48 08 35 40">+(00)33 6 48 08 35 40</a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="social d-flex justify-content-center">
-                    <a href="#" class="mx-2">
-                        <i class="fab fa-twitter"></i>
+                    <a href="www.linkedin.com/in/charlotte-saury-654a834a" class="mx-2">
+                        <i class="fab fa-linkedin"></i>
                     </a>
-                    <a href="#" class="mx-2">
+                    <a href="https://www.facebook.com/charlotte.saury.1" class="mx-2">
                         <i class="fab fa-facebook-f"></i>
                     </a>
-                    <a href="#" class="mx-2">
+                    <a href="https://github.com/CharlotteSaury" class="mx-2">
                         <i class="fab fa-github"></i>
                     </a>
                 </div>
@@ -151,16 +226,25 @@
 
 		<!-- Footer -->
 	    <footer class="bg-black small text-center text-white-50">
-	    	<div class="text-center" id="footerLinks">
-	    		<a href="index.php?action=admin">ADMIN</a> | 
-	    		<a href="#">MENTIONS LEGALES</a> | 
-	    		<a href="#">POLITIQUE DE CONFIDENTIALITE</a>
-	    		
-	    	</div>
-	      	<div class="text-center">
-	          	Copyright &copy; Site réalisé par Charlotte SAURY dans le cadre de la formation OpenClassrooms parcours "Développeur d'applications"
-	      	</div>
-	    </footer>
+            <div class="text-center" id="footerLinks">
+
+                <?php
+
+                if (isset($_SESSION['role']) && ($_SESSION['role'] == 1))
+                {
+                    echo '<a href="index.php?action=admin">ADMIN</a> | ';
+                }
+
+                ?>
+
+                <a href="#">MENTIONS LEGALES</a> | 
+                <a href="#">POLITIQUE DE CONFIDENTIALITE</a>
+                
+            </div>
+            <div class="text-center">
+                Copyright &copy; Site réalisé par Charlotte SAURY dans le cadre de la formation OpenClassrooms parcours "Développeur d'applications"
+            </div>
+        </footer>
 
 		<!-- Bootstrap core JavaScript -->
 	    <script src="public/vendor/startbootstrap-grayscale-gh-pages/vendor/jquery/jquery.min.js"></script>

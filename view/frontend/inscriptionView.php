@@ -26,7 +26,7 @@
                 <input type="password" name="pass2" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" placeholder="Retapez votre mot de passe...*" required>
                 <input type="email" name="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" placeholder="Votre adresse email...*" required>
                 <div class="form-check">
-                    <input type="checkbox" class="form-check-input" name="confidentiality" required/>
+                    <input type="checkbox" class="form-check-input" name="confidentiality" id="confidentiality" required/>
                     <label class="form-check-label text-white-50" for="confidentiality" >* J'ai lu et j'accepte la <a href="#"> Politique de Protection des données personnelles</a></label>
                 </div>
                 

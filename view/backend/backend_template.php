@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -32,87 +33,97 @@
         <!-- Page Wrapper -->
         <div id="wrapper">
 
-            <!-- Sidebar -->
-            <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
+            <?php
+            if (isset($_SESSION['role']) && $_SESSION['role'] == 1)
+            {
+                ?>
+                <!-- Sidebar -->
+                <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
-                <!-- Sidebar - Brand -->
-                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php?action=admin">
-                    <div class="sidebar-brand-text mx-3">Charlotte S</div>
-                </a>
-
-                <!-- Divider -->
-                <hr class="sidebar-divider my-0">
-
-                <!-- Nav Item - Dashboard -->
-                <li class="nav-item active">
-                    <a class="nav-link" href="index.php?action=admin">
-                        <i class="fas fa-fw fa-tachometer-alt"></i><span>Tableau de bord</span>
+                    <!-- Sidebar - Brand -->
+                    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php?action=admin">
+                        <div class="sidebar-brand-text mx-3"><?= htmlspecialchars($_SESSION['pseudo']); ?></div>
                     </a>
-                </li>
 
-                <!-- Divider -->
-                <hr class="sidebar-divider">
+                    <!-- Divider -->
+                    <hr class="sidebar-divider my-0">
 
-                <!-- Heading -->
-                <div class="sidebar-heading">
-                    Administration
-                </div>
+                    <!-- Nav Item - Dashboard -->
+                    <li class="nav-item active">
+                        <a class="nav-link" href="index.php?action=admin">
+                            <i class="fas fa-fw fa-tachometer-alt"></i><span>Tableau de bord</span>
+                        </a>
+                    </li>
 
-                <!-- Nav Item - Pages Collapse Menu -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                        <i class="fas fa-newspaper"></i>
-                        <span>Articles</span>
-                    </a>
-                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <a class="collapse-item" href="index.php?action=adminPosts">Tous les articles</a>
-                            <a class="collapse-item" href="index.php?action=adminNewPost"><i class="fas fa-plus mr-1"></i> Ajouter</a>
-                        </div>
+                    <!-- Divider -->
+                    <hr class="sidebar-divider">
+
+                    <!-- Heading -->
+                    <div class="sidebar-heading">
+                        Administration
                     </div>
-                </li>
 
-                <!-- Nav Item - Comments -->
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php?action=adminComments">
-                        <i class="fas fa-comments"></i>
-                        <span>Commentaires</span></a>
-                </li>
+                    <!-- Nav Item - Pages Collapse Menu -->
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                            <i class="fas fa-newspaper"></i>
+                            <span>Articles</span>
+                        </a>
+                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <a class="collapse-item" href="index.php?action=adminPosts">Tous les articles</a>
+                                <a class="collapse-item" href="index.php?action=adminNewPost"><i class="fas fa-plus mr-1"></i> Ajouter</a>
+                            </div>
+                        </div>
+                    </li>
 
-                <!-- Nav Item - users -->
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php?action=adminUsers">
-                        <i class="fas fa-users"></i>
-                        <span>Utilisateurs</span></a>
-                </li>
+                    <!-- Nav Item - Comments -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.php?action=adminComments">
+                            <i class="fas fa-comments"></i>
+                            <span>Commentaires</span></a>
+                        </li>
 
-                <!-- Divider -->
-                <hr class="sidebar-divider">
+                        <!-- Nav Item - users -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.php?action=adminUsers">
+                                <i class="fas fa-users"></i>
+                                <span>Utilisateurs</span></a>
+                            </li>
 
-                <!-- Heading -->
-                <div class="sidebar-heading">
-                    Profil
-                </div>
+                            <!-- Divider -->
+                            <hr class="sidebar-divider">
 
-                <!-- Profile nav card -->
+                            <!-- Heading -->
+                            <div class="sidebar-heading">
+                                Profil
+                            </div>
 
-                <div class="adminProfileNavCard text-center mb-4">
+                            <!-- Profile nav card -->
 
-                    <a href="profileView.php">
-                        <img class="my-4" src="public/images/photo.jpg" alt="User profil picture" />
-                    </a>
-                    <a href="editProfileView.php" class="btn btn-primary-custom">
-                      <i class="fas fa-user mr-1"></i> Modifier mon profil</a>
-                
-                </div>
+                            <div class="adminProfileNavCard text-center mb-4">
 
-              <!-- Sidebar Toggler (Sidebar) -->
-              <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-              </div>
+                                <a href="profileView.php">
+                                    <img class="my-4" src="<?= htmlspecialchars($_SESSION['avatar']); ?>" alt="User profil picture" />
+                                </a>
+                                <a href="index.php?action=editUser&id=<?= htmlspecialchars($_SESSION['id']); ?>" class="btn btn-primary-custom">
+                                  <i class="fas fa-user mr-1"></i> Modifier mon profil</a>
+                                  
+                              </div>
 
-            </ul>
-            <!-- End of Sidebar -->
+                              <!-- Sidebar Toggler (Sidebar) -->
+                              <div class="text-center d-none d-md-inline">
+                                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+                            </div>
+
+                        </ul>
+                        <!-- End of Sidebar -->
+                <?php
+            }
+
+            ?>
+
+            
 
             <!-- Content Wrapper -->
             <div id="content-wrapper" class="d-flex flex-column">
@@ -134,14 +145,19 @@
                                 <!-- Nav Item - User Information -->
                                 <li class="nav-item dropdown no-arrow">
                                   <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="mr-3 d-none d-lg-inline text-primary-custom font-weight-bold">Bonjour, Charlotte Saury</span>
-                                    <img class="img-profile rounded-circle" src="public/images/photo.jpg">
+                                    <span class="mr-3 d-none d-lg-inline text-primary-custom font-weight-bold">Bonjour, <?= htmlspecialchars($_SESSION['pseudo']); ?></span>
+                                    <img class="img-profile rounded-circle" src="<?= htmlspecialchars($_SESSION['avatar']); ?>">
                                   </a>
                                   <!-- Dropdown - User Information -->
                                   <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                    <a class="dropdown-item" href="profileView.php">
+                                    <a class="dropdown-item" href="index.php?action=profileUser&id=<?= htmlspecialchars($_SESSION['id']); ?>">
                                       <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                       Mon profil
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="index.php">
+                                      <i class="fas fa-tachometer-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                      Le blog
                                     </a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -213,7 +229,7 @@
                     <div class="modal-body">Cliquez sur "Se déconnecter" si vous souhaitez vous déconnecter du tableau de bord</div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                        <a class="btn btn-primary-custom" href="index.php">Se déconnecter</a>
+                        <a class="btn btn-primary-custom" href="index.php?action=deconnexion">Se déconnecter</a>
                     </div>
                 </div>
             </div>

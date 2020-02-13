@@ -1,4 +1,4 @@
-<?php $title = 'Blog connexion'; ?>
+<?php $title = 'Mot de passe oublié'; ?>
 
 
 
@@ -9,17 +9,18 @@
 <div class="masthead" id="connexionSection">
     <div class="container d-flex h-100 align-items-center">
         <div class="mx-auto text-center">
-            <h1 class="mx-auto my-0 text-uppercase">Bienvenue !</h1>
-            <h2 class="text-white-50 mx-auto mt-2 mb-5">Se connecter | <a href="index.php?action=inscriptionView">S'inscrire</a></h2>
-
+            <h1 class="mx-auto my-0 text-uppercase">Mot de passe oublié</h1>
+            
             <?php
             if (isset($message))
             {
                 echo '<div class="adminMessage text-white-50 text-center">' . $message . '</div>';
             }
+            else
+            {
             ?>
 
-            <form method="POST" action="index.php?action=connexion" class="form-inline d-flex flex-column">
+            <form method="POST" action="index.php?action=forgotPassMail" class="form-inline d-flex flex-column">
 
                 <?php
                 if (isset($_COOKIE['email']))
@@ -36,17 +37,15 @@
                     <?php
                 }
                 ?>
-                <input type="password" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" name="pass" placeholder="Votre mot de passe..." required>
-                <a href="index.php?action=forgotPassView">J'ai oublié mon mot de passe...</a>
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" name="rememberme" id="rememberme" />
-                    <label class="form-check-label text-white-50" for="rememberme" >Se souvenir de moi</label>
-                </div>
-                <button type="submit" class="btn btn-primary-custom mx-auto">Se connecter</button>
+                
+                <button type="submit" class="btn btn-primary-custom mx-auto">Réinitialiser mon mot de passe</button>
                 <p class="text-white-50">Pas encore membre ? <a href="index.php?action=inscriptionView">Je m'inscris !</a></p>
 
 
             </form>
+            <?php
+            }
+            ?>
         </div>
     </div>
 </div>

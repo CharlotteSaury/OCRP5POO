@@ -53,13 +53,81 @@
                         <li class="nav-item">
                             <a class="nav-link js-scroll-trigger" href="index.php#contact-form">Me contacter</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link js-scroll-trigger" href="connexionView.php">Se connecter</a>
-                        </li>
-                	</ul>
+                        <?php
+
+                        if (isset($_SESSION['id']) && isset($_SESSION['pseudo']))
+                        {
+                            ?>
+                            <li class="nav-item dropdown no-arrow nav-avatar">
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Bonjour, <?= htmlspecialchars($_SESSION['pseudo']); ?><img class="img-profile rounded-circle ml-2" src="<?= htmlspecialchars($_SESSION['avatar']); ?>" />
+                                    
+                                </a>
+                                <!-- Dropdown - User Information -->
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                                    <a class="dropdown-item" href="index.php?action=profileUser&id=<?= $_SESSION['id']; ?>">
+                                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Mon profil
+                                    </a>
+
+                                    <?php
+
+                                    if ($_SESSION['role'] == 1)
+                                    {
+                                        ?>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="index.php?action=admin">
+                                            <i class="fas fa-user-cog fa-sm fa-fw mr-2 text-gray-400"></i>
+                                            Admin
+                                        </a>
+
+                                        <?php
+
+                                    }
+                                    ?>
+
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Se déconnecter
+                                    </a>
+                                </div>
+                            </li>
+
+                            <?php
+                        }
+                        else
+                        {
+                            ?>
+                            <li class="nav-item">
+                                <a class="nav-link js-scroll-trigger" href="index.php?action=connexionView">Se connecter</a>
+                            </li>
+                            <?php
+                        }
+
+                        ?>
               	</div>
             </div>
         </nav>
+
+        <!-- Logout Modal-->
+        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Voulez-vous vraiment quitter cette page ?</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">Cliquez sur "Se déconnecter" si vous souhaitez vous déconnecter du tableau de bord</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+                        <a class="btn btn-primary-custom" href="index.php?action=deconnexion">Se déconnecter</a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
 		<!-- Content -->
@@ -69,7 +137,16 @@
 		<!-- Footer -->
 	    <footer class="bg-black small text-center text-white-50">
 	    	<div class="text-center" id="footerLinks">
-	    		<a href="../backend/dashboardView.php">ADMIN</a> | 
+
+                <?php
+
+                if (isset($_SESSION['role']) && ($_SESSION['role'] == 1))
+                {
+                    echo '<a href="index.php?action=admin">ADMIN</a> | ';
+                }
+
+                ?>
+
 	    		<a href="#">MENTIONS LEGALES</a> | 
 	    		<a href="#">POLITIQUE DE CONFIDENTIALITE</a>
 	    		

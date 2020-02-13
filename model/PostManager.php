@@ -143,7 +143,7 @@ class PostManager extends Manager
 
 		$req = $this->dbRequest($sql);
 
-		$allPostsCategories = $req->fetchAll(\PDO::FETCH_COLUMN | \PDO::FETCH_GROUP);
+		$allPostsCategories = $req->fetchAll();
 
 		return $allPostsCategories;
 		

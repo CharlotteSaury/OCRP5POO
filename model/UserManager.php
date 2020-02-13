@@ -13,8 +13,8 @@ class UserManager extends Manager
 		$random_code = substr(str_shuffle($permitted_chars), 0, 10);
 		$activation_code = password_hash($random_code, PASSWORD_DEFAULT);
 
-		$sql = 'INSERT INTO user (pseudo, email, password, user_role_id, register_date, activation_code)
-				VALUES (:pseudo, :email, :pass, 2, NOW(), :activation_code)';
+		$sql = 'INSERT INTO user (pseudo, email, password, user_role_id, register_date, activation_code, avatar)
+				VALUES (:pseudo, :email, :pass, 2, NOW(), :activation_code, "https://tse2.mm.bing.net/th?id=OIP.jRfbG71P_UTXJl-EGCx43QAAAA&pid=Api")';
 
 		$req = $this->dbRequest($sql, array($pseudo, $email, $pass, $activation_code));
 		$req->bindValue('pseudo', $pseudo);
@@ -26,11 +26,21 @@ class UserManager extends Manager
 		return $activation_code;
 	}
 
-	public function pseudoExists($pseudo)
+	public function pseudoExists($pseudo, $userId = null)
 	{
 		$sql = 'SELECT COUNT(*) AS nbUser FROM user WHERE pseudo = :pseudo';
 		
-		$req = $this->dbRequest($sql, array($pseudo));
+		if ($userId != null)
+		{
+			$sql .= ' AND id != :userId';
+			$req = $this->dbRequest($sql, array($pseudo, $userId));
+			$req->bindValue('userId', $userId);
+		}
+		else
+		{
+			$req = $this->dbRequest($sql, array($pseudo));
+		}
+
 		$req->bindValue('pseudo', $pseudo);
 		$req->execute();
 
@@ -38,11 +48,21 @@ class UserManager extends Manager
 		return $pseudoExists['nbUser'];
 	}
 
-	public function emailExists($email)
+	public function emailExists($email, $userId = null)
 	{
 		$sql = 'SELECT COUNT(*) AS nbUser FROM user WHERE email = :email';
 		
-		$req = $this->dbRequest($sql, array($email));
+		if ($userId != null)
+		{
+			$sql .= ' AND id != :userId';
+			$req = $this->dbRequest($sql, array($email, $userId));
+			$req->bindValue('userId', $userId);
+		}
+		else
+		{
+			$req = $this->dbRequest($sql, array($email));
+		}
+
 		$req->bindValue('email', $email);
 		$req->execute();
 
@@ -69,6 +89,81 @@ class UserManager extends Manager
 		$req = $this->dbRequest($sql, array($email));
 		$req->bindValue('email', $email);
 		$req->execute();
+	}
+
+	public function getUserPass($email)
+	{
+		$sql = 'SELECT password from user WHERE email = :email';
+
+		$req = $this->dbRequest($sql, array($email));
+		$req->bindValue('email', $email);
+		$req->execute();
+		$donnees = $req->fetch(\PDO::FETCH_ASSOC);
+
+		return $user_pass = $donnees['password'];
+	}
+
+	public function getSessionInfos($email)
+	{
+		$sql = 'SELECT user.id AS userId,
+				user.pseudo AS pseudo,
+				user.user_role_id AS role,
+				user.avatar AS avatar
+				FROM user
+				WHERE user.email = :email';
+
+		$req = $this->dbRequest($sql, array($email));
+		$req->bindValue('email', $email);
+		$req->execute();
+
+		$sessionInfos = $req->fetchAll(\PDO::FETCH_ASSOC);
+		return $sessionInfos;
+	}
+
+	public function newPassCode($email, $reinitialization_code)
+	{
+		$sql = 'UPDATE user SET reinitialization_code = :reinitialization_code
+				WHERE email = :email';
+
+		$req = $this->dbRequest($sql, array($reinitialization_code, $email));
+		$req->bindValue('reinitialization_code', $reinitialization_code);
+		$req->bindValue('email', $email);
+
+		$req->execute();
+	}
+
+	public function getNewPassCode($email)
+	{
+		$sql = 'SELECT reinitialization_code from user WHERE email = :email';
+
+		$req = $this->dbRequest($sql, array($email));
+		$req->bindValue('email', $email);
+		$req->execute();
+		$donnees = $req->fetch(\PDO::FETCH_ASSOC);
+
+		return $reinitialization_code = $donnees['reinitialization_code'];
+	}
+
+	public function newUserPass($email, $newPass)
+	{
+		$sql = 'UPDATE user SET password = :newPass, reinitialization_code = null WHERE email = :email';
+		$req = $this->dbRequest($sql, array($newPass, $email));
+		$req->bindValue('newPass', $newPass);
+		$req->bindValue('email', $email);
+		$req->execute();
+	}
+
+	public function getUserRole($userId)
+	{
+		$sql = 'SELECT user_role_id from user WHERE id = :userId';
+
+		$req = $this->dbRequest($sql, array($userId));
+		$req->bindValue('userId', $userId, \PDO::PARAM_INT);
+		$req->execute();
+
+		$donnees = $req->fetch(\PDO::FETCH_ASSOC);
+
+		return $role = $donnees['user_role_id'];
 	}
 
 	public function getUserNb()
@@ -143,7 +238,7 @@ class UserManager extends Manager
 			{
 				$sql .= ' ' . $key . '="' . $value . '", ';
 			}
-			else 
+			else  
 			{
 				$sql .= ' ' . $key . '="' . $value . '"';
 			}			

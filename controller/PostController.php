@@ -33,7 +33,7 @@ class PostController
 		require('./view/frontend/postListView.php');
 	}
 
-	public function postView($postId)
+	public function postView($postId, $message = null)
 	{
 		$postInfos = $this->_postManager->getPostInfos($postId);
 		$postContents = $this->_postManager->getPostContents($postId);
@@ -43,10 +43,11 @@ class PostController
 		require('./view/frontend/postView.php');
 	}
 
-	public function addComment($postId, $email, $content)
+	public function addComment($postId, $userId, $content)
 	{	
-		$this->_commentManager->addComment($postId, $email, $content);
-		$this->postView($postId);
+		$this->_commentManager->addComment($postId, $userId, $content);
+		$message = 'Votre commentaire a bien été envoyé, et est en attente de validation.';
+		$this->postView($postId, $message);
 	}
 
 }

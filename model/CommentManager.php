@@ -13,6 +13,7 @@ class CommentManager extends Manager
 			comment.content AS commentContent, 
 			DATE_FORMAT(comment.comment_date,\'%d-%m-%Y à %Hh%i\') AS commentDate, 
 			comment.status AS status,
+			user.pseudo AS pseudo,
 			user.first_name as first_name, 
 			user.last_name AS last_name, 
 			user.avatar AS avatar
@@ -37,9 +38,9 @@ class CommentManager extends Manager
 		return $req;
 	}
 
-	public function addComment($postId, $email, $content)
+	public function addComment($postId, $userId, $content)
 	{
-		// Recherche de l'id de l'utilisateur s'il existe déjà en bdd
+		/*// Recherche de l'id de l'utilisateur s'il existe déjà en bdd
 		$userIdSql = 'SELECT user.id AS userId FROM user
 					WHERE user.email = :email';
 		$req = $this->dbRequest($userIdSql, array($email));
@@ -61,7 +62,7 @@ class CommentManager extends Manager
 			$donnees = $req->fetch();
 		}
 
-		$userId = $donnees['userId'];
+		$userId = $donnees['userId'];*/
 		
 
 		$sql = 'INSERT INTO comment (post_id, user_id, content, comment_date) 
