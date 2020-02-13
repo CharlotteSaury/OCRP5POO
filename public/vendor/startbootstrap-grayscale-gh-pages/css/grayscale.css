@@ -112,6 +112,15 @@ form button {
   }
 }
 
+.nav-item .nav-link .img-profile {
+  height: 2rem;
+  width: 2rem;
+}
+
+.nav-avatar .nav-link {
+  padding: 1.70rem 1.5rem 2rem 1.5rem;
+}
+
 
 /*************************/
 /******* indexView *******/

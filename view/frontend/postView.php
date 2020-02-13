@@ -21,7 +21,20 @@
                 <div class="avatar mr-3" style="background-image: url('<?= htmlspecialchars($donnees['avatar']); ?>');">
                 </div>
                 <div class="text-white-50 posts-informations">
-                    <p class="mb-0">Posté par <strong><?= htmlspecialchars($donnees['first_name']) . ' ' . htmlspecialchars($donnees['last_name']); ?></strong></p>
+                    <p class="mb-0">Posté par 
+                        <strong>
+                        <?php
+                        if (isset($donnees['first_name'], $donnees['last_name']))
+                        {
+                            echo htmlspecialchars($donnees['first_name']) . ' ' . htmlspecialchars($donnees['last_name']);
+                        }
+                        else
+                        {
+                            echo htmlspecialchars($donnees['pseudo']);
+                        }
+                        ?>
+                        </strong>
+                    </p>
                     <p class="mb-0">le <?= $donnees['date_creation']; ?></p>
                     <p class="mb-0">Dernière modification le <?= $donnees['date_update']; ?></p>
                 </div>
@@ -47,9 +60,17 @@
 
         <!-- Blog post -->
         <div class="blog-post col-lg-9 col-sm-12 mx-auto">
-        
+                    
             <!-- Post  content -->
             <div class="post-content col-sm-10 mx-auto mb-5">
+
+                <?php
+                if (isset($message))
+                {
+                    echo '<div class="adminMessage text-dark-50 text-center">' . $message . '</div>';
+                }
+                ?>
+                
                 <h2 class="mb-4"><?= htmlspecialchars($donnees['title']); ?></h2>
                 <hr class="d-none d-lg-block ml-0">
 
@@ -98,30 +119,37 @@
                 <h2>Commentaires</h2>
                 <hr class="d-none d-lg-block ml-0">
 
-                <div class="comment-form">
-                    <form method="POST" action="index.php?action=addComment">
-                        <div class="form-row">
-                            <textarea class="form-control mt-4 mb-4 pb-5" name="content" placeholder="Votre commentaire"></textarea>
-                        </div>
-                        <div class="form-row">
-                            <div class="col">
-                                <input type="text" class="form-control" name="email" placeholder="Email *" required>
+                <?php
+                if (isset($_SESSION['id']))
+                {
+                    ?>
+                    <div class="comment-form">
+                        <form method="POST" action="index.php?action=addComment">
+                            <div class="form-row">
+                                <textarea class="form-control mt-4 mb-4 pb-5" name="content" placeholder="Votre commentaire"></textarea>
                             </div>
-                            <div class="col">
+                            <div class="form-row">
+                                <div class="col">
+                                    <input type="hidden" name="userId" value="<?= $_SESSION['id']; ?>" />
+                                    <input type="hidden" name="postId" value="<?= $postId; ?>" />
 
-                                <input type="hidden" name="postId" value="<?= $postId; ?>" />
-                            
+                                </div>
                             </div>
-                        </div>
-                        <input class="btn btn-primary-custom my-4" type="submit" value="Commenter"/>
-                    </form>
-                </div>
+                            <input class="btn btn-primary-custom my-4" type="submit" value="Commenter"/>
+                        </form>
+                    </div>
+                    <?php
+                }
+                else
+                {
+                    echo '<a href="index.php?action=connexionView" class="btn btn-primary-custom my-4">Se connecter pour laisser un commentaire</a>';
+                }
+                ?>
+
+                
 
                 <?php
-
-
-
-
+               
                 while ($donnees = $postComments -> fetch())
                 {
 
@@ -132,7 +160,7 @@
                         </div>
                         <div class="comment-content text-black-50 text-justify">
                             <div class="comment-infos">
-                                <p class=""><strong><?= htmlspecialchars($donnees['first_name']) . ' ' . htmlspecialchars($donnees['last_name']); ?></strong> - le <?= $donnees['commentDate']; ?></p>
+                                <p class=""><strong><?= htmlspecialchars($donnees['pseudo']); ?></strong> - le <?= $donnees['commentDate']; ?></p>
                             </div>
                             <div class="comment-text">
                                 <p class="mb-0"><?= htmlspecialchars($donnees['commentContent']); ?></p>

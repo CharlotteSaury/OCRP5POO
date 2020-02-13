@@ -29,7 +29,7 @@ while ($donnees = $userInfos->fetch())
                     </div>
                     <div class="form-group">
                         <label for="pseudo" hidden>Pseudo : </label>
-                        <input type="text" class="form-control" name="pseudo" placeholder="Pseudo : <?= htmlspecialchars($donnees['pseudo']); ?>"/>
+                        <input type="text" class="form-control" name="pseudo" value="<?= htmlspecialchars($donnees['pseudo']); ?>"/>
                     </div>
                 </div>
 
@@ -55,7 +55,7 @@ while ($donnees = $userInfos->fetch())
                                 <form method="POST" action="index.php?action=updateProfilePicture&amp;id=<?= htmlspecialchars($donnees['userId']); ?>">
                                     <div class="modal-body">
                                         <label for="avatarUrl" hidden>Url :</label>
-                                        <input type="text" class="form-control" name="avatar" placeholder="url"/>
+                                        <input type="text" class="form-control" name="avatar" placeholder="url" value="<?= htmlspecialchars($donnees['avatar']); ?>"/>
                                     </div>
                                     <div class="modal-footer">
                                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
@@ -70,11 +70,11 @@ while ($donnees = $userInfos->fetch())
                         <div class="card-title">
                             <div class="form-group">
                                 <label for="firstname">Prénom : </label>
-                                <input type="text" class="form-control" name="first_name" placeholder="<?= htmlspecialchars($donnees['first_name']); ?>"/>
+                                <input type="text" class="form-control" name="first_name" value="<?= htmlspecialchars($donnees['first_name']); ?>"/>
                             </div>
                             <div class="form-group">
                                 <label for="lastname">Nom : </label>
-                                <input type="text" class="form-control" name="last_name" placeholder="<?= htmlspecialchars($donnees['last_name']); ?>"/>
+                                <input type="text" class="form-control" name="last_name" value="<?= htmlspecialchars($donnees['last_name']); ?>"/>
                             </div>
                         </div>
 
@@ -82,11 +82,11 @@ while ($donnees = $userInfos->fetch())
 
                             <div class="form-group">
                                 <label for="birthdate">Né(e) le : </label>
-                                    <input type="text" class="form-control" name="birth_date" placeholder="<?= $donnees['birth_date']; ?>"/>
+                                    <input type="text" class="form-control" name="birth_date" value="<?= $donnees['birth_date']; ?>"/>
                             </div>
                             <div class="form-group">
                                 <label for="home">Habite à : </label>
-                                <input type="text" class="form-control" name="home" placeholder="<?= htmlspecialchars($donnees['home']); ?>"/>
+                                <input type="text" class="form-control" name="home" value="<?= htmlspecialchars($donnees['home']); ?>"/>
                             </div>
                             <div class="form-group">
                                 <label for="user_about">A propos de moi : </label>
@@ -94,53 +94,58 @@ while ($donnees = $userInfos->fetch())
                             </div>
                             <div class="form-group">
                                 <label for="email">Email : </label>
-                                <input type="text" class="form-control" name="email" placeholder="<?= htmlspecialchars($donnees['email']); ?>"/>
+                                <input type="text" class="form-control" name="email" value="<?= htmlspecialchars($donnees['email']); ?>"/>
                             </div>
                             <div class="form-group">
                                 <label for="mobile">Tel : </label>
-                                <input type="text" class="form-control" name="mobile" placeholder="<?= htmlspecialchars($donnees['mobile']); ?>"/>
+                                <input type="text" class="form-control" name="mobile" value="<?= htmlspecialchars($donnees['mobile']); ?>"/>
                             </div>
                             <div class="form-group">
                                 <label for="website">Site internet : </label>
-                                <input type="text" class="form-control" name="website" placeholder="<?= htmlspecialchars($donnees['website']); ?>"/>
+                                <input type="text" class="form-control" name="website" value="<?= htmlspecialchars($donnees['website']); ?>"/>
                             </div>
                             
                             <hr>
 
                             <?php
-                            if ($donnees['role'] == 'admin')
-                            {
-                            ?>
 
-                            <div class="form-group">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="rolecheckboxadmin" value="1" name="user_role_id" checked>
-                                    <label class="form-check-label" for="rolecheckboxadmin">Admin</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="rolecheckboxuser" name="user_role_id" value="2">
-                                    <label class="form-check-label" for="rolecheckboxuser">User</label>
-                                </div>
-                            </div>
+                            if (isset($_SESSION['role']) && $_SESSION['role'] == 1)
+                            {                           
 
-                            <?php
-                            }
-                            else
-                            {
-                            ?>
+                                if ($donnees['role'] == 'admin')
+                                {
+                                    ?>
 
-                            <div class="form-group">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="rolecheckboxadmin" name="user_role_id" value="1">
-                                    <label class="form-check-label" for="rolecheckboxadmin">Admin</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="rolecheckboxuser" name="user_role_id" value="2" checked>
-                                    <label class="form-check-label" for="rolecheckboxuser">User</label>
-                                </div>
-                            </div>
+                                    <div class="form-group">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" id="rolecheckboxadmin" value="1" name="user_role_id" checked />
+                                            <label class="form-check-label" for="rolecheckboxadmin">Admin</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" id="rolecheckboxuser" name="user_role_id" value="2" />
+                                            <label class="form-check-label" for="rolecheckboxuser">User</label>
+                                        </div>
+                                    </div>
 
-                            <?php
+                                    <?php
+                                }
+                                else
+                                {
+                                    ?>
+
+                                    <div class="form-group">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" id="rolecheckboxadmin" name="user_role_id" value="1" />
+                                            <label class="form-check-label" for="rolecheckboxadmin">Admin</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" id="rolecheckboxuser" name="user_role_id" value="2" checked />
+                                            <label class="form-check-label" for="rolecheckboxuser">User</label>
+                                        </div>
+                                    </div>
+
+                                    <?php
+                                }
                             }
                             ?>
                             

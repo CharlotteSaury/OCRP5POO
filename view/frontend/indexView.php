@@ -28,12 +28,13 @@
 
 <section id="profile" class="emphase-section text-center">
     <div class="container">
-      <div class="row">
-        <div class="col-lg-8 mx-auto">
-          <h2 class="text-white mb-4">A propos de moi</h2>
-          <p class="text-white-50">" Rien ne sert de courir, il faut partir à point. "</p>
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <h2 class="text-white mb-4">A propos de moi</h2>
+            <p class="text-white-50">" Rien ne sert de courir, il faut partir à point."</p>
+            
+          </div>
         </div>
-      </div>
     </div>
 </section>
 

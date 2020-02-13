@@ -19,8 +19,8 @@ use Exception;
 class Router 
 {
 	private $_homeController,
-			$_postController,
-			$_commentController;
+	$_postController,
+	$_commentController;
 
 	public function __construct()
 	{
@@ -39,6 +39,35 @@ class Router
 		{
 			throw new Exception ("Paramètre " . $name . " absent.");
 		}
+	}
+
+	private function adminAccess()
+	{
+		if (isset($_SESSION['id']))
+		{
+			$userId = htmlspecialchars($_SESSION['id']);
+			$infos = new UserController();
+
+			if ($infos->isAdmin($userId))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	public function connexionAuto($email)
+	{
+		$infos = new UserController();
+		$infos->newUserSession($email);
+		$this->routerRequest();
 	}
 
 	public function routerRequest()
@@ -98,11 +127,11 @@ class Router
 					elseif ($_GET['action'] == "addComment") 
 					{
 						$postId = $this->getParameter($_POST, 'postId');
-						$email = $this->getParameter($_POST, 'email');
+						$userId = $this->getParameter($_POST, 'userId');
 						$content = $this->getParameter($_POST, 'content');
 
 						$infos = new PostController();
-						$infos->addComment($postId, $email, $content);
+						$infos->addComment($postId, $userId, $content);
 						
 					}
 
@@ -110,12 +139,6 @@ class Router
 					{
 						$infos = new HomeController();
 						$infos->indexView();
-					}
-
-					elseif ($_GET['action'] == 'connexionView')
-					{
-						$infos = new UserController();
-						$infos->connexionView();
 					}
 
 					elseif ($_GET['action'] == 'inscriptionView')
@@ -131,39 +154,223 @@ class Router
 						$pass2 = $this->getParameter($_POST, 'pass2');
 						$email = $this->getParameter($_POST, 'email');
 
+						$infos = new UserController();
+
+						if (strlen($pseudo) < 25)
+						{
+							if (filter_var($email, FILTER_VALIDATE_EMAIL))
+							{
+								if ($pass1 == $pass2)
+								{
+									$pass = password_hash($pass1, PASSWORD_DEFAULT);
+
+									if (($infos->checkEmail($email)) || ($infos->checkPseudo($pseudo)) )
+									{
+										if ($infos->checkEmail($email))
+										{
+											$message = "Cet email est déjà associé à un compte. Essayez de vous connecter !";
+											$infos->connexionView($message);
+										}
+										else
+										{
+											$message = "Ce pseudo n'est pas disponible. Merci d'en choisir un nouveau.";
+											$infos->inscriptionView($message);
+										}								
+									}
+									else
+									{
+										$activation_code = $infos->newUser($pseudo, $pass, $email);
+										$infos->sendEmailActivation($email, $pseudo, $activation_code);
+										$message = 'Merci pour votre inscription ! Un email de confirmation vous a été envoyé afin de confirmer votre adresse email. Merci de vous reporter à cet email pour activer votre compte ! ';
+										$infos->inscriptionView($message);
+									}
+								}
+								else
+								{
+									$message = 'Les mots de passe saisis sont différents ! ';
+									$infos->inscriptionView($message);
+								}
+							}
+							else
+							{
+								$message = 'L\'adresse email n\'est pas valide !';
+								$infos->inscriptionView($message);
+							}							
+						}
+						else
+						{
+							$message = 'Le pseudo ne doit pas dépasser 25 caractères ! ';
+							$infos->inscriptionView($message);
+						}				
+
+					}
+
+
+					elseif ($_GET['action'] == 'activation')
+					{
+						$email = $this->getParameter($_GET, 'email');
+						$key = $this->getParameter($_GET, 'key');
+						$infos = new UserController();
+
+						if ($infos->userActivated($email))
+						{
+							$message = 'Votre compte est déjà activé, vous pouvez vous connecter ! ';
+							$infos->connexionView($message);
+						}
+						else
+						{
+							$message = $infos->userActivation($email, $key);
+							$infos->connexionView($message);
+						}
+						
+					}
+
+					elseif ($_GET['action'] == 'connexionView')
+					{
+						$infos = new UserController();
+						$infos->connexionView();
+					}
+
+					elseif ($_GET['action'] == 'connexion')
+					{
+						$email = $this->getParameter($_POST, 'email');
+						$pass = $this->getParameter($_POST, 'pass');
+
+						$infos = new UserController();
+
+						if ($infos->checkEmail($email))
+						{
+							if (!$infos->userActivated($email))
+							{
+								$message = 'Votre compte n\'est pas activé. Veuillez cliquer sur le lien d\'activation qui vous a été envoyé sur votre adresse email lors de votre inscription.';
+								$infos->connexionView($message);
+							}
+							else
+							{
+								$user_pass = $infos->getPassword($email);
+
+								if (password_verify($pass, $user_pass))
+								{
+									if (isset($_POST['rememberme']))
+									{
+										setcookie('email', $email, time() + 365*24*3600, null, null, false, true);
+										setcookie('auth', $email . '-----' . password_hash($_SERVER['REMOTE_ADDR'], PASSWORD_DEFAULT), time() + 365*24*3600, null, null, false, true);
+									}
+
+									$infos->newUserSession($email);
+
+									$infos = new HomeController();
+									$infos->indexView();
+								}
+								else
+								{
+									$message = "L'identifiant et/ou le mot de passe sont erronés.";
+									$infos->connexionView($message);
+								}
+							}							
+						}				
+						else
+						{
+							$message = "L'adresse email saisie est inconnue";
+							$infos->connexionView($message);
+						}
+						
+					}
+
+					elseif ($_GET['action'] == 'deconnexion')
+					{
+						if (isset($_SESSION['id']))
+						{
+							$_SESSION = array();
+							session_destroy();
+							setcookie('auth', '', time()-3600, null, null, false, true);
+
+							$infos = new HomeController();
+							$infos->indexView();
+						}
+						else
+						{
+							$infos = new HomeController();
+							$infos->indexView();
+						}
+						
+					}
+
+					elseif ($_GET['action'] == 'forgotPassView')
+					{
+						$infos = new UserController();
+						$infos->forgotPassView();
+					}
+
+					elseif ($_GET['action'] == 'forgotPassMail')
+					{
+						$email = $this->getParameter($_POST, 'email');
+						$infos = new UserController();
+
+						$reinitialization_code = $infos->newPassCode($email);
+						$infos->forgotPassMail($email, $reinitialization_code);
+
+						$message = "Un email contenant un lien de réinitialisation de mot de passe a été envoyé à votre adresse email.";
+						$infos->forgotPassView($message);
+					}
+
+					elseif ($_GET['action'] == 'newPassView')
+					{
+						$email = $this->getParameter($_GET, 'email');
+						$reinitialization_code = $this->getParameter($_GET, 'key');
+						
+						$infos = new UserController();
+
+						$user_reinitialization_code = $infos->getNewPassCode($email);
+
+						if ($reinitialization_code != $user_reinitialization_code)
+						{
+							$message = 'La clé de réinitialization n\'est pas bonne, veuillez retourner sur votre mail.';
+							$infos->newPassView($email, $message, false);
+						}
+						else
+						{
+							$message = 'Veuillez entrer votre nouveau mot de passe';
+							$infos->newPassView($email, $message, true);
+						}
+					}
+
+					elseif ($_GET['action'] == 'newPass')
+					{
+						$email = $this->getParameter($_POST, 'email');
+						$pass1 = $this->getParameter($_POST, 'pass1');
+						$pass2 = $this->getParameter($_POST, 'pass2');
+						
+						$infos = new UserController();
+
 						if ($pass1 == $pass2)
 						{
-							$pass = password_hash($pass1, PASSWORD_DEFAULT);
+							$newPass = password_hash($pass1, PASSWORD_DEFAULT);
 							
-							$infos = new UserController();
-							$infos->checkPseudo($pseudo);
-							$infos->checkEmail($email);
-							$infos->newUser($pseudo, $pass, $email);
-							$message = 'Merci pour votre inscription ! Un email de confirmation vous a été envoyé afin de confirmer votre adresse email. Merci de vous reporter à cet email pour activer votre compte ! ';
-							$infos->inscriptionView($message);
-
+							$infos->newUserPass($email, $newPass);
+							$message = 'Votre mot de passe a été réinitialisé. Vous pouvez maintenant vous connecter ! ';
+							$infos->connexionView($message);
 						}
 						else
 						{
 							$message = 'Les mots de passe saisis sont différents ! ';
-							$infos->inscriptionView($message);
-						}	
-						
+							$infos->newPassView($email, $message, true);
+						}
 					}
 
-					elseif ($_GET['action'] == 'admin')
+					elseif ($_GET['action'] == 'admin' && $this->adminAccess())
 					{
 						$infos = new AdminController();
 						$infos->dashboardView();
 					}
 
-					elseif ($_GET['action'] == 'adminPosts')
+					elseif ($_GET['action'] == 'adminPosts' && $this->adminAccess())
 					{
 						$infos = new AdminController();
 						$infos->adminPostsView();
 					}
 
-					elseif ($_GET['action'] == 'adminPostView')
+					elseif ($_GET['action'] == 'adminPostView' && $this->adminAccess())
 					{
 						$postId = $this->getParameter($_GET, 'id');
 						
@@ -171,13 +378,13 @@ class Router
 						$infos->adminPostView($postId);
 					}
 
-					elseif ($_GET['action'] == 'adminNewPost')
+					elseif ($_GET['action'] == 'adminNewPost' && $this->adminAccess())
 					{
 						$infos = new AdminController();
 						$infos->adminNewPostView();
 					}
 
-					elseif ($_GET['action'] == 'newPostInfos')
+					elseif ($_GET['action'] == 'newPostInfos' && $this->adminAccess())
 					{
 						$title = $this->getParameter($_POST, 'title');
 						$chapo = $this->getParameter($_POST, 'chapo');
@@ -188,14 +395,14 @@ class Router
 						$infos->NewPostInfos($title, $chapo, $userId, $mainImage);
 					}
 
-					elseif ($_GET['action'] == 'editPostView')
+					elseif ($_GET['action'] == 'editPostView' && $this->adminAccess())
 					{
 						$postId = $this->getParameter($_GET, 'id');
 						$infos = new AdminController();
 						$infos->editPostView($postId);
 					}
 
-					elseif ($_GET['action'] == 'editPost')
+					elseif ($_GET['action'] == 'editPost' && $this->adminAccess())
 					{
 						if (isset($_POST['updateMainPicture']))
 						{
@@ -224,19 +431,15 @@ class Router
 						{
 							$postId = $this->getParameter($_POST, 'postId');
 							$content = $this->getParameter($_POST, 'image_url');
-							var_dump($postId);
 							$infos = new AdminController();
 							$infos->addPicture($postId, $content);
 						}
 
 						elseif (isset($_POST['updatePicture']))
 						{
-							var_dump($_POST);
 							$postId = $this->getParameter($_POST, 'postId');
 							$contentId = substr($this->getParameter($_POST, 'action') , 12);
 							$url = $this->getParameter($_POST, 'content' . $contentId);
-
-							var_dump($postId, $contentId, $url); 
 
 							$infos = new AdminController();
 							$infos->editPostPicture($postId, $contentId, $url);
@@ -282,13 +485,11 @@ class Router
 							$infos = new AdminController();
 							$infos->editParagraph($postId, $newParagraphs);
 						}
-
-						
 					}
 
 					
 
-					elseif ($_GET['action'] == 'deleteContent')
+					elseif ($_GET['action'] == 'deleteContent' && $this->adminAccess())
 					{
 						$contentId = $this->getParameter($_GET, 'content');
 						$postId = $this->getParameter($_GET, 'id');
@@ -296,7 +497,7 @@ class Router
 						$infos->deleteContent($postId, $contentId);
 					}
 
-					elseif ($_GET['action'] == 'deleteCategory')
+					elseif ($_GET['action'] == 'deleteCategory' && $this->adminAccess())
 					{
 						$categoryId = $this->getParameter($_GET, 'cat');
 						$postId = $this->getParameter($_GET, 'id');
@@ -304,7 +505,7 @@ class Router
 						$infos->deleteCategory($postId, $categoryId);
 					}
 
-					elseif ($_GET['action'] == 'publishPost' || ($_GET['action'] == 'publishPostDashboard'))
+					elseif ($_GET['action'] == 'publishPost' || ($_GET['action'] == 'publishPostDashboard') && $this->adminAccess())
 					{
 						$postId = $this->getParameter($_GET, 'id');
 						$status = $this->getParameter($_GET, 'status');
@@ -322,7 +523,7 @@ class Router
 						
 					}
 
-					elseif (($_GET['action'] == 'deletePost') || ($_GET['action'] == 'deletePostDashboard'))
+					elseif (($_GET['action'] == 'deletePost') || ($_GET['action'] == 'deletePostDashboard') && $this->adminAccess())
 					{
 						$postId = $this->getParameter($_GET, 'id');
 						
@@ -338,13 +539,13 @@ class Router
 						}					
 					}
 
-					elseif ($_GET['action'] == 'adminComments')
+					elseif ($_GET['action'] == 'adminComments' && $this->adminAccess())
 					{
 						$infos = new AdminController();
 						$infos->adminCommentsView();
 					}
 
-					elseif (($_GET['action'] == 'approveComment') || ($_GET['action'] == 'approveCommentDashboard'))
+					elseif (($_GET['action'] == 'approveComment') || ($_GET['action'] == 'approveCommentDashboard') && $this->adminAccess())
 					{
 						$commentId = $this->getParameter($_GET, 'id');
 						
@@ -360,7 +561,7 @@ class Router
 						}					
 					}
 
-					elseif (($_GET['action'] == 'deleteComment') || ($_GET['action'] == 'deleteCommentDashboard'))
+					elseif (($_GET['action'] == 'deleteComment') || ($_GET['action'] == 'deleteCommentDashboard') && $this->adminAccess())
 					{
 						$commentId = $this->getParameter($_GET, 'id');
 						
@@ -376,7 +577,7 @@ class Router
 						}					
 					}
 
-					elseif ($_GET['action'] == 'adminUsers')
+					elseif ($_GET['action'] == 'adminUsers' && $this->adminAccess())
 					{
 						$infos = new AdminController();
 						$infos->adminUsersView();
@@ -392,8 +593,18 @@ class Router
 					elseif ($_GET['action'] == 'editUser')
 					{
 						$userId = $this->getParameter($_GET, 'id');
-						$infos = new AdminController();
-						$infos->editUserView($userId);
+						$currentUserId = $this->getParameter($_SESSION, 'id');
+
+						if ($currentUserId == $userId || $this->adminAccess())
+						{
+							$infos = new AdminController();
+							$infos->editUserView($userId);
+						}
+						else
+						{
+							throw new Exception('Vous n\'avez pas accès à cette page');
+						}
+						
 					}
 
 					elseif ($_GET['action'] == 'editUserInfos')
@@ -402,14 +613,74 @@ class Router
 
 						foreach ($_POST as $key => $value)
 						{
-							if ($_POST[$key] != '')
-							{
-								$newUserInfos[$key] = $value;
-							}
+							$newUserInfos[$key] = $value;
 						}
-												
-						$infos = new AdminController();
-						$infos->editUserInfos($newUserInfos);
+
+						$infos = new UserController();
+
+						if (strlen($newUserInfos['pseudo']) < 25)
+						{
+							if (filter_var($newUserInfos['email'], FILTER_VALIDATE_EMAIL))
+							{
+								if (($infos->checkEmail($newUserInfos['email'], $newUserInfos['id'])) || ($infos->checkPseudo($newUserInfos['pseudo'], $newUserInfos['id'])))
+								{
+									if ($infos->checkEmail($newUserInfos['email'], $newUserInfos['id']))
+									{
+										$message = "Cet email est déjà associé à un compte.";
+
+										$infos = new AdminController();
+										$infos->editUserView($newUserInfos['id'], $message);
+									}
+									else
+									{
+										$message = "Ce pseudo n'est pas disponible. Merci d'en choisir un nouveau.";
+										$infos = new AdminController();
+										$infos->editUserView($newUserInfos['id'], $message);
+									}								
+								}
+								else
+								{
+									if ($newUserInfos['birth_date'] == '')
+									{
+										unset($newUserInfos['birth_date']);
+									}
+
+									if (!isset($newUserInfos['user_role_id']))
+									{
+										$role = $this->getParameter($_SESSION, 'role');
+										$newUserInfos['user_role_id'] = $role;
+									}
+
+									$email = $newUserInfos['email'];
+									$userId = $newUserInfos['id'];
+									$currentUserId = $this->getParameter($_SESSION, 'id');
+
+									$infos = new AdminController();
+									$infos->editUserInfos($newUserInfos);
+
+									if ($currentUserId == $userId)
+									{
+										$infos = new UserController();
+										$infos->newUserSession($email);
+									}
+
+								}
+
+							}
+							else
+							{
+								$message = 'L\'adresse email n\'est pas valide !';
+								$infos = new AdminController();
+								$infos->editUserView($message);
+							}							
+						}
+						else
+						{
+							$message = 'Le pseudo ne doit pas dépasser 25 caractères ! ';
+							$infos = new AdminController();
+							$infos->editUserView($message);
+						}	
+
 					}
 
 					elseif ($_GET['action'] == 'updateProfilePicture')
@@ -422,7 +693,7 @@ class Router
 
 					else 
 					{
-						throw new Exception('Action inconnue');
+						throw new Exception('Vous n\'avez pas accès à cette page');
 					}
 				}
 

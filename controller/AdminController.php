@@ -237,7 +237,7 @@ class AdminController
 		require('./view/backend/profileUserView.php');
 	}
 
-	public function editUserView($userId)
+	public function editUserView($userId, $message = null)
 	{
 		$userInfos = $this->_userManager->getUserInfos($userId);
 		require('./view/backend/editUserView.php');
