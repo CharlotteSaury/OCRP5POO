@@ -8,6 +8,14 @@
 /******* Global **********/
 /*************************/
 
+h4
+{
+    font-weight: bold;
+    margin-top: 1.25rem;
+}
+
+
+
 /********** FORM ********/
 
 .form-inline {

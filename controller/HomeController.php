@@ -56,6 +56,16 @@ class HomeController
 		$message = wordwrap($message, 70, "\r\n");
 		mail($email, $subject, $message);
 	}
+
+	public function legalView()
+	{
+		require('./view/frontend/legalView.php');
+	}
+
+	public function confidentialityView()
+	{
+		require('./view/frontend/confidentialityView.php');
+	}
 	
 }
 
