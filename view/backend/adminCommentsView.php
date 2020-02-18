@@ -2,10 +2,6 @@
 
 <?php $title = 'Admin - Commentaires'; ?>
 
-<!-- Content title definition -->
-
-<?php $contentTitle = 'Commentaires'; ?>
-
 <!-- $content definition -->
 
 <?php ob_start(); ?>
@@ -14,20 +10,45 @@
 <!-- Sorting Row -->
 
 <div class="row mb-5">
-    <div class="col-12">
-        <form class="form-inline sorting-form">
-            <label for="admin-comments-date">Tri par date</label>
-            <select class="form-control block" id="admin-comments-date">
-                <option value="desc" selected>Du plus récent au plus ancien</option>
-                <option value="asc">Du plus ancien au plus récent</option>
-            </select>
-            <label for="admin-comments-articledate">Tri par article</label>
-            <select class="form-control block" id="admin-comments-articledate">
-                <option value="desc" selected>Du plus récent au plus ancien</option>
-                <option value="asc">Du plus ancien au plus récent</option>
-            </select>
-            <input class="btn btn-primary-custom" type="submit" name="admin-comments-sorting" value="Filtrer">
-        </form>                           
+    <div class="col-12 mb-3">
+        <a href="index.php?action=adminComments">Tous (<?= $totalCommentsNb ?>)</a> | <a href="index.php?action=adminComments&sort=unapproved">Non approuvés (<?= $unapprovedCommentsNb ?>)</a>
+             | trier par date 
+
+        <?php
+        if (!isset($_GET['sort']))
+        {
+            if (!isset($_GET['date']))
+            {
+                echo '<a href="index.php?action=adminComments&date=asc" title="Trier du plus ancien au plus récent"><i class="fas fa-sort-down fa-2x ml-2"></i></a>';
+            }
+            else
+            {
+                if ($_GET['date'] == 'asc')
+                {
+                    echo '<a href="index.php?action=adminComments" title="Trier du plus récent au plus ancien"><i class="fas fa-sort-up fa-2x ml-2 mb-0"></i></a>';
+                }
+            }
+        }
+        else
+        {
+            if ($_GET['sort'] == 'unapproved')
+            {
+                if (!isset($_GET['date']))
+                {
+                    echo '<a href="index.php?action=adminComments&sort=unapproved&date=asc" title="Trier du plus ancien au plus récent"><i class="fas fa-sort-down fa-2x ml-2"></i></a>';
+                }
+                else
+                {
+                    if ($_GET['date'] == 'asc')
+                    {
+                        echo '<a href="index.php?action=adminComments&sort=unapproved" title="Trier du plus récent au plus ancien"><i class="fas fa-sort-up fa-2x ml-2 mb-0"></i></a>';
+                    }
+                }
+            }
+        }
+
+        ?>
+
     </div>
 </div>
 

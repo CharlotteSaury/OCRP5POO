@@ -1,10 +1,6 @@
-<!-- title deinition -->
+<!-- title definition -->
 
 <?php $title = 'Admin - Formulaire de contact '; ?>
-
-<!-- Content title definition -->
-
-<?php $contentTitle = 'Tous les contacts'; ?>
 
 <!-- $content definition -->
 
@@ -15,17 +11,46 @@
 
 <div class="row mb-5">
     <div class="col-12 mb-3">
-        <a href="">Tous (6)</a> | <a href="">Non lus (3)</a>
-    </div>
-    <div class="col-12">
-        <form class="form-inline sorting-form">
-            <label for="admin-postslist-date" hidden>Tri par date</label>
-            <select class="form-control block" id="admin-postslist-date">
-                <option value="desc" selected>Du plus récent au plus ancien</option>
-                <option value="asc">Du plus ancien au plus récent</option>
-            </select>
-            <input class="btn btn-primary-custom" type="submit" name="admin-postslist-sorting" value="Filtrer">
-        </form>                           
+        <a href="index.php?action=adminContacts">Tous (<?= $allContactsNb ?>)</a>
+         | 
+         <a href="index.php?action=adminContacts&sort=unread">Non lus (<?= $unreadContactsNb ?>)</a>
+         | Trier par date 
+        
+        <?php
+
+        if (!isset($_GET['sort']))
+        {
+            if (!isset($_GET['date']))
+            {
+                echo '<a href="index.php?action=adminContacts&date=asc" title="Trier du plus ancien au plus récent"><i class="fas fa-sort-down fa-2x ml-2"></i></a>';
+            }
+            else
+            {
+                if ($_GET['date'] == 'asc')
+                {
+                   echo '<a href="index.php?action=adminContacts" title="Trier du plus récent au plus ancien"><i class="fas fa-sort-up fa-2x ml-2 mb-0"></i></a>';
+                }
+            }
+        }
+        else
+        {
+            if ($_GET['sort'] == 'unread')
+            {
+                if (!isset($_GET['date']))
+                {
+                    echo '<a href="index.php?action=adminContacts&sort=unread&date=asc" title="Trier du plus ancien au plus récent"><i class="fas fa-sort-down fa-2x ml-2"></i></a>';
+                }
+                else
+                {
+                    if ($_GET['date'] == 'asc')
+                    {
+                     echo '<a href="index.php?action=adminContacts&sort=unread" title="Trier du plus récent au plus ancien"><i class="fas fa-sort-up fa-2x ml-2 mb-0"></i></a>';
+                    }
+                }
+            }
+        }
+
+        ?>
     </div>
 </div>
 

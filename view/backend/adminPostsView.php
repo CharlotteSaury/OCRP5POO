@@ -2,10 +2,6 @@
 
 <?php $title = 'Admin - Tous les articles'; ?>
 
-<!-- Content title definition -->
-
-<?php $contentTitle = 'Tous les articles'; ?>
-
 <!-- $content definition -->
 
 <?php ob_start(); ?>
@@ -15,24 +11,43 @@
 
 <div class="row mb-5">
     <div class="col-12 mb-3">
-        <a href="">Tous (6)</a> | <a href="">Publiés (3)</a>
-    </div>
-    <div class="col-12">
-        <form class="form-inline sorting-form">
-            <label for="admin-postslist-date" hidden>Tri par date</label>
-            <select class="form-control block" id="admin-postslist-date">
-                <option value="desc" selected>Du plus récent au plus ancien</option>
-                <option value="asc">Du plus ancien au plus récent</option>
-            </select>
-            <label for="admin-postslist-category" hidden>Tri par category</label>
-            <select class="form-control block" id="admin-postslist-category">
-                <option value="categorie" selected disabled>Catégorie</option>
-                <option value="php">PHP</option>
-                <option value="javascript">Javascript</option>
-                <option value="développement">Développement</option>
-            </select>
-            <input class="btn btn-primary-custom" type="submit" name="admin-postslist-sorting" value="Filtrer">
-        </form>                           
+        <a href="index.php?action=adminPosts">Tous (<?= $totalPostsNb ?>)</a> | <a href="index.php?action=adminPosts&sort=unpublished">Non publiés (<?= $unpublishedPostsNb ?>)</a>
+         | Trier par date
+
+        <?php
+        if (!isset($_GET['sort']))
+        {
+            if (!isset($_GET['date']))
+            {
+                echo '<a href="index.php?action=adminPosts&date=asc" title="Trier du plus ancien au plus récent"><i class="fas fa-sort-down fa-2x ml-2"></i></a>';
+            }
+            else
+            {
+                if ($_GET['date'] == 'asc')
+                {
+                 echo '<a href="index.php?action=adminPosts" title="Trier du plus récent au plus ancien"><i class="fas fa-sort-up fa-2x ml-2 mb-0"></i></a>';
+                }
+            }
+        }
+        else
+        {
+            if ($_GET['sort'] == 'unpublished')
+            {
+                if (!isset($_GET['date']))
+                {
+                    echo '<a href="index.php?action=adminPosts&sort=unpublished&date=asc" title="Trier du plus ancien au plus récent"><i class="fas fa-sort-down fa-2x ml-2"></i></a>';
+                }
+                else
+                {
+                    if ($_GET['date'] == 'asc')
+                    {
+                     echo '<a href="index.php?action=adminPosts&sort=unpublished" title="Trier du plus récent au plus ancien"><i class="fas fa-sort-up fa-2x ml-2 mb-0"></i></a>';
+                    }
+                }
+            }
+        }
+
+        ?>
     </div>
 </div>
 

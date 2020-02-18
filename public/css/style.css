@@ -151,6 +151,11 @@ a:focus, a:hover {
 	margin-right: 1rem;
 }
 
+.fa-sort-up
+{
+	transform: translateY(0.7rem);
+}
+
 
 /* /////// ProfileViews /////////// */
 
