@@ -72,7 +72,7 @@
 
                                     <?php
 
-                                    if ($_SESSION['role'] == 1)
+                                    if ($_SESSION['role'] == 1 || $_SESSION['role'] == 3)
                                     {
                                         ?>
                                         <div class="dropdown-divider"></div>
@@ -140,15 +140,15 @@
 
                 <?php
 
-                if (isset($_SESSION['role']) && ($_SESSION['role'] == 1))
+                if (isset($_SESSION['role']) && ($_SESSION['role'] == 1 || $_SESSION['role'] == 3))
                 {
                     echo '<a href="index.php?action=admin">ADMIN</a> | ';
                 }
 
                 ?>
 
-	    		<a href="#">MENTIONS LEGALES</a> | 
-	    		<a href="#">POLITIQUE DE CONFIDENTIALITE</a>
+	    		<a href="index.php?action=legalView">MENTIONS LEGALES</a> | 
+                <a href="index.php?action=confidentiality">POLITIQUE DE CONFIDENTIALITE</a>
 	    		
 	    	</div>
 	      	<div class="text-center">

@@ -121,7 +121,6 @@ class UserController
 	public function newUserSession($email)
 	{
 		$sessionInfos = $this->_userManager->getSessionInfos($email);
-		var_dump($sessionInfos);
         $_SESSION['id'] = $sessionInfos[0]['userId'];
         $_SESSION['pseudo'] = $sessionInfos[0]['pseudo'];
         $_SESSION['role'] = $sessionInfos[0]['role'];
@@ -133,6 +132,19 @@ class UserController
 	{
 		$role = $this->_userManager->getUserRole($userId);
 		if ($role == 1)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	public function isSuperAdmin($userId)
+	{
+		$role = $this->_userManager->getUserRole($userId);
+		if ($role == 3)
 		{
 			return true;
 		}

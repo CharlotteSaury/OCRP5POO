@@ -30,6 +30,7 @@ while ($donnees = $userInfos->fetch())
                     <div class="form-group">
                         <label for="pseudo" hidden>Pseudo : </label>
                         <input type="text" class="form-control" name="pseudo" value="<?= htmlspecialchars($donnees['pseudo']); ?>"/>
+                        <small id="pseudoHelpBlock" class="form-text text-muted">Le pseudo ne doit pas dépasser 25 caractères.</small>
                     </div>
                 </div>
 
@@ -83,6 +84,7 @@ while ($donnees = $userInfos->fetch())
                             <div class="form-group">
                                 <label for="birthdate">Né(e) le : </label>
                                     <input type="text" class="form-control" name="birth_date" value="<?= $donnees['birth_date']; ?>"/>
+                                    <small id="birthDateHelpBlock" class="form-text text-muted">La date doit être au format JJ/MM/AAAA.</small>
                             </div>
                             <div class="form-group">
                                 <label for="home">Habite à : </label>

@@ -1,4 +1,4 @@
-<?php $title = 'Titre post'; ?>
+<?php $title = 'Mentions légales'; ?>
 
 
 <!-- $header definition -->
@@ -8,41 +8,10 @@
 <header class="post-view-head pb-5">
     <div class="container d-flex h-100 align-items-end">
         <div class="mx-auto text-center">
-        
-            <?php
-
-            while ($donnees = $postInfos->fetch())
-            {
-
-            ?>
-
-            <h1 class="mx-auto my-0 text-uppercase"><?= htmlspecialchars($donnees['title']); ?></h1>
-            <div class="d-flex mt-4 align-items-center">
-                <div class="avatar mr-3" style="background-image: url('<?= htmlspecialchars($donnees['avatar']); ?>');">
-                </div>
-                <div class="text-white-50 posts-informations">
-                    <p class="mb-0">Posté par 
-                        <strong>
-                        <?php
-                        if (isset($donnees['first_name'], $donnees['last_name']))
-                        {
-                            echo htmlspecialchars($donnees['first_name']) . ' ' . htmlspecialchars($donnees['last_name']);
-                        }
-                        else
-                        {
-                            echo htmlspecialchars($donnees['pseudo']);
-                        }
-                        ?>
-                        </strong>
-                    </p>
-                    <p class="mb-0">le <?= $donnees['date_creation']; ?></p>
-                    <p class="mb-0">Dernière modification le <?= $donnees['date_update']; ?></p>
-                </div>
-            </div>
-          </div>
-
+            <h1 class="mx-auto my-0 text-uppercase">Mentions légales</h1>
+        </div>
     </div>
-  </header>
+</header>
 
 
 <?php $header = ob_get_clean(); ?>

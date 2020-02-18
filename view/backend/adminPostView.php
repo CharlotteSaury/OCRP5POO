@@ -148,7 +148,7 @@ while ($donnees = $postInfos->fetch())
                 ?>
 
                     <div class="comment-infos">
-                        <p class=""><strong><?= htmlspecialchars($donnees["first_name"]); ?> <?= htmlspecialchars($donnees["last_name"]); ?></strong> - le <?= htmlspecialchars($donnees["commentDate"]); ?></p>
+                        <p class=""><strong><?= htmlspecialchars($donnees["pseudo"]); ?></strong> - le <?= htmlspecialchars($donnees["commentDate"]); ?></p>
                     </div>
                     <div class="comment-text">
                         <p class="mb-0"><?= htmlspecialchars($donnees["commentContent"]); ?></p>
@@ -159,7 +159,7 @@ while ($donnees = $postInfos->fetch())
                 {
                 ?>
                     <div class="mt-2">
-                        <a href='index.php?action=approveComment&id=<?= htmlspecialchars($donnees["commentId"]); ?>' class="btn btn-outline-dark btn-sm" title="Approuver">
+                        <a href='index.php?action=approveCommentView&id=<?= htmlspecialchars($donnees["commentId"]); ?>&post=<?= htmlspecialchars($donnees["postId"]); ?>' class="btn btn-outline-dark btn-sm" title="Approuver">
                             <i class="fas fa-check"></i>
                         </a>
                         <a href='index.php?action=deleteComment&id=<?= htmlspecialchars($donnees["commentId"]); ?>' class="btn btn-outline-dark btn-sm" title="Supprimer">

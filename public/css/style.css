@@ -97,6 +97,11 @@ a:focus, a:hover {
 	font-size: 0.9rem;
 }
 
+/************* FORMS ***************/
+
+.answer-form {
+	width: 100% !important;
+}
 
 /* //////////////////////////////// */
 /* /////// backend_template ////////// */

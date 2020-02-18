@@ -6,10 +6,12 @@ require_once('./model/Manager.php');
 require_once('./model/PostManager.php');
 require_once('./model/CommentManager.php');
 require_once('./model/UserManager.php');
+require_once('./model/ContactManager.php');
 
 use model\PostManager;
 use model\CommentManager;
 use model\UserManager;
+use model\ContactManager;
 
 class AdminController
 
@@ -17,12 +19,14 @@ class AdminController
 	private $_postManager;
 	private $_commentManager;
 	private $_userManager;
+	private $_contactManager;
 
 	public function __construct()
 	{
 		$this->_postManager = new PostManager();
 		$this->_commentManager = new CommentManager();
 		$this->_userManager = new UserManager();
+		$this->_contactManager = new ContactManager();
 	}
 
 	public function dashboardView($message = null)
@@ -35,6 +39,7 @@ class AdminController
 		$recentPosts = $this->_postManager->getRecentPosts();
 		$recentComments = $this->_commentManager->getComments(5);
 		$recentUsers = $this->_userManager->getUsers(5);
+		$unreadContactsNb = $this->_contactManager->getUnreadContactsNb();
 
 		require('./view/backend/dashboardView.php');
 	}
@@ -43,6 +48,7 @@ class AdminController
 	{
 		$allPosts = $this->_postManager->getPosts($first_post = null, $postsPerPage = null, $nbComments = 1);
 		$allPostsCategories = $this->_postManager->getAllPostsCategories();
+		$unreadContactsNb = $this->_contactManager->getUnreadContactsNb();
 		require('./view/backend/adminPostsView.php');
 	}
 
@@ -51,13 +57,15 @@ class AdminController
 		$postInfos = $this->_postManager->getPostInfos($postId);
 		$postContents = $this->_postManager->getPostContents($postId);
 		$postComments = $this->_commentManager->getpostComments($postId);
-		$postCategories = $this->_postManager->getPostCategories($postId);
+		$postCategories = $this->_postManager->getPostCategories($postId);		
+		$unreadContactsNb = $this->_contactManager->getUnreadContactsNb();
 
 		require('./view/backend/adminPostView.php');
 	}
 
 	public function adminNewPostView($message = null)
 	{
+		$unreadContactsNb = $this->_contactManager->getUnreadContactsNb();
 		require('./view/backend/newPostInfosView.php');
 	}
 
@@ -88,6 +96,7 @@ class AdminController
 		$postInfos = $this->_postManager->getPostInfos($postId);
 		$postContents = $this->_postManager->getPostContents($postId);
 		$postCategories = $this->_postManager->getPostCategories($postId);
+		$unreadContactsNb = $this->_contactManager->getUnreadContactsNb();
 		require('./view/backend/editPostView.php');
 	}
 
@@ -189,17 +198,22 @@ class AdminController
 	public function adminCommentsView($message = null)
 	{
 		$allComments = $this->_commentManager->getComments();
+		$unreadContactsNb = $this->_contactManager->getUnreadContactsNb();
 		require('./view/backend/adminCommentsView.php');
 	}
 
-	public function approveComment($commentId, $dashboard = null)
+	public function approveComment($commentId, $view = null, $postId = null)
 	{
 		$this->_commentManager->approveComment($commentId);
 		$message = "Commentaire approuvé ! ";
 
-		if ($dashboard != null)
+		if ($view == 1)
 		{
 			$this->dashboardView($message);
+		}
+		elseif ($view == 2)
+		{
+			$this->adminPostView($postId, $message);
 		}
 		else
 		{
@@ -226,6 +240,7 @@ class AdminController
 	{
 		$usersActivity = 1;
 		$allUsers = $this->_userManager->getUsers(null, $usersActivity);
+		$unreadContactsNb = $this->_contactManager->getUnreadContactsNb();
 		require('./view/backend/adminUsersView.php');
 	}
 
@@ -234,12 +249,14 @@ class AdminController
 		$userInfos = $this->_userManager->getUserInfos($userId);
 		$userPostsNb = $this->_userManager->getUserPostsNb($userId);
 		$userCommentsNb = $this->_userManager->getUserCommentsNb($userId);
+		$unreadContactsNb = $this->_contactManager->getUnreadContactsNb();
 		require('./view/backend/profileUserView.php');
 	}
 
 	public function editUserView($userId, $message = null)
 	{
 		$userInfos = $this->_userManager->getUserInfos($userId);
+		$unreadContactsNb = $this->_contactManager->getUnreadContactsNb();
 		require('./view/backend/editUserView.php');
 	}
 
@@ -258,6 +275,65 @@ class AdminController
 		$this->profileUserView($userId, $message);
 	}
 
+	public function adminContactsView($message = null)
+	{
+		$allContacts = $this->_contactManager->getContacts();
+		$unreadContactsNb = $this->_contactManager->getUnreadContactsNb();
+		require('./view/backend/adminContactsView.php');
+	}
+
+	public function adminContactView($contactId, $message = null)
+	{
+		$contactInfos = $this->_contactManager->getContacts($contactId);
+		$currentStatus = $this->_contactManager->getContactStatus($contactId);
+		
+		if ($currentStatus != 3 )
+		{
+			$this->_contactManager->updateStatus($contactId, 2);
+		}
+		else
+		{
+			$answerInfos = $this->_contactManager->getAnswer($contactId);
+			var_dump($answerInfos);
+		}
+		
+		$unreadContactsNb = $this->_contactManager->getUnreadContactsNb();
+		require('./view/backend/adminContactView.php');
+	}
+
+	public function deleteContact($contactId, $dashboard = null)
+	{
+		$this->_contactManager->deleteContact($contactId);
+		$message = "Message supprimé ! ";
+		$this->adminContactsView($message);
+		
+	}
+
+	public function adminAnswerEmail($contactId, $answerSubject, $answerContent, $email)
+	{
+		$contactInfos = $this->_contactManager->getContacts($contactId);
+		$contactInfos = $contactInfos->fetchAll(\PDO::FETCH_ASSOC);
+
+		$subject = $answerSubject;
+		$headers = "From : saury.charlotte@wanadoo.fr";
+		$message = $answerContent . 
+					" /r/n
+					----------------/r/n/r/n
+					De: " . $contactInfos[0]['name'] . " <" . $email . ">/r/n
+					Le: " . $contactInfos[0]['date_message'] . "/r/n
+					Objet: " . $contactInfos[0]['subject'] . "/r/n/r/n"
+					. $contactInfos[0]['content'];
+			
+
+		$message = wordwrap($message, 70, "\r\n");
+		mail($email, $subject, $message, $headers);	     
+	}
+
+	public function addAnswer($contactId, $answerSubject, $answerContent)
+	{
+		$this->_contactManager->updateStatus($contactId, 3);   
+		$this->_contactManager->addAnswer($contactId, $answerSubject, $answerContent);
+	}
 	
 }
 
