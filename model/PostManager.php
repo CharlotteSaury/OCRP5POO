@@ -51,7 +51,8 @@ class PostManager extends Manager
 			post.status AS status,
 			DATE_FORMAT(post.date_creation, \'%d-%m-%Y à %Hh%i \') AS date_creation,
 			DATE_FORMAT(post.date_update, \'%d-%m-%Y à %Hh%i \') AS date_update,
-			post.main_image AS main_image, 
+			post.main_image AS main_image,
+			user.pseudo AS pseudo, 
 			user.first_name AS first_name, 
 			user.last_name AS last_name, 
 			user.avatar AS avatar';
@@ -172,6 +173,7 @@ class PostManager extends Manager
 			post.chapo AS chapo, 
 			DATE_FORMAT(post.date_creation, \'%d-%m-%Y\') AS date_creation,
 			post.status AS status,
+			user.pseudo AS pseudo,
 			user.first_name AS first_name,
 			user.last_name AS last_name
 			FROM post

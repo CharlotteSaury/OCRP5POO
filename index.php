@@ -4,22 +4,21 @@ require_once('controller\Router.php');
 
 use controller\Router;
 
-var_dump($_COOKIE);
 
-if (isset($_COOKIE['auth']) && !empty($_COOKIE['auth']) && !isset($_SESSION['id']))
+if (isset($_COOKIE['auth']) && isset($_COOKIE['email']) && !empty($_COOKIE['auth']) && !isset($_SESSION['id']))
 {
 	$auth = htmlspecialchars($_COOKIE['auth']);
 	$auth = explode('-----', $auth);
+	$email = htmlspecialchars($_COOKIE['email']);
 	$ip = $_SERVER['REMOTE_ADDR'];
 
-	if (password_verify($ip, $auth[1])) // rajouter vérification email
+	if (password_verify($email, $auth[0]) && password_verify($ip, $auth[1]))
 	{
 		var_dump('connexion auto');
 		session_start();
-		var_dump($_SESSION);
 
 		$router = new Router();
-		$router->connexionAuto($auth[0]);
+		$router->connexionAuto($email);
 	}
 	else
 	{
@@ -31,7 +30,6 @@ if (isset($_COOKIE['auth']) && !empty($_COOKIE['auth']) && !isset($_SESSION['id'
 else
 {
 	session_start();
-	var_dump($_SESSION);
 	$router = new Router();
 	$router->routerRequest();
 }

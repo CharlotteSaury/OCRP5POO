@@ -100,6 +100,7 @@ class CommentManager extends Manager
 			comment.content AS content, 
 			DATE_FORMAT(comment.comment_date,\'%d-%m-%Y à %Hh%i\') AS commentDate, 
 			comment.status AS status,
+			user.pseudo AS pseudo,
 			user.first_name as first_name, 
 			user.last_name AS last_name,
 			post.title AS postTitle,

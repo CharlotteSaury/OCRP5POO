@@ -63,7 +63,7 @@
                 ?>
                     <th scope="row"><?= htmlspecialchars($donnees['commentId']); ?></th>
                     <td><a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($donnees['postId']); ?>"><?= htmlspecialchars($donnees['postTitle']); ?></a></td>
-                    <td><?= htmlspecialchars($donnees['first_name']); ?> <?= substr(($donnees['last_name']),0,1); ?></td>
+                    <td><?= htmlspecialchars($donnees['pseudo']); ?></td>
                     <td><?= htmlspecialchars($donnees['content']); ?></td>
                     <td><?= htmlspecialchars($donnees['commentDate']); ?></td>
                     <td>

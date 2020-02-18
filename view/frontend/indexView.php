@@ -57,7 +57,7 @@
                 </div>
                 <div class="featured-btn text-center text-lg-left">
                     <a href="#contact-form" class="btn btn-primary-custom js-scroll-trigger">Me contacter</a>
-                    <button type="button" class="btn btn-primary-custom" id="btnCV">Télécharger mon CV</a>
+                    <a href="public/pdf/cv_saury.pdf" class="btn btn-primary-custom" id="btnCV" download="cv_saury.pdf">Télécharger mon CV</a>
                 </div>
             </div>
         </div>

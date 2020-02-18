@@ -48,7 +48,7 @@ class Router
 			$userId = htmlspecialchars($_SESSION['id']);
 			$infos = new UserController();
 
-			if ($infos->isAdmin($userId))
+			if ($infos->isAdmin($userId) || $infos->isSuperAdmin($userId))
 			{
 				return true;
 			}
@@ -139,6 +139,18 @@ class Router
 					{
 						$infos = new HomeController();
 						$infos->indexView();
+					}
+
+					elseif ($_GET['action'] == 'legalView') 
+					{
+						$infos = new HomeController();
+						$infos->legalView();
+					}
+
+					elseif ($_GET['action'] == 'confidentiality') 
+					{
+						$infos = new HomeController();
+						$infos->confidentialityView();
 					}
 
 					elseif ($_GET['action'] == 'inscriptionView')
@@ -254,7 +266,7 @@ class Router
 									if (isset($_POST['rememberme']))
 									{
 										setcookie('email', $email, time() + 365*24*3600, null, null, false, true);
-										setcookie('auth', $email . '-----' . password_hash($_SERVER['REMOTE_ADDR'], PASSWORD_DEFAULT), time() + 365*24*3600, null, null, false, true);
+										setcookie('auth', password_hash($email, PASSWORD_DEFAULT) . '-----' . password_hash($_SERVER['REMOTE_ADDR'], PASSWORD_DEFAULT), time() + 365*24*3600, null, null, false, true);
 									}
 
 									$infos->newUserSession($email);
@@ -545,16 +557,23 @@ class Router
 						$infos->adminCommentsView();
 					}
 
-					elseif (($_GET['action'] == 'approveComment') || ($_GET['action'] == 'approveCommentDashboard') && $this->adminAccess())
+					elseif (($_GET['action'] == 'approveComment') || ($_GET['action'] == 'approveCommentDashboard') || ($_GET['action'] == 'approveCommentView') && $this->adminAccess())
 					{
 						$commentId = $this->getParameter($_GET, 'id');
 						
 						$infos = new AdminController();						
 						if ($_GET['action'] == 'approveCommentDashboard')
 						{
-							$dashboard = 1;
-							$infos->approveComment($commentId, $dashboard);
+							$view = 1;
+							$infos->approveComment($commentId, $view);
 						}
+						elseif ($_GET['action'] == 'approveCommentView')
+						{
+							$view = 2;
+							$postId = $this->getParameter($_GET, 'post');
+							$infos->approveComment($commentId, $view, $postId);
+						}
+
 						else
 						{
 							$infos->approveComment($commentId);
@@ -640,30 +659,73 @@ class Router
 								}
 								else
 								{
-									if ($newUserInfos['birth_date'] == '')
-									{
-										unset($newUserInfos['birth_date']);
-									}
-
 									if (!isset($newUserInfos['user_role_id']))
 									{
 										$role = $this->getParameter($_SESSION, 'role');
 										$newUserInfos['user_role_id'] = $role;
 									}
 
-									$email = $newUserInfos['email'];
-									$userId = $newUserInfos['id'];
-									$currentUserId = $this->getParameter($_SESSION, 'id');
+									$date = $newUserInfos['birth_date'];
 
-									$infos = new AdminController();
-									$infos->editUserInfos($newUserInfos);
-
-									if ($currentUserId == $userId)
+									if (empty($date))
 									{
-										$infos = new UserController();
-										$infos->newUserSession($email);
-									}
+										unset($newUserInfos['birth_date']);
+										$infos = new AdminController();
+										$infos->deleteBirthDate($newUserInfos['id']);
 
+										$email = $newUserInfos['email'];
+										$userId = $newUserInfos['id'];
+										$currentUserId = $this->getParameter($_SESSION, 'id');	
+
+										$infos = new AdminController();
+										$infos->editUserInfos($newUserInfos);
+
+										// Si l'utilisateur a modifié son propre profil, alors on modifie les variables de session
+
+										if ($currentUserId == $userId)
+										{
+											$infos = new UserController();
+											$infos->newUserSession($email);
+										}
+									}
+									else
+									{
+										$checkDate = explode('-', $date);						
+										if (!preg_match('#^([0-9]{2})(-)([0-9]{2})(-)([0-9]{4})$#' , $date)) // check date format (DD/MM/AAAA)
+										{
+											$message = "La date de naissance n'est pas dans le format autorisé.";
+											$infos = new AdminController();
+											$infos->editUserView($newUserInfos['id'], $message);
+										}
+										elseif (!checkdate($checkDate[1], $checkDate[0], $checkDate[2]) || ($checkDate[2] < 1900 )) // check date validity
+										{
+											$message = "La date de naissance n'est pas valide.";
+											$infos = new AdminController();
+											$infos->editUserView($newUserInfos['id'], $message);
+										}
+										else // date valide
+										{
+											$newUserInfos['birth_date'] = $checkDate[2] . '-' . $checkDate[1] . '-' . $checkDate[0];
+
+
+											$email = $newUserInfos['email'];
+											$userId = $newUserInfos['id'];
+											$currentUserId = $this->getParameter($_SESSION, 'id');	
+
+											$infos = new AdminController();
+											$infos->editUserInfos($newUserInfos);
+
+											// Si l'utilisateur a modifié son propre profil, alors on modifie les variables de session
+											
+											if ($currentUserId == $userId)
+											{
+												$infos = new UserController();
+												$infos->newUserSession($email);
+											}
+
+										}
+									}
+									
 								}
 
 							}
@@ -691,11 +753,68 @@ class Router
 						$infos->updateProfilePicture($userId, $avatarUrl);
 					}
 
+					elseif ($_GET['action'] == 'adminContacts' && $this->adminAccess())
+					{
+						$infos = new AdminController();
+						$infos->adminContactsView();
+					}
+
+					elseif ($_GET['action'] == 'contactForm' && $this->adminAccess())
+					{
+						$name = $this->getParameter($_POST, 'name');
+						$email = $this->getParameter($_POST, 'email');
+						$subject = $this->getParameter($_POST, 'subject');
+						$content = $this->getParameter($_POST, 'content');
+
+						$infos = new HomeController();
+
+						$contactId = $infos->newContactForm($name, $email, $subject, $content);
+						var_dump($contactId);
+						$infos->mailContactForm($name, $email, $subject, $content, $contactId);
+
+						$message = "Votre message a bien été envoyé. Nous vous remercions et vous recontacterons dans les plus brefs délais.";
+						$infos->indexView($message);
+					}
+
+					elseif ($_GET['action'] == 'contactView' && $this->adminAccess())
+					{
+						$contactId = $this->getParameter($_GET, 'id');
+						
+						$infos = new AdminController();
+						$infos->adminContactView($contactId);
+					}
+
+					elseif (($_GET['action'] == 'deleteContact') && $this->adminAccess())
+					{
+						$contactId = $this->getParameter($_GET, 'id');
+						
+						$infos = new AdminController();						
+						$infos->deleteContact($contactId);				
+					}
+
+					elseif (($_GET['action'] == 'answer') && $this->adminAccess())
+					{
+						var_dump($_POST);
+						$contactId = $this->getParameter($_POST, 'id');
+						$answerSubject = $this->getParameter($_POST, 'answerSubject');
+						$email = $this->getParameter($_POST, 'email');
+						$answerContent = $this->getParameter($_POST, 'answerContent');
+						
+						$infos = new AdminController();
+						$infos->addAnswer($contactId, $answerSubject, $answerContent);
+						//$infos->adminAnswerEmail($contactId, $answerSubject, $answerContent, $email);
+
+						$message = "La réponse a bien été envoyée.";
+						$infos->adminContactView($contactId, $message);  			
+					}
+
 					else 
 					{
 						throw new Exception('Vous n\'avez pas accès à cette page');
 					}
 				}
+
+				
 
 				else
 				{

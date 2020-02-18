@@ -27,7 +27,7 @@
                 <input type="email" name="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" placeholder="Votre adresse email...*" required>
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" name="confidentiality" id="confidentiality" required/>
-                    <label class="form-check-label text-white-50" for="confidentiality" >* J'ai lu et j'accepte la <a href="#"> Politique de Protection des données personnelles</a></label>
+                    <label class="form-check-label text-white-50" for="confidentiality" >* J'ai lu et j'accepte la <a href="index.php?action=confidentiality"> Politique de confidentialité des données personnelles</a></label>
                 </div>
                 
                 <button type="submit" class="btn btn-primary-custom mx-auto">S'inscrire</button>

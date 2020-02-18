@@ -73,7 +73,7 @@
 
                                     <?php
 
-                                    if ($_SESSION['role'] == 1)
+                                    if ($_SESSION['role'] == 1 || $_SESSION['role'] == 3)
                                     {
                                         ?>
                                         <div class="dropdown-divider"></div>
@@ -153,10 +153,18 @@
                         <i class="far fa-paper-plane fa-2x mb-2 text-white"></i>
                         <h2 class="text-white mb-5">Me contacter !</h2>
 
-                        <form class="form-inline d-flex flex-column">
-                            <input type="text" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="contactName" placeholder="Votre nom..."/>
-                            <input type="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="contactEmail" placeholder="Votre adresse email..."/>
-                            <textarea class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="contactMessage" placeholder="Votre message..."></textarea>
+                        <?php
+                        if (isset($message))
+                        {
+                            echo '<div class="adminMessage text-white-50 text-center">' . $message . '</div>';
+                        }
+                        ?>
+
+                        <form method="POST" action="index.php?action=contactForm#contact-form" class="form-inline d-flex flex-column">
+                            <input type="text" name="name" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="contactName" placeholder="Votre nom" required/>
+                            <input type="email" name="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="contactEmail" placeholder="Votre adresse email" required/>
+                            <input type="text" name="subject" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="contactSubject" placeholder="Objet" required/>
+                            <textarea name="content" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="contactMessage" placeholder="Votre message" required></textarea>
                             <button type="submit" class="btn btn-primary-custom mx-auto">Envoyer</button>
                         </form>
                     </div>
@@ -230,15 +238,15 @@
 
                 <?php
 
-                if (isset($_SESSION['role']) && ($_SESSION['role'] == 1))
+                if (isset($_SESSION['role']) && ($_SESSION['role'] == 1  || $_SESSION['role'] == 3))
                 {
                     echo '<a href="index.php?action=admin">ADMIN</a> | ';
                 }
 
                 ?>
 
-                <a href="#">MENTIONS LEGALES</a> | 
-                <a href="#">POLITIQUE DE CONFIDENTIALITE</a>
+                <a href="index.php?action=legalView">MENTIONS LEGALES</a> | 
+                <a href="index.php?action=confidentiality">POLITIQUE DE CONFIDENTIALITE</a>
                 
             </div>
             <div class="text-center">

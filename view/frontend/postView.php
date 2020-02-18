@@ -63,14 +63,7 @@
                     
             <!-- Post  content -->
             <div class="post-content col-sm-10 mx-auto mb-5">
-
-                <?php
-                if (isset($message))
-                {
-                    echo '<div class="adminMessage text-dark-50 text-center">' . $message . '</div>';
-                }
-                ?>
-                
+               
                 <h2 class="mb-4"><?= htmlspecialchars($donnees['title']); ?></h2>
                 <hr class="d-none d-lg-block ml-0">
 
@@ -115,16 +108,21 @@
 
             <!-- Comments section -->
 
-            <div class="post-comments col-sm-10 mx-auto mb-5">
+            <div class="post-comments col-sm-10 mx-auto mb-5" id="comments-section">
                 <h2>Commentaires</h2>
                 <hr class="d-none d-lg-block ml-0">
 
                 <?php
+                if (isset($message))
+                {
+                    echo '<div class="adminMessage text-dark-50 text-center">' . $message . '</div>';
+                }
+
                 if (isset($_SESSION['id']))
                 {
                     ?>
                     <div class="comment-form">
-                        <form method="POST" action="index.php?action=addComment">
+                        <form method="POST" action="index.php?action=addComment#comments-section">
                             <div class="form-row">
                                 <textarea class="form-control mt-4 mb-4 pb-5" name="content" placeholder="Votre commentaire"></textarea>
                             </div>

@@ -63,8 +63,7 @@
                 </div>
             </div>
         </div>
-    </div>
-                    
+    </div>        
 </div>
 
 <!-- Recent Post Row -->
@@ -106,7 +105,7 @@
                                 }
                             ?>
                                 <th scope="row"><?= htmlspecialchars($donnees['postId']); ?></th>
-                                <td><?= htmlspecialchars($donnees['first_name']); ?> <?= htmlspecialchars($donnees['last_name']); ?></td>
+                                <td><?= htmlspecialchars($donnees['pseudo']); ?></td>
                                 <td><?= htmlspecialchars($donnees['title']); ?></td>
                                 <td><?= substr(htmlspecialchars($donnees['chapo']), 0, 50); ?>...</td>
                                 <td><?= $donnees['date_creation']; ?></td>
@@ -215,7 +214,7 @@
                                 }
                             ?>
                                 <th scope="row"><?= htmlspecialchars($donnees['commentId']); ?></th>
-                                <td><?= htmlspecialchars($donnees['first_name']); ?> <?= htmlspecialchars($donnees['last_name']); ?></td>
+                                <td><?= htmlspecialchars($donnees['pseudo']); ?></td>
                                 <td><?= substr(htmlspecialchars($donnees['content']), 0, 50); ?></td>
                                 <td><?= $donnees['commentDate']; ?></td>
                                 <td>

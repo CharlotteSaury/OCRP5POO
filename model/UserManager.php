@@ -181,7 +181,7 @@ class UserManager extends Manager
 		$sql = 'SELECT user.id AS userId,
 				user.pseudo AS pseudo,
 				user.email AS email,
-				user.register_date AS register_date,
+				DATE_FORMAT(user.register_date, \'%d-%m-%Y\') AS register_date,
 				user_role.role AS role';
 
 		if ($usersActivity !== null)
@@ -208,14 +208,14 @@ class UserManager extends Manager
 		$sql = 'SELECT user.id AS userId,
 				user.pseudo AS pseudo,
 				user.email AS email,
-				user.register_date AS register_date,
+				DATE_FORMAT(user.register_date, \'%d-%m-%Y\') AS register_date,
 				user_role.role AS role,
 				user.first_name AS first_name,
 				user.last_name AS last_name,
 				user.mobile AS mobile,
 				user.website AS website,
 				user.home AS home,
-				user.birth_date AS birth_date,
+				DATE_FORMAT(user.birth_date, \'%d-%m-%Y\') AS birth_date,
 				user.avatar AS avatar,
 				user.user_about AS about
 				FROM user 
@@ -247,6 +247,14 @@ class UserManager extends Manager
 		$sql .= ' WHERE user.id = :id';
 		$req = $this->dbRequest($sql, array($newUserInfos['id']));
 		$req->bindValue('id', $newUserInfos['id'], \PDO::PARAM_INT);
+		$req->execute();
+	}
+
+	public function deleteBirthDate($userId)
+	{
+		$sql = 'UPDATE user SET birth_date = NULL WHERE user.id = :userId';
+		$req = $this->dbRequest($sql, array($userId));
+		$req->bindValue('userId', $userId, \PDO::PARAM_INT);
 		$req->execute();
 	}
 
