@@ -113,9 +113,9 @@
                 <hr class="d-none d-lg-block ml-0">
 
                 <?php
-                if (isset($message))
+                if (isset($messageComment))
                 {
-                    echo '<div class="adminMessage text-dark-50 text-center">' . $message . '</div>';
+                    echo '<div class="adminMessage text-dark-50 text-center">' . $messageComment . '</div>';
                 }
 
                 if (isset($_SESSION['id']))

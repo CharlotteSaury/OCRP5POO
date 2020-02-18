@@ -162,7 +162,19 @@
 
                         <form method="POST" action="index.php?action=contactForm#contact-form" class="form-inline d-flex flex-column">
                             <input type="text" name="name" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="contactName" placeholder="Votre nom" required/>
-                            <input type="email" name="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="contactEmail" placeholder="Votre adresse email" required/>
+
+                            <?php
+                            if (isset($_SESSION['email']))
+                            {
+                               echo '<input type="email" name="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="contactEmail" value="' . htmlspecialchars($_SESSION['email']) . '" required/>'; 
+                            }
+                            else
+                            {
+                                echo '<input type="email" name="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="contactEmail" placeholder="Votre adresse email" required/>'; 
+                            }
+                            ?>
+
+                            
                             <input type="text" name="subject" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="contactSubject" placeholder="Objet" required/>
                             <textarea name="content" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="contactMessage" placeholder="Votre message" required></textarea>
                             <button type="submit" class="btn btn-primary-custom mx-auto">Envoyer</button>
