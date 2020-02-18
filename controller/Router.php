@@ -659,46 +659,71 @@ class Router
 								}
 								else
 								{
-									if ($newUserInfos['birth_date'] == '')
-									{
-										$newUserInfos['birth_date'] = null;
-									}
-									else
-									{
-										$date = $newUserInfos['birth_date'];
-										var_dump($date);
-										$checkDate = explode('-', $date);
-										var_dump($checkDate);
-
-										if (checkdate($checkDate[1], $checkDate[2], $checkDate[0]) && ($checkDate[0] >= 1900 ))
-										{
-											$newUserInfos['birth_date'] = $date;	
-										}
-										else
-										{
-											$message = "La date de naissance n'est pas valide.";
-											$infos = new AdminController();
-											$infos->editUserView($newUserInfos['id'], $message);
-										}
-									}
-
 									if (!isset($newUserInfos['user_role_id']))
 									{
 										$role = $this->getParameter($_SESSION, 'role');
 										$newUserInfos['user_role_id'] = $role;
 									}
 
-									$email = $newUserInfos['email'];
-									$userId = $newUserInfos['id'];
-									$currentUserId = $this->getParameter($_SESSION, 'id');
+									$date = $newUserInfos['birth_date'];
 
-									$infos = new AdminController();
-									$infos->editUserInfos($newUserInfos);
-
-									if ($currentUserId == $userId)
+									if (empty($date))
 									{
-										$infos = new UserController();
-										$infos->newUserSession($email);
+										unset($newUserInfos['birth_date']);
+										$infos = new AdminController();
+										$infos->deleteBirthDate($newUserInfos['id']);
+
+										$email = $newUserInfos['email'];
+										$userId = $newUserInfos['id'];
+										$currentUserId = $this->getParameter($_SESSION, 'id');	
+
+										$infos = new AdminController();
+										$infos->editUserInfos($newUserInfos);
+
+										// Si l'utilisateur a modifié son propre profil, alors on modifie les variables de session
+
+										if ($currentUserId == $userId)
+										{
+											$infos = new UserController();
+											$infos->newUserSession($email);
+										}
+									}
+									else
+									{
+										$checkDate = explode('-', $date);						
+										if (!preg_match('#^([0-9]{2})(-)([0-9]{2})(-)([0-9]{4})$#' , $date)) // check date format (DD/MM/AAAA)
+										{
+											$message = "La date de naissance n'est pas dans le format autorisé.";
+											$infos = new AdminController();
+											$infos->editUserView($newUserInfos['id'], $message);
+										}
+										elseif (!checkdate($checkDate[1], $checkDate[0], $checkDate[2]) || ($checkDate[2] < 1900 )) // check date validity
+										{
+											$message = "La date de naissance n'est pas valide.";
+											$infos = new AdminController();
+											$infos->editUserView($newUserInfos['id'], $message);
+										}
+										else // date valide
+										{
+											$newUserInfos['birth_date'] = $checkDate[2] . '-' . $checkDate[1] . '-' . $checkDate[0];
+
+
+											$email = $newUserInfos['email'];
+											$userId = $newUserInfos['id'];
+											$currentUserId = $this->getParameter($_SESSION, 'id');	
+
+											$infos = new AdminController();
+											$infos->editUserInfos($newUserInfos);
+
+											// Si l'utilisateur a modifié son propre profil, alors on modifie les variables de session
+											
+											if ($currentUserId == $userId)
+											{
+												$infos = new UserController();
+												$infos->newUserSession($email);
+											}
+
+										}
 									}
 									
 								}

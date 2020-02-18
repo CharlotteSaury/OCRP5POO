@@ -268,6 +268,11 @@ class AdminController
 		$this->profileUserView($userId, $message);
 	}
 
+	public function deleteBirthDate($userId)
+	{
+		$this->_userManager->deleteBirthDate($userId);
+	}
+
 	public function updateProfilePicture($userId, $avatarUrl)
 	{
 		$this->_userManager->updateProfilePicture($userId, $avatarUrl);

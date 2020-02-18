@@ -84,7 +84,7 @@ while ($donnees = $userInfos->fetch())
                             <div class="form-group">
                                 <label for="birthdate">Né(e) le : </label>
                                     <input type="text" class="form-control" name="birth_date" value="<?= $donnees['birth_date']; ?>"/>
-                                    <small id="birthDateHelpBlock" class="form-text text-muted">La date doit être au format JJ/MM/AAAA.</small>
+                                    <small id="birthDateHelpBlock" class="form-text text-muted">La date doit être au format JJ-MM-AAAA.</small>
                             </div>
                             <div class="form-group">
                                 <label for="home">Habite à : </label>
@@ -111,7 +111,7 @@ while ($donnees = $userInfos->fetch())
 
                             <?php
 
-                            if (isset($_SESSION['role']) && $_SESSION['role'] == 1)
+                            if (isset($_SESSION['role']) && $_SESSION['role'] == 3)
                             {                           
 
                                 if ($donnees['role'] == 'admin')
@@ -127,11 +127,15 @@ while ($donnees = $userInfos->fetch())
                                             <input class="form-check-input" type="radio" id="rolecheckboxuser" name="user_role_id" value="2" />
                                             <label class="form-check-label" for="rolecheckboxuser">User</label>
                                         </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" id="rolecheckboxadmin" value="3" name="user_role_id" checked />
+                                            <label class="form-check-label" for="rolecheckboxadmin">Super-admin</label>
+                                        </div>
                                     </div>
 
                                     <?php
                                 }
-                                else
+                                elseif ($donnees['role'] == 'user')
                                 {
                                     ?>
 
@@ -143,6 +147,30 @@ while ($donnees = $userInfos->fetch())
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" id="rolecheckboxuser" name="user_role_id" value="2" checked />
                                             <label class="form-check-label" for="rolecheckboxuser">User</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" id="rolecheckboxadmin" value="3" name="user_role_id" />
+                                            <label class="form-check-label" for="rolecheckboxadmin">Super-admin</label>
+                                        </div>
+                                    </div>
+
+                                    <?php
+                                }
+                                else
+                                {
+                                    ?>
+                                    <div class="form-group">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" id="rolecheckboxadmin" name="user_role_id" value="1" />
+                                            <label class="form-check-label" for="rolecheckboxadmin">Admin</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" id="rolecheckboxuser" name="user_role_id" value="2" />
+                                            <label class="form-check-label" for="rolecheckboxuser">User</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" id="rolecheckboxadmin" value="3" name="user_role_id" checke/>
+                                            <label class="form-check-label" for="rolecheckboxadmin">Super-admin</label>
                                         </div>
                                     </div>
 

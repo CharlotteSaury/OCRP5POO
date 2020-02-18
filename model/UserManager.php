@@ -250,6 +250,14 @@ class UserManager extends Manager
 		$req->execute();
 	}
 
+	public function deleteBirthDate($userId)
+	{
+		$sql = 'UPDATE user SET birth_date = NULL WHERE user.id = :userId';
+		$req = $this->dbRequest($sql, array($userId));
+		$req->bindValue('userId', $userId, \PDO::PARAM_INT);
+		$req->execute();
+	}
+
 	public function getUserPostsNb($userId)
 	{
 		$sql = 'SELECT COUNT(*) AS postsNb FROM post WHERE post.user_id = :userId';
