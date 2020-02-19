@@ -27,7 +27,7 @@ class ContactManager extends Manager
 		return $contactsNb;
 	}
 	
-	public function getContacts($contactId = null)
+	public function getContacts($contactId = null, $status = null, $sortingDate = null)
 	{
 		$sql = 'SELECT contact_form.id AS contactId, 
 			contact_form.name AS name, 
@@ -40,6 +40,11 @@ class ContactManager extends Manager
 			FROM contact_form 
 			JOIN contact_status ON contact_form.contact_status_id = contact_status.id';
 
+		if ($status != null)
+		{
+			$sql .= ' WHERE contact_status.id = ' . $status;
+		}
+		
 		if ($contactId != null)
 		{
 			$sql .= ' WHERE contact_form.id = :contactId';
@@ -49,7 +54,14 @@ class ContactManager extends Manager
 		}
 		else
 		{
-			$sql .= ' ORDER BY contactId DESC';
+			if ($sortingDate != null)
+			{
+				$sql .= ' ORDER BY contact_form.date_message ASC';
+			}
+			else
+			{
+				$sql .= ' ORDER BY contact_form.date_message DESC';
+			}
 			$req = $this->dbRequest($sql);
 		}
 

@@ -166,17 +166,23 @@ class UserManager extends Manager
 		return $role = $donnees['user_role_id'];
 	}
 
-	public function getUserNb()
+	public function getUserNb($userRoleId = null)
 	{
-		$sql = ('SELECT COUNT(*) AS usersNb FROM user');
+		$sql = 'SELECT COUNT(*) AS usersNb FROM user';
+
+		if ($userRoleId != null)
+		{
+			$sql .= ' WHERE user.user_role_id = ' . $userRoleId;
+		}
+
 		$req = $this->dbRequest($sql);
 
-		$totalUsersNb = $req->fetch();
-		$usersNb = $totalUsersNb['usersNb'];
+		$donnees = $req->fetch();
+		$usersNb = $donnees['usersNb'];
 		return $usersNb;
 	}
 
-	public function getUsers($usersNb = null, $usersActivity = null)
+	public function getUsers($usersNb = null, $usersActivity = null, $userRoleId = null)
 	{
 		$sql = 'SELECT user.id AS userId,
 				user.pseudo AS pseudo,
@@ -191,8 +197,14 @@ class UserManager extends Manager
 		}		
 		
 		$sql .= ' FROM user 
-				JOIN user_role ON user.user_role_id = user_role.id
-				ORDER BY user.register_date DESC';
+				JOIN user_role ON user.user_role_id = user_role.id';
+
+		if ($userRoleId != null)
+		{
+			$sql .= ' WHERE user.user_role_id = ' . $userRoleId;
+		}
+
+		$sql .= ' ORDER BY user.register_date DESC';
 
 		if ($usersNb !== null)
 		{

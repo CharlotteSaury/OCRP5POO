@@ -44,9 +44,23 @@ class AdminController
 		require('./view/backend/dashboardView.php');
 	}
 
-	public function adminPostsView($message = null)
+	public function adminPostsView($message = null, $sorting = null, $sortingDate = null)
 	{
-		$allPosts = $this->_postManager->getPosts($first_post = null, $postsPerPage = null, $nbComments = 1);
+		$totalPostsNb = $this->_postManager->getTotalPostsNb();
+		$publishedPostsNb = $this->_postManager->getPublishedPostsNb();
+		$unpublishedPostsNb = $totalPostsNb - $publishedPostsNb;
+
+		if ($sorting != null)
+		{
+			$contentTitle = 'Articles non publiés';
+			$allPosts = $this->_postManager->getUnpublishedPosts($sortingDate);
+		}
+		else
+		{
+			$contentTitle = 'Tous les articles';
+			$allPosts = $this->_postManager->getPosts($first_post = null, $postsPerPage = null, $nbComments = 1, $sortingDate);
+		}
+		
 		$allPostsCategories = $this->_postManager->getAllPostsCategories();
 		$unreadContactsNb = $this->_contactManager->getUnreadContactsNb();
 		require('./view/backend/adminPostsView.php');
@@ -195,9 +209,24 @@ class AdminController
 		}
 	}
 
-	public function adminCommentsView($message = null)
+	public function adminCommentsView($message = null, $sorting = null, $sortingDate = null)
 	{
-		$allComments = $this->_commentManager->getComments();
+		$totalCommentsNb = $this->_commentManager->getTotalCommentsNb();
+		$approvedCommentsNb = $this->_commentManager->getApprovedCommentsNb();
+		$unapprovedCommentsNb = $totalCommentsNb - $approvedCommentsNb;
+
+		if ($sorting != null)
+		{
+			$contentTitle = 'Commentaires non approuvés';
+			$status = 0;
+			$allComments = $this->_commentManager->getComments($commentsNb = null, $status, $sortingDate);
+		}
+		else
+		{
+			$contentTitle = 'Tous les Commentaires';
+			$allComments = $this->_commentManager->getComments($commentsNb = null, $status = null, $sortingDate);
+		}
+
 		$unreadContactsNb = $this->_contactManager->getUnreadContactsNb();
 		require('./view/backend/adminCommentsView.php');
 	}
@@ -236,10 +265,37 @@ class AdminController
 		}
 	}
 
-	public function adminUsersView()
+	public function adminUsersView($userRoleId = null)
 	{
+		$allUsersNb = $this->_userManager->getUserNb();
+		$superAdminNb = $this->_userManager->getUserNb(3);
+		$adminNb = $this->_userManager->getUserNb(1);
+		$usersNb = $this->_userManager->getUserNb(2);
+
+		if ($userRoleId != null)
+		{
+			if ($userRoleId == 1)
+			{
+				$contentTitle = 'Administrateurs';
+			}
+			elseif ($userRoleId == 2)
+			{
+				$contentTitle = 'Utilisateurs';
+			}
+			else
+			{
+				$contentTitle = 'Super Admin';
+			}
+		}
+		else
+		{
+			$contentTitle = 'Tous les Utilisateurs';
+		}
+		
+
+
 		$usersActivity = 1;
-		$allUsers = $this->_userManager->getUsers(null, $usersActivity);
+		$allUsers = $this->_userManager->getUsers(null, $usersActivity, $userRoleId);
 		$unreadContactsNb = $this->_contactManager->getUnreadContactsNb();
 		require('./view/backend/adminUsersView.php');
 	}
@@ -280,10 +336,23 @@ class AdminController
 		$this->profileUserView($userId, $message);
 	}
 
-	public function adminContactsView($message = null)
+	public function adminContactsView($message = null, $sorting = null, $sortingDate = null)
 	{
-		$allContacts = $this->_contactManager->getContacts();
+		$allContactsNb = $this->_contactManager->getTotalContactsNb();
 		$unreadContactsNb = $this->_contactManager->getUnreadContactsNb();
+
+		if ($sorting != null)
+		{
+			$contentTitle = 'Contacts non lus';
+			$status = 1;
+			$allContacts = $this->_contactManager->getContacts($contactId = null, $status, $sortingDate);
+		}
+		else
+		{
+			$contentTitle = 'Tous les contacts';
+			$allContacts = $this->_contactManager->getContacts($contactId = null, $status = null, $sortingDate);
+		}
+
 		require('./view/backend/adminContactsView.php');
 	}
 
@@ -299,7 +368,6 @@ class AdminController
 		else
 		{
 			$answerInfos = $this->_contactManager->getAnswer($contactId);
-			var_dump($answerInfos);
 		}
 		
 		$unreadContactsNb = $this->_contactManager->getUnreadContactsNb();

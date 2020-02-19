@@ -4,7 +4,7 @@
 
 <!-- Content title definition -->
 
-<?php $contentTitle = 'Utilisateurs'; ?>
+<?php $contentTitle; ?>
 
 <!-- $content definition -->
 
@@ -13,21 +13,14 @@
 <!-- Sorting Row -->
 
 <div class="row mb-5">
-    <div class="col-12">
-        <form class="form-inline sorting-form">
-            <label for="admin-postslist-date" hidden>Tri par date</label>
-            <select class="form-control block" id="admin-postslist-date">
-                <option value="desc" selected>Du plus récent au plus ancien</option>
-                <option value="asc">Du plus ancien au plus récent</option>
-            </select>
-            <label for="admin-postslist-category" hidden>Tri par category</label>
-            <select class="form-control block" id="admin-postslist-category">
-                <option value="categorie" selected disabled>Rôle</option>
-                <option value="admin">Administrateur</option>
-                <option value="user">Utilisateur</option>
-            </select>
-            <input class="btn btn-primary-custom" type="submit" name="admin-postslist-sorting" value="Filtrer">
-        </form>                           
+    <div class="col-12 mb-3">
+        <a href="index.php?action=adminUsers">Tous (<?= $allUsersNb ?>)</a>
+         | 
+         <a href="index.php?action=adminUsers&sort=3">Super Admin (<?= $superAdminNb ?>)</a>
+         | 
+         <a href="index.php?action=adminUsers&sort=1">Admin (<?= $adminNb ?>)</a>
+         | 
+         <a href="index.php?action=adminUsers&sort=2">Users (<?= $usersNb ?>)</a>                        
     </div>
 </div>
 

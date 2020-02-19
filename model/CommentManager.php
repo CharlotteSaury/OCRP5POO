@@ -94,7 +94,7 @@ class CommentManager extends Manager
 		return $commentsNb;
 	}
 
-	public function getComments($commentsNb = null)
+	public function getComments($commentsNb = null, $status = null, $sortingDate = null)
 	{
 		$sql = 'SELECT comment.id AS commentId, 
 			comment.content AS content, 
@@ -107,8 +107,21 @@ class CommentManager extends Manager
 			post.id AS postId
 			FROM comment 
 			JOIN user on comment.user_id = user.id
-			JOIN post on comment.post_id = post.id
-			ORDER BY comment.id DESC';
+			JOIN post on comment.post_id = post.id';
+
+		if (isset($status) && $status == 0)
+		{
+			$sql.= ' WHERE comment.status = ' . $status;
+		}
+
+		if ($sortingDate != null)
+		{
+			$sql.= ' ORDER BY comment.comment_date ASC';
+		}
+		else
+		{
+			$sql.= ' ORDER BY comment.comment_date DESC';
+		}
 
 		if ($commentsNb !== null)
 		{

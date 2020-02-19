@@ -378,8 +378,61 @@ class Router
 
 					elseif ($_GET['action'] == 'adminPosts' && $this->adminAccess())
 					{
-						$infos = new AdminController();
-						$infos->adminPostsView();
+						if (isset($_GET['sort']) || isset($_GET['date']))
+						{
+							if (isset($_GET['sort']) && !isset($_GET['date']))
+							{
+								if ($_GET['sort'] == 'unpublished')
+								{
+									$message = null;
+									$sorting = htmlspecialchars($_GET['sort']);
+									$sortingDate = null;
+								}
+								else
+								{
+									$message = 'Le choix de tri n\'est pas valide';
+									$sorting = null;
+									$sortingDate = null;
+								}
+							}
+							elseif (!isset($_GET['sort']) && isset($_GET['date']))
+							{
+								if ($_GET['date'] == 'asc')
+								{
+									$message = null;
+									$sorting = null;
+									$sortingDate = htmlspecialchars($_GET['date']);
+								}
+								else
+								{
+									$message = 'Le choix de tri n\'est pas valide';
+									$sorting = null;
+									$sortingDate = null;
+								}
+							}
+							else
+							{
+								if ($_GET['sort'] == 'unpublished' && $_GET['date'] == 'asc')
+								{
+									$message = null;
+									$sorting = htmlspecialchars($_GET['sort']);
+									$sortingDate = htmlspecialchars($_GET['date']);
+								}
+								else
+								{
+									$message = 'Le choix de tri n\'est pas valide';
+									$sorting = null;
+									$sortingDate = null;
+								}
+							}
+							$infos = new AdminController();
+							$infos->adminPostsView($message, $sorting, $sortingDate);	
+						}
+						else
+						{
+							$infos = new AdminController();
+							$infos->adminPostsView();
+						}
 					}
 
 					elseif ($_GET['action'] == 'adminPostView' && $this->adminAccess())
@@ -553,8 +606,61 @@ class Router
 
 					elseif ($_GET['action'] == 'adminComments' && $this->adminAccess())
 					{
-						$infos = new AdminController();
-						$infos->adminCommentsView();
+						if (isset($_GET['sort']) || isset($_GET['date']))
+						{
+							if (isset($_GET['sort']) && !isset($_GET['date']))
+							{
+								if ($_GET['sort'] == 'unapproved')
+								{
+									$message = null;
+									$sorting = htmlspecialchars($_GET['sort']);
+									$sortingDate = null;
+								}
+								else
+								{
+									$message = 'Le choix de tri n\'est pas valide';
+									$sorting = null;
+									$sortingDate = null;
+								}
+							}
+							elseif (!isset($_GET['sort']) && isset($_GET['date']))
+							{
+								if ($_GET['date'] == 'asc')
+								{
+									$message = null;
+									$sorting = null;
+									$sortingDate = htmlspecialchars($_GET['date']);
+								}
+								else
+								{
+									$message = 'Le choix de tri n\'est pas valide';
+									$sorting = null;
+									$sortingDate = null;
+								}
+							}
+							else
+							{
+								if ($_GET['sort'] == 'unapproved' && $_GET['date'] == 'asc')
+								{
+									$message = null;
+									$sorting = htmlspecialchars($_GET['sort']);
+									$sortingDate = htmlspecialchars($_GET['date']);
+								}
+								else
+								{
+									$message = 'Le choix de tri n\'est pas valide';
+									$sorting = null;
+									$sortingDate = null;
+								}
+							}
+							$infos = new AdminController();
+							$infos->adminCommentsView($message, $sorting, $sortingDate);	
+						}
+						else
+						{
+							$infos = new AdminController();
+							$infos->adminCommentsView();
+						}
 					}
 
 					elseif (($_GET['action'] == 'approveComment') || ($_GET['action'] == 'approveCommentDashboard') || ($_GET['action'] == 'approveCommentView') && $this->adminAccess())
@@ -598,8 +704,24 @@ class Router
 
 					elseif ($_GET['action'] == 'adminUsers' && $this->adminAccess())
 					{
+						if (isset($_GET['sort']))
+						{
+							if (in_array($_GET['sort'], [1, 2, 3]))
+							{
+								$userRoleId = htmlspecialchars($_GET['sort']);
+							}
+							else
+							{
+								throw new Exception("La page que vous recherchez n'existe pas. ");
+							}
+						}
+						else
+						{
+							$userRoleId = null;
+						}
+
 						$infos = new AdminController();
-						$infos->adminUsersView();
+						$infos->adminUsersView($userRoleId);
 					}
 
 					elseif ($_GET['action'] == 'profileUser')
@@ -716,7 +838,7 @@ class Router
 											$infos->editUserInfos($newUserInfos);
 
 											// Si l'utilisateur a modifié son propre profil, alors on modifie les variables de session
-											
+
 											if ($currentUserId == $userId)
 											{
 												$infos = new UserController();
@@ -755,8 +877,61 @@ class Router
 
 					elseif ($_GET['action'] == 'adminContacts' && $this->adminAccess())
 					{
-						$infos = new AdminController();
-						$infos->adminContactsView();
+						if (isset($_GET['sort']) || isset($_GET['date']))
+						{
+							if (isset($_GET['sort']) && !isset($_GET['date']))
+							{
+								if ($_GET['sort'] == 'unread')
+								{
+									$message = null;
+									$sorting = htmlspecialchars($_GET['sort']);
+									$sortingDate = null;
+								}
+								else
+								{
+									$message = 'Le choix de tri n\'est pas valide';
+									$sorting = null;
+									$sortingDate = null;
+								}
+							}
+							elseif (!isset($_GET['sort']) && isset($_GET['date']))
+							{
+								if ($_GET['date'] == 'asc')
+								{
+									$message = null;
+									$sorting = null;
+									$sortingDate = htmlspecialchars($_GET['date']);
+								}
+								else
+								{
+									$message = 'Le choix de tri n\'est pas valide';
+									$sorting = null;
+									$sortingDate = null;
+								}
+							}
+							else
+							{
+								if ($_GET['sort'] == 'unread' && $_GET['date'] == 'asc')
+								{
+									$message = null;
+									$sorting = htmlspecialchars($_GET['sort']);
+									$sortingDate = htmlspecialchars($_GET['date']);
+								}
+								else
+								{
+									$message = 'Le choix de tri n\'est pas valide';
+									$sorting = null;
+									$sortingDate = null;
+								}
+							}
+							$infos = new AdminController();
+							$infos->adminContactsView($message, $sorting, $sortingDate);	
+						}
+						else
+						{
+							$infos = new AdminController();
+							$infos->adminContactsView();
+						}
 					}
 
 					elseif ($_GET['action'] == 'contactForm' && $this->adminAccess())
@@ -794,7 +969,6 @@ class Router
 
 					elseif (($_GET['action'] == 'answer') && $this->adminAccess())
 					{
-						var_dump($_POST);
 						$contactId = $this->getParameter($_POST, 'id');
 						$answerSubject = $this->getParameter($_POST, 'answerSubject');
 						$email = $this->getParameter($_POST, 'email');
@@ -802,7 +976,7 @@ class Router
 						
 						$infos = new AdminController();
 						$infos->addAnswer($contactId, $answerSubject, $answerContent);
-						//$infos->adminAnswerEmail($contactId, $answerSubject, $answerContent, $email);
+						$infos->adminAnswerEmail($contactId, $answerSubject, $answerContent, $email);
 
 						$message = "La réponse a bien été envoyée.";
 						$infos->adminContactView($contactId, $message);  			

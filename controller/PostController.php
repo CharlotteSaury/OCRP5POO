@@ -33,7 +33,7 @@ class PostController
 		require('./view/frontend/postListView.php');
 	}
 
-	public function postView($postId, $message = null)
+	public function postView($postId, $messageComment = null)
 	{
 		$postInfos = $this->_postManager->getPostInfos($postId);
 		$postContents = $this->_postManager->getPostContents($postId);
@@ -46,8 +46,8 @@ class PostController
 	public function addComment($postId, $userId, $content)
 	{	
 		$this->_commentManager->addComment($postId, $userId, $content);
-		$message = 'Votre commentaire a bien été envoyé, et est en attente de validation.';
-		$this->postView($postId, $message);
+		$messageComment = 'Votre commentaire a bien été envoyé, et est en attente de validation.';
+		$this->postView($postId, $messageComment);
 	}
 
 }

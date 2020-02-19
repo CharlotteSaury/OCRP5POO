@@ -43,7 +43,7 @@ class PostManager extends Manager
 		return $first_post;
 	}
 
-	public function getPosts($first_post = null, $postsPerPage = null, $nbComments = null)
+	public function getPosts($first_post = null, $postsPerPage = null, $nbComments = null, $sortingDate = null)
 	{
 		$sql = 'SELECT post.id AS postId, 
 			post.title AS title, 
@@ -74,11 +74,49 @@ class PostManager extends Manager
 			$req->bindValue(':postsPerPage', $postsPerPage, \PDO::PARAM_INT);
 			$req->execute();
 		}
+		elseif ($sortingDate != null)
+		{
+			$sql .= ' ORDER BY post.date_creation ASC';
+			$req = $this->dbRequest($sql);
+		}
 		else
 		{
 			$sql .= ' ORDER BY postID DESC';
 			$req = $this->dbRequest($sql);
 		}
+		
+		return $req;
+	}
+
+	public function getUnpublishedPosts($sortingDate = null)
+	{
+		$sql = 'SELECT post.id AS postId, 
+			post.title AS title, 
+			post.chapo AS chapo, 
+			post.status AS status,
+			DATE_FORMAT(post.date_creation, \'%d-%m-%Y à %Hh%i \') AS date_creation,
+			DATE_FORMAT(post.date_update, \'%d-%m-%Y à %Hh%i \') AS date_update,
+			post.main_image AS main_image,
+			user.pseudo AS pseudo, 
+			user.first_name AS first_name, 
+			user.last_name AS last_name, 
+			user.avatar AS avatar, 
+			(SELECT COUNT(*) FROM comment WHERE post.id = comment.post_id AND comment.status = 1) AS approvedCommentsNb,
+            (SELECT COUNT(*) FROM comment WHERE post.id = comment.post_id) AS commentsNb
+            FROM post 
+			JOIN user ON post.user_id=user.id 
+			WHERE post.status = 0';
+
+		if ($sortingDate != null)
+		{
+			$sql .= ' ORDER BY post.date_creation ASC';
+		}
+		else
+		{
+			$sql .= ' ORDER BY postID DESC';
+		}
+
+		$req = $this->dbRequest($sql);
 		
 		return $req;
 	}
@@ -144,7 +182,7 @@ class PostManager extends Manager
 
 		$req = $this->dbRequest($sql);
 
-		$allPostsCategories = $req->fetchAll();
+		$allPostsCategories = $req->fetchAll(\PDO::FETCH_COLUMN | \PDO::FETCH_GROUP);
 
 		return $allPostsCategories;
 		
