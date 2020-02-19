@@ -185,12 +185,11 @@ class AdminController
 		$this->editPostView($postId, $message);
 	}
 
-	public function editPostInfos($newPostInfos)
+	public function editPostInfos($newPostInfos, $message = null)
 	{
 		$postId = $newPostInfos['id'];
 		$this->_postManager->editPostInfos($newPostInfos, $postId);
 		$this->_postManager->dateUpdate($postId);
-		$message = "Information(s) modifiée(s) ! ";
 		$this->editPostView($postId, $message);
 	}
 

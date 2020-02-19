@@ -435,7 +435,7 @@ class PostManager extends Manager
 
 		foreach ($newPostInfos AS $key => $value)
 		{
-			if ($key == 'title' || $key == 'chapo')
+			if ($key == 'title' || $key == 'chapo' || $key == 'main_image')
 			{
 				$sql .= ' ' . $key . '="' . $value . '", ';
 			}

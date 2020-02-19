@@ -26,10 +26,25 @@ while ($donnees = $userInfos->fetch())
 
             <div class="card-body profileView">
                 <div class="profile-card-avatar">
-                    <img class="img-thumbnail" src="<?= htmlspecialchars($donnees['avatar']); ?>" alt="User profil picture" />
-                        <div class="form-group mt-2">
-                            <a data-toggle="modal" data-target="#updateProfilePictureModal<?= htmlspecialchars($donnees['userId']); ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary-custom shadow-sm ml-1"><i class="fas fa-upload mr-1"></i> Modifier la photo de profil</a>
-                        </div>
+
+                    <?php
+                    if ($donnees['avatar'] != null)
+                    {
+                        ?>
+                        <img class="img-thumbnail" src="<?= htmlspecialchars($donnees['avatar']); ?>" alt="User profil picture" />
+                        <?php
+                    }
+                    else
+                    {
+                        ?>
+                        <img class="img-thumbnail" src="public/images/profile.jpg" alt="User profil picture" />
+                        <?php
+                    }
+                    ?>
+                    
+                    <div class="form-group mt-2">
+                        <a data-toggle="modal" data-target="#updateProfilePictureModal<?= htmlspecialchars($donnees['userId']); ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary-custom shadow-sm ml-1"><i class="fas fa-upload mr-1"></i> Modifier la photo de profil</a>
+                    </div>
                 </div>
 
                 <!-- updateProfilePicture Modal-->
@@ -37,7 +52,7 @@ while ($donnees = $userInfos->fetch())
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="updateProfilePictureLabel">Entrez l'url de votre nouvelle photo</h5>
+                                    <h5 class="modal-title" id="updateProfilePictureLabel">Choisissez votre nouvelle photo</h5>
                                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">×</span>
                                     </button>
@@ -45,8 +60,7 @@ while ($donnees = $userInfos->fetch())
                                 
                                 <form enctype="multipart/form-data" action="index.php?action=updateProfilePicture&amp;id=<?= htmlspecialchars($donnees['userId']); ?>" method="POST">
                                     <div class="modal-body">
-                                        <!-- Le nom de l'élément input détermine le nom dans le tableau $_FILES -->
-                                        Envoyez ce fichier : <input name="userAvatar" type="file" />
+                                        <input name="picture" type="file" />
                                     </div>
                                     <div class="modal-footer">
                                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>

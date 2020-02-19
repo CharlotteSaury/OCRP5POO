@@ -13,7 +13,7 @@
 <!-- New post form Row -->
 <div class="row">
     <div class="col-12">
-        <form action="index.php?action=newPostInfos" method="post">
+        <form enctype="multipart/form-data" action="index.php?action=newPostInfos" method="post">
             <div class="form-group">
                 <label for="new-post-title" hidden>Titre</label>
                 <input type="text" class="form-control" name="title" placeholder="Titre de l'article *" required/>
@@ -22,16 +22,14 @@
                 <label for="new-post-chapo" hidden>Chapô</label>
                 <textarea class="form-control" name="chapo" required>Chapo *</textarea>
             </div>
-            <div class="form-group">
-                <label for="new-post-author" hidden>Auteur</label>
-                <input type="text" class="form-control" name="user_id" placeholder="UserId *" required/>
-            </div>
+             
             <div class="form-group mt-4">
-                <label for="main-post-img">Image principale</label>
-                <input type="text" name="main_image" class="form-control" placeholder="url de l'image principale"/>
+                <label for="main_image">Image principale</label>
+                <input name="picture" type="file" />
             </div>         
                            
             <div class="mt-4">
+                <input type="hidden" class="form-control" name="user_id" value="<?= $_SESSION['id']; ?>" />
                 <button type="submit" class="btn btn-primary-custom">Continuer</button>
             </div>
                                 

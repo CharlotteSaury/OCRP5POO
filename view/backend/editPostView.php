@@ -16,7 +16,7 @@ while ($donnees = $postInfos->fetch())
 {
     ?>
 
-    <form class="form" method="POST" action="index.php?action=editPost">
+    <form class="form" enctype="multipart/form-data"  method="POST" action="index.php?action=editPost">
         <div class="row adminPostView">
 
             <div class="col-11 mx-auto my-3 d-flex justify-content-between">
@@ -28,7 +28,7 @@ while ($donnees = $postInfos->fetch())
 
                     <div class="form-group">
                         <label for="post-title">Titre : </label>
-                        <input type="text" class="form-control" name="title" placeholder="<?= htmlspecialchars($donnees['title']); ?>"/>
+                        <input type="text" class="form-control" name="title" value="<?= htmlspecialchars($donnees['title']); ?>" required/>
                     </div>
 
                     <hr class="d-none d-lg-block ml-0">
@@ -43,7 +43,7 @@ while ($donnees = $postInfos->fetch())
 
                     <div class="form-group">
                         <label for="post-chapo">Chapô : </label>
-                        <textarea class="form-control" name="chapo"><?= htmlspecialchars($donnees['chapo']); ?></textarea>   
+                        <textarea class="form-control" name="chapo" required><?= htmlspecialchars($donnees['chapo']); ?></textarea>   
                     </div>
                     <input type="submit" name="updatePostInfos" class="d-none d-sm-inline-block btn btn-sm btn-primary-custom shadow-sm ml-1" value="Enregistrer les modifications"/> 
                 </div>
@@ -53,15 +53,13 @@ while ($donnees = $postInfos->fetch())
                     {
                         ?>
 
-                        <div class="my-4 text-center">  
-                            <img class="admin-post-img mb-4" src="<?= htmlspecialchars($donnees['main_image']); ?>" />
-                            <div>
-
-                                <a data-toggle="modal" data-target="#updateMainPictureModal<?= htmlspecialchars($donnees['postId']); ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary-custom shadow-sm ml-1"><i class="fas fa-upload mr-1"></i> Modifier l'image principale</a> 
-                                <a data-toggle="modal" data-target="#deleteMainPictureModal<?= htmlspecialchars($donnees['postId']); ?>" class="btn btn-outline-dark btn-sm mr-2" title="Supprimer">
-                                    <i class="fas fa-trash-alt"></i>
+                        <div class="my-4 text-center">
+                            <p class="">
+                                <strong>Image principale </strong>
+                                <a data-toggle="modal" data-target="#deleteMainPictureModal" class="btn btn-outline-dark btn-sm mr-2" title="Supprimer"><i class="fas fa-trash-alt"></i>
                                 </a>
-                            </div>  
+                            </p>
+                            <img class="admin-post-img mb-4" src="<?= htmlspecialchars($donnees['main_image']); ?>"/>
                         </div>
 
                         <?php
@@ -70,40 +68,16 @@ while ($donnees = $postInfos->fetch())
                     {
                         ?>
                         <div class="my-4 text-center">
-                            <p class=""><strong>Image principale : </strong></p>
+                            <p class=""><strong>Image principale</strong></p>
                             <p>Aucune image sélectionnée</p>
-                            <a data-toggle="modal" data-target="#updateMainPictureModal<?= htmlspecialchars($donnees['postId']); ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary-custom shadow-sm ml-1"><i class="fas fa-upload mr-1"></i> Ajouter une image</a>
+                            <input name="picture" type="file" />
                         </div>
                         <?php
                     }
                     ?>
 
-                    <!-- updateMainPicture Modal-->
-                    <div class="modal fade" id="updateMainPictureModal<?= htmlspecialchars($donnees['postId']); ?>" tabindex="-1" role="dialog" aria-labelledby="updateMainPictureLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="updateMainPictureLabel">Entrez l'url de votre nouvelle photo</h5>
-                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">×</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <p><em>Veuillez enregistrer les autres modifications avant de modifier ce contenu au risque que les informations soient perdues.</em></p>
-                                    <input type="hidden" name="postId" value="<?= htmlspecialchars($donnees['postId']); ?>"/>
-                                    <label for="main_image" hidden>Url :</label>
-                                    <input type="text" class="form-control" name="main_image" placeholder="url"/>
-                                </div>
-                                <div class="modal-footer">
-                                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                    <button type="submit" name="updateMainPicture" class="btn btn-primary-custom" >Valider</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- deletePicture Modal-->
-                    <div class="modal fade" id="deleteMainPictureModal<?= htmlspecialchars($donnees['postId']); ?>" tabindex="-1" role="dialog" aria-labelledby="deleteMainPictureLabel" aria-hidden="true">
+                    <div class="modal fade" id="deleteMainPictureModal" tabindex="-1" role="dialog" aria-labelledby="deleteMainPictureLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -111,7 +85,6 @@ while ($donnees = $postInfos->fetch())
                                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">×</span>
                                     </button>
-                                    <input type="hidden" name="postId" value="<?= htmlspecialchars($donnees['postId']); ?>"/>
                                 </div>
                                 <div class="modal-body">
                                     <p>Cliquez sur "Valider" pour supprimer définitivement cette image.</p>

@@ -14,7 +14,7 @@ class UserManager extends Manager
 		$activation_code = password_hash($random_code, PASSWORD_DEFAULT);
 
 		$sql = 'INSERT INTO user (pseudo, email, password, user_role_id, register_date, activation_code, avatar)
-				VALUES (:pseudo, :email, :pass, 2, NOW(), :activation_code, "https://tse2.mm.bing.net/th?id=OIP.jRfbG71P_UTXJl-EGCx43QAAAA&pid=Api")';
+				VALUES (:pseudo, :email, :pass, 2, NOW(), :activation_code, "public/images/profile.jpg")';
 
 		$req = $this->dbRequest($sql, array($pseudo, $email, $pass, $activation_code));
 		$req->bindValue('pseudo', $pseudo);
