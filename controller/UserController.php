@@ -2,28 +2,18 @@
 
 namespace controller;
 
-require_once('./model/Manager.php');
-require_once('./model/PostManager.php');
-require_once('./model/CommentManager.php');
 require_once('./model/UserManager.php');
 
-use model\PostManager;
-use model\CommentManager;
 use model\UserManager;
 use Exception;
 
 class UserController
 
 {
-
-	private $_postManager;
-	private $_commentManager;
 	private $_userManager;
 
 	public function __construct()
 	{
-		$this->_postManager = new PostManager();
-		$this->_commentManager = new CommentManager();
 		$this->_userManager = new UserManager();
 	}
 

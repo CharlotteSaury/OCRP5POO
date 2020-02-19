@@ -27,7 +27,36 @@ while ($donnees = $userInfos->fetch())
             <div class="card-body profileView">
                 <div class="profile-card-avatar">
                     <img class="img-thumbnail" src="<?= htmlspecialchars($donnees['avatar']); ?>" alt="User profil picture" />
+                        <div class="form-group mt-2">
+                            <a data-toggle="modal" data-target="#updateProfilePictureModal<?= htmlspecialchars($donnees['userId']); ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary-custom shadow-sm ml-1"><i class="fas fa-upload mr-1"></i> Modifier la photo de profil</a>
+                        </div>
                 </div>
+
+                <!-- updateProfilePicture Modal-->
+                    <div class="modal fade" id="updateProfilePictureModal<?= htmlspecialchars($donnees['userId']); ?>" tabindex="-1" role="dialog" aria-labelledby="updateProfilePictureLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="updateProfilePictureLabel">Entrez l'url de votre nouvelle photo</h5>
+                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                                
+                                <form enctype="multipart/form-data" action="index.php?action=updateProfilePicture&amp;id=<?= htmlspecialchars($donnees['userId']); ?>" method="POST">
+                                    <div class="modal-body">
+                                        <!-- Le nom de l'élément input détermine le nom dans le tableau $_FILES -->
+                                        Envoyez ce fichier : <input name="userAvatar" type="file" />
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+                                        <button type="submit" class="btn btn-primary-custom" >Envoyer</button>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
 
                 <div class="profile-card-info">
                     <h5 class="card-title"><?= htmlspecialchars($donnees['first_name']); ?> <?= htmlspecialchars($donnees['last_name']); ?></h5>

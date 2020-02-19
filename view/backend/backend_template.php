@@ -130,7 +130,7 @@
 
                         <div class="adminProfileNavCard text-center mb-4">
 
-                            <a href="profileView.php">
+                            <a href="index.php?action=profileUser&amp;id=<?= htmlspecialchars($_SESSION['id']); ?>">
                                 <img class="my-4" src="<?= htmlspecialchars($_SESSION['avatar']); ?>" alt="User profil picture" />
                             </a>
                             <a href="index.php?action=editUser&id=<?= htmlspecialchars($_SESSION['id']); ?>" class="btn btn-primary-custom">

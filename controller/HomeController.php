@@ -3,29 +3,17 @@
 namespace controller;
 
 require_once('./model/Manager.php');
-require_once('./model/PostManager.php');
-require_once('./model/CommentManager.php');
-require_once('./model/UserManager.php');
 require_once('./model/ContactManager.php');
 
-use model\PostManager;
-use model\CommentManager;
-use model\UserManager;
 use model\ContactManager;
 
 class HomeController
 
 {
-	private $_postManager;
-	private $_commentManager;
-	private $_userManager;
 	private $_contactManager;
 
 	public function __construct()
 	{
-		$this->_postManager = new PostManager();
-		$this->_commentManager = new CommentManager();
-		$this->_userManager = new UserManager();
 		$this->_contactManager = new ContactManager();
 	}
 

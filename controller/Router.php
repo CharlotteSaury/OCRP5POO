@@ -4,13 +4,11 @@ namespace controller;
 
 require_once('controller\HomeController.php');
 require_once('controller\PostController.php');
-require_once('controller\CommentController.php');
 require_once('controller\AdminController.php');
 require_once('controller\UserController.php');
 
 use controller\HomeController;
 use controller\PostController;
-use controller\CommentController;
 use controller\AdminController;
 use controller\UserController;
 use Exception;
@@ -19,14 +17,12 @@ use Exception;
 class Router 
 {
 	private $_homeController,
-	$_postController,
-	$_commentController;
+	$_postController;
 
 	public function __construct()
 	{
 		$this->_homeController = new HomeController();
 		$this->_postController = new PostController();
-		$this->_commentController = new CommentController();
 	}
 
 	private function getParameter($table, $name)
@@ -870,9 +866,53 @@ class Router
 					elseif ($_GET['action'] == 'updateProfilePicture')
 					{
 						$userId = $this->getParameter($_GET, 'id');
-						$avatarUrl = $this->getParameter($_POST, 'avatar');
 						$infos = new AdminController();
-						$infos->updateProfilePicture($userId, $avatarUrl);
+
+						if (isset($_FILES['userAvatar']) && $_FILES['userAvatar']['error'] == 0)
+						{
+							if ($_FILES['userAvatar']['size'] <= 2000000)
+							{
+								$fileInfos = pathinfo($_FILES['userAvatar']['name']);
+								$extension_upload = $fileInfos['extension'];
+								$allowed_extensions = array('jpg', 'jpeg', 'gif', 'png');
+
+								if (in_array($extension_upload, $allowed_extensions))
+								{
+									$avatarUrl = 'uploads/' . basename($_FILES['userAvatar']['name']);
+
+									move_uploaded_file($_FILES['userAvatar']['tmp_name'], $avatarUrl);
+
+									$infos->updateProfilePicture($userId, $avatarUrl);
+
+									$message = 'Photo de profil modifiée !';
+
+									// Si l'utilisateur a modifié son propre profil, alors on modifie les variables de session
+									$currentUserId = $this->getParameter($_SESSION, 'id');	
+									if ($currentUserId == $userId)
+									{
+										$_SESSION['avatar'] = $avatarUrl;
+									}
+								}
+								else
+								{
+									$message = 'L\'extension du fichier n\'est pas acceptée, merci de ne charger que des fichiers .jpg, .jpeg, .gif ou .png';
+								}
+							}
+							else
+							{
+								$message = 'Fichier trop volumineux, merci de ne pas dépasser 2Mo.';
+							}
+						}
+						elseif (isset($_FILES['userAvatar']) && $_FILES['userAvatar']['error'] == 1 || $_FILES['userAvatar']['error'] == 2)
+						{
+							$message = 'Fichier trop volumineux, merci de ne pas dépasser 2Mo.';
+						}
+						else
+						{
+							$message = 'Aucun fichier téléchargé.';
+						}
+						
+						$infos->profileUserView($userId, $message);
 					}
 
 					elseif ($_GET['action'] == 'adminContacts' && $this->adminAccess())
