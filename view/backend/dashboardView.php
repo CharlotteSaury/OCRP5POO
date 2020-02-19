@@ -20,7 +20,7 @@
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary-custom text-uppercase mb-1">Nombre de posts</div>
+                        <div class="text-xs font-weight-bold text-primary-custom text-uppercase mb-1"><a href="index.php?action=adminPosts">Nombre de posts</a></div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $publishedPostsNb ?> publiés / <?= $totalPostsNb ?></div>
                     </div>
                     <div class="col-auto">
@@ -37,7 +37,7 @@
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary-custom text-uppercase mb-1">Nombre de commentaires</div>
+                        <div class="text-xs font-weight-bold text-primary-custom text-uppercase mb-1"><a href="index.php?action=adminComments">Nombre de commentaires</a></div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $approvedCommentsNb ?> approuvés / <?= $totalCommentsNb ?></div>
                     </div>
                     <div class="col-auto">
@@ -54,7 +54,7 @@
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary-custom text-uppercase mb-1">Nombre d'utilisateurs</div>
+                        <div class="text-xs font-weight-bold text-primary-custom text-uppercase mb-1"><a href="index.php?action=adminUsers">Nombre d'utilisateurs</a></div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $usersNb ?></div>
                     </div>
                     <div class="col-auto">

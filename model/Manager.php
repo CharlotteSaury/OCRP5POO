@@ -2,13 +2,11 @@
 
 namespace model;
 
+include('config.php');
+
 abstract class Manager
 {
 	private $db;
-
-	const DB_HOST = 'mysql:host=localhost;dbname=phpblogp5_v2;charset=utf8';
-	const DB_USER = 'root';
-	const DB_PASS = '';
 
 	protected function dbRequest($sql, $params = null)
 	{
@@ -27,7 +25,7 @@ abstract class Manager
 	{
 		if ($this->db == null)
 		{
-			$this->db = new \PDO(self::DB_HOST, self::DB_USER, self::DB_PASS);
+			$this->db = new \PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8',DB_USER,DB_PASS);
 			$this->db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 		}
 		

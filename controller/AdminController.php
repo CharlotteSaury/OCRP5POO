@@ -368,7 +368,6 @@ class AdminController
 		else
 		{
 			$answerInfos = $this->_contactManager->getAnswer($contactId);
-			var_dump($answerInfos);
 		}
 		
 		$unreadContactsNb = $this->_contactManager->getUnreadContactsNb();

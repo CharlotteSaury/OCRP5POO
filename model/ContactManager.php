@@ -27,7 +27,7 @@ class ContactManager extends Manager
 		return $contactsNb;
 	}
 	
-	public function getContacts($contactId = null, $status = null, $sortingDate)
+	public function getContacts($contactId = null, $status = null, $sortingDate = null)
 	{
 		$sql = 'SELECT contact_form.id AS contactId, 
 			contact_form.name AS name, 

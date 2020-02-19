@@ -969,7 +969,6 @@ class Router
 
 					elseif (($_GET['action'] == 'answer') && $this->adminAccess())
 					{
-						var_dump($_POST);
 						$contactId = $this->getParameter($_POST, 'id');
 						$answerSubject = $this->getParameter($_POST, 'answerSubject');
 						$email = $this->getParameter($_POST, 'email');
@@ -977,7 +976,7 @@ class Router
 						
 						$infos = new AdminController();
 						$infos->addAnswer($contactId, $answerSubject, $answerContent);
-						//$infos->adminAnswerEmail($contactId, $answerSubject, $answerContent, $email);
+						$infos->adminAnswerEmail($contactId, $answerSubject, $answerContent, $email);
 
 						$message = "La réponse a bien été envoyée.";
 						$infos->adminContactView($contactId, $message);  			
