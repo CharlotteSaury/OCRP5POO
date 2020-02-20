@@ -86,7 +86,6 @@ class AdminController
 	public function newPostInfos($title, $chapo, $userId, $mainImage)
 	{
 		$postId = $this->_postManager->newPostInfos($title, $chapo, $userId, $mainImage);
-				var_dump($postId);
 		$this->editPostView($postId);
 	}
 
@@ -125,9 +124,8 @@ class AdminController
 	public function deleteMainPostPicture($postId)
 	{
 		$postInfos = $this->_postManager->getPostInfos($postId);
-		$donnees = $postInfos->fetchAll(\PDO::FETCH_ASSOC);
-		$avatarUrl = $donnees[0]['avatar'];
-		unlink($avatarUrl);
+		$mainImgUrl = $postInfos[0]['main_image'];
+		unlink($mainImgUrl);
 
 		$this->_postManager->deleteMainPostPicture($postId);
 		$this->_postManager->dateUpdate($postId);
@@ -148,7 +146,6 @@ class AdminController
 		if ($contentType == 1)
 		{
 			$imgUrl = $this->_postManager->getImgUrl($contentId);
-			var_dump($imgUrl);
 			unlink($imgUrl);
 		}
 
@@ -341,8 +338,7 @@ class AdminController
 	public function updateProfilePicture($userId, $avatarUrl)
 	{
 		$userInfos = $this->_userManager->getUserInfos($userId);
-		$donnees = $userInfos->fetchAll(\PDO::FETCH_ASSOC);
-		$oldAvatarUrl = $donnees[0]['avatar'];
+		$oldAvatarUrl = $userInfos[0]['avatar'];
 		unlink($oldAvatarUrl);
 
 		$this->_userManager->updateProfilePicture($userId, $avatarUrl);

@@ -10,21 +10,17 @@
 
 <?php ob_start(); ?>
 
-<?php
-while ($donnees = $postInfos->fetch())
-{
-?>
 <div class="row adminPostView">
     <div class="col-11 mx-auto my-3">
         <div class="d-flex flex-row justify-content-between">
-            <h2 class="mb-4"><?= htmlspecialchars($donnees['title']); ?></h2>
+            <h2 class="mb-4"><?= htmlspecialchars($postInfos[0]['title']); ?></h2>
             <div>
                 <?php 
-                if ($donnees['status'] == 1)
+                if ($postInfos[0]['status'] == 1)
                 {
                 ?>
 
-                    <a href="index.php?action=publishPost&amp;id=<?= htmlspecialchars($donnees['postId']); ?>&amp;status=<?= htmlspecialchars($donnees['status']); ?>" title="Ne plus publier" class="mr-2"><i class="fas fa-toggle-on"></i></a>
+                    <a href="index.php?action=publishPost&amp;id=<?= htmlspecialchars($postInfos[0]['postId']); ?>&amp;status=<?= htmlspecialchars($postInfos[0]['status']); ?>" title="Ne plus publier" class="mr-2"><i class="fas fa-toggle-on"></i></a>
                     
                 <?php
                 }
@@ -32,15 +28,15 @@ while ($donnees = $postInfos->fetch())
                 {
                 ?>
 
-                    <a href="index.php?action=publishPost&amp;id=<?= htmlspecialchars($donnees['postId']); ?>&amp;status=<?= htmlspecialchars($donnees['status']); ?>" title="Publier"  class="mr-2"><i class="fas fa-toggle-off"></i></a>
+                    <a href="index.php?action=publishPost&amp;id=<?= htmlspecialchars($postInfos[0]['postId']); ?>&amp;status=<?= htmlspecialchars($postInfos[0]['status']); ?>" title="Publier"  class="mr-2"><i class="fas fa-toggle-off"></i></a>
                     
                 <?php
                 }
                 ?>
-                <a href="index.php?action=editPostView&amp;id=<?= htmlspecialchars($donnees['postId']); ?>" class="btn btn-outline-dark btn-sm" title="Modifier">
+                <a href="index.php?action=editPostView&amp;id=<?= htmlspecialchars($postInfos[0]['postId']); ?>" class="btn btn-outline-dark btn-sm" title="Modifier">
                     <i class="fas fa-pencil-alt"></i>
                 </a>
-                <a href="index.php?action=deletePost&amp;id=<?= htmlspecialchars($donnees['postId']); ?>" class="btn btn-outline-dark btn-sm" title="Supprimer">
+                <a href="index.php?action=deletePost&amp;id=<?= htmlspecialchars($postInfos[0]['postId']); ?>" class="btn btn-outline-dark btn-sm" title="Supprimer">
                     <i class="fas fa-trash-alt"></i>
                 </a>
             </div>
@@ -49,34 +45,32 @@ while ($donnees = $postInfos->fetch())
         <hr class="d-none d-lg-block ml-0">
 
         <div class="post-content post-content-text text-black-50 text-justify">
-            <p class="">Posté par <strong><?= htmlspecialchars($donnees['first_name']); ?> <?= htmlspecialchars($donnees['last_name']); ?></strong></p>
-            <p class="mb-0">le <?= htmlspecialchars($donnees['date_creation']); ?></p>
-            <p class="mb-0">Dernière modification le <?= htmlspecialchars($donnees['date_update']); ?></p>
+            <p class="">Posté par <strong><?= htmlspecialchars($postInfos[0]['first_name']); ?> <?= htmlspecialchars($postInfos[0]['last_name']); ?></strong></p>
+            <p class="mb-0">le <?= htmlspecialchars($postInfos[0]['date_creation']); ?></p>
+            <p class="mb-0">Dernière modification le <?= htmlspecialchars($postInfos[0]['date_update']); ?></p>
         </div>
 
         <hr class="d-none d-lg-block ml-0">
 
         <div class="post-content post-content-text text-black-50 text-justify">
-            <p class=""><strong>Chapô : </strong><?= htmlspecialchars($donnees['chapo']); ?></p>
+            <p class=""><strong>Chapô : </strong><?= htmlspecialchars($postInfos[0]['chapo']); ?></p>
         </div>
 
         <hr class="d-none d-lg-block ml-0">
 
         <?php
 
-            if ($donnees['main_image'] != null)
+            if ($postInfos[0]['main_image'] != null)
             {
             ?>
 
                 <div class="my-4 text-center">
                     <p class=""><strong>Image principale : </strong></p>  
-                    <img class="admin-post-img" src="<?= htmlspecialchars($donnees['main_image']); ?>" />  
+                    <img class="admin-post-img" src="<?= htmlspecialchars($postInfos[0]['main_image']); ?>" />  
                 </div>
 
             <?php
             }
-        }
-        $postInfos->closeCursor();
 
         while ($donnees = $postContents->fetch())
         {

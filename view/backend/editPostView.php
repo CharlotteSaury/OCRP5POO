@@ -10,12 +10,6 @@
 
 <?php ob_start(); ?>
 
-<?php
-
-while ($donnees = $postInfos->fetch())
-{
-    ?>
-
     <form class="form" enctype="multipart/form-data"  method="POST" action="index.php?action=editPost">
         <div class="row adminPostView">
 
@@ -23,33 +17,33 @@ while ($donnees = $postInfos->fetch())
 
                 <div class="col-8">
                     <div class="form-group">
-                        <input type="hidden" class="form-control" name="postId" value="<?= htmlspecialchars($donnees['postId']); ?>"/>
+                        <input type="hidden" class="form-control" name="postId" value="<?= htmlspecialchars($postInfos[0]['postId']); ?>"/>
                     </div>
 
                     <div class="form-group">
                         <label for="post-title">Titre : </label>
-                        <input type="text" class="form-control" name="title" value="<?= htmlspecialchars($donnees['title']); ?>" required/>
+                        <input type="text" class="form-control" name="title" value="<?= htmlspecialchars($postInfos[0]['title']); ?>" required/>
                     </div>
 
                     <hr class="d-none d-lg-block ml-0">
 
                     <div class="post-content post-content-text text-black-50 text-justify">
-                        <p class="mb-0">Auteur : <?= htmlspecialchars($donnees['first_name']); ?> <?= htmlspecialchars($donnees['last_name']); ?></p>
-                        <p class="mb-0">le <?= htmlspecialchars($donnees['date_creation']); ?></p>
-                        <p class="mb-0">Dernière modification le <?= htmlspecialchars($donnees['date_update']); ?></p>
+                        <p class="mb-0">Auteur : <?= htmlspecialchars($postInfos[0]['first_name']); ?> <?= htmlspecialchars($postInfos[0]['last_name']); ?></p>
+                        <p class="mb-0">le <?= htmlspecialchars($postInfos[0]['date_creation']); ?></p>
+                        <p class="mb-0">Dernière modification le <?= htmlspecialchars($postInfos[0]['date_update']); ?></p>
                     </div>
 
                     <hr class="d-none d-lg-block ml-0">
 
                     <div class="form-group">
                         <label for="post-chapo">Chapô : </label>
-                        <textarea class="form-control" name="chapo" required><?= htmlspecialchars($donnees['chapo']); ?></textarea>   
+                        <textarea class="form-control" name="chapo" required><?= htmlspecialchars($postInfos[0]['chapo']); ?></textarea>   
                     </div>
                     <input type="submit" name="updatePostInfos" class="d-none d-sm-inline-block btn btn-sm btn-primary-custom shadow-sm ml-1" value="Enregistrer les modifications"/> 
                 </div>
                 <div class="col-4">
                     <?php
-                    if ($donnees['main_image'] != null)
+                    if ($postInfos[0]['main_image'] != null)
                     {
                         ?>
 
@@ -59,7 +53,7 @@ while ($donnees = $postInfos->fetch())
                                 <a data-toggle="modal" data-target="#deleteMainPictureModal" class="btn btn-outline-dark btn-sm mr-2" title="Supprimer"><i class="fas fa-trash-alt"></i>
                                 </a>
                             </p>
-                            <img class="admin-post-img mb-4" src="<?= htmlspecialchars($donnees['main_image']); ?>"/>
+                            <img class="admin-post-img mb-4" src="<?= htmlspecialchars($postInfos[0]['main_image']); ?>"/>
                         </div>
 
                         <?php
@@ -98,10 +92,7 @@ while ($donnees = $postInfos->fetch())
                             </div>
                         </div>
                     </div>
-                    <?php
-                }
-                $postInfos->closeCursor();
-                ?>
+
                 </div>
             </div>
 

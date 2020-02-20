@@ -238,7 +238,9 @@ class UserManager extends Manager
 		$req = $this->dbRequest($sql, array($userId));
 		$req->bindValue('userId', $userId, \PDO::PARAM_INT);
 		$req->execute();
-		return $req;
+
+		$userInfos = $req->fetchAll(\PDO::FETCH_ASSOC);
+		return $userInfos;
 	}
 
 	public function editUserInfos($newUserInfos)

@@ -73,7 +73,7 @@ class Router
 
 					if (in_array($extension_upload, $allowed_extensions))
 					{
-						$uploadResults = 'uploads/' . $_SERVER['REQUEST_TIME'] . '_' . basename($_FILES[$namePicture]['name']);
+						$uploadResults = 'uploads/' . microtime(true) . '_' . basename($_FILES[$namePicture]['name']);
 
 						move_uploaded_file($_FILES[$namePicture]['tmp_name'], $uploadResults);
 					}

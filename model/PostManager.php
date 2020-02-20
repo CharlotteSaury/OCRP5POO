@@ -151,7 +151,9 @@ class PostManager extends Manager
 		$req = $this->dbRequest($sql, array($postId));
 		$req->bindValue(':id', $postId, \PDO::PARAM_INT);
 		$req->execute();
-		return $req;
+
+		$postInfos = $req->fetchAll(\PDO::FETCH_ASSOC);
+		return $postInfos;
 	}
 
 	public function getPostContents($postId)

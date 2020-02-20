@@ -8,35 +8,28 @@
 <header class="post-view-head pb-5">
     <div class="container d-flex h-100 align-items-end">
         <div class="mx-auto text-center">
-        
-            <?php
 
-            while ($donnees = $postInfos->fetch())
-            {
-
-            ?>
-
-            <h1 class="mx-auto my-0 text-uppercase"><?= htmlspecialchars($donnees['title']); ?></h1>
+            <h1 class="mx-auto my-0 text-uppercase"><?= htmlspecialchars($postInfos[0]['title']); ?></h1>
             <div class="d-flex mt-4 align-items-center">
-                <div class="avatar mr-3" style="background-image: url('<?= htmlspecialchars($donnees['avatar']); ?>');">
+                <div class="avatar mr-3" style="background-image: url('<?= htmlspecialchars($postInfos[0]['avatar']); ?>');">
                 </div>
                 <div class="text-white-50 posts-informations">
                     <p class="mb-0">Posté par 
                         <strong>
                         <?php
-                        if (isset($donnees['first_name'], $donnees['last_name']))
+                        if (isset($postInfos[0]['first_name'], $postInfos[0]['last_name']))
                         {
-                            echo htmlspecialchars($donnees['first_name']) . ' ' . htmlspecialchars($donnees['last_name']);
+                            echo htmlspecialchars($postInfos[0]['first_name']) . ' ' . htmlspecialchars($postInfos[0]['last_name']);
                         }
                         else
                         {
-                            echo htmlspecialchars($donnees['pseudo']);
+                            echo htmlspecialchars($postInfos[0]['pseudo']);
                         }
                         ?>
                         </strong>
                     </p>
-                    <p class="mb-0">le <?= $donnees['date_creation']; ?></p>
-                    <p class="mb-0">Dernière modification le <?= $donnees['date_update']; ?></p>
+                    <p class="mb-0">le <?= $postInfos[0]['date_creation']; ?></p>
+                    <p class="mb-0">Dernière modification le <?= $postInfos[0]['date_update']; ?></p>
                 </div>
             </div>
           </div>
@@ -64,23 +57,20 @@
             <!-- Post  content -->
             <div class="post-content col-sm-10 mx-auto mb-5">
                
-                <h2 class="mb-4"><?= htmlspecialchars($donnees['title']); ?></h2>
+                <h2 class="mb-4"><?= htmlspecialchars($postInfos[0]['title']); ?></h2>
                 <hr class="d-none d-lg-block ml-0">
 
-                <p><?= htmlspecialchars($donnees['chapo']); ?></p>
+                <p><?= htmlspecialchars($postInfos[0]['chapo']); ?></p>
 
                 <?php
 
-                    if ($donnees['main_image'] != null)
+                    if ($postInfos[0]['main_image'] != null)
                     {
                     ?>
-                        <div class="post-picture my-3" style="background-image: url('<?= htmlspecialchars($donnees['main_image']); ?>');">     
+                        <div class="post-picture my-3" style="background-image: url('<?= htmlspecialchars($postInfos[0]['main_image']); ?>');">     
                         </div>
                     <?php
                     } 
-                }
-
-                $postInfos->closeCursor();
 
                 while ($donnees = $postContents->fetch())
                 {
