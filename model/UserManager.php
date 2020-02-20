@@ -222,6 +222,7 @@ class UserManager extends Manager
 				user.email AS email,
 				DATE_FORMAT(user.register_date, \'%d-%m-%Y\') AS register_date,
 				user_role.role AS role,
+				user.user_role_id AS roleId,
 				user.first_name AS first_name,
 				user.last_name AS last_name,
 				user.mobile AS mobile,

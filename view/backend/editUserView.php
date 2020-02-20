@@ -88,7 +88,7 @@ while ($donnees = $userInfos->fetch())
                             if (isset($_SESSION['role']) && $_SESSION['role'] == 3)
                             {                           
 
-                                if ($donnees['role'] == 'admin')
+                                if ($donnees['roleId'] == 1)
                                 {
                                     ?>
 
@@ -102,14 +102,14 @@ while ($donnees = $userInfos->fetch())
                                             <label class="form-check-label" for="rolecheckboxuser">User</label>
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" id="rolecheckboxadmin" value="3" name="user_role_id" checked />
+                                            <input class="form-check-input" type="radio" id="rolecheckboxadmin" value="3" name="user_role_id" />
                                             <label class="form-check-label" for="rolecheckboxadmin">Super-admin</label>
                                         </div>
                                     </div>
 
                                     <?php
                                 }
-                                elseif ($donnees['role'] == 'user')
+                                elseif ($donnees['roleId'] == 2)
                                 {
                                     ?>
 
@@ -130,7 +130,7 @@ while ($donnees = $userInfos->fetch())
 
                                     <?php
                                 }
-                                else
+                                elseif ($donnees['roleId'] == 3)
                                 {
                                     ?>
                                     <div class="form-group">

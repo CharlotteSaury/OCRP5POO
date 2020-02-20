@@ -538,7 +538,6 @@ class Router
 
 						elseif (isset($_POST['addParagraph']))
 						{
-							var_dump($_POST);
 							$postId = $this->getParameter($_POST, 'postId');
 							$infos = new AdminController();
 							$infos->addParagraph($postId);
@@ -610,7 +609,6 @@ class Router
 
 						elseif (isset($_POST['addPicture']))
 						{
-							var_dump($_POST, $_FILES);
 							$postId = $this->getParameter($_POST, 'postId');
 
 							$uploadResults = $this->pictureUpload($namePicture = 'picture');
@@ -628,11 +626,35 @@ class Router
 								$infos->editPostView($postId, $message);
 							}
 						}
+
+						elseif (isset($_POST['updatePicture']))
+						{
+							$postId = $this->getParameter($_POST, 'postId');
+
+							foreach ($_FILES AS $key => $value)
+							{
+								if ($value['name'] !='')
+								{
+									$contentId = substr($key, 7);
+								}
+							}
+
+							$uploadResults = $this->pictureUpload($namePicture = 'picture' . $contentId);
+							$infos = new AdminController();
+
+							if (strrpos($uploadResults, 'uploads') === false)
+							{
+								$message = $uploadResults;
+								$infos->editPostView($postId, $message);
+							}
+							else
+							{
+								$infos->editPostPicture($postId, $contentId, $uploadResults);
+								$message = 'Image modifiée !';
+								$infos->editPostView($postId, $message);
+							}
+						}
 					}
-
-					
-
-					
 
 					elseif ($_GET['action'] == 'deleteContent' && $this->adminAccess())
 					{

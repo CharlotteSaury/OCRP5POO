@@ -141,17 +141,14 @@ while ($donnees = $postInfos->fetch())
                                             <span aria-hidden="true">×</span>
                                         </button>
                                     </div>
-
-                                    <form enctype="multipart/form-data" action="index.php?action=updatePicture&amp;id=<?= htmlspecialchars($donnees['userId']); ?>" method="POST">
-                                        <div class="modal-body">
-                                            <p><em>Veuillez enregistrer les autres modifications avant de modifier ce contenu au risque que les informations soient perdues.</em></p>
-                                            <input name="picture" type="file" />
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                            <button type="submit" class="btn btn-primary-custom" name="updatePicture<?= htmlspecialchars($donnees['contentId']); ?>">Envoyer</button>
-                                        </div>
-                                    </form>
+                                    <div class="modal-body">
+                                        <p><em>Veuillez enregistrer les autres modifications avant de modifier ce contenu au risque que les informations soient perdues.</em></p>
+                                        <input name="picture<?= htmlspecialchars($donnees['contentId']); ?>" type="file" />
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+                                        <button type="submit" class="btn btn-primary-custom" name="updatePicture">Envoyer</button>
+                                    </div>
 
                                 </div>
                             </div>
