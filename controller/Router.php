@@ -553,7 +553,6 @@ class Router
 
 						elseif (isset($_POST['updatePostInfos']))
 						{
-							var_dump($_POST, $_FILES);
 							$infos = new AdminController();
 
 							$newPostInfos = [];
@@ -660,8 +659,11 @@ class Router
 					{
 						$contentId = $this->getParameter($_GET, 'content');
 						$postId = $this->getParameter($_GET, 'id');
+						$contentType = $this->getParameter($_GET, 'type');
+
 						$infos = new AdminController();
-						$infos->deleteContent($postId, $contentId);
+						$infos->deleteContent($postId, $contentId, $contentType);
+
 					}
 
 					elseif ($_GET['action'] == 'deleteCategory' && $this->adminAccess())
@@ -1066,7 +1068,6 @@ class Router
 						$infos = new HomeController();
 
 						$contactId = $infos->newContactForm($name, $email, $subject, $content);
-						var_dump($contactId);
 						$infos->mailContactForm($name, $email, $subject, $content, $contactId);
 
 						$message = "Votre message a bien été envoyé. Nous vous remercions et vous recontacterons dans les plus brefs délais.";

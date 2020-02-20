@@ -169,7 +169,7 @@ while ($donnees = $postInfos->fetch())
                                     <div class="modal-body">Cliquez sur "Valider" pour supprimer définitivement ce contenu</div>
                                     <div class="modal-footer">
                                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                        <a href="index.php?action=deleteContent&amp;id=<?= htmlspecialchars($donnees['postId']); ?>&amp;content=<?= htmlspecialchars($donnees['contentId']); ?>" class="btn btn-primary-custom" >Valider</a>
+                                        <a href="index.php?action=deleteContent&amp;id=<?= htmlspecialchars($donnees['postId']); ?>&amp;content=<?= htmlspecialchars($donnees['contentId']); ?>&amp;type=<?= htmlspecialchars($donnees['content_type']); ?>" class="btn btn-primary-custom" >Valider</a>
                                     </div>
                                 </div>
                             </div>
@@ -206,7 +206,7 @@ while ($donnees = $postInfos->fetch())
                                     <div class="modal-body">Cliquez sur "Valider" pour supprimer définitivement ce contenu</div>
                                     <div class="modal-footer">
                                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                        <a href="index.php?action=deleteContent&amp;id=<?= htmlspecialchars($donnees['postId']); ?>&amp;content=<?= htmlspecialchars($donnees['contentId']); ?>" class="btn btn-primary-custom" >Valider</a>
+                                        <a href="index.php?action=deleteContent&amp;id=<?= htmlspecialchars($donnees['postId']); ?>&amp;content=<?= htmlspecialchars($donnees['contentId']); ?>&amp;type=<?= htmlspecialchars($donnees['content_type']); ?>" class="btn btn-primary-custom" >Valider</a>
                                     </div>
                                 </div>
                             </div>

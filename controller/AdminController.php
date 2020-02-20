@@ -124,6 +124,11 @@ class AdminController
 
 	public function deleteMainPostPicture($postId)
 	{
+		$postInfos = $this->_postManager->getPostInfos($postId);
+		$donnees = $postInfos->fetchAll(\PDO::FETCH_ASSOC);
+		$avatarUrl = $donnees[0]['avatar'];
+		unlink($avatarUrl);
+
 		$this->_postManager->deleteMainPostPicture($postId);
 		$this->_postManager->dateUpdate($postId);
 		$message = 'Photo supprimée ! ';
@@ -132,12 +137,21 @@ class AdminController
 
 	public function editPostPicture($postId, $contentId, $url)
 	{
+		$oldImgUrl = $this->_postManager->getImgUrl($contentId);
 		$this->_postManager->updatePostPicture($contentId, $url);
 		$this->_postManager->dateUpdate($postId);
+		unlink($oldImgUrl);
 	}
 
-	public function deleteContent($postId, $contentId)
+	public function deleteContent($postId, $contentId, $contentType)
 	{
+		if ($contentType == 1)
+		{
+			$imgUrl = $this->_postManager->getImgUrl($contentId);
+			var_dump($imgUrl);
+			unlink($imgUrl);
+		}
+
 		$this->_postManager->deleteContent($contentId);
 		$this->_postManager->dateUpdate($postId);
 		$message = 'Contenu supprimé ! ';
@@ -326,6 +340,11 @@ class AdminController
 
 	public function updateProfilePicture($userId, $avatarUrl)
 	{
+		$userInfos = $this->_userManager->getUserInfos($userId);
+		$donnees = $userInfos->fetchAll(\PDO::FETCH_ASSOC);
+		$oldAvatarUrl = $donnees[0]['avatar'];
+		unlink($oldAvatarUrl);
+
 		$this->_userManager->updateProfilePicture($userId, $avatarUrl);
 	}
 

@@ -172,6 +172,21 @@ class PostManager extends Manager
 		return $req;
 	}
 
+	public function getImgUrl($contentId)
+	{
+		$sql = 'SELECT content.content AS imgUrl
+			FROM content 
+			WHERE content.id= :contentId';
+		
+		$req = $this->dbRequest($sql, array($contentId));
+		$req->bindValue(':contentId', $contentId, \PDO::PARAM_INT);
+		$req->execute();
+
+		$donnees = $req->fetch(\PDO::FETCH_ASSOC);
+
+		return $donnees['imgUrl'];
+	}
+
 	public function getAllPostsCategories() {
 		
 		$sql = 'SELECT post.id AS postId,
