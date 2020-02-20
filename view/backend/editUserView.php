@@ -10,13 +10,6 @@
 
 <?php ob_start(); ?>
 
-<?php
-
-while ($donnees = $userInfos->fetch())
-{
-
-?>
-
 <form class="form" method="POST" action="index.php?action=editUserInfos">
 
     <div class="row">
@@ -25,11 +18,11 @@ while ($donnees = $userInfos->fetch())
 
                 <div class="card-header">
                     <div class="form-group">
-                        <input type="hidden" name="id" value="<?= $donnees['userId']; ?>"/>
+                        <input type="hidden" name="id" value="<?= $userInfos[0]['userId']; ?>"/>
                     </div>
                     <div class="form-group">
                         <label for="pseudo" hidden>Pseudo : </label>
-                        <input type="text" class="form-control" name="pseudo" value="<?= htmlspecialchars($donnees['pseudo']); ?>"/>
+                        <input type="text" class="form-control" name="pseudo" value="<?= htmlspecialchars($userInfos[0]['pseudo']); ?>"/>
                         <small id="pseudoHelpBlock" class="form-text text-muted">Le pseudo ne doit pas dépasser 25 caractères.</small>
                     </div>
                 </div>
@@ -37,7 +30,7 @@ while ($donnees = $userInfos->fetch())
                 <div class="card-body editProfileView">
 
                     <div class="profile-card-avatar text-center">
-                        <img class="img-thumbnail" src="<?= htmlspecialchars($donnees['avatar']); ?>" alt="User profil picture" />
+                        <img class="img-thumbnail" src="<?= htmlspecialchars($userInfos[0]['avatar']); ?>" alt="User profil picture" />
                     </div>
 
 
@@ -45,11 +38,11 @@ while ($donnees = $userInfos->fetch())
                         <div class="card-title">
                             <div class="form-group">
                                 <label for="firstname">Prénom : </label>
-                                <input type="text" class="form-control" name="first_name" value="<?= htmlspecialchars($donnees['first_name']); ?>"/>
+                                <input type="text" class="form-control" name="first_name" value="<?= htmlspecialchars($userInfos[0]['first_name']); ?>"/>
                             </div>
                             <div class="form-group">
                                 <label for="lastname">Nom : </label>
-                                <input type="text" class="form-control" name="last_name" value="<?= htmlspecialchars($donnees['last_name']); ?>"/>
+                                <input type="text" class="form-control" name="last_name" value="<?= htmlspecialchars($userInfos[0]['last_name']); ?>"/>
                             </div>
                         </div>
 
@@ -57,28 +50,28 @@ while ($donnees = $userInfos->fetch())
 
                             <div class="form-group">
                                 <label for="birthdate">Né(e) le : </label>
-                                    <input type="text" class="form-control" name="birth_date" value="<?= $donnees['birth_date']; ?>"/>
+                                    <input type="text" class="form-control" name="birth_date" value="<?= $userInfos[0]['birth_date']; ?>"/>
                                     <small id="birthDateHelpBlock" class="form-text text-muted">La date doit être au format JJ-MM-AAAA.</small>
                             </div>
                             <div class="form-group">
                                 <label for="home">Habite à : </label>
-                                <input type="text" class="form-control" name="home" value="<?= htmlspecialchars($donnees['home']); ?>"/>
+                                <input type="text" class="form-control" name="home" value="<?= htmlspecialchars($userInfos[0]['home']); ?>"/>
                             </div>
                             <div class="form-group">
                                 <label for="user_about">A propos de moi : </label>
-                                <textarea type="text" class="form-control" name="user_about"><?= htmlspecialchars($donnees['about']); ?></textarea>                               
+                                <textarea type="text" class="form-control" name="user_about"><?= htmlspecialchars($userInfos[0]['about']); ?></textarea>                               
                             </div>
                             <div class="form-group">
                                 <label for="email">Email : </label>
-                                <input type="text" class="form-control" name="email" value="<?= htmlspecialchars($donnees['email']); ?>"/>
+                                <input type="text" class="form-control" name="email" value="<?= htmlspecialchars($userInfos[0]['email']); ?>"/>
                             </div>
                             <div class="form-group">
                                 <label for="mobile">Tel : </label>
-                                <input type="text" class="form-control" name="mobile" value="<?= htmlspecialchars($donnees['mobile']); ?>"/>
+                                <input type="text" class="form-control" name="mobile" value="<?= htmlspecialchars($userInfos[0]['mobile']); ?>"/>
                             </div>
                             <div class="form-group">
                                 <label for="website">Site internet : </label>
-                                <input type="text" class="form-control" name="website" value="<?= htmlspecialchars($donnees['website']); ?>"/>
+                                <input type="text" class="form-control" name="website" value="<?= htmlspecialchars($userInfos[0]['website']); ?>"/>
                             </div>
                             
                             <hr>
@@ -88,7 +81,7 @@ while ($donnees = $userInfos->fetch())
                             if (isset($_SESSION['role']) && $_SESSION['role'] == 3)
                             {                           
 
-                                if ($donnees['role'] == 'admin')
+                                if ($userInfos[0]['roleId'] == 1)
                                 {
                                     ?>
 
@@ -102,14 +95,14 @@ while ($donnees = $userInfos->fetch())
                                             <label class="form-check-label" for="rolecheckboxuser">User</label>
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" id="rolecheckboxadmin" value="3" name="user_role_id" checked />
+                                            <input class="form-check-input" type="radio" id="rolecheckboxadmin" value="3" name="user_role_id" />
                                             <label class="form-check-label" for="rolecheckboxadmin">Super-admin</label>
                                         </div>
                                     </div>
 
                                     <?php
                                 }
-                                elseif ($donnees['role'] == 'user')
+                                elseif ($userInfos[0]['roleId'] == 2)
                                 {
                                     ?>
 
@@ -130,7 +123,7 @@ while ($donnees = $userInfos->fetch())
 
                                     <?php
                                 }
-                                else
+                                elseif ($userInfos[0]['roleId'] == 3)
                                 {
                                     ?>
                                     <div class="form-group">
@@ -165,10 +158,6 @@ while ($donnees = $userInfos->fetch())
 
 </form>                      
                             
-<?php
-}
-$userInfos->closeCursor();
-
-$content = ob_get_clean(); ?>
+<?php $content = ob_get_clean(); ?>
 
 <?php require('backend_template.php'); ?>

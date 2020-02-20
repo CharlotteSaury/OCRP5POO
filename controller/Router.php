@@ -59,6 +59,51 @@ class Router
 		}
 	}
 
+	private function pictureUpload($namePicture)
+	{
+		if (isset($_FILES[$namePicture]))
+		{
+			if ($_FILES[$namePicture]['error'] == 0)
+			{
+				if ($_FILES[$namePicture]['size'] <= 2000000)
+				{
+					$fileInfos = pathinfo($_FILES[$namePicture]['name']);
+					$extension_upload = $fileInfos['extension'];
+					$allowed_extensions = array('jpg', 'jpeg', 'gif', 'png');
+
+					if (in_array($extension_upload, $allowed_extensions))
+					{
+						$uploadResults = 'uploads/' . microtime(true) . '_' . basename($_FILES[$namePicture]['name']);
+
+						move_uploaded_file($_FILES[$namePicture]['tmp_name'], $uploadResults);
+					}
+					else
+					{
+						$uploadResults = 'L\'extension du fichier n\'est pas acceptée, merci de ne charger que des fichiers .jpg, .jpeg, .gif ou .png';
+					}
+				}
+				else
+				{
+					$uploadResults = 'Fichier trop volumineux, merci de ne pas dépasser 2Mo.';
+				}
+			}
+			elseif ($_FILES[$namePicture]['error'] == 1 || $_FILES[$namePicture]['error'] == 2)
+			{
+				$uploadResults = 'Fichier trop volumineux, merci de ne pas dépasser 2Mo.';
+			}
+			else
+			{
+				$uploadResults = 'Erreur. Le fichier n\'a pu être téléchargé.';
+			}
+		}
+		else
+		{
+			$uploadResults = 'Aucun fichier téléchargé.';
+		}
+
+		return $uploadResults;
+	}
+
 	public function connexionAuto($email)
 	{
 		$infos = new UserController();
@@ -447,13 +492,31 @@ class Router
 
 					elseif ($_GET['action'] == 'newPostInfos' && $this->adminAccess())
 					{
+						$infos = new AdminController();
+
 						$title = $this->getParameter($_POST, 'title');
 						$chapo = $this->getParameter($_POST, 'chapo');
 						$userId = $this->getParameter($_POST, 'user_id');
-						$mainImage = $this->getParameter($_POST, 'main_image');
 
-						$infos = new AdminController();
-						$infos->NewPostInfos($title, $chapo, $userId, $mainImage);
+						if (isset($_FILES['picture']) && $_FILES['picture']['error'] != 4)
+						{
+							$uploadResults = $this->pictureUpload($namePicture = 'picture');
+							if (strrpos($uploadResults, 'uploads') === false)
+							{
+								$message = $uploadResults;
+								$infos->adminNewPostView($message);
+							}
+							else
+							{
+								$mainImage = $uploadResults;
+								$infos->NewPostInfos($title, $chapo, $userId, $mainImage);
+							}
+						}
+						else
+						{
+							$infos->NewPostInfos($title, $chapo, $userId, $mainImage = null);
+						}
+						
 					}
 
 					elseif ($_GET['action'] == 'editPostView' && $this->adminAccess())
@@ -465,15 +528,7 @@ class Router
 
 					elseif ($_GET['action'] == 'editPost' && $this->adminAccess())
 					{
-						if (isset($_POST['updateMainPicture']))
-						{
-							$postId = $this->getParameter($_POST, 'postId');
-							$url = $this->getParameter($_POST, 'main_image');
-							$infos = new AdminController();
-							$infos->editMainPostPicture($postId, $url);
-						}
-
-						elseif (isset($_POST['deleteMainPicture']))
+						if (isset($_POST['deleteMainPicture']))
 						{
 							$postId = $this->getParameter($_POST, 'postId');
 							$infos = new AdminController();
@@ -487,24 +542,6 @@ class Router
 							$infos = new AdminController();
 							$infos->addParagraph($postId);
 						}
-
-						elseif (isset($_POST['addPicture']))
-						{
-							$postId = $this->getParameter($_POST, 'postId');
-							$content = $this->getParameter($_POST, 'image_url');
-							$infos = new AdminController();
-							$infos->addPicture($postId, $content);
-						}
-
-						elseif (isset($_POST['updatePicture']))
-						{
-							$postId = $this->getParameter($_POST, 'postId');
-							$contentId = substr($this->getParameter($_POST, 'action') , 12);
-							$url = $this->getParameter($_POST, 'content' . $contentId);
-
-							$infos = new AdminController();
-							$infos->editPostPicture($postId, $contentId, $url);
-						}
 						
 						elseif (isset($_POST['addCategory']))
 						{
@@ -516,6 +553,8 @@ class Router
 
 						elseif (isset($_POST['updatePostInfos']))
 						{
+							$infos = new AdminController();
+
 							$newPostInfos = [];
 
 							foreach ($_POST as $key => $value)
@@ -526,8 +565,28 @@ class Router
 								}
 							}
 
-							$infos = new AdminController();
-							$infos->editPostInfos($newPostInfos);
+							if (isset($_FILES['MainPicture']) && $_FILES['MainPicture']['error'] != 4)
+							{
+								$uploadResults = $this->pictureUpload($namePicture = 'MainPicture');
+								if (strrpos($uploadResults, 'uploads') === false)
+								{
+									$message = "Information(s) modifiée(s) \n 
+										/!\ Erreur de téléchargement de l'image principale : " . $uploadResults;
+									$infos->editPostInfos($newPostInfos, $message);
+								}
+								else
+								{
+									$newPostInfos['main_image'] = $uploadResults;
+									$message = "Information(s) modifiée(s) ! ";
+									$infos->editPostInfos($newPostInfos, $message);
+								}
+							}
+							else
+							{
+								$message = "Information(s) modifiée(s) ! ";
+								$infos->editPostInfos($newPostInfos, $message);
+							}
+
 						}
 
 						elseif (isset($_POST['editContent']))
@@ -546,16 +605,65 @@ class Router
 							$infos = new AdminController();
 							$infos->editParagraph($postId, $newParagraphs);
 						}
-					}
 
-					
+						elseif (isset($_POST['addPicture']))
+						{
+							$postId = $this->getParameter($_POST, 'postId');
+
+							$uploadResults = $this->pictureUpload($namePicture = 'picture');
+							$infos = new AdminController();
+
+							if (strrpos($uploadResults, 'uploads') === false)
+							{
+								$message = $uploadResults;
+								$infos->editPostView($postId, $message);
+							}
+							else
+							{
+								$infos->addPicture($postId, $uploadResults);
+								$message = 'Image ajoutée !';
+								$infos->editPostView($postId, $message);
+							}
+						}
+
+						elseif (isset($_POST['updatePicture']))
+						{
+							$postId = $this->getParameter($_POST, 'postId');
+
+							foreach ($_FILES AS $key => $value)
+							{
+								if ($value['name'] !='')
+								{
+									$contentId = substr($key, 7);
+								}
+							}
+
+							$uploadResults = $this->pictureUpload($namePicture = 'picture' . $contentId);
+							$infos = new AdminController();
+
+							if (strrpos($uploadResults, 'uploads') === false)
+							{
+								$message = $uploadResults;
+								$infos->editPostView($postId, $message);
+							}
+							else
+							{
+								$infos->editPostPicture($postId, $contentId, $uploadResults);
+								$message = 'Image modifiée !';
+								$infos->editPostView($postId, $message);
+							}
+						}
+					}
 
 					elseif ($_GET['action'] == 'deleteContent' && $this->adminAccess())
 					{
 						$contentId = $this->getParameter($_GET, 'content');
 						$postId = $this->getParameter($_GET, 'id');
+						$contentType = $this->getParameter($_GET, 'type');
+
 						$infos = new AdminController();
-						$infos->deleteContent($postId, $contentId);
+						$infos->deleteContent($postId, $contentId, $contentType);
+
 					}
 
 					elseif ($_GET['action'] == 'deleteCategory' && $this->adminAccess())
@@ -866,53 +974,29 @@ class Router
 					elseif ($_GET['action'] == 'updateProfilePicture')
 					{
 						$userId = $this->getParameter($_GET, 'id');
+						$uploadResults = $this->pictureUpload($namePicture = 'picture');
 						$infos = new AdminController();
-
-						if (isset($_FILES['userAvatar']) && $_FILES['userAvatar']['error'] == 0)
+						
+						if (strrpos($uploadResults, 'uploads') === false)
 						{
-							if ($_FILES['userAvatar']['size'] <= 2000000)
-							{
-								$fileInfos = pathinfo($_FILES['userAvatar']['name']);
-								$extension_upload = $fileInfos['extension'];
-								$allowed_extensions = array('jpg', 'jpeg', 'gif', 'png');
-
-								if (in_array($extension_upload, $allowed_extensions))
-								{
-									$avatarUrl = 'uploads/' . basename($_FILES['userAvatar']['name']);
-
-									move_uploaded_file($_FILES['userAvatar']['tmp_name'], $avatarUrl);
-
-									$infos->updateProfilePicture($userId, $avatarUrl);
-
-									$message = 'Photo de profil modifiée !';
-
-									// Si l'utilisateur a modifié son propre profil, alors on modifie les variables de session
-									$currentUserId = $this->getParameter($_SESSION, 'id');	
-									if ($currentUserId == $userId)
-									{
-										$_SESSION['avatar'] = $avatarUrl;
-									}
-								}
-								else
-								{
-									$message = 'L\'extension du fichier n\'est pas acceptée, merci de ne charger que des fichiers .jpg, .jpeg, .gif ou .png';
-								}
-							}
-							else
-							{
-								$message = 'Fichier trop volumineux, merci de ne pas dépasser 2Mo.';
-							}
-						}
-						elseif (isset($_FILES['userAvatar']) && $_FILES['userAvatar']['error'] == 1 || $_FILES['userAvatar']['error'] == 2)
-						{
-							$message = 'Fichier trop volumineux, merci de ne pas dépasser 2Mo.';
+							$message = $uploadResults;
+							$infos->profileUserView($userId, $message);
 						}
 						else
 						{
-							$message = 'Aucun fichier téléchargé.';
+							$infos->updateProfilePicture($userId, $uploadResults);
+							$message = 'Photo de profil modifiée !';
+
+							$infos->profileUserView($userId, $message);
+
+						// Si l'utilisateur a modifié son propre profil, alors on modifie les variables de session
+
+							$currentUserId = $this->getParameter($_SESSION, 'id');	
+							if ($currentUserId == $userId)
+							{
+								$_SESSION['avatar'] = $uploadResults;
+							}
 						}
-						
-						$infos->profileUserView($userId, $message);
 					}
 
 					elseif ($_GET['action'] == 'adminContacts' && $this->adminAccess())
@@ -984,7 +1068,6 @@ class Router
 						$infos = new HomeController();
 
 						$contactId = $infos->newContactForm($name, $email, $subject, $content);
-						var_dump($contactId);
 						$infos->mailContactForm($name, $email, $subject, $content, $contactId);
 
 						$message = "Votre message a bien été envoyé. Nous vous remercions et vous recontacterons dans les plus brefs délais.";

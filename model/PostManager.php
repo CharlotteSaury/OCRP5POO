@@ -151,7 +151,9 @@ class PostManager extends Manager
 		$req = $this->dbRequest($sql, array($postId));
 		$req->bindValue(':id', $postId, \PDO::PARAM_INT);
 		$req->execute();
-		return $req;
+
+		$postInfos = $req->fetchAll(\PDO::FETCH_ASSOC);
+		return $postInfos;
 	}
 
 	public function getPostContents($postId)
@@ -170,6 +172,21 @@ class PostManager extends Manager
 		$req->bindValue(':id', $postId, \PDO::PARAM_INT);
 		$req->execute();
 		return $req;
+	}
+
+	public function getImgUrl($contentId)
+	{
+		$sql = 'SELECT content.content AS imgUrl
+			FROM content 
+			WHERE content.id= :contentId';
+		
+		$req = $this->dbRequest($sql, array($contentId));
+		$req->bindValue(':contentId', $contentId, \PDO::PARAM_INT);
+		$req->execute();
+
+		$donnees = $req->fetch(\PDO::FETCH_ASSOC);
+
+		return $donnees['imgUrl'];
 	}
 
 	public function getAllPostsCategories() {
@@ -435,7 +452,7 @@ class PostManager extends Manager
 
 		foreach ($newPostInfos AS $key => $value)
 		{
-			if ($key == 'title' || $key == 'chapo')
+			if ($key == 'title' || $key == 'chapo' || $key == 'main_image')
 			{
 				$sql .= ' ' . $key . '="' . $value . '", ';
 			}

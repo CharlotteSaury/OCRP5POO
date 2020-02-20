@@ -191,6 +191,7 @@ a:focus, a:hover {
 
 .adminPostView .admin-post-img {
 	max-width: 25rem;
+	max-height: 20rem;
 }
 
 .unapproved-comment {

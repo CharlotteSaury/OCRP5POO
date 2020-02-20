@@ -86,7 +86,6 @@ class AdminController
 	public function newPostInfos($title, $chapo, $userId, $mainImage)
 	{
 		$postId = $this->_postManager->newPostInfos($title, $chapo, $userId, $mainImage);
-				var_dump($postId);
 		$this->editPostView($postId);
 	}
 
@@ -124,6 +123,10 @@ class AdminController
 
 	public function deleteMainPostPicture($postId)
 	{
+		$postInfos = $this->_postManager->getPostInfos($postId);
+		$mainImgUrl = $postInfos[0]['main_image'];
+		unlink($mainImgUrl);
+
 		$this->_postManager->deleteMainPostPicture($postId);
 		$this->_postManager->dateUpdate($postId);
 		$message = 'Photo supprimée ! ';
@@ -132,14 +135,20 @@ class AdminController
 
 	public function editPostPicture($postId, $contentId, $url)
 	{
+		$oldImgUrl = $this->_postManager->getImgUrl($contentId);
 		$this->_postManager->updatePostPicture($contentId, $url);
 		$this->_postManager->dateUpdate($postId);
-		$message = 'Photo modifiée ! ';
-		$this->editPostView($postId, $message);
+		unlink($oldImgUrl);
 	}
 
-	public function deleteContent($postId, $contentId)
+	public function deleteContent($postId, $contentId, $contentType)
 	{
+		if ($contentType == 1)
+		{
+			$imgUrl = $this->_postManager->getImgUrl($contentId);
+			unlink($imgUrl);
+		}
+
 		$this->_postManager->deleteContent($contentId);
 		$this->_postManager->dateUpdate($postId);
 		$message = 'Contenu supprimé ! ';
@@ -166,8 +175,6 @@ class AdminController
 	{
 		$this->_postManager->addPicture($postId, $content);
 		$this->_postManager->dateUpdate($postId);
-		$message = 'Image ajoutée ! ';
-		$this->editPostView($postId, $message);
 	}
 
 	public function addCategory($postId, $category)
@@ -185,12 +192,11 @@ class AdminController
 		$this->editPostView($postId, $message);
 	}
 
-	public function editPostInfos($newPostInfos)
+	public function editPostInfos($newPostInfos, $message = null)
 	{
-		$postId = $newPostInfos['id'];
+		$postId = $newPostInfos['postId'];
 		$this->_postManager->editPostInfos($newPostInfos, $postId);
 		$this->_postManager->dateUpdate($postId);
-		$message = "Information(s) modifiée(s) ! ";
 		$this->editPostView($postId, $message);
 	}
 
@@ -331,9 +337,11 @@ class AdminController
 
 	public function updateProfilePicture($userId, $avatarUrl)
 	{
+		$userInfos = $this->_userManager->getUserInfos($userId);
+		$oldAvatarUrl = $userInfos[0]['avatar'];
+		unlink($oldAvatarUrl);
+
 		$this->_userManager->updateProfilePicture($userId, $avatarUrl);
-		$message = 'Photo de profil modifiée';
-		$this->profileUserView($userId, $message);
 	}
 
 	public function adminContactsView($message = null, $sorting = null, $sortingDate = null)

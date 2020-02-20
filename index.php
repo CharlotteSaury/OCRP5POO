@@ -16,7 +16,6 @@ if (isset($_COOKIE['auth']) && isset($_COOKIE['email']) && !empty($_COOKIE['auth
 	{
 		var_dump('connexion auto');
 		session_start();
-
 		$router = new Router();
 		$router->connexionAuto($email);
 	}

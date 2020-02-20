@@ -10,43 +10,51 @@
 
 <?php ob_start(); ?>
 
-<?php
-
-while ($donnees = $userInfos->fetch())
-{
-?>
-
 <div class="row">
 
     <div class="col-11 mx-auto">
 
         <div class="card profile-user-card">
 
-            <h5 class="card-header text-primary-custom"><?= htmlspecialchars($donnees['pseudo']); ?></h5>
+            <h5 class="card-header text-primary-custom"><?= htmlspecialchars($userInfos[0]['pseudo']); ?></h5>
 
             <div class="card-body profileView">
                 <div class="profile-card-avatar">
-                    <img class="img-thumbnail" src="<?= htmlspecialchars($donnees['avatar']); ?>" alt="User profil picture" />
-                        <div class="form-group mt-2">
-                            <a data-toggle="modal" data-target="#updateProfilePictureModal<?= htmlspecialchars($donnees['userId']); ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary-custom shadow-sm ml-1"><i class="fas fa-upload mr-1"></i> Modifier la photo de profil</a>
-                        </div>
+
+                    <?php
+                    if ($userInfos[0]['avatar'] != null)
+                    {
+                        ?>
+                        <img class="img-thumbnail" src="<?= htmlspecialchars($userInfos[0]['avatar']); ?>" alt="User profil picture" />
+                        <?php
+                    }
+                    else
+                    {
+                        ?>
+                        <img class="img-thumbnail" src="public/images/profile.jpg" alt="User profil picture" />
+                        <?php
+                    }
+                    ?>
+                    
+                    <div class="form-group mt-2">
+                        <a data-toggle="modal" data-target="#updateProfilePictureModal<?= htmlspecialchars($userInfos[0]['userId']); ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary-custom shadow-sm ml-1"><i class="fas fa-upload mr-1"></i> Modifier la photo de profil</a>
+                    </div>
                 </div>
 
                 <!-- updateProfilePicture Modal-->
-                    <div class="modal fade" id="updateProfilePictureModal<?= htmlspecialchars($donnees['userId']); ?>" tabindex="-1" role="dialog" aria-labelledby="updateProfilePictureLabel" aria-hidden="true">
+                    <div class="modal fade" id="updateProfilePictureModal<?= htmlspecialchars($userInfos[0]['userId']); ?>" tabindex="-1" role="dialog" aria-labelledby="updateProfilePictureLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="updateProfilePictureLabel">Entrez l'url de votre nouvelle photo</h5>
+                                    <h5 class="modal-title" id="updateProfilePictureLabel">Choisissez votre nouvelle photo</h5>
                                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">×</span>
                                     </button>
                                 </div>
                                 
-                                <form enctype="multipart/form-data" action="index.php?action=updateProfilePicture&amp;id=<?= htmlspecialchars($donnees['userId']); ?>" method="POST">
+                                <form enctype="multipart/form-data" action="index.php?action=updateProfilePicture&amp;id=<?= htmlspecialchars($userInfos[0]['userId']); ?>" method="POST">
                                     <div class="modal-body">
-                                        <!-- Le nom de l'élément input détermine le nom dans le tableau $_FILES -->
-                                        Envoyez ce fichier : <input name="userAvatar" type="file" />
+                                        <input name="picture" type="file" />
                                     </div>
                                     <div class="modal-footer">
                                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
@@ -59,23 +67,23 @@ while ($donnees = $userInfos->fetch())
                     </div>
 
                 <div class="profile-card-info">
-                    <h5 class="card-title"><?= htmlspecialchars($donnees['first_name']); ?> <?= htmlspecialchars($donnees['last_name']); ?></h5>
-                    <p class="card-text">Née le <?= $donnees['birth_date']; ?></p>
-                    <p class="card-text">Habite à <?= htmlspecialchars($donnees['home']); ?></p>
-                    <p class="card-text"><strong>A propos de moi : </strong> <?= htmlspecialchars($donnees['about']); ?></p>
+                    <h5 class="card-title"><?= htmlspecialchars($userInfos[0]['first_name']); ?> <?= htmlspecialchars($userInfos[0]['last_name']); ?></h5>
+                    <p class="card-text">Née le <?= $userInfos[0]['birth_date']; ?></p>
+                    <p class="card-text">Habite à <?= htmlspecialchars($userInfos[0]['home']); ?></p>
+                    <p class="card-text"><strong>A propos de moi : </strong> <?= htmlspecialchars($userInfos[0]['about']); ?></p>
                     <hr>
-                    <p class="card-text"><strong>Email : </strong><?= htmlspecialchars($donnees['email']); ?></p>
-                    <p class="card-text"><strong>Tel : </strong><?= htmlspecialchars($donnees['mobile']); ?></p>
-                    <p class="card-text"><strong>Site internet : </strong><?= htmlspecialchars($donnees['website']); ?></p>
+                    <p class="card-text"><strong>Email : </strong><?= htmlspecialchars($userInfos[0]['email']); ?></p>
+                    <p class="card-text"><strong>Tel : </strong><?= htmlspecialchars($userInfos[0]['mobile']); ?></p>
+                    <p class="card-text"><strong>Site internet : </strong><?= htmlspecialchars($userInfos[0]['website']); ?></p>
                     <hr>
-                    <p class="card-text"><strong>Rôle : </strong><?= htmlspecialchars($donnees['role']); ?></p>
-                    <p class="card-text"><strong>Date de création : </strong><?= $donnees['register_date']; ?></p>
+                    <p class="card-text"><strong>Rôle : </strong><?= htmlspecialchars($userInfos[0]['role']); ?></p>
+                    <p class="card-text"><strong>Date de création : </strong><?= $userInfos[0]['register_date']; ?></p>
                     <hr>
 
 
                     <p class="card-text"><i class="fas fa-newspaper"> <?= $userPostsNb['postsNb']; ?></i> - <i class="fas fa-comments"> <?= $userCommentsNb['commentsNb']; ?></i></p>
                     <hr>
-                    <a href="index.php?action=editUser&amp;id=<?= htmlspecialchars($donnees['userId']); ?>" class="btn btn-outline-dark btn-sm" title="Modifier">
+                    <a href="index.php?action=editUser&amp;id=<?= htmlspecialchars($userInfos[0]['userId']); ?>" class="btn btn-outline-dark btn-sm" title="Modifier">
                         <i class="fas fa-pencil-alt"></i>
                     </a>
 
@@ -88,12 +96,6 @@ while ($donnees = $userInfos->fetch())
     </div>
 
 </div>
-
-<?php
-}
-$userInfos->closeCursor();
-?>
-
 
                             
 <?php $content = ob_get_clean(); ?>

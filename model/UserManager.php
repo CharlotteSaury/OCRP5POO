@@ -14,7 +14,7 @@ class UserManager extends Manager
 		$activation_code = password_hash($random_code, PASSWORD_DEFAULT);
 
 		$sql = 'INSERT INTO user (pseudo, email, password, user_role_id, register_date, activation_code, avatar)
-				VALUES (:pseudo, :email, :pass, 2, NOW(), :activation_code, "https://tse2.mm.bing.net/th?id=OIP.jRfbG71P_UTXJl-EGCx43QAAAA&pid=Api")';
+				VALUES (:pseudo, :email, :pass, 2, NOW(), :activation_code, "public/images/profile.jpg")';
 
 		$req = $this->dbRequest($sql, array($pseudo, $email, $pass, $activation_code));
 		$req->bindValue('pseudo', $pseudo);
@@ -222,6 +222,7 @@ class UserManager extends Manager
 				user.email AS email,
 				DATE_FORMAT(user.register_date, \'%d-%m-%Y\') AS register_date,
 				user_role.role AS role,
+				user.user_role_id AS roleId,
 				user.first_name AS first_name,
 				user.last_name AS last_name,
 				user.mobile AS mobile,
@@ -237,7 +238,9 @@ class UserManager extends Manager
 		$req = $this->dbRequest($sql, array($userId));
 		$req->bindValue('userId', $userId, \PDO::PARAM_INT);
 		$req->execute();
-		return $req;
+
+		$userInfos = $req->fetchAll(\PDO::FETCH_ASSOC);
+		return $userInfos;
 	}
 
 	public function editUserInfos($newUserInfos)
