@@ -360,8 +360,8 @@ class Router
 						$email = $this->getParameter($_POST, 'email');
 						$infos = new UserController();
 
-						$reinitialization_code = $infos->newPassCode($email);
-						$infos->forgotPassMail($email, $reinitialization_code);
+						$reinit_code = $infos->newPassCode($email);
+						$infos->forgotPassMail($email, $reinit_code);
 
 						$message = "Un email contenant un lien de réinitialisation de mot de passe a été envoyé à votre adresse email.";
 						$infos->forgotPassView($message);
@@ -370,13 +370,13 @@ class Router
 					elseif ($_GET['action'] == 'newPassView')
 					{
 						$email = $this->getParameter($_GET, 'email');
-						$reinitialization_code = $this->getParameter($_GET, 'key');
+						$reinit_code = $this->getParameter($_GET, 'key');
 						
 						$infos = new UserController();
 
-						$user_reinitialization_code = $infos->getNewPassCode($email);
+						$user_reinit_code = $infos->getNewPassCode($email);
 
-						if ($reinitialization_code != $user_reinitialization_code)
+						if ($reinit_code != $user_reinit_code)
 						{
 							$message = 'La clé de réinitialization n\'est pas bonne, veuillez retourner sur votre mail.';
 							$infos->newPassView($email, $message, false);
