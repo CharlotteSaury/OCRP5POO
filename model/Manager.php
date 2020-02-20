@@ -6,7 +6,7 @@ include('config.php');
 
 abstract class Manager
 {
-	private $database;
+	private $_database;
 
 	protected function dbRequest($sql, $params = null)
 	{
@@ -22,13 +22,13 @@ abstract class Manager
 
 	private function dbConnect()
 	{
-		if ($this->$database == null)
+		if ($this->_database == null)
 		{
-			$this->$database = new \PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8',DB_USER,DB_PASS);
-			$this->$database->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+			$this->_database = new \PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8',DB_USER,DB_PASS);
+			$this->_database->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 		}
 		
-		return $this->$database;
+		return $this->_database;
 	}
 }
 
