@@ -404,34 +404,32 @@ class PostManager extends Manager
 			return $message; 
 		}
 
-		else
+		$sql = 'SELECT COUNT(*) AS categoryExists FROM category WHERE category.name = :category';
+		$req = $this->dbRequest($sql, array($category));
+		$req->bindValue('category', $category);
+		$req->execute();
+		$donnees = $req->fetch(\PDO::FETCH_ASSOC);
+
+		if ($donnees['categoryExists'] != 1)
 		{
-			$sql = 'SELECT COUNT(*) AS categoryExists FROM category WHERE category.name = :category';
+			$sql = 'INSERT INTO category (name) VALUES (:category)';
 			$req = $this->dbRequest($sql, array($category));
 			$req->bindValue('category', $category);
 			$req->execute();
-			$donnees = $req->fetch(\PDO::FETCH_ASSOC);
-
-			if ($donnees['categoryExists'] != 1)
-			{
-				$sql = 'INSERT INTO category (name) VALUES (:category)';
-				$req = $this->dbRequest($sql, array($category));
-				$req->bindValue('category', $category);
-				$req->execute();
-			}
-
-			$sql = 'INSERT INTO post_category (post_id, category_id) 
-			VALUES (:postId, 
-			(SELECT category.id FROM category WHERE category.name = :category))';
-
-			$req = $this->dbRequest($sql, array($postId, $category));
-			$req->bindValue('postId', $postId, \PDO::PARAM_INT);
-			$req->bindValue('category', $category);
-			$req->execute();
-
-			$message = 'Catégorie ajoutée';
-			return $message; 
 		}
+
+		$sql = 'INSERT INTO post_category (post_id, category_id) 
+		VALUES (:postId, 
+		(SELECT category.id FROM category WHERE category.name = :category))';
+
+		$req = $this->dbRequest($sql, array($postId, $category));
+		$req->bindValue('postId', $postId, \PDO::PARAM_INT);
+		$req->bindValue('category', $category);
+		$req->execute();
+
+		$message = 'Catégorie ajoutée';
+		return $message; 
+		
 
 		
 	}

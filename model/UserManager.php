@@ -120,13 +120,13 @@ class UserManager extends Manager
 		return $sessionInfos;
 	}
 
-	public function newPassCode($email, $reinitialization_code)
+	public function newPassCode($email, $reinit_code)
 	{
 		$sql = 'UPDATE user SET reinitialization_code = :reinitialization_code
 				WHERE email = :email';
 
-		$req = $this->dbRequest($sql, array($reinitialization_code, $email));
-		$req->bindValue('reinitialization_code', $reinitialization_code);
+		$req = $this->dbRequest($sql, array($reinit_code, $email));
+		$req->bindValue('reinitialization_code', $reinit_code);
 		$req->bindValue('email', $email);
 
 		$req->execute();
@@ -141,7 +141,7 @@ class UserManager extends Manager
 		$req->execute();
 		$donnees = $req->fetch(\PDO::FETCH_ASSOC);
 
-		return $reinitialization_code = $donnees['reinitialization_code'];
+		return $reinit_code = $donnees['reinitialization_code'];
 	}
 
 	public function newUserPass($email, $newPass)

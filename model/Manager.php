@@ -6,30 +6,29 @@ include('config.php');
 
 abstract class Manager
 {
-	private $db;
+	private $database;
 
 	protected function dbRequest($sql, $params = null)
 	{
 		if ($params == null)
 		{
 			$req = $this->dbConnect()->query($sql);
+			return $req;
 		}
-		else
-		{
-			$req = $this->dbConnect()->prepare($sql, $params);
-		}
+		
+		$req = $this->dbConnect()->prepare($sql, $params);
 		return $req;
 	}
 
 	private function dbConnect()
 	{
-		if ($this->db == null)
+		if ($this->$database == null)
 		{
-			$this->db = new \PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8',DB_USER,DB_PASS);
-			$this->db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+			$this->$database = new \PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8',DB_USER,DB_PASS);
+			$this->$database->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 		}
 		
-		return $this->db;
+		return $this->$database;
 	}
 }
 

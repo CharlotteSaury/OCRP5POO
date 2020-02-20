@@ -125,10 +125,7 @@ class UserController
 		{
 			return true;
 		}
-		else
-		{
-			return false;
-		}
+		return false;
 	}
 
 	public function isSuperAdmin($userId)
@@ -138,10 +135,7 @@ class UserController
 		{
 			return true;
 		}
-		else
-		{
-			return false;
-		}
+		return false;
 	}
 
 	public function forgotPassView($message = null)
