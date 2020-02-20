@@ -134,8 +134,6 @@ class AdminController
 	{
 		$this->_postManager->updatePostPicture($contentId, $url);
 		$this->_postManager->dateUpdate($postId);
-		$message = 'Photo modifiée ! ';
-		$this->editPostView($postId, $message);
 	}
 
 	public function deleteContent($postId, $contentId)
@@ -166,8 +164,6 @@ class AdminController
 	{
 		$this->_postManager->addPicture($postId, $content);
 		$this->_postManager->dateUpdate($postId);
-		$message = 'Image ajoutée ! ';
-		$this->editPostView($postId, $message);
 	}
 
 	public function addCategory($postId, $category)
@@ -187,7 +183,7 @@ class AdminController
 
 	public function editPostInfos($newPostInfos, $message = null)
 	{
-		$postId = $newPostInfos['id'];
+		$postId = $newPostInfos['postId'];
 		$this->_postManager->editPostInfos($newPostInfos, $postId);
 		$this->_postManager->dateUpdate($postId);
 		$this->editPostView($postId, $message);
@@ -331,8 +327,6 @@ class AdminController
 	public function updateProfilePicture($userId, $avatarUrl)
 	{
 		$this->_userManager->updateProfilePicture($userId, $avatarUrl);
-		$message = 'Photo de profil modifiée';
-		$this->profileUserView($userId, $message);
 	}
 
 	public function adminContactsView($message = null, $sorting = null, $sortingDate = null)
