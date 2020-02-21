@@ -2,10 +2,10 @@
 
 namespace controller;
 
-require_once('controller\HomeController.php');
-require_once('controller\PostController.php');
-require_once('controller\AdminController.php');
-require_once('controller\UserController.php');
+require_once('controller/HomeController.php');
+require_once('controller/PostController.php');
+require_once('controller/AdminController.php');
+require_once('controller/UserController.php');
 
 use controller\HomeController;
 use controller\PostController;
@@ -1058,7 +1058,7 @@ class Router
 						}
 					}
 
-					elseif ($_GET['action'] == 'contactForm' && $this->adminAccess())
+					elseif ($_GET['action'] == 'contactForm')
 					{
 						$name = $this->getParameter($_POST, 'name');
 						$email = $this->getParameter($_POST, 'email');

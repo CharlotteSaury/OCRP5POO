@@ -62,7 +62,7 @@ class UserController
 	public function sendEmailActivation($email, $pseudo, $activation_code)
 	{
 		$subject = "Bienvenue sur mon blog";
-		$headers = "From : saury.charlotte@wanadoo.fr";
+		$headers = "From : contact@blogphp.charlottesaury.fr";
 		$message = "Bonjour " . $pseudo . ", bienvenue sur mon blog !\r\n
 					Pour activer votre compte, veuillez cliquer sur le lien ci-dessous
 					ou copier/coller dans votre navigateur Internet.\r\n
@@ -71,7 +71,7 @@ class UserController
 					Ceci est un mail automatique, Merci de ne pas y répondre.";
 
 		$message = wordwrap($message, 70, "\r\n");
-		mail($email, $subject, $message, $headers);
+		$mail = mail($email, $subject, $message, $headers);
 	}
 
 	public function userActivated($email)
@@ -147,19 +147,19 @@ class UserController
 	{
 		$permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz';
 		$random_code = substr(str_shuffle($permitted_chars), 0, 10);
-		$reinitialization_code = password_hash($random_code, PASSWORD_DEFAULT);
-		$this->_userManager->newPassCode($email, $reinitialization_code);
-		return $reinitialization_code;
+		$reinit_code = password_hash($random_code, PASSWORD_DEFAULT);
+		$this->_userManager->newPassCode($email, $reinit_code);
+		return $reinit_code;
 	}
 
-	public function forgotPassMail($email, $reinitialization_code)
+	public function forgotPassMail($email, $reinit_code)
 	{
 		$subject = "Réinitialisation mot de passeg";
 		$headers = "From : saury.charlotte@wanadoo.fr";
 		$content = "Bonjour, \r\n
 					Pour réinitialiser le mot de passe du compte " . $email . ", veuillez cliquer sur le lien ci-dessous
 					ou copier/coller dans votre navigateur Internet.\r\n
-					http://localhost/OCR-P5-Blog-POO/index.php?action=newPassView&email=" . $email . "&key=" . $reinitialization_code . "\r\n\r\n
+					http://localhost/OCR-P5-Blog-POO/index.php?action=newPassView&email=" . $email . "&key=" . $reinit_code . "\r\n\r\n
 					----------------------\r\n
 					Ceci est un mail automatique, Merci de ne pas y répondre.";
 
@@ -169,7 +169,7 @@ class UserController
 
 	public function getNewPassCode($email)
 	{
-		return $reinitialization_code = $this->_userManager->getNewPassCode($email);
+		return $reinit_code = $this->_userManager->getNewPassCode($email);
 	}
 
 	public function newPassView($email, $message = null, $status)
