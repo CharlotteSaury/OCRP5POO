@@ -216,4 +216,4 @@
 
 <?php $content = ob_get_clean(); ?>
 
-<?php require('frontend_template.php'); ?>
+<?php require 'frontend_template.php'; ?>

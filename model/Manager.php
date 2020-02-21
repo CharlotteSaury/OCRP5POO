@@ -2,7 +2,7 @@
 
 namespace model;
 
-include('config.php');
+include 'config.php';
 
 abstract class Manager
 {

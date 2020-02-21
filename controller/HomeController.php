@@ -2,8 +2,8 @@
 
 namespace controller;
 
-require_once('./model/Manager.php');
-require_once('./model/ContactManager.php');
+require_once './model/Manager.php';
+require_once './model/ContactManager.php';
 
 use model\ContactManager;
 
@@ -21,7 +21,7 @@ class HomeController
 
 	public function indexView($message = null) 
 	{
-		require('./view/frontend/indexView.php');
+		require './view/frontend/indexView.php';
 	}
 
 	public function newContactForm($name, $email, $subject, $content)
@@ -64,12 +64,12 @@ class HomeController
 
 	public function legalView()
 	{
-		require('./view/frontend/legalView.php');
+		require './view/frontend/legalView.php';
 	}
 
 	public function confidentialityView()
 	{
-		require('./view/frontend/confidentialityView.php');
+		require './view/frontend/confidentialityView.php';
 	}
 	
 }

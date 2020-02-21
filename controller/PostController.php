@@ -2,9 +2,9 @@
 
 namespace controller;
 
-require_once('./model/Manager.php');
-require_once('./model/PostManager.php');
-require_once('./model/CommentManager.php');
+require_once './model/Manager.php';
+require_once './model/PostManager.php';
+require_once './model/CommentManager.php';
 
 use model\Manager;
 use model\PostManager;
@@ -30,7 +30,7 @@ class PostController
 		$posts = $this->_postManager->getPosts($first_post, $postsPerPage);
 		$recentPosts = $this->_postManager->getRecentPosts(1);
 		$categories = $this->_postManager->getCategories();
-		require('./view/frontend/postListView.php');
+		require './view/frontend/postListView.php';
 	}
 
 	public function postView($postId, $messageComment = null)
