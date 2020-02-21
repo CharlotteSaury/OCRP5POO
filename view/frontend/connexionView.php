@@ -56,4 +56,4 @@
 
 
 
-<?php require('frontend_login_template.php'); ?>
+<?php require 'frontend_login_template.php'; ?>

@@ -93,4 +93,4 @@
 
 <?php $content = ob_get_clean(); ?>
 
-<?php require('backend_template.php'); ?>
+<?php require 'backend_template.php'; ?>

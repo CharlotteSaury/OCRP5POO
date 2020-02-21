@@ -2,7 +2,7 @@
 
 namespace model;
 
-require_once("model/Manager.php");
+require_once 'model/Manager.php';
 
 class CommentManager extends Manager
 {
@@ -40,31 +40,6 @@ class CommentManager extends Manager
 
 	public function addComment($postId, $userId, $content)
 	{
-		/*// Recherche de l'id de l'utilisateur s'il existe déjà en bdd
-		$userIdSql = 'SELECT user.id AS userId FROM user
-					WHERE user.email = :email';
-		$req = $this->dbRequest($userIdSql, array($email));
-		$req->bindValue('email', $email);
-		$req->execute();
-
-		$donnees = $req->fetch();
-
-		if (empty($donnees))
-		{
-			$req = $this->dbRequest('INSERT INTO user (email, register_date) VALUES (:email, NOW())', array($email));
-			$req->bindValue('email', $email);
-			$req->execute();
-
-			$req = $this->dbRequest($userIdSql, array($email));
-			$req->bindValue('email', $email);
-			$req->execute();
-
-			$donnees = $req->fetch();
-		}
-
-		$userId = $donnees['userId'];*/
-		
-
 		$sql = 'INSERT INTO comment (post_id, user_id, content, comment_date) 
 				VALUES (:postId, :userId, :content, NOW())';
 		$req = $this->dbRequest($sql, array($postId, $userId, $content));

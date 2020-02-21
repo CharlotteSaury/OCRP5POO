@@ -2,7 +2,7 @@
 
 namespace controller;
 
-require_once('./model/UserManager.php');
+require_once './model/UserManager.php';
 
 use model\UserManager;
 use Exception;
@@ -19,12 +19,12 @@ class UserController
 
 	public function inscriptionView($message = null) 
 	{
-		require('./view/frontend/inscriptionView.php');
+		require './view/frontend/inscriptionView.php';
 	}
 
 	public function connexionView($message = null) 
 	{
-		require('./view/frontend/connexionView.php');
+		require './view/frontend/connexionView.php';
 	}
 
 	public function newUser($pseudo, $pass, $email)
@@ -142,7 +142,7 @@ class UserController
 
 	public function forgotPassView($message = null)
 	{
-		require('./view/frontend/forgotPassView.php');
+		require './view/frontend/forgotPassView.php';
 	}
 
 	public function newPassCode($email)
@@ -176,7 +176,7 @@ class UserController
 
 	public function newPassView($email, $message = null, $status)
 	{
-		require('./view/frontend/newPassView.php');
+		require './view/frontend/newPassView.php';
 	}
 
 	public function newUserPass($email, $newPass)

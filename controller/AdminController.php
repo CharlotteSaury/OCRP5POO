@@ -2,11 +2,11 @@
 
 namespace controller;
 
-require_once('./model/Manager.php');
-require_once('./model/PostManager.php');
-require_once('./model/CommentManager.php');
-require_once('./model/UserManager.php');
-require_once('./model/ContactManager.php');
+require_once './model/Manager.php';
+require_once './model/PostManager.php';
+require_once './model/CommentManager.php';
+require_once './model/UserManager.php';
+require_once './model/ContactManager.php';
 
 use model\PostManager;
 use model\CommentManager;
@@ -41,7 +41,7 @@ class AdminController
 		$recentUsers = $this->_userManager->getUsers(5);
 		$unreadContactsNb = $this->_contactManager->getUnreadContactsNb();
 
-		require('./view/backend/dashboardView.php');
+		require './view/backend/dashboardView.php';
 	}
 
 	public function adminPostsView($message = null, $sorting = null, $sortingDate = null)
@@ -63,7 +63,7 @@ class AdminController
 		
 		$allPostsCategories = $this->_postManager->getAllPostsCategories();
 		$unreadContactsNb = $this->_contactManager->getUnreadContactsNb();
-		require('./view/backend/adminPostsView.php');
+		require './view/backend/adminPostsView.php';
 	}
 
 	public function adminPostView($postId, $message = null)
@@ -74,13 +74,13 @@ class AdminController
 		$postCategories = $this->_postManager->getPostCategories($postId);		
 		$unreadContactsNb = $this->_contactManager->getUnreadContactsNb();
 
-		require('./view/backend/adminPostView.php');
+		require './view/backend/adminPostView.php';
 	}
 
 	public function adminNewPostView($message = null)
 	{
 		$unreadContactsNb = $this->_contactManager->getUnreadContactsNb();
-		require('./view/backend/newPostInfosView.php');
+		require './view/backend/newPostInfosView.php';
 	}
 
 	public function newPostInfos($title, $chapo, $userId, $mainImage)
@@ -234,7 +234,7 @@ class AdminController
 		}
 
 		$unreadContactsNb = $this->_contactManager->getUnreadContactsNb();
-		require('./view/backend/adminCommentsView.php');
+		require './view/backend/adminCommentsView.php';
 	}
 
 	public function approveComment($commentId, $view = null, $postId = null)
@@ -303,7 +303,7 @@ class AdminController
 		$usersActivity = 1;
 		$allUsers = $this->_userManager->getUsers(null, $usersActivity, $userRoleId);
 		$unreadContactsNb = $this->_contactManager->getUnreadContactsNb();
-		require('./view/backend/adminUsersView.php');
+		require './view/backend/adminUsersView.php' ;
 	}
 
 	public function profileUserView($userId, $message = null)
@@ -319,7 +319,7 @@ class AdminController
 	{
 		$userInfos = $this->_userManager->getUserInfos($userId);
 		$unreadContactsNb = $this->_contactManager->getUnreadContactsNb();
-		require('./view/backend/editUserView.php');
+		require './view/backend/editUserView.php' ;
 	}
 
 	public function editUserInfos($newUserInfos)
@@ -361,7 +361,7 @@ class AdminController
 			$allContacts = $this->_contactManager->getContacts($contactId = null, $status = null, $sortingDate);
 		}
 
-		require('./view/backend/adminContactsView.php');
+		require './view/backend/adminContactsView.php';
 	}
 
 	public function adminContactView($contactId, $message = null)
@@ -379,7 +379,7 @@ class AdminController
 		}
 		
 		$unreadContactsNb = $this->_contactManager->getUnreadContactsNb();
-		require('./view/backend/adminContactView.php');
+		require './view/backend/adminContactView.php';
 	}
 
 	public function deleteContact($contactId, $dashboard = null)

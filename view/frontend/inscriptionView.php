@@ -42,4 +42,4 @@
 <?php $content = ob_get_clean(); ?>
 
 
-<?php require('frontend_login_template.php'); ?>
+<?php require 'frontend_login_template.php'; ?>

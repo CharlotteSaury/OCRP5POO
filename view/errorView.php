@@ -20,4 +20,4 @@
 
 
 
-<?php require('view/frontend/frontend_login_template.php'); ?>
+<?php require 'view/frontend/frontend_login_template.php'; ?>
