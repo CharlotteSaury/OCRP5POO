@@ -233,6 +233,7 @@ class Router
 									else
 									{
 										$activation_code = $infos->newUser($pseudo, $pass, $email);
+										var_dump($activation_code);
 										$infos->sendEmailActivation($email, $pseudo, $activation_code);
 										$message = 'Merci pour votre inscription ! Un email de confirmation vous a été envoyé afin de confirmer votre adresse email. Merci de vous reporter à cet email pour activer votre compte ! ';
 										$infos->inscriptionView($message);
