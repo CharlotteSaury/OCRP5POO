@@ -2,8 +2,6 @@
 
 namespace controller;
 
-include 'config.php';
-
 require_once('./model/Manager.php');
 require_once('./model/ContactManager.php');
 
