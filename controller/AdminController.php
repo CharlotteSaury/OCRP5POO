@@ -396,7 +396,7 @@ class AdminController
 		$contactInfos = $contactInfos->fetchAll(\PDO::FETCH_ASSOC);
 
 		$subject = $answerSubject;
-		$headers = "From : saury.charlotte@wanadoo.fr";
+		$headers = "From: " . BLOG_AUTHOR . "/r/n";
 		$message = $answerContent . 
 					" /r/n
 					----------------/r/n/r/n

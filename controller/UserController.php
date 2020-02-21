@@ -30,6 +30,8 @@ class UserController
 	public function newUser($pseudo, $pass, $email)
 	{
 		$activation_code = $this->_userManager->addUser($pseudo, $pass, $email);
+		var_dump($activation_code);
+		return $activation_code;
 	}
 
 	public function checkPseudo($pseudo, $userId = null)
@@ -62,16 +64,16 @@ class UserController
 	public function sendEmailActivation($email, $pseudo, $activation_code)
 	{
 		$subject = "Bienvenue sur mon blog";
-		$headers = "From : contact@blogphp.charlottesaury.fr";
+		$headers = "From: " . BLOG_AUTHOR . "\r\n";
 		$message = "Bonjour " . $pseudo . ", bienvenue sur mon blog !\r\n
 					Pour activer votre compte, veuillez cliquer sur le lien ci-dessous
 					ou copier/coller dans votre navigateur Internet.\r\n
-					http://localhost/OCR-P5-Blog-POO/index.php?action=activation&email=" . $email . "&key=" . $activation_code . "\r\n\r\n
+					http://blogphp.charlottesaury.fr/index.php?action=activation&email=" . $email . "&key=" . $activation_code . "\r\n\r\n
 					----------------------\r\n
 					Ceci est un mail automatique, Merci de ne pas y répondre.";
 
 		$message = wordwrap($message, 70, "\r\n");
-		$mail = mail($email, $subject, $message, $headers);
+		mail($email, $subject, $message, $headers);
 	}
 
 	public function userActivated($email)
@@ -154,12 +156,12 @@ class UserController
 
 	public function forgotPassMail($email, $reinit_code)
 	{
-		$subject = "Réinitialisation mot de passeg";
-		$headers = "From : saury.charlotte@wanadoo.fr";
+		$subject = "Réinitialisation mot de passe";
+		$headers = "From: " . BLOG_AUTHOR . "\r\n";
 		$content = "Bonjour, \r\n
 					Pour réinitialiser le mot de passe du compte " . $email . ", veuillez cliquer sur le lien ci-dessous
 					ou copier/coller dans votre navigateur Internet.\r\n
-					http://localhost/OCR-P5-Blog-POO/index.php?action=newPassView&email=" . $email . "&key=" . $reinit_code . "\r\n\r\n
+					http://www.blogphp.charlottesaury.fr/index.php?action=newPassView&email=" . $email . "&key=" . $reinit_code . "\r\n\r\n
 					----------------------\r\n
 					Ceci est un mail automatique, Merci de ne pas y répondre.";
 

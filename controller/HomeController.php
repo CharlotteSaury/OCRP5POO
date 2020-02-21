@@ -2,8 +2,6 @@
 
 namespace controller;
 
-include('config.php');
-
 require_once('./model/Manager.php');
 require_once('./model/ContactManager.php');
 
@@ -51,7 +49,7 @@ class HomeController
 		// Confitmation email sent to sender
 
 		$mailSubject = "Votre message sur le blog de Charlotte SAURY";
-		$headers = "From: " . BLOG_AUTHOR;
+		$headers = "From: " . BLOG_AUTHOR . "\r\n";
 		$mailMessage = "Bonjour " . $name .  ",\r\n
 					Votre message ci-dessous a bien été envoyé à l'auteur du blog. Nous vous remercions pour ce contact et tâcherons d'y répondre dans les plus brefs délais.\r\n
 					----------------------\r\n

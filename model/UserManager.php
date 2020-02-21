@@ -12,6 +12,7 @@ class UserManager extends Manager
 		$permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz';
 		$random_code = substr(str_shuffle($permitted_chars), 0, 10);
 		$activation_code = password_hash($random_code, PASSWORD_DEFAULT);
+		var_dump($activation_code);
 
 		$sql = 'INSERT INTO user (pseudo, email, password, user_role_id, register_date, activation_code, avatar)
 				VALUES (:pseudo, :email, :pass, 2, NOW(), :activation_code, "public/images/profile.jpg")';
