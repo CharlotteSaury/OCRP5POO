@@ -6,11 +6,14 @@ require_once 'Controller/HomeController.php';
 require_once 'Controller/PostController.php';
 require_once 'Controller/AdminController.php';
 require_once 'Controller/UserController.php';
+require_once 'Controller/ErrorController.php';
 
 use controller\HomeController;
 use controller\PostController;
 use controller\AdminController;
 use controller\UserController;
+use controller\ErrorController;
+
 use Exception;
 
 
@@ -19,7 +22,8 @@ class Router
 	private $_homeController,
 			$_postController,
 			$_userController,
-			$_adminController;
+			$_adminController,
+			$_errorController;
 
 	public function __construct()
 	{
@@ -27,6 +31,7 @@ class Router
 		$this->_postController = new PostController();
 		$this->_userController = new UserController();
 		$this->_adminController = new AdminController();
+		$this->_errorController = new ErrorController();
 	}
 
 	private function getParameter($table, $name)
@@ -1061,7 +1066,7 @@ class Router
 		catch(Exception $e)
 		{
 			$errorMessage = $e->getMessage();
-			require 'view/errorView.php';
+			$this->_errorController->errorView($errorMessage);
 		}
 	}
 }
