@@ -11,7 +11,7 @@
     <meta name="keywords" content="">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-    <title><?= $title ?></title>
+    <title><?= $this->_title ?></title>
 
     <!-- Custom fonts for this template-->
     <link href="public/vendor/startbootstrap-sb-admin-2/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -204,8 +204,17 @@
 
                     <!-- Page Heading -->
                     <div class="mb-4">
-                        <h1 class="h3 mb-0 text-gray-800"><?= $contentTitle ?></h1>
+                        <h1 class="h3 mb-0 text-gray-800">
                         <?php
+                        if (isset($this->_contentTitle))
+                        {
+                            echo $this->_contentTitle . '</h1>';
+                        }
+                        else
+                        {
+                            echo $contentTitle . '</h1>';
+                        }
+
                         if (isset($message))
                         {
                             echo '<div class="adminMessage text-center">' . $message . '</div>';
@@ -215,7 +224,7 @@
 
                     <!-- Content -->
                     
-                    <?= $content ?>
+                    <?= $this->_content ?>
                     
                 </div>
 

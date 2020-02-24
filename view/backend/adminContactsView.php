@@ -1,6 +1,6 @@
 <!-- title definition -->
 
-<?php $title = 'Admin - Formulaire de contact '; ?>
+<?php $this->_title = 'Admin - Formulaire de contact '; ?>
 
 <!-- $content definition -->
 
@@ -163,6 +163,5 @@
 </div>
 
 
-<?php $content = ob_get_clean(); ?>
+<?php $this->_content = ob_get_clean(); ?>
 
-<?php require 'backend_template.php'; ?>

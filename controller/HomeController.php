@@ -4,24 +4,28 @@ namespace controller;
 
 require_once './model/Manager.php';
 require_once './model/ContactManager.php';
+require_once './view/View.php';
 
 use model\ContactManager;
+use view\View;
 
 class HomeController
 
 {
-	private $_contactManager;
+	private $_contactManager,
+			$_view;
 
 	public function __construct()
 	{
 		$this->_contactManager = new ContactManager();
+		$this->_view = new View();
 	}
 
 	// Home page
 
 	public function indexView($message = null) 
 	{
-		require './view/frontend/indexView.php';
+		return $this->_view->render('frontend', 'indexView', ['message' => $message]); 
 	}
 
 	public function newContactForm($name, $email, $subject, $content)
@@ -42,7 +46,7 @@ class HomeController
 					----------------------\r\n
 					Ceci est un mail automatique, Merci de ne pas y répondre.";
 
-		$message = wordwrap($message, 70, "\r\n");
+		$mailMessage = wordwrap($mailMessage, 70, "\r\n");
 		mail(CF_EMAIL, $mailSubject, $mailMessage);
 
 
@@ -58,18 +62,18 @@ class HomeController
 					----------------------\r\n
 					Ceci est un mail automatique, Merci de ne pas y répondre.";
 
-		$message = wordwrap($message, 70, "\r\n");
+		$mailMessage = wordwrap($mailMessage, 70, "\r\n");
 		mail($email, $mailSubject, $mailMessage, $headers);
 	}
 
 	public function legalView()
 	{
-		require './view/frontend/legalView.php';
+		return $this->_view->render('frontend', 'legalView');
 	}
 
 	public function confidentialityView()
 	{
-		require './view/frontend/confidentialityView.php';
+		return $this->_view->render('frontend', 'confidentialityView');
 	}
 	
 }

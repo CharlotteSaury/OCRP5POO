@@ -1,4 +1,4 @@
-<?php $title = 'Nouveau mot de passe'; ?>
+<?php $this->_title = 'Nouveau mot de passe'; ?>
 
 
 
@@ -42,8 +42,4 @@
 </div>
 
 
-<?php $content = ob_get_clean(); ?>
-
-
-
-<?php require 'frontend_login_template.php'; ?>
+<?php $this->_content = ob_get_clean(); ?>

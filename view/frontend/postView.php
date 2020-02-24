@@ -1,4 +1,4 @@
-<?php $title = 'Titre post'; ?>
+<?php $this->_title = 'Titre post'; ?>
 
 
 <!-- $header definition -->
@@ -38,7 +38,7 @@
   </header>
 
 
-<?php $header = ob_get_clean(); ?>
+<?php $this->_header = ob_get_clean(); ?>
 
 
 <!-- $content definition -->
@@ -214,6 +214,4 @@
 
 </section>
 
-<?php $content = ob_get_clean(); ?>
-
-<?php require 'frontend_template.php'; ?>
+<?php $this->_content = ob_get_clean(); ?>

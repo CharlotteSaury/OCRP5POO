@@ -1,10 +1,10 @@
 <!-- $title definition -->
 
-<?php $title = 'Admin - Editer l\'article'; ?>
+<?php $this->_title = 'Admin - Editer l\'article'; ?>
 
 <!-- Content title definition -->
 
-<?php $contentTitle = 'Editer l\'article'; ?>
+<?php $this->_contentTitle = 'Editer l\'article'; ?>
 
 <!-- $content definition -->
 
@@ -267,12 +267,5 @@
         </div>  
     </form>  
     
+    <?php $this->_content = ob_get_clean(); ?>
 
-
-
-
-
-
-    <?php $content = ob_get_clean(); ?>
-
-    <?php require 'backend_template.php'; ?>

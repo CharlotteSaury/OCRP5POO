@@ -1,6 +1,6 @@
 <!-- $title definition -->
 
-<?php $title = 'Admin - Commentaires'; ?>
+<?php $this->_title = 'Admin - Commentaires'; ?>
 
 <!-- $content definition -->
 
@@ -142,6 +142,5 @@
 </div>
 
 
-<?php $content = ob_get_clean(); ?>
+<?php $this->_content = ob_get_clean(); ?>
 
-<?php require 'backend_template.php'; ?>

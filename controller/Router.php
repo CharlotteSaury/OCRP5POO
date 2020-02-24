@@ -231,7 +231,6 @@ class Router
 									else
 									{
 										$activation_code = $this->_userController->newUser($pseudo, $pass, $email);
-										var_dump($activation_code);
 										$this->_userController->sendEmailActivation($email, $pseudo, $activation_code);
 										$message = 'Merci pour votre inscription ! Un email de confirmation vous a été envoyé afin de confirmer votre adresse email. Merci de vous reporter à cet email pour activer votre compte ! ';
 										$this->_userController->inscriptionView($message);

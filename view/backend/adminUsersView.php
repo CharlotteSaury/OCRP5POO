@@ -1,10 +1,10 @@
 <!-- $title definition -->
 
-<?php $title = 'Admin - Utilisateurs'; ?>
+<?php $this->_title = 'Admin - Utilisateurs'; ?>
 
 <!-- Content title definition -->
 
-<?php $contentTitle; ?>
+<?php $this->_contentTitle; ?>
 
 <!-- $content definition -->
 
@@ -80,6 +80,5 @@
 
 
 
-<?php $content = ob_get_clean(); ?>
+<?php $this->_content = ob_get_clean(); ?>
 
-<?php require 'backend_template.php'; ?>

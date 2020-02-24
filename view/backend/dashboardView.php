@@ -1,11 +1,11 @@
 <!-- $title definition -->
 
-<?php $title = 'Tableau de bord'; ?>
+<?php $this->_title = 'Tableau de bord'; ?>
 
 
 <!-- Content title definition -->
 
-<?php $contentTitle = 'Tableau de bord'; ?>
+<?php $this->_contentTitle = 'Tableau de bord'; ?>
 
 <!-- $content definition -->
 
@@ -332,6 +332,4 @@
 </div>
 
 
-<?php $content = ob_get_clean(); ?>
-
-<?php require 'backend_template.php'; ?>
+<?php $this->_content = ob_get_clean(); ?>

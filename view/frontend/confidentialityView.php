@@ -1,4 +1,4 @@
-<?php $title = 'Politique de confidentialité'; ?>
+<?php $this->_title = 'Politique de confidentialité'; ?>
 
 
 <!-- $header definition -->
@@ -14,7 +14,7 @@
 </header>
 
 
-<?php $header = ob_get_clean(); ?>
+<?php $this->_header = ob_get_clean(); ?>
 
 
 <!-- $content definition -->
@@ -75,6 +75,4 @@
     </div>
 </section>
 
-<?php $content = ob_get_clean(); ?>
-
-<?php require 'frontend_template.php'; ?>
+<?php $this->_content = ob_get_clean(); ?>
