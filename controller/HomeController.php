@@ -2,35 +2,22 @@
 
 namespace controller;
 
-require_once './model/Manager.php';
-require_once './model/ContactManager.php';
-require_once './view/View.php';
+require_once './controller/Controller.php';
+use controller\Controller;
 
-use model\ContactManager;
-use view\View;
-
-class HomeController
+class HomeController extends Controller
 
 {
-	private $_contactManager,
-			$_view;
-
-	public function __construct()
-	{
-		$this->_contactManager = new ContactManager();
-		$this->_view = new View();
-	}
-
 	// Home page
 
 	public function indexView($message = null) 
 	{
-		return $this->_view->render('frontend', 'indexView', ['message' => $message]); 
+		return $this->view->render('frontend', 'indexView', ['message' => $message]); 
 	}
 
 	public function newContactForm($name, $email, $subject, $content)
 	{
-		$contactId = $this->_contactManager->addNewContact($name, $email, $subject, $content);
+		$contactId = $this->contactManager->addNewContact($name, $email, $subject, $content);
 		return $contactId;
 	}
 
@@ -68,12 +55,12 @@ class HomeController
 
 	public function legalView()
 	{
-		return $this->_view->render('frontend', 'legalView');
+		return $this->view->render('frontend', 'legalView');
 	}
 
 	public function confidentialityView()
 	{
-		return $this->_view->render('frontend', 'confidentialityView');
+		return $this->view->render('frontend', 'confidentialityView');
 	}
 	
 }

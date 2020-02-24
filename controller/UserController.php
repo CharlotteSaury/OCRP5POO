@@ -2,44 +2,31 @@
 
 namespace controller;
 
-require_once './model/UserManager.php';
-require_once './view/View.php';
+require_once './controller/Controller.php';
+use controller\Controller;
 
-use model\UserManager;
-use view\View;
-use Exception;
-
-class UserController
+class UserController extends Controller
 
 {
-	private $_userManager,
-			$_view;
-
-	public function __construct()
-	{
-		$this->_userManager = new UserManager();
-		$this->_view = new View();
-	}
-
 	public function inscriptionView($message = null) 
 	{
-		return $this->_view->render('frontend', 'inscriptionView', ['message' => $message]);
+		return $this->view->render('frontend', 'inscriptionView', ['message' => $message]);
 	}
 
 	public function connexionView($message = null) 
 	{
-		return $this->_view->render('frontend', 'connexionView', ['message' => $message]);
+		return $this->view->render('frontend', 'connexionView', ['message' => $message]);
 	}
 
 	public function newUser($pseudo, $pass, $email)
 	{
-		$activation_code = $this->_userManager->addUser($pseudo, $pass, $email);
+		$activation_code = $this->userManager->addUser($pseudo, $pass, $email);
 		return $activation_code;
 	}
 
 	public function checkPseudo($pseudo, $userId = null)
 	{
-		$pseudoExists = $this->_userManager->pseudoExists($pseudo, $userId);
+		$pseudoExists = $this->userManager->pseudoExists($pseudo, $userId);
 		if ($pseudoExists == 1)
 		{
 			return true;
@@ -52,7 +39,7 @@ class UserController
 
 	public function checkEmail($email, $userId = null)
 	{
-		$emailExists = $this->_userManager->emailExists($email, $userId);
+		$emailExists = $this->userManager->emailExists($email, $userId);
 		if ($emailExists == 1)
 		{
 			return true;
@@ -81,7 +68,7 @@ class UserController
 
 	public function userActivated($email)
 	{
-		$activation_code = $this->_userManager->getUserCode($email);
+		$activation_code = $this->userManager->getUserCode($email);
 		if ($activation_code != null)
 		{
 			return false;
@@ -95,14 +82,14 @@ class UserController
 
 	public function userActivation($email, $key)
 	{
-		$activation_code = $this->_userManager->getUserCode($email);
+		$activation_code = $this->userManager->getUserCode($email);
 		if ($activation_code != $key)
 		{
 			$message = 'La clé d\'activation n\'est pas bonne, veuillez retourner sur votre mail d\'activation.';
 		}
 		else
 		{
-			$this->_userManager->userActivation($email);
+			$this->userManager->userActivation($email);
 			$message = 'Votre compte est maintenant activé, vous pouvez vous connecter ! ';
 		}
 		return $message;
@@ -110,12 +97,12 @@ class UserController
 
 	public function getPassword($email)
 	{
-		return $user_pass = $this->_userManager->getUserPass($email);
+		return $user_pass = $this->userManager->getUserPass($email);
 	}
 
 	public function newUserSession($email)
 	{
-		$sessionInfos = $this->_userManager->getSessionInfos($email);
+		$sessionInfos = $this->userManager->getSessionInfos($email);
         $_SESSION['id'] = $sessionInfos[0]['userId'];
         $_SESSION['pseudo'] = $sessionInfos[0]['pseudo'];
         $_SESSION['role'] = $sessionInfos[0]['role'];
@@ -125,7 +112,7 @@ class UserController
 
 	public function isAdmin($userId)
 	{
-		$role = $this->_userManager->getUserRole($userId);
+		$role = $this->userManager->getUserRole($userId);
 		if ($role == 1)
 		{
 			return true;
@@ -135,7 +122,7 @@ class UserController
 
 	public function isSuperAdmin($userId)
 	{
-		$role = $this->_userManager->getUserRole($userId);
+		$role = $this->userManager->getUserRole($userId);
 		if ($role == 3)
 		{
 			return true;
@@ -145,7 +132,7 @@ class UserController
 
 	public function forgotPassView($message = null)
 	{
-		return $this->_view->render('frontend', 'forgotPassView', ['message' => $message]);
+		return $this->view->render('frontend', 'forgotPassView', ['message' => $message]);
 	}
 
 	public function newPassCode($email)
@@ -153,7 +140,7 @@ class UserController
 		$permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz';
 		$random_code = substr(str_shuffle($permitted_chars), 0, 10);
 		$reinit_code = password_hash($random_code, PASSWORD_DEFAULT);
-		$this->_userManager->newPassCode($email, $reinit_code);
+		$this->userManager->newPassCode($email, $reinit_code);
 		return $reinit_code;
 	}
 
@@ -174,17 +161,17 @@ class UserController
 
 	public function getNewPassCode($email)
 	{
-		return $reinit_code = $this->_userManager->getNewPassCode($email);
+		return $reinit_code = $this->userManager->getNewPassCode($email);
 	}
 
 	public function newPassView($email, $message = null, $status)
 	{
-		return $this->_view->render('frontend', 'newPassView', ['message' => $message]);
+		return $this->view->render('frontend', 'newPassView', ['message' => $message]);
 	}
 
 	public function newUserPass($email, $newPass)
 	{
-		$this->_userManager->newUserPass($email, $newPass);
+		$this->userManager->newUserPass($email, $newPass);
 	}
 
 }
