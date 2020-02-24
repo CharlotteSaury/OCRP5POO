@@ -1,4 +1,4 @@
-<?php $title = 'Blog connexion'; ?>
+<?php $this->_title = 'Blog connexion'; ?>
 
 
 
@@ -52,8 +52,4 @@
 </div>
 
 
-<?php $content = ob_get_clean(); ?>
-
-
-
-<?php require 'frontend_login_template.php'; ?>
+<?php $this->_content = ob_get_clean(); ?>

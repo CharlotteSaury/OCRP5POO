@@ -1,10 +1,10 @@
 <!-- $title definition -->
 
-<?php $title = 'Admin - Editer le profil'; ?>
+<?php $this->_title = 'Admin - Editer le profil'; ?>
 
 <!-- Content title definition -->
 
-<?php $contentTitle = 'Editer le profil'; ?>
+<?php $this->_contentTitle = 'Editer le profil'; ?>
 
 <!-- $content definition -->
 
@@ -158,6 +158,5 @@
 
 </form>                      
                             
-<?php $content = ob_get_clean(); ?>
+<?php $this->_content = ob_get_clean(); ?>
 
-<?php require 'backend_template.php'; ?>

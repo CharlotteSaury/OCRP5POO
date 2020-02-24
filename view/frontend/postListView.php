@@ -1,6 +1,6 @@
 <!-- title deinition -->
 
-<?php $title = 'Blog : liste des posts'; ?>
+<?php $this->_title = 'Blog : liste des posts'; ?>
 
 
 <!-- $header definition -->
@@ -18,7 +18,7 @@
   </header>
 
 
-<?php $header = ob_get_clean(); ?>
+<?php $this->_header = ob_get_clean(); ?>
 
 
 <!-- $content definition -->
@@ -245,6 +245,4 @@
 </section>
 
 
-<?php $content = ob_get_clean(); ?>
-
-<?php require 'frontend_template.php'; ?>
+<?php $this->_content = ob_get_clean(); ?>

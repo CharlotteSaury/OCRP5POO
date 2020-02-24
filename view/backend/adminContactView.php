@@ -1,10 +1,10 @@
 <!-- $title definition -->
 
-<?php $title = 'Admin - Contact'; ?>
+<?php $this->_title = 'Admin - Contact'; ?>
 
 <!-- Content title definition -->
 
-<?php $contentTitle = ''; ?>
+<?php $this->_contentTitle = ''; ?>
 
 <!-- $content definition -->
 
@@ -93,10 +93,5 @@ $contactInfos->closeCursor();
 ?>
 
 
+<?php $this->_content = ob_get_clean(); ?>
 
-
-
-
-<?php $content = ob_get_clean(); ?>
-
-<?php require 'backend_template.php'; ?>

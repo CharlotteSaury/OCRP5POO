@@ -3,34 +3,37 @@
 namespace controller;
 
 require_once './model/UserManager.php';
+require_once './view/View.php';
 
 use model\UserManager;
+use view\View;
 use Exception;
 
 class UserController
 
 {
-	private $_userManager;
+	private $_userManager,
+			$_view;
 
 	public function __construct()
 	{
 		$this->_userManager = new UserManager();
+		$this->_view = new View();
 	}
 
 	public function inscriptionView($message = null) 
 	{
-		require './view/frontend/inscriptionView.php';
+		return $this->_view->render('frontend', 'inscriptionView', ['message' => $message]);
 	}
 
 	public function connexionView($message = null) 
 	{
-		require './view/frontend/connexionView.php';
+		return $this->_view->render('frontend', 'connexionView', ['message' => $message]);
 	}
 
 	public function newUser($pseudo, $pass, $email)
 	{
 		$activation_code = $this->_userManager->addUser($pseudo, $pass, $email);
-		var_dump($activation_code);
 		return $activation_code;
 	}
 
@@ -142,7 +145,7 @@ class UserController
 
 	public function forgotPassView($message = null)
 	{
-		require './view/frontend/forgotPassView.php';
+		return $this->_view->render('frontend', 'forgotPassView', ['message' => $message]);
 	}
 
 	public function newPassCode($email)
@@ -176,7 +179,7 @@ class UserController
 
 	public function newPassView($email, $message = null, $status)
 	{
-		require './view/frontend/newPassView.php';
+		return $this->_view->render('frontend', 'newPassView', ['message' => $message]);
 	}
 
 	public function newUserPass($email, $newPass)

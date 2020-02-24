@@ -1,4 +1,4 @@
-<?php $title = 'Erreur'; ?>
+<?php $this->_title = 'Erreur'; ?>
 
 
 
@@ -16,8 +16,5 @@
 </div>
 
 
-<?php $content = ob_get_clean(); ?>
+<?php $this->_content = ob_get_clean(); ?>
 
-
-
-<?php require 'view/frontend/frontend_login_template.php'; ?>

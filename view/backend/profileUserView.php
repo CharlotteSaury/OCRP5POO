@@ -1,10 +1,10 @@
 <!-- $title definition -->
 
-<?php $title = 'Admin - Profil utilisateur'; ?>
+<?php $this->_title = 'Admin - Profil utilisateur'; ?>
 
 <!-- Content title definition -->
 
-<?php $contentTitle = ''; ?>
+<?php $this->_contentTitle = ''; ?>
 
 <!-- $content definition -->
 
@@ -98,6 +98,4 @@
 </div>
 
                             
-<?php $content = ob_get_clean(); ?>
-
-<?php require 'backend_template.php'; ?>
+<?php $this->_content = ob_get_clean(); ?>

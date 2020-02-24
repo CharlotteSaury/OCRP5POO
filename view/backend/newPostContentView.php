@@ -1,10 +1,10 @@
 <!-- $title definition -->
 
-<?php $title = 'Admin - Ajouter un article'; ?>
+<?php $this->_title = 'Admin - Ajouter un article'; ?>
 
 <!-- Content title definition -->
 
-<?php $contentTitle = 'Ajouter un nouvel article'; ?>
+<?php $this->_contentTitle = 'Ajouter un nouvel article'; ?>
 
 <!-- $content definition -->
 
@@ -91,6 +91,5 @@
 
 
 
-<?php $content = ob_get_clean(); ?>
+<?php $this->_content = ob_get_clean(); ?>
 
-<?php require 'backend_template.php'; ?>
