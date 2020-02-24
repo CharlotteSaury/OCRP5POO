@@ -192,8 +192,7 @@ class Router
 
 					elseif ($_GET['action'] == 'inscriptionView')
 					{
-						$infos = new UserController();
-						$infos->inscriptionView();
+						$this->_userController->inscriptionView();
 					}
 
 					elseif ($_GET['action'] == 'inscription')
@@ -820,7 +819,7 @@ class Router
 						{
 							if (filter_var($newUserInfos['email'], FILTER_VALIDATE_EMAIL))
 							{
-								if (($infos->checkEmail($newUserInfos['email'], $newUserInfos['id'])) || ($infos->checkPseudo($newUserInfos['pseudo'], $newUserInfos['id'])))
+								if (($this->_userController->checkEmail($newUserInfos['email'], $newUserInfos['id'])) || ($this->_userController->checkPseudo($newUserInfos['pseudo'], $newUserInfos['id'])))
 								{
 									if ($this->_userController->checkEmail($newUserInfos['email'], $newUserInfos['id']))
 									{
@@ -1004,7 +1003,7 @@ class Router
 						$subject = $this->getParameter($_POST, 'subject');
 						$content = $this->getParameter($_POST, 'content');
 
-						$contactId = $infos->newContactForm($name, $email, $subject, $content);
+						$contactId = $this->_homeController->newContactForm($name, $email, $subject, $content);
 						$this->_homeController->mailContactForm($name, $email, $subject, $content, $contactId);
 
 						$message = "Votre message a bien été envoyé. Nous vous remercions et vous recontacterons dans les plus brefs délais.";
