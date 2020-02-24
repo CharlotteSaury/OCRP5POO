@@ -1,4 +1,4 @@
-<?php $this->_title = 'Titre post'; ?>
+<?php $this->_title = htmlspecialchars($postInfos[0]['title']); ?>
 
 
 <!-- $header definition -->

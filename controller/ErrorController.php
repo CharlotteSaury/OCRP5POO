@@ -2,23 +2,15 @@
 
 namespace controller;
 
-require_once './view/View.php';
+require_once './controller/Controller.php';
+use controller\Controller;
 
-use view\View;
-
-class ErrorController
+class ErrorController extends Controller
 
 {
-	private $_view;
-
-	public function __construct()
-	{
-		$this->_view = new View();
-	}
-
 	public function errorView($errorMessage) 
 	{
-		return $this->_view->render('frontend', 'errorView', ['errorMessage' => $errorMessage]);
+		return $this->view->render('frontend', 'errorView', ['errorMessage' => $errorMessage]);
 	}
 
 }
