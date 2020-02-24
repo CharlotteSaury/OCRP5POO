@@ -1,6 +1,7 @@
 <?php
 
-require_once('controller/Router.php');
+require_once 'controller/Router.php';
+require_once 'config/dev.php';
 
 use controller\Router;
 

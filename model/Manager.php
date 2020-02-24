@@ -2,8 +2,6 @@
 
 namespace model;
 
-include 'config.php';
-
 abstract class Manager
 {
 	private $_database;
