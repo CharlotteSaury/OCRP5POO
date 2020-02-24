@@ -2,10 +2,10 @@
 
 namespace controller;
 
-require_once 'controller/HomeController.php';
-require_once 'controller/PostController.php';
-require_once 'controller/AdminController.php';
-require_once 'controller/UserController.php';
+require_once 'Controller/HomeController.php';
+require_once 'Controller/PostController.php';
+require_once 'Controller/AdminController.php';
+require_once 'Controller/UserController.php';
 
 use controller\HomeController;
 use controller\PostController;
@@ -17,12 +17,16 @@ use Exception;
 class Router 
 {
 	private $_homeController,
-	$_postController;
+			$_postController,
+			$_userController,
+			$_adminController;
 
 	public function __construct()
 	{
 		$this->_homeController = new HomeController();
 		$this->_postController = new PostController();
+		$this->_userController = new UserController();
+		$this->_adminController = new AdminController();
 	}
 
 	private function getParameter($table, $name)
@@ -42,9 +46,8 @@ class Router
 		if (isset($_SESSION['id']))
 		{
 			$userId = htmlspecialchars($_SESSION['id']);
-			$infos = new UserController();
 
-			if ($infos->isAdmin($userId) || $infos->isSuperAdmin($userId))
+			if ($this->_userController->isAdmin($userId) || $this->_userController->isSuperAdmin($userId))
 			{
 				return true;
 			}
@@ -106,8 +109,7 @@ class Router
 
 	public function connexionAuto($email)
 	{
-		$infos = new UserController();
-		$infos->newUserSession($email);
+		$this->_userController->newUserSession($email);
 		$this->routerRequest();
 	}
 
@@ -147,8 +149,7 @@ class Router
 							$postsNb = 3;
 						}
 
-						$infos = new PostController();
-						$infos->listPostView($current_page, $postsNb);
+						$this->_postController->listPostView($current_page, $postsNb);
 					} 
 
 					elseif (($_GET['action'] == 'postView')) 
@@ -156,8 +157,7 @@ class Router
 						$postId = $this->getParameter($_GET, 'id');
 						if ($postId>0) 
 						{
-							$infos = new PostController();
-							$infos->postView($postId);
+							$this->_postController->postView($postId);
 						}
 						else 
 						{
@@ -171,33 +171,28 @@ class Router
 						$userId = $this->getParameter($_POST, 'userId');
 						$content = $this->getParameter($_POST, 'content');
 
-						$infos = new PostController();
-						$infos->addComment($postId, $userId, $content);
+						$this->_postController->addComment($postId, $userId, $content);
 						
 					}
 
 					elseif ($_GET['action'] == 'home') 
 					{
-						$infos = new HomeController();
-						$infos->indexView();
+						$this->_homeController->indexView();
 					}
 
 					elseif ($_GET['action'] == 'legalView') 
 					{
-						$infos = new HomeController();
-						$infos->legalView();
+						$this->_homeController->legalView();
 					}
 
 					elseif ($_GET['action'] == 'confidentiality') 
 					{
-						$infos = new HomeController();
-						$infos->confidentialityView();
+						$this->_homeController->confidentialityView();
 					}
 
 					elseif ($_GET['action'] == 'inscriptionView')
 					{
-						$infos = new UserController();
-						$infos->inscriptionView();
+						$this->_userController->inscriptionView();
 					}
 
 					elseif ($_GET['action'] == 'inscription')
@@ -207,8 +202,6 @@ class Router
 						$pass2 = $this->getParameter($_POST, 'pass2');
 						$email = $this->getParameter($_POST, 'email');
 
-						$infos = new UserController();
-
 						if (strlen($pseudo) < 25)
 						{
 							if (filter_var($email, FILTER_VALIDATE_EMAIL))
@@ -217,44 +210,44 @@ class Router
 								{
 									$pass = password_hash($pass1, PASSWORD_DEFAULT);
 
-									if (($infos->checkEmail($email)) || ($infos->checkPseudo($pseudo)) )
+									if (($this->_userController->checkEmail($email)) || ($this->_userController->checkPseudo($pseudo)) )
 									{
-										if ($infos->checkEmail($email))
+										if ($this->_userController->checkEmail($email))
 										{
 											$message = "Cet email est déjà associé à un compte. Essayez de vous connecter !";
-											$infos->connexionView($message);
+											$this->_userController->connexionView($message);
 										}
 										else
 										{
 											$message = "Ce pseudo n'est pas disponible. Merci d'en choisir un nouveau.";
-											$infos->inscriptionView($message);
+											$this->_userController->inscriptionView($message);
 										}								
 									}
 									else
 									{
-										$activation_code = $infos->newUser($pseudo, $pass, $email);
+										$activation_code = $this->_userController->newUser($pseudo, $pass, $email);
 										var_dump($activation_code);
-										$infos->sendEmailActivation($email, $pseudo, $activation_code);
+										$this->_userController->sendEmailActivation($email, $pseudo, $activation_code);
 										$message = 'Merci pour votre inscription ! Un email de confirmation vous a été envoyé afin de confirmer votre adresse email. Merci de vous reporter à cet email pour activer votre compte ! ';
-										$infos->inscriptionView($message);
+										$this->_userController->inscriptionView($message);
 									}
 								}
 								else
 								{
 									$message = 'Les mots de passe saisis sont différents ! ';
-									$infos->inscriptionView($message);
+									$this->_userController->inscriptionView($message);
 								}
 							}
 							else
 							{
 								$message = 'L\'adresse email n\'est pas valide !';
-								$infos->inscriptionView($message);
+								$this->_userController->inscriptionView($message);
 							}							
 						}
 						else
 						{
 							$message = 'Le pseudo ne doit pas dépasser 25 caractères ! ';
-							$infos->inscriptionView($message);
+							$this->_userController->inscriptionView($message);
 						}				
 
 					}
@@ -264,25 +257,23 @@ class Router
 					{
 						$email = $this->getParameter($_GET, 'email');
 						$key = $this->getParameter($_GET, 'key');
-						$infos = new UserController();
 
-						if ($infos->userActivated($email))
+						if ($this->_userController->userActivated($email))
 						{
 							$message = 'Votre compte est déjà activé, vous pouvez vous connecter ! ';
-							$infos->connexionView($message);
+							$this->_userController->connexionView($message);
 						}
 						else
 						{
-							$message = $infos->userActivation($email, $key);
-							$infos->connexionView($message);
+							$message = $this->_userController->userActivation($email, $key);
+							$this->_userController->connexionView($message);
 						}
 						
 					}
 
 					elseif ($_GET['action'] == 'connexionView')
 					{
-						$infos = new UserController();
-						$infos->connexionView();
+						$this->_userController->connexionView();
 					}
 
 					elseif ($_GET['action'] == 'connexion')
@@ -290,18 +281,16 @@ class Router
 						$email = $this->getParameter($_POST, 'email');
 						$pass = $this->getParameter($_POST, 'pass');
 
-						$infos = new UserController();
-
-						if ($infos->checkEmail($email))
+						if ($this->_userController->checkEmail($email))
 						{
-							if (!$infos->userActivated($email))
+							if (!$this->_userController->userActivated($email))
 							{
 								$message = 'Votre compte n\'est pas activé. Veuillez cliquer sur le lien d\'activation qui vous a été envoyé sur votre adresse email lors de votre inscription.';
-								$infos->connexionView($message);
+								$this->_userController->connexionView($message);
 							}
 							else
 							{
-								$user_pass = $infos->getPassword($email);
+								$user_pass = $this->_userController->getPassword($email);
 
 								if (password_verify($pass, $user_pass))
 								{
@@ -311,22 +300,21 @@ class Router
 										setcookie('auth', password_hash($email, PASSWORD_DEFAULT) . '-----' . password_hash($_SERVER['REMOTE_ADDR'], PASSWORD_DEFAULT), time() + 365*24*3600, null, null, false, true);
 									}
 
-									$infos->newUserSession($email);
+									$this->_userController->newUserSession($email);
 
-									$infos = new HomeController();
-									$infos->indexView();
+									$this->_homeController->indexView();
 								}
 								else
 								{
 									$message = "L'identifiant et/ou le mot de passe sont erronés.";
-									$infos->connexionView($message);
+									$this->_userController->connexionView($message);
 								}
 							}							
 						}				
 						else
 						{
 							$message = "L'adresse email saisie est inconnue";
-							$infos->connexionView($message);
+							$this->_userController->connexionView($message);
 						}
 						
 					}
@@ -339,33 +327,29 @@ class Router
 							session_destroy();
 							setcookie('auth', '', time()-3600, null, null, false, true);
 
-							$infos = new HomeController();
-							$infos->indexView();
+							$this->_homeController->indexView();
 						}
 						else
 						{
-							$infos = new HomeController();
-							$infos->indexView();
+							$this->_homeController->indexView();
 						}
 						
 					}
 
 					elseif ($_GET['action'] == 'forgotPassView')
 					{
-						$infos = new UserController();
-						$infos->forgotPassView();
+						$this->_userController->forgotPassView();
 					}
 
 					elseif ($_GET['action'] == 'forgotPassMail')
 					{
 						$email = $this->getParameter($_POST, 'email');
-						$infos = new UserController();
-
-						$reinit_code = $infos->newPassCode($email);
-						$infos->forgotPassMail($email, $reinit_code);
+						
+						$reinit_code = $this->_userController->newPassCode($email);
+						$this->_userController->forgotPassMail($email, $reinit_code);
 
 						$message = "Un email contenant un lien de réinitialisation de mot de passe a été envoyé à votre adresse email.";
-						$infos->forgotPassView($message);
+						$this->_userController->forgotPassView($message);
 					}
 
 					elseif ($_GET['action'] == 'newPassView')
@@ -373,19 +357,17 @@ class Router
 						$email = $this->getParameter($_GET, 'email');
 						$reinit_code = $this->getParameter($_GET, 'key');
 						
-						$infos = new UserController();
-
-						$user_reinit_code = $infos->getNewPassCode($email);
+						$user_reinit_code = $this->_userController->getNewPassCode($email);
 
 						if ($reinit_code != $user_reinit_code)
 						{
 							$message = 'La clé de réinitialization n\'est pas bonne, veuillez retourner sur votre mail.';
-							$infos->newPassView($email, $message, false);
+							$this->_userController->newPassView($email, $message, false);
 						}
 						else
 						{
 							$message = 'Veuillez entrer votre nouveau mot de passe';
-							$infos->newPassView($email, $message, true);
+							$this->_userController->newPassView($email, $message, true);
 						}
 					}
 
@@ -395,27 +377,24 @@ class Router
 						$pass1 = $this->getParameter($_POST, 'pass1');
 						$pass2 = $this->getParameter($_POST, 'pass2');
 						
-						$infos = new UserController();
-
 						if ($pass1 == $pass2)
 						{
 							$newPass = password_hash($pass1, PASSWORD_DEFAULT);
 							
-							$infos->newUserPass($email, $newPass);
+							$this->_userController->newUserPass($email, $newPass);
 							$message = 'Votre mot de passe a été réinitialisé. Vous pouvez maintenant vous connecter ! ';
-							$infos->connexionView($message);
+							$this->_userController->connexionView($message);
 						}
 						else
 						{
 							$message = 'Les mots de passe saisis sont différents ! ';
-							$infos->newPassView($email, $message, true);
+							$this->_userController->newPassView($email, $message, true);
 						}
 					}
 
 					elseif ($_GET['action'] == 'admin' && $this->adminAccess())
 					{
-						$infos = new AdminController();
-						$infos->dashboardView();
+						$this->_adminController->dashboardView();
 					}
 
 					elseif ($_GET['action'] == 'adminPosts' && $this->adminAccess())
@@ -467,13 +446,11 @@ class Router
 									$sortingDate = null;
 								}
 							}
-							$infos = new AdminController();
-							$infos->adminPostsView($message, $sorting, $sortingDate);	
+							$this->_adminController->adminPostsView($message, $sorting, $sortingDate);	
 						}
 						else
 						{
-							$infos = new AdminController();
-							$infos->adminPostsView();
+							$this->_adminController->adminPostsView();
 						}
 					}
 
@@ -481,20 +458,16 @@ class Router
 					{
 						$postId = $this->getParameter($_GET, 'id');
 						
-						$infos = new AdminController();
-						$infos->adminPostView($postId);
+						$this->_adminController->adminPostView($postId);
 					}
 
 					elseif ($_GET['action'] == 'adminNewPost' && $this->adminAccess())
 					{
-						$infos = new AdminController();
-						$infos->adminNewPostView();
+						$this->_adminController->adminNewPostView();
 					}
 
 					elseif ($_GET['action'] == 'newPostInfos' && $this->adminAccess())
 					{
-						$infos = new AdminController();
-
 						$title = $this->getParameter($_POST, 'title');
 						$chapo = $this->getParameter($_POST, 'chapo');
 						$userId = $this->getParameter($_POST, 'user_id');
@@ -505,17 +478,17 @@ class Router
 							if (strrpos($uploadResults, 'uploads') === false)
 							{
 								$message = $uploadResults;
-								$infos->adminNewPostView($message);
+								$this->_adminController->adminNewPostView($message);
 							}
 							else
 							{
 								$mainImage = $uploadResults;
-								$infos->NewPostInfos($title, $chapo, $userId, $mainImage);
+								$this->_adminController->NewPostInfos($title, $chapo, $userId, $mainImage);
 							}
 						}
 						else
 						{
-							$infos->NewPostInfos($title, $chapo, $userId, $mainImage = null);
+							$this->_adminController->NewPostInfos($title, $chapo, $userId, $mainImage = null);
 						}
 						
 					}
@@ -523,8 +496,7 @@ class Router
 					elseif ($_GET['action'] == 'editPostView' && $this->adminAccess())
 					{
 						$postId = $this->getParameter($_GET, 'id');
-						$infos = new AdminController();
-						$infos->editPostView($postId);
+						$this->_adminController->editPostView($postId);
 					}
 
 					elseif ($_GET['action'] == 'editPost' && $this->adminAccess())
@@ -532,30 +504,25 @@ class Router
 						if (isset($_POST['deleteMainPicture']))
 						{
 							$postId = $this->getParameter($_POST, 'postId');
-							$infos = new AdminController();
-							$infos->deleteMainPostPicture($postId);
+							$this->_adminController->deleteMainPostPicture($postId);
 						}
 						
 
 						elseif (isset($_POST['addParagraph']))
 						{
 							$postId = $this->getParameter($_POST, 'postId');
-							$infos = new AdminController();
-							$infos->addParagraph($postId);
+							$this->_adminController->addParagraph($postId);
 						}
 						
 						elseif (isset($_POST['addCategory']))
 						{
 							$category = $this->getParameter($_POST, 'categoryName');
 							$postId = $this->getParameter($_POST, 'postId');
-							$infos = new AdminController();
-							$infos->addCategory($postId, $category);
+							$this->_adminController->addCategory($postId, $category);
 						}
 
 						elseif (isset($_POST['updatePostInfos']))
 						{
-							$infos = new AdminController();
-
 							$newPostInfos = [];
 
 							foreach ($_POST as $key => $value)
@@ -573,19 +540,19 @@ class Router
 								{
 									$message = "Information(s) modifiée(s) \n 
 										/!\ Erreur de téléchargement de l'image principale : " . $uploadResults;
-									$infos->editPostInfos($newPostInfos, $message);
+									$this->_adminController->editPostInfos($newPostInfos, $message);
 								}
 								else
 								{
 									$newPostInfos['main_image'] = $uploadResults;
 									$message = "Information(s) modifiée(s) ! ";
-									$infos->editPostInfos($newPostInfos, $message);
+									$this->_adminController->editPostInfos($newPostInfos, $message);
 								}
 							}
 							else
 							{
 								$message = "Information(s) modifiée(s) ! ";
-								$infos->editPostInfos($newPostInfos, $message);
+								$this->_adminController->editPostInfos($newPostInfos, $message);
 							}
 
 						}
@@ -603,8 +570,7 @@ class Router
 								}
 							}
 
-							$infos = new AdminController();
-							$infos->editParagraph($postId, $newParagraphs);
+							$this->_adminController->editParagraph($postId, $newParagraphs);
 						}
 
 						elseif (isset($_POST['addPicture']))
@@ -612,18 +578,17 @@ class Router
 							$postId = $this->getParameter($_POST, 'postId');
 
 							$uploadResults = $this->pictureUpload($namePicture = 'picture');
-							$infos = new AdminController();
-
+							
 							if (strrpos($uploadResults, 'uploads') === false)
 							{
 								$message = $uploadResults;
-								$infos->editPostView($postId, $message);
+								$this->_adminController->editPostView($postId, $message);
 							}
 							else
 							{
-								$infos->addPicture($postId, $uploadResults);
+								$this->_adminController->addPicture($postId, $uploadResults);
 								$message = 'Image ajoutée !';
-								$infos->editPostView($postId, $message);
+								$this->_adminController->editPostView($postId, $message);
 							}
 						}
 
@@ -640,18 +605,17 @@ class Router
 							}
 
 							$uploadResults = $this->pictureUpload($namePicture = 'picture' . $contentId);
-							$infos = new AdminController();
-
+							
 							if (strrpos($uploadResults, 'uploads') === false)
 							{
 								$message = $uploadResults;
-								$infos->editPostView($postId, $message);
+								$this->_adminController->editPostView($postId, $message);
 							}
 							else
 							{
-								$infos->editPostPicture($postId, $contentId, $uploadResults);
+								$this->_adminController->editPostPicture($postId, $contentId, $uploadResults);
 								$message = 'Image modifiée !';
-								$infos->editPostView($postId, $message);
+								$this->_adminController->editPostView($postId, $message);
 							}
 						}
 					}
@@ -662,8 +626,7 @@ class Router
 						$postId = $this->getParameter($_GET, 'id');
 						$contentType = $this->getParameter($_GET, 'type');
 
-						$infos = new AdminController();
-						$infos->deleteContent($postId, $contentId, $contentType);
+						$this->_adminController->deleteContent($postId, $contentId, $contentType);
 
 					}
 
@@ -671,24 +634,22 @@ class Router
 					{
 						$categoryId = $this->getParameter($_GET, 'cat');
 						$postId = $this->getParameter($_GET, 'id');
-						$infos = new AdminController();
-						$infos->deleteCategory($postId, $categoryId);
+						$this->_adminController->deleteCategory($postId, $categoryId);
 					}
 
 					elseif ($_GET['action'] == 'publishPost' || ($_GET['action'] == 'publishPostDashboard') && $this->adminAccess())
 					{
 						$postId = $this->getParameter($_GET, 'id');
 						$status = $this->getParameter($_GET, 'status');
-						$infos = new AdminController();
-
+						
 						if ($_GET['action'] == 'publishPostDashboard')
 						{
 							$dashboard = 1;
-							$infos->publishPost($postId, $status, $dashboard);
+							$this->_adminController->publishPost($postId, $status, $dashboard);
 						}
 						else
 						{
-							$infos->publishPost($postId, $status);
+							$this->_adminController->publishPost($postId, $status);
 						}
 						
 					}
@@ -696,16 +657,15 @@ class Router
 					elseif (($_GET['action'] == 'deletePost') || ($_GET['action'] == 'deletePostDashboard') && $this->adminAccess())
 					{
 						$postId = $this->getParameter($_GET, 'id');
-						
-						$infos = new AdminController();						
+									
 						if ($_GET['action'] == 'deletePostDashboard')
 						{
 							$dashboard = 1;
-							$infos->deletePost($postId, $dashboard);
+							$this->_adminController->deletePost($postId, $dashboard);
 						}
 						else
 						{
-							$infos->deletePost($postId);
+							$this->_adminController->deletePost($postId);
 						}					
 					}
 
@@ -758,52 +718,48 @@ class Router
 									$sortingDate = null;
 								}
 							}
-							$infos = new AdminController();
-							$infos->adminCommentsView($message, $sorting, $sortingDate);	
+							$this->_adminController->adminCommentsView($message, $sorting, $sortingDate);	
 						}
 						else
 						{
-							$infos = new AdminController();
-							$infos->adminCommentsView();
+							$this->_adminController->adminCommentsView();
 						}
 					}
 
 					elseif (($_GET['action'] == 'approveComment') || ($_GET['action'] == 'approveCommentDashboard') || ($_GET['action'] == 'approveCommentView') && $this->adminAccess())
 					{
 						$commentId = $this->getParameter($_GET, 'id');
-						
-						$infos = new AdminController();						
+										
 						if ($_GET['action'] == 'approveCommentDashboard')
 						{
 							$view = 1;
-							$infos->approveComment($commentId, $view);
+							$this->_adminController->approveComment($commentId, $view);
 						}
 						elseif ($_GET['action'] == 'approveCommentView')
 						{
 							$view = 2;
 							$postId = $this->getParameter($_GET, 'post');
-							$infos->approveComment($commentId, $view, $postId);
+							$this->_adminController->approveComment($commentId, $view, $postId);
 						}
 
 						else
 						{
-							$infos->approveComment($commentId);
+							$this->_adminController->approveComment($commentId);
 						}					
 					}
 
 					elseif (($_GET['action'] == 'deleteComment') || ($_GET['action'] == 'deleteCommentDashboard') && $this->adminAccess())
 					{
 						$commentId = $this->getParameter($_GET, 'id');
-						
-						$infos = new AdminController();						
+										
 						if ($_GET['action'] == 'deleteCommentDashboard')
 						{
 							$dashboard = 1;
-							$infos->deleteComment($commentId, $dashboard);
+							$this->_adminController->deleteComment($commentId, $dashboard);
 						}
 						else
 						{
-							$infos->deleteComment($commentId);
+							$this->_adminController->deleteComment($commentId);
 						}					
 					}
 
@@ -825,15 +781,13 @@ class Router
 							$userRoleId = null;
 						}
 
-						$infos = new AdminController();
-						$infos->adminUsersView($userRoleId);
+						$this->_adminController->adminUsersView($userRoleId);
 					}
 
 					elseif ($_GET['action'] == 'profileUser')
 					{
 						$userId = $this->getParameter($_GET, 'id');
-						$infos = new AdminController();
-						$infos->profileUserView($userId);
+						$this->_adminController->profileUserView($userId);
 					}
 
 					elseif ($_GET['action'] == 'editUser')
@@ -843,8 +797,7 @@ class Router
 
 						if ($currentUserId == $userId || $this->adminAccess())
 						{
-							$infos = new AdminController();
-							$infos->editUserView($userId);
+							$this->_adminController->editUserView($userId);
 						}
 						else
 						{
@@ -862,26 +815,22 @@ class Router
 							$newUserInfos[$key] = $value;
 						}
 
-						$infos = new UserController();
-
 						if (strlen($newUserInfos['pseudo']) < 25)
 						{
 							if (filter_var($newUserInfos['email'], FILTER_VALIDATE_EMAIL))
 							{
-								if (($infos->checkEmail($newUserInfos['email'], $newUserInfos['id'])) || ($infos->checkPseudo($newUserInfos['pseudo'], $newUserInfos['id'])))
+								if (($this->_userController->checkEmail($newUserInfos['email'], $newUserInfos['id'])) || ($this->_userController->checkPseudo($newUserInfos['pseudo'], $newUserInfos['id'])))
 								{
-									if ($infos->checkEmail($newUserInfos['email'], $newUserInfos['id']))
+									if ($this->_userController->checkEmail($newUserInfos['email'], $newUserInfos['id']))
 									{
 										$message = "Cet email est déjà associé à un compte.";
 
-										$infos = new AdminController();
-										$infos->editUserView($newUserInfos['id'], $message);
+										$this->_adminController->editUserView($newUserInfos['id'], $message);
 									}
 									else
 									{
 										$message = "Ce pseudo n'est pas disponible. Merci d'en choisir un nouveau.";
-										$infos = new AdminController();
-										$infos->editUserView($newUserInfos['id'], $message);
+										$this->_adminController->editUserView($newUserInfos['id'], $message);
 									}								
 								}
 								else
@@ -897,22 +846,19 @@ class Router
 									if (empty($date))
 									{
 										unset($newUserInfos['birth_date']);
-										$infos = new AdminController();
-										$infos->deleteBirthDate($newUserInfos['id']);
+										$this->_adminController->deleteBirthDate($newUserInfos['id']);
 
 										$email = $newUserInfos['email'];
 										$userId = $newUserInfos['id'];
 										$currentUserId = $this->getParameter($_SESSION, 'id');	
 
-										$infos = new AdminController();
-										$infos->editUserInfos($newUserInfos);
+										$this->_adminController->editUserInfos($newUserInfos);
 
 										// Si l'utilisateur a modifié son propre profil, alors on modifie les variables de session
 
 										if ($currentUserId == $userId)
 										{
-											$infos = new UserController();
-											$infos->newUserSession($email);
+											$this->_userController->newUserSession($email);
 										}
 									}
 									else
@@ -921,14 +867,12 @@ class Router
 										if (!preg_match('#^([0-9]{2})(-)([0-9]{2})(-)([0-9]{4})$#' , $date)) // check date format (DD/MM/AAAA)
 										{
 											$message = "La date de naissance n'est pas dans le format autorisé.";
-											$infos = new AdminController();
-											$infos->editUserView($newUserInfos['id'], $message);
+											$this->_adminController->editUserView($newUserInfos['id'], $message);
 										}
 										elseif (!checkdate($checkDate[1], $checkDate[0], $checkDate[2]) || ($checkDate[2] < 1900 )) // check date validity
 										{
 											$message = "La date de naissance n'est pas valide.";
-											$infos = new AdminController();
-											$infos->editUserView($newUserInfos['id'], $message);
+											$this->_adminController->editUserView($newUserInfos['id'], $message);
 										}
 										else // date valide
 										{
@@ -939,15 +883,13 @@ class Router
 											$userId = $newUserInfos['id'];
 											$currentUserId = $this->getParameter($_SESSION, 'id');	
 
-											$infos = new AdminController();
-											$infos->editUserInfos($newUserInfos);
+											$this->_adminController->editUserInfos($newUserInfos);
 
 											// Si l'utilisateur a modifié son propre profil, alors on modifie les variables de session
 
 											if ($currentUserId == $userId)
 											{
-												$infos = new UserController();
-												$infos->newUserSession($email);
+												$this->_userController->newUserSession($email);
 											}
 
 										}
@@ -959,15 +901,13 @@ class Router
 							else
 							{
 								$message = 'L\'adresse email n\'est pas valide !';
-								$infos = new AdminController();
-								$infos->editUserView($message);
+								$this->_adminController->editUserView($message);
 							}							
 						}
 						else
 						{
 							$message = 'Le pseudo ne doit pas dépasser 25 caractères ! ';
-							$infos = new AdminController();
-							$infos->editUserView($message);
+							$this->_adminController->editUserView($message);
 						}	
 
 					}
@@ -976,19 +916,18 @@ class Router
 					{
 						$userId = $this->getParameter($_GET, 'id');
 						$uploadResults = $this->pictureUpload($namePicture = 'picture');
-						$infos = new AdminController();
 						
 						if (strrpos($uploadResults, 'uploads') === false)
 						{
 							$message = $uploadResults;
-							$infos->profileUserView($userId, $message);
+							$this->_adminController->profileUserView($userId, $message);
 						}
 						else
 						{
-							$infos->updateProfilePicture($userId, $uploadResults);
+							$this->_adminController->updateProfilePicture($userId, $uploadResults);
 							$message = 'Photo de profil modifiée !';
 
-							$infos->profileUserView($userId, $message);
+							$this->_adminController->profileUserView($userId, $message);
 
 						// Si l'utilisateur a modifié son propre profil, alors on modifie les variables de session
 
@@ -1049,13 +988,11 @@ class Router
 									$sortingDate = null;
 								}
 							}
-							$infos = new AdminController();
-							$infos->adminContactsView($message, $sorting, $sortingDate);	
+							$this->_adminController->adminContactsView($message, $sorting, $sortingDate);	
 						}
 						else
 						{
-							$infos = new AdminController();
-							$infos->adminContactsView();
+							$this->_adminController->adminContactsView();
 						}
 					}
 
@@ -1066,29 +1003,25 @@ class Router
 						$subject = $this->getParameter($_POST, 'subject');
 						$content = $this->getParameter($_POST, 'content');
 
-						$infos = new HomeController();
-
-						$contactId = $infos->newContactForm($name, $email, $subject, $content);
-						$infos->mailContactForm($name, $email, $subject, $content, $contactId);
+						$contactId = $this->_homeController->newContactForm($name, $email, $subject, $content);
+						$this->_homeController->mailContactForm($name, $email, $subject, $content, $contactId);
 
 						$message = "Votre message a bien été envoyé. Nous vous remercions et vous recontacterons dans les plus brefs délais.";
-						$infos->indexView($message);
+						$this->_homeController->indexView($message);
 					}
 
 					elseif ($_GET['action'] == 'contactView' && $this->adminAccess())
 					{
 						$contactId = $this->getParameter($_GET, 'id');
 						
-						$infos = new AdminController();
-						$infos->adminContactView($contactId);
+						$this->_adminController->adminContactView($contactId);
 					}
 
 					elseif (($_GET['action'] == 'deleteContact') && $this->adminAccess())
 					{
 						$contactId = $this->getParameter($_GET, 'id');
 						
-						$infos = new AdminController();						
-						$infos->deleteContact($contactId);				
+						$this->_adminController->deleteContact($contactId);				
 					}
 
 					elseif (($_GET['action'] == 'answer') && $this->adminAccess())
@@ -1098,12 +1031,11 @@ class Router
 						$email = $this->getParameter($_POST, 'email');
 						$answerContent = $this->getParameter($_POST, 'answerContent');
 						
-						$infos = new AdminController();
-						$infos->addAnswer($contactId, $answerSubject, $answerContent);
-						$infos->adminAnswerEmail($contactId, $answerSubject, $answerContent, $email);
+						$this->_adminController->addAnswer($contactId, $answerSubject, $answerContent);
+						$this->_adminController->adminAnswerEmail($contactId, $answerSubject, $answerContent, $email);
 
 						$message = "La réponse a bien été envoyée.";
-						$infos->adminContactView($contactId, $message);  			
+						$this->_adminController->adminContactView($contactId, $message);  			
 					}
 
 					else 
@@ -1116,15 +1048,13 @@ class Router
 
 				else
 				{
-					$infos = new HomeController();
-					$infos->indexView();
+					$this->_homeController->indexView();
 				}
 			} 
 
 			else 
 			{
-				$infos = new HomeController();
-				$infos->indexView();
+				$this->_homeController->indexView();
 			}
 
 		}
