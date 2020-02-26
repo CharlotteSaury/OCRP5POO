@@ -2,6 +2,21 @@
 
 namespace model;
 
+require_once 'entity/Post.php';
+require_once 'entity/Content.php';
+require_once 'entity/User.php';
+require_once 'entity/Contact.php';
+require_once 'entity/Answer.php';
+require_once 'entity/Comment.php';
+
+use entity\Post;
+use entity\Content;
+use entity\User;
+use entity\Contact;
+use entity\Answer;
+use entity\Comment;
+
+
 abstract class Manager
 {
 	private $_database;

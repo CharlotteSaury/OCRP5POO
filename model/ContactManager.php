@@ -3,11 +3,6 @@
 namespace model;
 
 require_once 'model/Manager.php';
-require_once 'entity/Contact.php';
-require_once 'entity/Answer.php';
-
-use entity\Contact;
-use entity\Answer;
 
 class ContactManager extends Manager
 {

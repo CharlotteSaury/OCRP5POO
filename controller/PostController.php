@@ -13,8 +13,8 @@ class PostController extends Controller
 		$publishedPostsNb = $this->postManager->getPublishedPostsNb();
 		$page_number = $this->postManager->getPagination($postsPerPage, $publishedPostsNb);
 		$first_post = $this->postManager->getFirstPost($current_page, $postsPerPage);
-		$posts = $this->postManager->getPosts($first_post, $postsPerPage);
-		$recentPosts = $this->postManager->getRecentPosts(1);
+		$posts = $this->postManager->getPosts(2, $first_post, $postsPerPage);
+		$recentPosts = $this->postManager->getRecentPosts(2);
 		$categories = $this->postManager->getCategories();
 		
 		return $this->view->render('frontend', 'postListView', 
@@ -27,17 +27,16 @@ class PostController extends Controller
 
 	public function postView($postId, $messageComment = null)
 	{
-		$postInfos = $this->postManager->getPostInfos($postId);
-		$postContents = $this->postManager->getPostContents($postId);
+		$post = $this->postManager->getPostInfos($postId);
+		$post->setCategories($this->postManager->getPostCategories($postId));
+		$contents = $this->contentManager->getPostContents($postId);
 		$postComments = $this->commentManager->getpostComments($postId, 1);
-		$postCategories = $this->postManager->getPostCategories($postId);
-		$recentPosts = $this->postManager->getRecentPosts(1);
+		$recentPosts = $this->postManager->getRecentPosts(2);
 		
 		return $this->view->render('frontend', 'postView', ['postId' => $postId,
-			'postInfos' => $postInfos,
-			'postContents' => $postContents,
+			'post' => $post,
+			'contents' => $contents,
 			'postComments' => $postComments,
-			'postCategories' => $postCategories,
 			'recentPosts' => $recentPosts,
 			'messageComment' => $messageComment]
 			);

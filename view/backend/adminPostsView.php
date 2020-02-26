@@ -72,9 +72,9 @@
 
                 <?php
 
-                while ($donnees = $allPosts->fetch())
+                foreach ($posts as $post)
                 {
-                    if ($donnees['approvedCommentsNb'] != $donnees['commentsNb'])
+                    if ($post->approvedCommentsNb() != $post->commentsNb())
                     {
                         echo '<tr class="table-success-custom">';
                     }
@@ -84,14 +84,14 @@
                     }
                 ?>
                 
-                    <th scope="row"><?= htmlspecialchars($donnees['postId']); ?></th>
+                    <th scope="row"><?= htmlspecialchars($post->id()); ?></th>
 
                     <?php 
-                    if ($donnees['status'] == 1)
+                    if ($post->status() == 2)
                     {
                     ?>
 
-                    <td><a href="index.php?action=publishPost&amp;id=<?= htmlspecialchars($donnees['postId']); ?>&amp;status=<?= htmlspecialchars($donnees['status']); ?>" title="Ne plus publier"><i class="fas fa-toggle-on"></i></a></td>
+                    <td><a href="index.php?action=publishPost&amp;id=<?= htmlspecialchars($post->id()); ?>&amp;status=<?= htmlspecialchars($post->status()); ?>" title="Ne plus publier"><i class="fas fa-toggle-on"></i></a></td>
                     
                     <?php
                     }
@@ -99,55 +99,52 @@
                     {
                     ?>
 
-                    <td><a href="index.php?action=publishPost&amp;id=<?= htmlspecialchars($donnees['postId']); ?>&amp;status=<?= htmlspecialchars($donnees['status']); ?>" title="Publier"><i class="fas fa-toggle-off"></i></a></td>
+                    <td><a href="index.php?action=publishPost&amp;id=<?= htmlspecialchars($post->id()); ?>&amp;status=<?= htmlspecialchars($post->status()); ?>" title="Publier"><i class="fas fa-toggle-off"></i></a></td>
                     
                     <?php
                     }
                     ?>
 
                     <td>
-                        <a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($donnees['postId']); ?>"><?= htmlspecialchars($donnees['title']); ?></a>
+                        <a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($post->id()); ?>"><?= htmlspecialchars($post->title()); ?></a>
                         <hr class="postlist-divider">
-                        <a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($donnees['postId']); ?>" class="btn btn-outline-dark btn-sm" title="Voir">
+                        <a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($post->id()); ?>" class="btn btn-outline-dark btn-sm" title="Voir">
                             <i class="fas fa-eye"></i>
                         </a>
-                        <a href="index.php?action=editPostView&amp;id=<?= htmlspecialchars($donnees['postId']); ?>" class="btn btn-outline-dark btn-sm" title="Modifier">
+                        <a href="index.php?action=editPostView&amp;id=<?= htmlspecialchars($post->id()); ?>" class="btn btn-outline-dark btn-sm" title="Modifier">
                             <i class="fas fa-pencil-alt"></i>
                         </a>
-                        <a data-toggle="modal" data-target="#deletePostModal<?= htmlspecialchars($donnees['postId']); ?>" class="btn btn-outline-dark btn-sm" title="Supprimer">
+                        <a data-toggle="modal" data-target="#deletePostModal<?= htmlspecialchars($post->id()); ?>" class="btn btn-outline-dark btn-sm" title="Supprimer">
                             <i class="fas fa-trash-alt"></i>
                         </a>
                     </td>
-                    <td class="responsive-table-custom"><?= htmlspecialchars($donnees['first_name']); ?> <?= substr(htmlspecialchars($donnees['last_name']),0,1); ?></td>
+                    <td class="responsive-table-custom"><?= htmlspecialchars($post->pseudo()); ?></td>
                     <td class="responsive-table-custom">
-                        <?= substr(htmlspecialchars($donnees['chapo']), 0, 50); ?>
+                        <?= substr(htmlspecialchars($post->chapo()), 0, 50); ?>
                         
-                        <?php
-
-                        if (array_key_exists($donnees['postId'], $allPostsCategories))
-                        {
-                            echo '<hr class="postlist-divider">';
-                            echo 'Catégorie(s) :';
-                        
-
-                            $postCategories = $allPostsCategories[$donnees['postId']];
-
-                            foreach ($postCategories AS $key => $value)
-                            {
-                                echo '<a class="btn btn-outline-secondary ml-2" href="">' . $value . '</a>';
-                            }
-                        }
-                        
+                    <?php
+                    if ($post->categories() != null)
+                    {
                         ?>
+                        <hr class="postlist-divider">
+                        <p>Catégorie(s) :</p>
+                    
+                        <?php
+                        foreach ($post->categories() as $category)
+                        {
+                            echo '<a class="btn btn-outline-secondary ml-2" href="">' . $category['name'] . '</a>';
+                        }
+                    }
+                    ?>
 
                         
                     </td>
-                    <td><?= htmlspecialchars($donnees['date_creation']); ?></td>
-                    <td class="responsive-table-custom"><?= htmlspecialchars($donnees['approvedCommentsNb']); ?>/<?= htmlspecialchars($donnees['commentsNb']); ?></td>
+                    <td><?= htmlspecialchars($post->dateCreation()); ?></td>
+                    <td class="responsive-table-custom"><?= htmlspecialchars($post->approvedCommentsNb()); ?>/<?= htmlspecialchars($post->commentsNb()); ?></td>
                     
                 </tr>
                 <!-- deletePost Modal-->
-                <div class="modal fade" id="deletePostModal<?= htmlspecialchars($donnees['postId']); ?>" tabindex="-1" role="dialog" aria-labelledby="deletePostLabel" aria-hidden="true">
+                <div class="modal fade" id="deletePostModal<?= htmlspecialchars($post->id()); ?>" tabindex="-1" role="dialog" aria-labelledby="deletePostLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -159,7 +156,7 @@
                             <div class="modal-body">Cliquez sur "Valider" pour supprimer définitivement ce post</div>
                             <div class="modal-footer">
                                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                <a class="btn btn-primary-custom" href="index.php?action=deletePost&amp;id=<?= htmlspecialchars($donnees['postId']); ?>">Valider</a>
+                                <a class="btn btn-primary-custom" href="index.php?action=deletePost&amp;id=<?= htmlspecialchars($post->id()); ?>">Valider</a>
                             </div>
                         </div>
                     </div>
@@ -167,7 +164,6 @@
 
                 <?php
                 }
-                $allPosts->closeCursor();
                 ?>
                 
             </tbody>

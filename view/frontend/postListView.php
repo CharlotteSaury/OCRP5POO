@@ -38,7 +38,7 @@
 
             <?php
 
-            while ($donnees = $posts->fetch())
+            foreach ($posts as $post)
             {
 
             ?>
@@ -48,29 +48,29 @@
                     <div class="d-flex flex-md-row flex-column">
 
                         <?php
-                        if ($donnees['main_image'] != null)
+                        if ($post->mainImage() != null)
                         {
                         ?>
-                            <div class="post-list-picture col-md-4 col-12" style="background-image: url('<?= htmlspecialchars($donnees['main_image']); ?>');">     
+                            <div class="post-list-picture col-md-4 col-12" style="background-image: url('<?= htmlspecialchars($post->mainImage()); ?>')">     
                             </div>
                         <?php
                         }
                         ?>
                         
                         <div class="post-chapo col-md-8 col-12 text-center text-lg-left ml-md-3 pt-4">
-                            <h4 class="text-white"><?= htmlspecialchars($donnees['title']); ?></h4>
-                            <p class="mb-0 text-white-50"><?= substr(htmlspecialchars($donnees['chapo']), 0, 200); ?>... - <a href="index.php?action=postView&amp;id=<?= $donnees['postId']; ?>">En savoir plus</a></p>
+                            <h4 class="text-white"><?= htmlspecialchars($post->title()); ?></h4>
+                            <p class="mb-0 text-white-50"><?= substr(htmlspecialchars($post->chapo()), 0, 200); ?>... - <a href="index.php?action=postView&amp;id=<?= $post->id(); ?>">En savoir plus</a></p>
                             <hr class="d-none d-lg-block mb-0 ml-0">
                         </div>
                     </div>
                         
                     <div class="post-author d-flex mt-4 align-items-center">
-                        <div class="avatar mr-3" style="background-image: url('<?= htmlspecialchars($donnees['avatar']); ?>');">
+                        <div class="avatar mr-3" style="background-image: url('<?= htmlspecialchars($post->avatar()); ?>')">
                         </div>
                         <div class="text-white-50 posts-informations">
-                            <p class="mb-0">Posté par <strong><?= htmlspecialchars($donnees['first_name']) . ' ' . htmlspecialchars($donnees['last_name']); ?></strong></p>
-                            <p class="mb-0">le <?= $donnees['date_creation']; ?></p>
-                            <p class="mb-0">Dernière modification le <?= $donnees['date_update']; ?></p>
+                            <p class="mb-0">Posté par <strong><?= htmlspecialchars($post->pseudo()); ?></strong></p>
+                            <p class="mb-0">le <?= $post->dateCreation(); ?></p>
+                            <p class="mb-0">Dernière modification le <?= $post->dateUpdate(); ?></p>
                         </div>
                     </div>
                 </div>
@@ -79,9 +79,6 @@
             <?php
 
             }
-
-            $posts->closeCursor();
-
             ?>
 
             <!-- Post list navigation -->
@@ -206,15 +203,14 @@
                 <h4 class="mb-4">Articles récents</h4>
                 <div class="recent-post">
                     <?php
-                    while ($donnees = $recentPosts -> fetch())
+                    foreach ($recentPosts as $post)
                     {
                     ?>
-                        <h5><?= htmlspecialchars($donnees['title']); ?><em>(posté le <?= $donnees['date_creation']; ?>)</em></h5>
-                        <p><?= substr(htmlspecialchars($donnees['chapo']), 0, 30);?>... - <a href="index.php?action=postView&amp;id=<?= htmlspecialchars($donnees['postId']); ?>">En savoir plus</a></p>
+                        <h5><?= htmlspecialchars($post->title()); ?><em>(posté le <?= $post->dateCreation(); ?>)</em></h5>
+                        <p><?= substr(htmlspecialchars($post->chapo()), 0, 30);?>... - <a href="index.php?action=postView&amp;id=<?= htmlspecialchars($post->id()); ?>">En savoir plus</a></p>
 
                     <?php
                     }
-                    $recentPosts -> closeCursor();
                     ?>                      
                 </div>
             </div>

@@ -9,27 +9,15 @@
     <div class="container d-flex h-100 align-items-end">
         <div class="mx-auto text-center">
 
-            <h1 class="mx-auto my-0 text-uppercase"><?= htmlspecialchars($postInfos[0]['title']); ?></h1>
+            <h1 class="mx-auto my-0 text-uppercase"><?= htmlspecialchars($post->title()); ?></h1>
             <div class="d-flex mt-4 align-items-center">
-                <div class="avatar mr-3" style="background-image: url('<?= htmlspecialchars($postInfos[0]['avatar']); ?>');">
+                <div class="avatar mr-3" style="background-image: url('<?= htmlspecialchars($post->avatar()); ?>');">
                 </div>
                 <div class="text-white-50 posts-informations">
-                    <p class="mb-0">Posté par 
-                        <strong>
-                        <?php
-                        if (isset($postInfos[0]['first_name'], $postInfos[0]['last_name']))
-                        {
-                            echo htmlspecialchars($postInfos[0]['first_name']) . ' ' . htmlspecialchars($postInfos[0]['last_name']);
-                        }
-                        else
-                        {
-                            echo htmlspecialchars($postInfos[0]['pseudo']);
-                        }
-                        ?>
-                        </strong>
+                    <p class="mb-0">Posté par <strong><?= htmlspecialchars($post->pseudo()); ?></strong>
                     </p>
-                    <p class="mb-0">le <?= $postInfos[0]['date_creation']; ?></p>
-                    <p class="mb-0">Dernière modification le <?= $postInfos[0]['date_update']; ?></p>
+                    <p class="mb-0">le <?= $post->dateCreation(); ?></p>
+                    <p class="mb-0">Dernière modification le <?= $post->dateUpdate(); ?></p>
                 </div>
             </div>
           </div>
@@ -57,28 +45,28 @@
             <!-- Post  content -->
             <div class="post-content col-sm-10 mx-auto mb-5">
                
-                <h2 class="mb-4"><?= htmlspecialchars($postInfos[0]['title']); ?></h2>
+                <h2 class="mb-4"><?= htmlspecialchars($post->title()); ?></h2>
                 <hr class="d-none d-lg-block ml-0">
 
-                <p><?= htmlspecialchars($postInfos[0]['chapo']); ?></p>
+                <p><?= htmlspecialchars($post->chapo()); ?></p>
 
                 <?php
 
-                    if ($postInfos[0]['main_image'] != null)
+                    if ($post->mainImage() != null)
                     {
                     ?>
-                        <div class="post-picture my-3" style="background-image: url('<?= htmlspecialchars($postInfos[0]['main_image']); ?>');">     
+                        <div class="post-picture my-3" style="background-image: url('<?= htmlspecialchars($post->mainImage()); ?>');">     
                         </div>
                     <?php
                     } 
 
-                while ($donnees = $postContents->fetch())
+                foreach ($contents as $content)
                 {
 
-                    if (($donnees['content_type'] == 1)) 
+                    if ($content->contentTypeId() == 1) 
                     {
                     ?>
-                        <div class="post-picture my-3" style="background-image: url('<?= htmlspecialchars($donnees['content']); ?>');">     
+                        <div class="post-picture my-3" style="background-image: url('<?= htmlspecialchars($content->content()); ?>');">     
                         </div>
 
                     <?php
@@ -87,12 +75,11 @@
                     {
                     ?> 
                         <div class="post-content post-content-text text-black-50 text-justify">
-                            <p><?= htmlspecialchars($donnees['content']); ?></p>
+                            <p><?= htmlspecialchars($content->content()); ?></p>
                         </div>                        
                 <?php
                     }
                 }
-                $postContents->closeCursor();
                 ?>
             </div>
 
@@ -169,38 +156,45 @@
 
         <div class="blog-right-col col-lg-3 col-sm-10 pl-3 mx-auto">
 
-            <div class="blog-right-col-div mb-5">
-                <h4 class="mb-4">Catégories</h4>
-                <div>
+            <?php
+            if ($post->categories() != null)
+            {
+               ?>
+                <div class="blog-right-col-div mb-5">
+                    <h4 class="mb-4">Catégories</h4>
+                    <div>
 
                     <?php
-                    while ($donnees = $postCategories->fetch())
-                    {
-                    ?>
+                        foreach($post->categories() as $category)
+                        {
+                            ?>
 
-                    <a class="btn btn-outline-secondary" href="#"><?= htmlspecialchars($donnees['categoryName']); ?></a>
+                            <a class="btn btn-outline-secondary" href="#"><?= htmlspecialchars($category['name']); ?></a>
 
-                    <?php
-                    }
-                    $postCategories -> closeCursor();
+                            <?php
+                        }
                     ?> 
 
+                    </div>
                 </div>
-            </div>
+
+               <?php 
+            }
+            ?>
+            
 
             <div class="blog-right-col-div recent-posts mb-5">
                 <h4 class="mb-4">Articles récents</h4>
                 <div class="recent-post">
                     <?php
-                    while ($donnees = $recentPosts -> fetch())
+                    foreach ($recentPosts as $post)
                     {
                     ?>
-                        <h5><?= htmlspecialchars($donnees['title']); ?><em>(posté le <?= $donnees['date_creation']; ?>)</em></h5>
-                        <p><?= substr(htmlspecialchars($donnees['chapo']), 0, 30);?>... - <a href="index.php?action=postView&amp;id=<?= htmlspecialchars($donnees['postId']); ?>">En savoir plus</a></p>
+                        <h5><?= htmlspecialchars($post->title()); ?><em>(posté le <?= $post->dateCreation(); ?>)</em></h5>
+                        <p><?= substr(htmlspecialchars($post->chapo()), 0, 30);?>... - <a href="index.php?action=postView&amp;id=<?= htmlspecialchars($post->id()); ?>">En savoir plus</a></p>
 
                     <?php
                     }
-                    $recentPosts -> closeCursor();
                     ?>                      
                 </div>
             </div>
