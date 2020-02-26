@@ -17,7 +17,7 @@ class AdminController extends Controller
 		$usersNb = $this->userManager->getUserNb();
 		$recentPosts = $this->postManager->getRecentPosts();
 		$recentComments = $this->commentManager->getComments(5);
-		$recentUsers = $this->userManager->getUsers(5);
+		$users = $this->userManager->getUsers(5);
 		$unreadContactsNb = $this->contactManager->getUnreadContactsNb();
 
 		return $this->view->render('backend', 'dashboardView', [
@@ -29,7 +29,7 @@ class AdminController extends Controller
 			'usersNb' => $usersNb,
 			'recentPosts' => $recentPosts,
 			'recentComments' => $recentComments,
-			'recentUsers' => $recentUsers,
+			'users' => $users,
 			'unreadContactsNb' => $unreadContactsNb]);
 	}
 
@@ -66,7 +66,7 @@ class AdminController extends Controller
 	{
 		$postInfos = $this->postManager->getPostInfos($postId);
 		$postContents = $this->postManager->getPostContents($postId);
-		$postComments = $this->commentManager->getpostComments($postId);
+		$postComments = $this->commentManager->getPostComments($postId);
 		$postCategories = $this->postManager->getPostCategories($postId);		
 		$unreadContactsNb = $this->contactManager->getUnreadContactsNb();
 
@@ -212,6 +212,7 @@ class AdminController extends Controller
 	public function deletePost($postId, $dashboard = null)
 	{
 		$this->postManager->deletePost($postId);
+		$this->commentManager->deleteCommentsFromPost($postId);
 		$message = "Post supprimé ! ";
 
 		if ($dashboard != null)
@@ -314,10 +315,7 @@ class AdminController extends Controller
 			$contentTitle = 'Tous les Utilisateurs';
 		}
 		
-
-
-		$usersActivity = 1;
-		$allUsers = $this->userManager->getUsers(null, $usersActivity, $userRoleId);
+		$users = $this->userManager->getUsers(null, $userRoleId);
 		$unreadContactsNb = $this->contactManager->getUnreadContactsNb();
 		
 		return $this->view->render('backend', 'adminUsersView', ['allUsersNb' => $allUsersNb,
@@ -325,20 +323,16 @@ class AdminController extends Controller
 			'adminNb' => $adminNb,
 			'usersNb' => $usersNb,
 			'contentTitle' => $contentTitle,
-			'allUsers' => $allUsers,
+			'users' => $users,
 			'unreadContactsNb' => $unreadContactsNb]);
 	}
 
 	public function profileUserView($userId, $message = null)
 	{
-		$userInfos = $this->userManager->getUserInfos($userId);
-		$userPostsNb = $this->userManager->getUserPostsNb($userId);
-		$userCommentsNb = $this->userManager->getUserCommentsNb($userId);
+		$user = $this->userManager->getUser($userId);
 		$unreadContactsNb = $this->contactManager->getUnreadContactsNb();
 
-		return $this->view->render('backend', 'profileUserView', ['userInfos' => $userInfos,
-			'userPostsNb' => $userPostsNb,
-			'userCommentsNb' => $userCommentsNb,
+		return $this->view->render('backend', 'profileUserView', ['user' => $user,
 			'unreadContactsNb' => $unreadContactsNb,
 			'userId' => $userId,
 			'message' => $message]);
@@ -346,10 +340,10 @@ class AdminController extends Controller
 
 	public function editUserView($userId, $message = null)
 	{
-		$userInfos = $this->userManager->getUserInfos($userId);
+		$user = $this->userManager->getUser($userId);
 		$unreadContactsNb = $this->contactManager->getUnreadContactsNb();
 
-		return $this->view->render('backend', 'editUserView', ['userInfos' => $userInfos,
+		return $this->view->render('backend', 'editUserView', ['user' => $user,
 			'unreadContactsNb' => $unreadContactsNb,
 			'userId' => $userId,
 			'message' => $message]);
@@ -370,9 +364,12 @@ class AdminController extends Controller
 
 	public function updateProfilePicture($userId, $avatarUrl)
 	{
-		$userInfos = $this->userManager->getUserInfos($userId);
-		$oldAvatarUrl = $userInfos[0]['avatar'];
-		unlink($oldAvatarUrl);
+		$user = $this->userManager->getUser($userId);
+		$oldAvatarUrl = $user->avatar();
+		if ($oldAvatarUrl != 'public/images/profile.png')
+		{
+			unlink($oldAvatarUrl);
+		}
 
 		$this->userManager->updateProfilePicture($userId, $avatarUrl);
 	}
@@ -403,26 +400,26 @@ class AdminController extends Controller
 
 	public function adminContactView($contactId, $message = null)
 	{
-		$contactInfos = $this->contactManager->getContacts($contactId);
-		$currentStatus = $this->contactManager->getContactStatus($contactId);
+		$contact = $this->contactManager->getContacts($contactId);
+		$currentStatus = $contact->statusId();
 		
 		if ($currentStatus != 3 )
 		{
-			$answerInfos = null;
+			$answer = null;
 			$this->contactManager->updateStatus($contactId, 2);
 		}
 		else
 		{
-			$answerInfos = $this->contactManager->getAnswer($contactId);
+			$answer = $this->contactManager->getAnswer($contactId);
 		}
 		
 		$unreadContactsNb = $this->contactManager->getUnreadContactsNb();
 		
 		return $this->view->render('backend', 'adminContactView', ['contactId' => $contactId,
 			'message' => $message,
-			'contactInfos' => $contactInfos,
+			'contact' => $contact,
 			'currentStatus' => $currentStatus,
-			'answerInfos' => $answerInfos,
+			'answer' => $answer,
 			'unreadContactsNb' => $unreadContactsNb]);
 	}
 
@@ -436,18 +433,17 @@ class AdminController extends Controller
 
 	public function adminAnswerEmail($contactId, $answerSubject, $answerContent, $email)
 	{
-		$contactInfos = $this->contactManager->getContacts($contactId);
-		$contactInfos = $contactInfos->fetchAll(\PDO::FETCH_ASSOC);
+		$contact = $this->contactManager->getContacts($contactId);
 
 		$subject = $answerSubject;
 		$headers = "From: " . BLOG_AUTHOR . "/r/n";
 		$message = $answerContent . 
 					" /r/n
 					----------------/r/n/r/n
-					De: " . $contactInfos[0]['name'] . " <" . $email . ">/r/n
-					Le: " . $contactInfos[0]['date_message'] . "/r/n
-					Objet: " . $contactInfos[0]['subject'] . "/r/n/r/n"
-					. $contactInfos[0]['content'];
+					De: " . $contact->name() . " <" . $email . ">/r/n
+					Le: " . $contact->dateMessage() . "/r/n
+					Objet: " . $contact->subject() . "/r/n/r/n"
+					. $contact->content();
 			
 
 		$message = wordwrap($message, 70, "\r\n");
@@ -456,6 +452,7 @@ class AdminController extends Controller
 
 	public function addAnswer($contactId, $answerSubject, $answerContent)
 	{
+		$contact = $this->contactManager->getContacts($contactId);
 		$this->contactManager->updateStatus($contactId, 3);   
 		$this->contactManager->addAnswer($contactId, $answerSubject, $answerContent);
 	}

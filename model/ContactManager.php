@@ -3,6 +3,11 @@
 namespace model;
 
 require_once 'model/Manager.php';
+require_once 'entity/Contact.php';
+require_once 'entity/Answer.php';
+
+use entity\Contact;
+use entity\Answer;
 
 class ContactManager extends Manager
 {
@@ -29,14 +34,13 @@ class ContactManager extends Manager
 	
 	public function getContacts($contactId = null, $status = null, $sortingDate = null)
 	{
-		$sql = 'SELECT contact_form.id AS contactId, 
+		$sql = 'SELECT contact_form.id AS id, 
 			contact_form.name AS name, 
 			contact_form.email AS email, 
 			contact_form.subject AS subject, 
 			contact_form.content AS content, 
 			contact_status.id AS statusId,
-			contact_status.name AS status,
-			DATE_FORMAT(contact_form.date_message, \'%d-%m-%Y à %Hh%i \') AS date_message
+			DATE_FORMAT(contact_form.date_message, \'%d-%m-%Y à %Hh%i \') AS dateMessage
 			FROM contact_form 
 			JOIN contact_status ON contact_form.contact_status_id = contact_status.id';
 
@@ -51,6 +55,9 @@ class ContactManager extends Manager
 			$req = $this->dbRequest($sql, array($contactId));
 			$req->bindValue('contactId', $contactId, \PDO::PARAM_INT);
 			$req->execute();
+			$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\entity\Contact');
+		
+			$contacts = $req->fetch();
 		}
 		else
 		{
@@ -63,9 +70,12 @@ class ContactManager extends Manager
 				$sql .= ' ORDER BY contact_form.date_message DESC';
 			}
 			$req = $this->dbRequest($sql);
+			$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\entity\Contact');
+		
+			$contacts = $req->fetchAll();
 		}
 
-		return $req;
+		return $contacts;
 	}
 
 	public function addNewContact($name, $email, $subject, $content)
@@ -86,21 +96,6 @@ class ContactManager extends Manager
 		$donnees = $req->fetch(\PDO::FETCH_ASSOC);
 		$contactId = $donnees['contactId'];
 		return $contactId;
-	}
-
-	public function getContactStatus($contactId)
-	{
-		$sql = 'SELECT contact_status.id AS statusId
-			FROM contact_status 
-			JOIN contact_form ON contact_form.contact_status_id = contact_status.id
-			WHERE contact_form.id = :contactId';
-
-		$req = $this->dbRequest($sql, array($contactId));
-		$req->bindValue('contactId', $contactId, \PDO::PARAM_INT);
-		$req->execute();
-		$donnees = $req->fetch(\PDO::FETCH_ASSOC);
-		
-		return $donnees['statusId'];
 	}
 
 	public function updateStatus($contactId, $status)
@@ -147,9 +142,11 @@ class ContactManager extends Manager
 
 	public function getAnswer($contactId)
 	{
-		$sql = 'SELECT answer.subject AS subject,
+		$sql = 'SELECT answer.id AS id,
+				answer.subject AS subject,
 				answer.content AS content,
-				answer.date_answer AS date_answer 
+				answer.date_answer AS dateAnswer,
+				contact_answer.contact_id AS contactId
 				FROM answer 
 				JOIN contact_answer ON contact_answer.answer_id = answer.id
 				WHERE contact_answer.contact_id = :contactId';
@@ -158,8 +155,10 @@ class ContactManager extends Manager
 		$req->bindValue('contactId', $contactId, \PDO::PARAM_INT);
 		$req->execute();
 
-		$donnees = $req->fetchAll(\PDO::FETCH_ASSOC);
-		return $donnees;
+		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\entity\Answer');
+		
+		$answer = $req->fetch();
+		return $answer;
 	}
 	
 }

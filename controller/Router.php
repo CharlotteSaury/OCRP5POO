@@ -115,6 +115,7 @@ class Router
 	public function connexionAuto($email)
 	{
 		$this->_userController->newUserSession($email);
+		var_dump($_SESSION);
 		$this->routerRequest();
 	}
 
@@ -132,7 +133,7 @@ class Router
 						{
 							if ($_GET['page']>0)
 							{
-								$current_page =htmlspecialchars($_GET['page']);
+								$current_page = htmlspecialchars($_GET['page']);
 							}
 							else
 							{
@@ -303,7 +304,6 @@ class Router
 										setcookie('email', $email, time() + 365*24*3600, null, null, false, true);
 										setcookie('auth', password_hash($email, PASSWORD_DEFAULT) . '-----' . password_hash($_SERVER['REMOTE_ADDR'], PASSWORD_DEFAULT), time() + 365*24*3600, null, null, false, true);
 									}
-
 									$this->_userController->newUserSession($email);
 
 									$this->_homeController->indexView();

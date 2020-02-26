@@ -138,29 +138,26 @@
 
                 <?php
                
-                while ($donnees = $postComments -> fetch())
+                foreach ($postComments as $postComment)
                 {
 
                 ?>
                 <div class="comments mt-3">
                     <div class="comment d-flex flex-column flex-sm-row align-items-center mb-4">
-                        <div class="avatar mr-md-4 ml-md-2 mx-auto mb-4 mb-md-0" style="background-image: url('<?= htmlspecialchars($donnees['avatar']); ?>');">
+                        <div class="avatar mr-md-4 ml-md-2 mx-auto mb-4 mb-md-0" style="background-image: url('<?= htmlspecialchars($postComment->userAvatar()); ?>');">
                         </div>
                         <div class="comment-content text-black-50 text-justify">
                             <div class="comment-infos">
-                                <p class=""><strong><?= htmlspecialchars($donnees['pseudo']); ?></strong> - le <?= $donnees['commentDate']; ?></p>
+                                <p class=""><strong><?= htmlspecialchars($postComment->userPseudo()); ?></strong> - le <?= $postComment->commentDate(); ?></p>
                             </div>
                             <div class="comment-text">
-                                <p class="mb-0"><?= htmlspecialchars($donnees['commentContent']); ?></p>
+                                <p class="mb-0"><?= htmlspecialchars($postComment->content()); ?></p>
                             </div>
                         </div>
                     </div>
 
                     <?php
                     }
-
-                    $postComments -> closeCursor();
-
                     ?>                    
                 </div>
             </div>         

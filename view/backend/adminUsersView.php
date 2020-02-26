@@ -45,22 +45,22 @@
             <tbody>
 
                 <?php
-                while ($donnees = $allUsers->fetch())
+                foreach ($users as $user)
                 {
                 ?> 
                 <tr>
-                    <th scope="row"><?= htmlspecialchars($donnees['userId']); ?></th>
-                    <td><a href="index.php?action=profileUser&amp;id=<?= htmlspecialchars($donnees['userId']); ?>"><?= htmlspecialchars($donnees['pseudo']); ?></a></td>
-                    <td><?= htmlspecialchars($donnees['email']); ?></td>
-                    <td><?= htmlspecialchars($donnees['role']); ?></td>
-                    <td><?= htmlspecialchars($donnees['register_date']); ?></td>
-                    <td><?= htmlspecialchars($donnees['postsNb']); ?></td>
-                    <td><?= htmlspecialchars($donnees['commentsNb']); ?></td>
+                    <th scope="row"><?= htmlspecialchars($user->id()); ?></th>
+                    <td><a href="index.php?action=profileUser&amp;id=<?= htmlspecialchars($user->id()); ?>"><?= htmlspecialchars($user->pseudo()); ?></a></td>
+                    <td><?= htmlspecialchars($user->email()); ?></td>
+                    <td><?= htmlspecialchars($user->role()); ?></td>
+                    <td><?= htmlspecialchars($user->registerDate()); ?></td>
+                    <td><?= htmlspecialchars($user->postsNb()); ?></td>
+                    <td><?= htmlspecialchars($user->commentsNb()); ?></td>
                     <td>
-                        <a href="index.php?action=profileUser&amp;id=<?= htmlspecialchars($donnees['userId']); ?>" class="btn btn-outline-dark btn-sm" title="Voir">
+                        <a href="index.php?action=profileUser&amp;id=<?= htmlspecialchars($user->id()); ?>" class="btn btn-outline-dark btn-sm" title="Voir">
                             <i class="fas fa-eye"></i>
                         </a>
-                        <a href="index.php?action=editUser&amp;id=<?= htmlspecialchars($donnees['userId']); ?>" class="btn btn-outline-dark btn-sm" title="Modifier">
+                        <a href="index.php?action=editUser&amp;id=<?= htmlspecialchars($user->id()); ?>" class="btn btn-outline-dark btn-sm" title="Modifier">
                             <i class="fas fa-pencil-alt"></i>
                         </a>
                     </td>
@@ -69,7 +69,6 @@
                 
                 <?php
                 }
-                $allUsers->closeCursor();
                 ?>
 
             </tbody>
