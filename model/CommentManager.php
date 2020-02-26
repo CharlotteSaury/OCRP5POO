@@ -3,9 +3,6 @@
 namespace model;
 
 require_once 'model/Manager.php';
-require_once 'entity/Comment.php';
-
-use entity\Comment;
 
 class CommentManager extends Manager
 {

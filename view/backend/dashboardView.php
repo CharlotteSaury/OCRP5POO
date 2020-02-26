@@ -93,9 +93,9 @@
                         <tbody>
                             <?php
 
-                            while ($donnees = $recentPosts->fetch())
+                            foreach ($recentPosts as $post)
                             {
-                                if ($donnees['status'] == 1)
+                                if ($post->status() == 2)
                                 {
                                     echo '<tr>';
                                 }
@@ -104,18 +104,19 @@
                                     echo '<tr class="table-success-custom">';
                                 }
                             ?>
-                                <th scope="row"><?= htmlspecialchars($donnees['postId']); ?></th>
-                                <td><?= htmlspecialchars($donnees['pseudo']); ?></td>
-                                <td><?= htmlspecialchars($donnees['title']); ?></td>
-                                <td><?= substr(htmlspecialchars($donnees['chapo']), 0, 50); ?>...</td>
-                                <td><?= $donnees['date_creation']; ?></td>
+                                <th scope="row"><?= htmlspecialchars($post->id()); ?></th>
+                                <td><?= htmlspecialchars($post->pseudo()); ?></td>
+                                <td><?= htmlspecialchars($post->title()); ?></td>
+                                <td><?= substr(htmlspecialchars($post->chapo()), 0, 50); ?>...</td>
+                                <td><?= $post->dateCreation(); ?></td>
                                 <td>
+                                    
                                 <?php 
-                                if ($donnees['status'] == 1)
+                                if ($post->status() == 2)
                                 {
                                     ?>
 
-                                    <a href="index.php?action=publishPostDashboard&amp;id=<?= htmlspecialchars($donnees['postId']); ?>&amp;status=<?= htmlspecialchars($donnees['status']); ?>" class="mr-2" title="Ne plus publier"><i class="fas fa-toggle-on"></i></a>
+                                    <a href="index.php?action=publishPostDashboard&amp;id=<?= htmlspecialchars($post->id()); ?>&amp;status=<?= htmlspecialchars($post->status()); ?>" class="mr-2" title="Ne plus publier"><i class="fas fa-toggle-on"></i></a>
 
                                     <?php
                                 }
@@ -123,24 +124,24 @@
                                 {
                                     ?>
 
-                                    <a href="index.php?action=publishPostDashboard&amp;id=<?= htmlspecialchars($donnees['postId']); ?>&amp;status=<?= htmlspecialchars($donnees['status']); ?>" class="mr-2"><i class="fas fa-toggle-off" title="Publier"></i></a>
+                                    <a href="index.php?action=publishPostDashboard&amp;id=<?= htmlspecialchars($post->id()); ?>&amp;status=<?= htmlspecialchars($post->status()); ?>" class="mr-2"><i class="fas fa-toggle-off" title="Publier"></i></a>
 
                                     <?php
                                 }
                                 ?>
-                                    <a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($donnees['postId']); ?>" class="btn btn-outline-dark btn-sm" title="Voir">
+                                    <a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($post->id()); ?>" class="btn btn-outline-dark btn-sm" title="Voir">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="index.php?action=editPostView&amp;id=<?= htmlspecialchars($donnees['postId']); ?>" class="btn btn-outline-dark btn-sm" title="Modifier">
+                                    <a href="index.php?action=editPostView&amp;id=<?= htmlspecialchars($post->id()); ?>" class="btn btn-outline-dark btn-sm" title="Modifier">
                                         <i class="fas fa-pencil-alt"></i>
                                     </a>
-                                    <a data-toggle="modal" data-target="#deletePostModal<?= htmlspecialchars($donnees['postId']); ?>" class="btn btn-outline-dark btn-sm" title="Supprimer">
+                                    <a data-toggle="modal" data-target="#deletePostModal<?= htmlspecialchars($post->id()); ?>" class="btn btn-outline-dark btn-sm" title="Supprimer">
                                         <i class="fas fa-trash-alt"></i>
                                     </a>
                                 </td>
                             </tr>
                             <!-- deletePost Modal-->
-                            <div class="modal fade" id="deletePostModal<?= htmlspecialchars($donnees['postId']); ?>" tabindex="-1" role="dialog" aria-labelledby="deletePostLabel" aria-hidden="true">
+                            <div class="modal fade" id="deletePostModal<?= htmlspecialchars($post->id()); ?>" tabindex="-1" role="dialog" aria-labelledby="deletePostLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -152,7 +153,7 @@
                                         <div class="modal-body">Cliquez sur "Valider" pour supprimer définitivement ce post.</div>
                                         <div class="modal-footer">
                                             <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                            <a class="btn btn-primary-custom" href="index.php?action=deletePostDashboard&amp;id=<?= htmlspecialchars($donnees['postId']); ?>">Valider</a>
+                                            <a class="btn btn-primary-custom" href="index.php?action=deletePostDashboard&amp;id=<?= htmlspecialchars($post->id()); ?>">Valider</a>
                                         </div>
                                     </div>
                                 </div>
@@ -160,8 +161,6 @@
 
                             <?php
                             }
-
-                            $recentPosts->closeCursor();
 
                             ?>
                         </tbody>

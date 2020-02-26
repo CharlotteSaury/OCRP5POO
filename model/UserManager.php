@@ -3,9 +3,6 @@
 namespace model;
 
 require_once 'model/Manager.php';
-require_once 'entity/User.php';
-
-use entity\User;
 
 class UserManager extends Manager
 {

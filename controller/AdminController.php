@@ -42,40 +42,50 @@ class AdminController extends Controller
 		if ($sorting != null)
 		{
 			$contentTitle = 'Articles non publiés';
-			$allPosts = $this->postManager->getUnpublishedPosts($sortingDate);
+			$posts = $this->postManager->getPosts(1, $first_post = null, $postsPerPage = null, $sortingDate);
 		}
 		else
 		{
 			$contentTitle = 'Tous les articles';
-			$allPosts = $this->postManager->getPosts($first_post = null, $postsPerPage = null, $nbComments = 1, $sortingDate);
+			$posts = $this->postManager->getPosts($status = null, $first_post = null, $postsPerPage = null, $sortingDate);
 		}
 		
 		$allPostsCategories = $this->postManager->getAllPostsCategories();
+
+		foreach ($allPostsCategories as $key => $value)
+		{
+			foreach ($posts as $post)
+			{
+				if ($post->id() == $key)
+				{
+					$post->setCategories($value);
+				}
+			}
+		}
+
 		$unreadContactsNb = $this->contactManager->getUnreadContactsNb();
 
 		return $this->view->render('backend', 'adminPostsView', ['message' => $message,
 			'contentTitle' => $contentTitle, 
 			'totalPostsNb' => $totalPostsNb,
 			'unpublishedPostsNb' => $unpublishedPostsNb,
-			'allPosts' => $allPosts,
-			'allPostsCategories' => $allPostsCategories,
+			'posts' => $posts,
 			'unreadContactsNb' => $unreadContactsNb]);
 	}
 
 	public function adminPostView($postId, $message = null)
 	{
-		$postInfos = $this->postManager->getPostInfos($postId);
-		$postContents = $this->postManager->getPostContents($postId);
-		$postComments = $this->commentManager->getPostComments($postId);
-		$postCategories = $this->postManager->getPostCategories($postId);		
+		$post = $this->postManager->getPostInfos($postId);
+		$post->setCategories($this->postManager->getPostCategories($postId));
+		$contents = $this->contentManager->getPostContents($postId);
+		$postComments = $this->commentManager->getPostComments($postId);	
 		$unreadContactsNb = $this->contactManager->getUnreadContactsNb();
 
 		return $this->view->render('backend', 'adminPostView', ['postId' => $postId,
 			'message' => $message,
-			'postInfos' => $postInfos,
-			'postContents' => $postContents,
+			'post' => $post,
+			'contents' => $contents,
 			'postComments' => $postComments,
-			'postCategories' => $postCategories,
 			'unreadContactsNb' => $unreadContactsNb]);
 	}
 
@@ -109,16 +119,15 @@ class AdminController extends Controller
 
 	public function editPostView($postId, $message = null)
 	{
-		$postInfos = $this->postManager->getPostInfos($postId);
-		$postContents = $this->postManager->getPostContents($postId);
-		$postCategories = $this->postManager->getPostCategories($postId);
+		$post = $this->postManager->getPostInfos($postId);
+		$post->setCategories($this->postManager->getPostCategories($postId));
+		$contents = $this->contentManager->getPostContents($postId);
 		$unreadContactsNb = $this->contactManager->getUnreadContactsNb();
 		
 		return $this->view->render('backend', 'editPostView', ['message' => $message,
 			'postId' => $postId,
-			'postInfos' => $postInfos,
-			'postContents' => $postContents,
-			'postCategories' => $postCategories,
+			'post' => $post,
+			'contents' => $contents,
 			'unreadContactsNb' => $unreadContactsNb]);
 	}
 
@@ -132,8 +141,8 @@ class AdminController extends Controller
 
 	public function deleteMainPostPicture($postId)
 	{
-		$postInfos = $this->postManager->getPostInfos($postId);
-		$mainImgUrl = $postInfos[0]['main_image'];
+		$post = $this->postManager->getPostInfos($postId);
+		$mainImgUrl = $post->mainImage();
 		unlink($mainImgUrl);
 
 		$this->postManager->deleteMainPostPicture($postId);
@@ -144,8 +153,9 @@ class AdminController extends Controller
 
 	public function editPostPicture($postId, $contentId, $url)
 	{
-		$oldImgUrl = $this->postManager->getImgUrl($contentId);
-		$this->postManager->updatePostPicture($contentId, $url);
+		$content = $this->contentManager->getContent($contentId);
+		$oldImgUrl = $content->content();
+		$this->contentManager->updatePostPicture($contentId, $url);
 		$this->postManager->dateUpdate($postId);
 		unlink($oldImgUrl);
 	}
@@ -154,11 +164,12 @@ class AdminController extends Controller
 	{
 		if ($contentType == 1)
 		{
-			$imgUrl = $this->postManager->getImgUrl($contentId);
+			$content = $this->contentManager->getContent($contentId);
+			$imgUrl = $content->content();
 			unlink($imgUrl);
 		}
 
-		$this->postManager->deleteContent($contentId);
+		$this->contentManager->deleteContent($contentId);
 		$this->postManager->dateUpdate($postId);
 		$message = 'Contenu supprimé ! ';
 		$this->editPostView($postId, $message);
@@ -166,7 +177,7 @@ class AdminController extends Controller
 
 	public function addParagraph($postId)
 	{
-		$this->postManager->addParagraph($postId);
+		$this->contentManager->addParagraph($postId);
 		$this->postManager->dateUpdate($postId);
 		$message = 'Bloc paragraphe ajouté ! ';
 		$this->editPostView($postId, $message);
@@ -174,7 +185,7 @@ class AdminController extends Controller
 
 	public function editParagraph($postId, $newParagraphs)
 	{
-		$this->postManager->editParagraph($newParagraphs);
+		$this->contentManager->editParagraph($newParagraphs);
 		$this->postManager->dateUpdate($postId);
 		$message = 'Bloc paragraphe enregistré ! ';
 		$this->editPostView($postId, $message);
@@ -182,7 +193,7 @@ class AdminController extends Controller
 
 	public function addPicture($postId, $content)
 	{
-		$this->postManager->addPicture($postId, $content);
+		$this->contentManager->addPicture($postId, $content);
 		$this->postManager->dateUpdate($postId);
 	}
 

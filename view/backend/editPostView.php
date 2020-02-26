@@ -17,33 +17,33 @@
 
                 <div class="col-8">
                     <div class="form-group">
-                        <input type="hidden" class="form-control" name="postId" value="<?= htmlspecialchars($postInfos[0]['postId']); ?>"/>
+                        <input type="hidden" class="form-control" name="postId" value="<?= htmlspecialchars($post->id()); ?>"/>
                     </div>
 
                     <div class="form-group">
                         <label for="post-title">Titre : </label>
-                        <input type="text" class="form-control" name="title" value="<?= htmlspecialchars($postInfos[0]['title']); ?>" required/>
+                        <input type="text" class="form-control" name="title" value="<?= htmlspecialchars($post->title()); ?>" required/>
                     </div>
 
                     <hr class="d-none d-lg-block ml-0">
 
                     <div class="post-content post-content-text text-black-50 text-justify">
-                        <p class="mb-0">Auteur : <?= htmlspecialchars($postInfos[0]['first_name']); ?> <?= htmlspecialchars($postInfos[0]['last_name']); ?></p>
-                        <p class="mb-0">le <?= htmlspecialchars($postInfos[0]['date_creation']); ?></p>
-                        <p class="mb-0">Dernière modification le <?= htmlspecialchars($postInfos[0]['date_update']); ?></p>
+                        <p class="mb-0">Auteur : <?= htmlspecialchars($post->pseudo()); ?></p>
+                        <p class="mb-0">le <?= htmlspecialchars($post->dateCreation()); ?></p>
+                        <p class="mb-0">Dernière modification le <?= htmlspecialchars($post->dateUpdate()); ?></p>
                     </div>
 
                     <hr class="d-none d-lg-block ml-0">
 
                     <div class="form-group">
                         <label for="post-chapo">Chapô : </label>
-                        <textarea class="form-control" name="chapo" required><?= htmlspecialchars($postInfos[0]['chapo']); ?></textarea>   
+                        <textarea class="form-control" name="chapo" required><?= htmlspecialchars($post->chapo()); ?></textarea>   
                     </div>
                     <input type="submit" name="updatePostInfos" class="d-none d-sm-inline-block btn btn-sm btn-primary-custom shadow-sm ml-1" value="Enregistrer les modifications"/> 
                 </div>
                 <div class="col-4">
                     <?php
-                    if ($postInfos[0]['main_image'] != null)
+                    if ($post->mainImage() != null)
                     {
                         ?>
 
@@ -53,7 +53,7 @@
                                 <a data-toggle="modal" data-target="#deleteMainPictureModal" class="btn btn-outline-dark btn-sm mr-2" title="Supprimer"><i class="fas fa-trash-alt"></i>
                                 </a>
                             </p>
-                            <img class="admin-post-img mb-4" src="<?= htmlspecialchars($postInfos[0]['main_image']); ?>"/>
+                            <img class="admin-post-img mb-4" src="<?= htmlspecialchars($post->mainImage()); ?>"/>
                         </div>
 
                         <?php
@@ -105,17 +105,17 @@
                 <?php
 
 
-                while ($donnees = $postContents->fetch())
+                foreach ($contents as $content)
                 {
-                    if ($donnees['content_type'] == 1) 
+                    if ($content->contentTypeId() == 1) 
                     {
                         ?>
                         <div class="my-4 text-center d-flex flex-column align-items-center">  
-                            <img class="admin-post-img mb-4" src="<?= htmlspecialchars($donnees['content']); ?>" /> 
+                            <img class="admin-post-img mb-4" src="<?= htmlspecialchars($content->content()); ?>" /> 
                             <div>
 
-                                <a data-toggle="modal" data-target="#updatePictureModal<?= htmlspecialchars($donnees['contentId']); ?>" class="btn btn-outline-dark btn-sm mr-2" title="Modifier l'image"><i class="fas fa-pencil-alt mr-1"></i></a> 
-                                <a data-toggle="modal" data-target="#deleteContentModal<?= htmlspecialchars($donnees['contentId']); ?>" class="btn btn-outline-dark btn-sm mr-2" title="Supprimer">
+                                <a data-toggle="modal" data-target="#updatePictureModal<?= htmlspecialchars($content->id()); ?>" class="btn btn-outline-dark btn-sm mr-2" title="Modifier l'image"><i class="fas fa-pencil-alt mr-1"></i></a> 
+                                <a data-toggle="modal" data-target="#deleteContentModal<?= htmlspecialchars($content->id()); ?>" class="btn btn-outline-dark btn-sm mr-2" title="Supprimer">
                                     <i class="fas fa-trash-alt"></i>
                                 </a>
                             </div> 
@@ -123,7 +123,7 @@
 
                         <!-- updatePicture Modal-->
 
-                        <div class="modal fade" id="updatePictureModal<?= htmlspecialchars($donnees['contentId']); ?>" tabindex="-1" role="dialog" aria-labelledby="updatePictureLabel" aria-hidden="true">
+                        <div class="modal fade" id="updatePictureModal<?= htmlspecialchars($content->id()); ?>" tabindex="-1" role="dialog" aria-labelledby="updatePictureLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -134,7 +134,7 @@
                                     </div>
                                     <div class="modal-body">
                                         <p><em>Veuillez enregistrer les autres modifications avant de modifier ce contenu au risque que les informations soient perdues.</em></p>
-                                        <input name="picture<?= htmlspecialchars($donnees['contentId']); ?>" type="file" />
+                                        <input name="picture<?= htmlspecialchars($content->id()); ?>" type="file" />
                                     </div>
                                     <div class="modal-footer">
                                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
@@ -146,7 +146,7 @@
                         </div>
                         
                         <!-- deleteContent Modal-->
-                        <div class="modal fade" id="deleteContentModal<?= htmlspecialchars($donnees['contentId']); ?>" tabindex="-1" role="dialog" aria-labelledby="deleteContentLabel" aria-hidden="true">
+                        <div class="modal fade" id="deleteContentModal<?= htmlspecialchars($content->id()); ?>" tabindex="-1" role="dialog" aria-labelledby="deleteContentLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -154,13 +154,13 @@
                                         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">×</span>
                                         </button>
-                                        <input type="hidden" name="postId" value="<?= htmlspecialchars($donnees['postId']); ?>"/>
-                                        <input type="hidden" name="contentId" value="<?= htmlspecialchars($donnees['contentId']); ?>"/>
+                                        <input type="hidden" name="postId" value="<?= htmlspecialchars($content->postId()); ?>"/>
+                                        <input type="hidden" name="contentId" value="<?= htmlspecialchars($content->id()); ?>"/>
                                     </div>
                                     <div class="modal-body">Cliquez sur "Valider" pour supprimer définitivement ce contenu</div>
                                     <div class="modal-footer">
                                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                        <a href="index.php?action=deleteContent&amp;id=<?= htmlspecialchars($donnees['postId']); ?>&amp;content=<?= htmlspecialchars($donnees['contentId']); ?>&amp;type=<?= htmlspecialchars($donnees['content_type']); ?>" class="btn btn-primary-custom" >Valider</a>
+                                        <a href="index.php?action=deleteContent&amp;id=<?= htmlspecialchars($content->postId()); ?>&amp;content=<?= htmlspecialchars($content->id()); ?>&amp;type=<?= htmlspecialchars($content->contentTypeId()); ?>" class="btn btn-primary-custom" >Valider</a>
                                     </div>
                                 </div>
                             </div>
@@ -174,18 +174,18 @@
 
                         <div class="form-group d-flex">                        
 
-                            <textarea class="form-control" name="<?= htmlspecialchars($donnees['contentId']); ?>" rows="5"><?= htmlspecialchars($donnees['content']); ?></textarea>
+                            <textarea class="form-control" name="<?= htmlspecialchars($content->id()); ?>" rows="5"><?= htmlspecialchars($content->content()); ?></textarea>
                             
                             <input type="submit" name="editContent" class="btn btn-outline-success btn-sm mx-2" title="Enregistrer les modifications" value="Enregistrer"/>
                             
-                            <a data-toggle="modal" data-target="#deleteContentModal<?= htmlspecialchars($donnees['contentId']); ?>" class="btn btn-outline-dark btn-sm mr-2" title="Supprimer">
+                            <a data-toggle="modal" data-target="#deleteContentModal<?= htmlspecialchars($content->id()); ?>" class="btn btn-outline-dark btn-sm mr-2" title="Supprimer">
                                 <i class="fas fa-trash-alt"></i>
                             </a>
 
                         </div>
 
                         <!-- deleteContent Modal-->
-                        <div class="modal fade" id="deleteContentModal<?= htmlspecialchars($donnees['contentId']); ?>" tabindex="-1" role="dialog" aria-labelledby="deleteContentLabel" aria-hidden="true">
+                        <div class="modal fade" id="deleteContentModal<?= htmlspecialchars($content->id()); ?>" tabindex="-1" role="dialog" aria-labelledby="deleteContentLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -197,7 +197,7 @@
                                     <div class="modal-body">Cliquez sur "Valider" pour supprimer définitivement ce contenu</div>
                                     <div class="modal-footer">
                                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                        <a href="index.php?action=deleteContent&amp;id=<?= htmlspecialchars($donnees['postId']); ?>&amp;content=<?= htmlspecialchars($donnees['contentId']); ?>&amp;type=<?= htmlspecialchars($donnees['content_type']); ?>" class="btn btn-primary-custom" >Valider</a>
+                                        <a href="index.php?action=deleteContent&amp;id=<?= htmlspecialchars($content->postId()); ?>&amp;content=<?= htmlspecialchars($content->id()); ?>&amp;type=<?= htmlspecialchars($content->contentTypeId()); ?>" class="btn btn-primary-custom" >Valider</a>
                                     </div>
                                 </div>
                             </div>
@@ -206,7 +206,6 @@
                         <?php
                     }
                 }
-                $postContents->closeCursor();
 
                 ?>       
 
@@ -244,14 +243,20 @@
                 <div class="">
 
                     <?php
-                    while ($donnees = $postCategories->fetch())
+                    if ($post->categories() != null)
                     {
-                        ?>
-                        <a href="index.php?action=deleteCategory&amp;id=<?= htmlspecialchars($donnees['postId']); ?>&amp;cat=<?= htmlspecialchars($donnees['categoryId']); ?>" class="btn btn-outline-secondary mr-2"><?= htmlspecialchars($donnees['categoryName']); ?> <i class="ml-1 fas fa-times"></i></a>
-                        <?php 
+                        foreach($post->categories() as $category)
+                        {
+                            ?>
+                            <a href="index.php?action=deleteCategory&amp;id=<?= htmlspecialchars($category['postId']); ?>&amp;cat=<?= htmlspecialchars($category['id']); ?>" class="btn btn-outline-secondary mr-2"><?= htmlspecialchars($category['name']); ?> <i class="ml-1 fas fa-times"></i></a>
+                            <?php 
+                        }
                     }
-
-                    $postCategories->closeCursor();
+                    else
+                    {
+                        echo '<p>Pas de catégorie associée à ce post. </p>';
+                    }
+                    
                     ?>
 
                 </div>

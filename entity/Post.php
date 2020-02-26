@@ -2,51 +2,34 @@
 
 namespace entity;
 
-class Post
+require_once 'Entity.php';
+use entity\Entity;
+
+class Post extends Entity
 
 {
 	protected $title,
-	$chapo,
-	$status,
-	$dateCreation,
-	$dateUpdate,
-	$author;
-
-	const INVALID_AUTHOR = 1;
-	const INVALID_TITLE = 2;
-	const INVALID_CHAPO = 3;
-	
+			$chapo,
+			$status,
+			$dateCreation,
+			$dateUpdate,
+			$pseudo,
+			$avatar,
+			$mainImage,
+			$approvedCommentsNb,
+			$commentsNb,
+			$categories;
 
   	// SETTERS //
 
 
-	public function setAuthor($author)
-	{
-		if (!is_string($auteur) || empty($auteur))
-		{
-			$this->erreurs[] = self::INVALID_AUTHOR;
-		}
-
-		$this->author = $author;
-	}
-
 	public function setTitle($title)
 	{
-		if (!is_string($title) || empty($title))
-		{
-			$this->erreurs[] = self::INVALID_TITLE;
-		}
-
 		$this->title = $title;
 	}
 
 	public function setChapo($chapo)
 	{
-		if (!is_string($chapo) || empty($chapo))
-		{
-			$this->erreurs[] = self::INVALID_CHAPO;
-		}
-
 		$this->chapo = $chapo;
 	}
 
@@ -65,36 +48,91 @@ class Post
 		$this->dateUpdate = $dateUpdate;
 	}
 
+	public function setPseudo($pseudo)
+	{
+		$this->pseudo = $pseudo;
+	}
+
+	public function setAvatar($avatar)
+	{
+		$this->avatar = $avatar;
+	}
+
+	public function setMainImage($mainImage)
+	{
+		$this->mainImage = $mainImage;
+	}
+
+	public function setApprovedCommentsNb($approvedCommentsNb)
+	{
+		$this->approvedCommentsNb = $approvedCommentsNb;
+	}
+
+	public function setCommentsNb($commentsNb)
+	{
+		$this->commentsNb = $commentsNb;
+	}
+
+	public function setCategories($categories)
+	{
+		$this->categories = $categories;
+	}
+
 
   	// GETTERS //
 
-	public function author()
-	{
-		return this->author;
-	}
-
 	public function title()
 	{
-		return this->title;
+		return $this->title;
 	}
 
 	public function chapo()
 	{
-		return this->chapo;
+		return $this->chapo;
 	}
 
 	public function status()
 	{
-		return this->status;
+		return $this->status;
 	}
 
 	public function dateCreation()
 	{
-		return this->dateCreation;
+		return $this->dateCreation;
 	}
 
 	public function dateUpdate()
 	{
-		return this->dateUpdate;
+		return $this->dateUpdate;
+	}
+
+	public function pseudo()
+	{
+		return $this->pseudo;
+	}
+
+	public function avatar()
+	{
+		return $this->avatar;
+	}
+
+	public function mainImage()
+	{
+		return $this->mainImage;
+	}
+
+	public function commentsNb()
+	{
+		return $this->commentsNb;
+	}
+
+	public function approvedCommentsNb()
+	{
+		return $this->approvedCommentsNb;
+	}
+
+	public function categories()
+	{
+		return $this->categories;
 	}
 }
