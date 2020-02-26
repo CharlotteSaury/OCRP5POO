@@ -18,11 +18,11 @@
 
                 <div class="card-header">
                     <div class="form-group">
-                        <input type="hidden" name="id" value="<?= $userInfos[0]['userId']; ?>"/>
+                        <input type="hidden" name="id" value="<?= $user->id(); ?>"/>
                     </div>
                     <div class="form-group">
                         <label for="pseudo" hidden>Pseudo : </label>
-                        <input type="text" class="form-control" name="pseudo" value="<?= htmlspecialchars($userInfos[0]['pseudo']); ?>"/>
+                        <input type="text" class="form-control" name="pseudo" value="<?= htmlspecialchars($user->pseudo()); ?>"/>
                         <small id="pseudoHelpBlock" class="form-text text-muted">Le pseudo ne doit pas dépasser 25 caractères.</small>
                     </div>
                 </div>
@@ -30,7 +30,7 @@
                 <div class="card-body editProfileView">
 
                     <div class="profile-card-avatar text-center">
-                        <img class="img-thumbnail" src="<?= htmlspecialchars($userInfos[0]['avatar']); ?>" alt="User profil picture" />
+                        <img class="img-thumbnail" src="<?= htmlspecialchars($user->avatar()); ?>" alt="User profil picture" />
                     </div>
 
 
@@ -38,11 +38,11 @@
                         <div class="card-title">
                             <div class="form-group">
                                 <label for="firstname">Prénom : </label>
-                                <input type="text" class="form-control" name="first_name" value="<?= htmlspecialchars($userInfos[0]['first_name']); ?>"/>
+                                <input type="text" class="form-control" name="first_name" value="<?= htmlspecialchars($user->firstName()); ?>"/>
                             </div>
                             <div class="form-group">
                                 <label for="lastname">Nom : </label>
-                                <input type="text" class="form-control" name="last_name" value="<?= htmlspecialchars($userInfos[0]['last_name']); ?>"/>
+                                <input type="text" class="form-control" name="last_name" value="<?= htmlspecialchars($user->lastName()); ?>"/>
                             </div>
                         </div>
 
@@ -50,28 +50,28 @@
 
                             <div class="form-group">
                                 <label for="birthdate">Né(e) le : </label>
-                                    <input type="text" class="form-control" name="birth_date" value="<?= $userInfos[0]['birth_date']; ?>"/>
+                                    <input type="text" class="form-control" name="birth_date" value="<?= $user->birthDate(); ?>"/>
                                     <small id="birthDateHelpBlock" class="form-text text-muted">La date doit être au format JJ-MM-AAAA.</small>
                             </div>
                             <div class="form-group">
                                 <label for="home">Habite à : </label>
-                                <input type="text" class="form-control" name="home" value="<?= htmlspecialchars($userInfos[0]['home']); ?>"/>
+                                <input type="text" class="form-control" name="home" value="<?= htmlspecialchars($user->home()); ?>"/>
                             </div>
                             <div class="form-group">
                                 <label for="user_about">A propos de moi : </label>
-                                <textarea type="text" class="form-control" name="user_about"><?= htmlspecialchars($userInfos[0]['about']); ?></textarea>                               
+                                <textarea type="text" class="form-control" name="user_about"><?= htmlspecialchars($user->userAbout()); ?></textarea>                               
                             </div>
                             <div class="form-group">
                                 <label for="email">Email : </label>
-                                <input type="text" class="form-control" name="email" value="<?= htmlspecialchars($userInfos[0]['email']); ?>"/>
+                                <input type="text" class="form-control" name="email" value="<?= htmlspecialchars($user->email()); ?>"/>
                             </div>
                             <div class="form-group">
                                 <label for="mobile">Tel : </label>
-                                <input type="text" class="form-control" name="mobile" value="<?= htmlspecialchars($userInfos[0]['mobile']); ?>"/>
+                                <input type="text" class="form-control" name="mobile" value="<?= htmlspecialchars($user->mobile()); ?>"/>
                             </div>
                             <div class="form-group">
                                 <label for="website">Site internet : </label>
-                                <input type="text" class="form-control" name="website" value="<?= htmlspecialchars($userInfos[0]['website']); ?>"/>
+                                <input type="text" class="form-control" name="website" value="<?= htmlspecialchars($user->website()); ?>"/>
                             </div>
                             
                             <hr>
@@ -81,7 +81,7 @@
                             if (isset($_SESSION['role']) && $_SESSION['role'] == 3)
                             {                           
 
-                                if ($userInfos[0]['roleId'] == 1)
+                                if ($user->userRoleId() == 1)
                                 {
                                     ?>
 
@@ -102,7 +102,7 @@
 
                                     <?php
                                 }
-                                elseif ($userInfos[0]['roleId'] == 2)
+                                elseif ($user->userRoleId() == 2)
                                 {
                                     ?>
 
@@ -123,7 +123,7 @@
 
                                     <?php
                                 }
-                                elseif ($userInfos[0]['roleId'] == 3)
+                                elseif ($user->userRoleId() == 3)
                                 {
                                     ?>
                                     <div class="form-group">

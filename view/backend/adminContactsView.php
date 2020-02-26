@@ -76,9 +76,9 @@
 
                 <?php
 
-                while ($donnees = $allContacts->fetch())
+                foreach($allContacts as $contact)
                 {
-                    if ($donnees['statusId'] == 1)
+                    if ($contact->statusId() == 1)
                     {
                         echo '<tr class="table-success-custom">';
                     }
@@ -88,14 +88,14 @@
                     }
                 ?>
                 
-                    <th scope="row"><?= htmlspecialchars($donnees['contactId']); ?></th>
+                    <th scope="row"><?= htmlspecialchars($contact->id()); ?></th>
 
                     <?php
-                    if ($donnees['statusId'] == 1)
+                    if ($contact->statusId() == 1)
                     {
                         echo '<td class="responsive-table-custom" title="Non lu"><i class="fas fa-envelope"></i></td>';
                     }
-                    elseif ($donnees['statusId'] == 2)
+                    elseif ($contact->statusId() == 2)
                     {
                         echo '<td class="responsive-table-custom" title="Lu"><i class="fas fa-envelope-open-text"></i></td>';
                     }
@@ -106,18 +106,18 @@
                     ?>
 
                     
-                    <td class="responsive-table-custom"><?= htmlspecialchars($donnees['name']); ?></td>
-                    <td class="responsive-table-custom"><?= htmlspecialchars($donnees['email']); ?></td>
-                    <td class="responsive-table-custom"><a href="index.php?action=contactView&amp;id=<?= htmlspecialchars($donnees['contactId']); ?>" ><?= htmlspecialchars($donnees['subject']); ?></a></td>
-                    <td class="responsive-table-custom"><a href="index.php?action=contactView&amp;id=<?= htmlspecialchars($donnees['contactId']); ?>" ><?= substr(htmlspecialchars($donnees['content']), 0, 50); ?>...</a></td>
-                    <td class="responsive-table-custom"><?= $donnees['date_message']; ?></td>
+                    <td class="responsive-table-custom"><?= htmlspecialchars($contact->name()); ?></td>
+                    <td class="responsive-table-custom"><?= htmlspecialchars($contact->email()); ?></td>
+                    <td class="responsive-table-custom"><a href="index.php?action=contactView&amp;id=<?= htmlspecialchars($contact->id()); ?>" ><?= htmlspecialchars($contact->subject()); ?></a></td>
+                    <td class="responsive-table-custom"><a href="index.php?action=contactView&amp;id=<?= htmlspecialchars($contact->id()); ?>" ><?= substr(htmlspecialchars($contact->content()), 0, 50); ?>...</a></td>
+                    <td class="responsive-table-custom"><?= $contact->dateMessage(); ?></td>
                     <td class="responsive-table-custom">
 
                         <?php
-                        if ($donnees['statusId'] != 3)
+                        if ($contact->statusId() != 3)
                         {
                             ?>
-                            <a href="index.php?action=contactView&amp;id=<?= htmlspecialchars($donnees['contactId']); ?>" class="btn btn-outline-dark btn-sm" title="Répondre">
+                            <a href="index.php?action=contactView&amp;id=<?= htmlspecialchars($contact->id()); ?>" class="btn btn-outline-dark btn-sm" title="Répondre">
                                 <i class="fas fa-arrow-circle-right"></i>
                             </a>
 
@@ -125,7 +125,7 @@
                         }
                         ?>
                         
-                        <a data-toggle="modal" data-target="#deleteContactModal<?= htmlspecialchars($donnees['contactId']); ?>" class="btn btn-outline-dark btn-sm" title="Supprimer">
+                        <a data-toggle="modal" data-target="#deleteContactModal<?= htmlspecialchars($contact->id()); ?>" class="btn btn-outline-dark btn-sm" title="Supprimer">
                             <i class="fas fa-trash-alt"></i>
                         </a>
                     </td>
@@ -133,7 +133,7 @@
                     
                 </tr>
                 <!-- deleteContact Modal-->
-                <div class="modal fade" id="deleteContactModal<?= htmlspecialchars($donnees['contactId']); ?>" tabindex="-1" role="dialog" aria-labelledby="deleteContactLabel" aria-hidden="true">
+                <div class="modal fade" id="deleteContactModal<?= htmlspecialchars($contact->id()); ?>" tabindex="-1" role="dialog" aria-labelledby="deleteContactLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -145,7 +145,7 @@
                             <div class="modal-body">Cliquez sur "Valider" pour supprimer définitivement ce message</div>
                             <div class="modal-footer">
                                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                <a class="btn btn-primary-custom" href="index.php?action=deleteContact&amp;id=<?= htmlspecialchars($donnees['contactId']); ?>">Valider</a>
+                                <a class="btn btn-primary-custom" href="index.php?action=deleteContact&amp;id=<?= htmlspecialchars($contact->id()); ?>">Valider</a>
                             </div>
                         </div>
                     </div>
@@ -153,7 +153,6 @@
 
                 <?php
                 }
-                $allContacts->closeCursor();
                 ?>
                 
             </tbody>

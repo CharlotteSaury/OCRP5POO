@@ -5,7 +5,6 @@ require_once 'config/dev.php';
 
 use controller\Router;
 
-
 if (isset($_COOKIE['auth']) && isset($_COOKIE['email']) && !empty($_COOKIE['auth']) && !isset($_SESSION['id']))
 {
 	$auth = htmlspecialchars($_COOKIE['auth']);

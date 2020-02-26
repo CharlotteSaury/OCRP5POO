@@ -71,9 +71,9 @@
             <tbody>
                 <?php
 
-                while ($donnees = $allComments->fetch())
+                foreach($allComments as $comment)
                 {
-                    if ($donnees['status'] == 1)
+                    if ($comment->status() == 1)
                     {
                         echo '<tr>';
                     }
@@ -82,22 +82,22 @@
                         echo '<tr class="table-success-custom">';
                     }
                 ?>
-                    <th scope="row"><?= htmlspecialchars($donnees['commentId']); ?></th>
-                    <td><a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($donnees['postId']); ?>"><?= htmlspecialchars($donnees['postTitle']); ?></a></td>
-                    <td><?= htmlspecialchars($donnees['pseudo']); ?></td>
-                    <td><?= htmlspecialchars($donnees['content']); ?></td>
-                    <td><?= htmlspecialchars($donnees['commentDate']); ?></td>
+                    <th scope="row"><?= htmlspecialchars($comment->id()); ?></th>
+                    <td><a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($comment->postId()); ?>"><?= htmlspecialchars($comment->postTitle()); ?></a></td>
+                    <td><?= htmlspecialchars($comment->userPseudo()); ?></td>
+                    <td><?= htmlspecialchars($comment->content()); ?></td>
+                    <td><?= htmlspecialchars($comment->commentDate()); ?></td>
                     <td>
-                        <a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($donnees['postId']); ?>" class="btn btn-outline-dark btn-sm" title="Voir l'article">
+                        <a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($comment->postId()); ?>" class="btn btn-outline-dark btn-sm" title="Voir l'article">
                             <i class="fas fa-eye"></i>
                         </a>
 
                         <?php
-                        if ($donnees['status'] == 0)
+                        if ($comment->status() == 0)
                         {
                         ?>
 
-                        <a href="index.php?action=approveComment&amp;id=<?= htmlspecialchars($donnees['commentId']); ?>" class="btn btn-outline-dark btn-sm" title="Approuver">
+                        <a href="index.php?action=approveComment&amp;id=<?= htmlspecialchars($comment->id()); ?>" class="btn btn-outline-dark btn-sm" title="Approuver">
                             <i class="fas fa-check"></i>
                         </a>
 
@@ -105,13 +105,13 @@
                         }
                         ?>
 
-                        <a data-toggle="modal" data-target="#deleteCommentModal<?= htmlspecialchars($donnees['commentId']); ?>" class="btn btn-outline-dark btn-sm" title="Supprimer">
+                        <a data-toggle="modal" data-target="#deleteCommentModal<?= htmlspecialchars($comment->id()); ?>" class="btn btn-outline-dark btn-sm" title="Supprimer">
                             <i class="fas fa-times"></i>
                         </a>
                     </td>
                 </tr>
                 <!-- deleteComment Modal-->
-                <div class="modal fade" id="deleteCommentModal<?= htmlspecialchars($donnees['commentId']); ?>" tabindex="-1" role="dialog" aria-labelledby="deleteCommentLabel" aria-hidden="true">
+                <div class="modal fade" id="deleteCommentModal<?= htmlspecialchars($comment->id()); ?>" tabindex="-1" role="dialog" aria-labelledby="deleteCommentLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -123,14 +123,13 @@
                             <div class="modal-body">Cliquez sur "Valider" pour supprimer définitivement ce commentaire</div>
                             <div class="modal-footer">
                                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                <a class="btn btn-primary-custom" href="index.php?action=deleteComment&amp;id=<?= htmlspecialchars($donnees['commentId']); ?>">Valider</a>
+                                <a class="btn btn-primary-custom" href="index.php?action=deleteComment&amp;id=<?= htmlspecialchars($comment->id()); ?>">Valider</a>
                             </div>
                         </div>
                     </div>
                 </div>
                 <?php
                 }
-                $allComments->closeCursor();
                 ?>
 
             </tbody>

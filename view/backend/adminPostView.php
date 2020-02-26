@@ -128,9 +128,9 @@
         <div class="comments mt-5">
 
             <?php
-            while ($donnees = $postComments->fetch())
+            foreach($postComments as $postComment)
             {
-                if ($donnees['status'] == 0)
+                if ($postComment->status() == 0)
                 {
 
                     echo '<div class="comment-content text-black-50 text-justify mt-4 mt-4 unapproved-comment">';
@@ -142,30 +142,28 @@
                 ?>
 
                     <div class="comment-infos">
-                        <p class=""><strong><?= htmlspecialchars($donnees["pseudo"]); ?></strong> - le <?= htmlspecialchars($donnees["commentDate"]); ?></p>
+                        <p><strong><?= htmlspecialchars($postComment->userPseudo()); ?></strong> - le <?= htmlspecialchars($postComment->commentDate()); ?></p>
                     </div>
                     <div class="comment-text">
-                        <p class="mb-0"><?= htmlspecialchars($donnees["commentContent"]); ?></p>
+                        <p class="mb-0"><?= htmlspecialchars($postComment->content()); ?></p>
                     </div>
                 
                 <?php
-                if ($donnees['status'] == 0)
+                if ($postComment->status() == 0)
                 {
                 ?>
                     <div class="mt-2">
-                        <a href='index.php?action=approveCommentView&id=<?= htmlspecialchars($donnees["commentId"]); ?>&post=<?= htmlspecialchars($donnees["postId"]); ?>' class="btn btn-outline-dark btn-sm" title="Approuver">
+                        <a href='index.php?action=approveCommentView&id=<?= htmlspecialchars($postComment->id()); ?>&post=<?= htmlspecialchars($postComment->postId()); ?>' class="btn btn-outline-dark btn-sm" title="Approuver">
                             <i class="fas fa-check"></i>
                         </a>
-                        <a href='index.php?action=deleteComment&id=<?= htmlspecialchars($donnees["commentId"]); ?>' class="btn btn-outline-dark btn-sm" title="Supprimer">
+                        <a href='index.php?action=deleteComment&id=<?= htmlspecialchars($postComment->id()); ?>' class="btn btn-outline-dark btn-sm" title="Supprimer">
                             <i class="fas fa-times"></i>
                         </a>
                     </div>
                 </div>   
                 <?php
                 }
-
             }
-            $postComments->closeCursor();
             ?>
             
             

@@ -3,6 +3,7 @@
 namespace controller;
 
 require_once './controller/Controller.php';
+
 use controller\Controller;
 
 class UserController extends Controller
@@ -68,8 +69,9 @@ class UserController extends Controller
 
 	public function userActivated($email)
 	{
-		$activation_code = $this->userManager->getUserCode($email);
-		if ($activation_code != null)
+		$user = $this->userManager->getUser($userId = null, $email);
+
+		if ($user->actCode() != null)
 		{
 			return false;
 		}
@@ -82,8 +84,9 @@ class UserController extends Controller
 
 	public function userActivation($email, $key)
 	{
-		$activation_code = $this->userManager->getUserCode($email);
-		if ($activation_code != $key)
+		$user = $this->userManager->getUser($userId = null, $email);
+
+		if ($user->actCode() != $key)
 		{
 			$message = 'La clé d\'activation n\'est pas bonne, veuillez retourner sur votre mail d\'activation.';
 		}
@@ -97,23 +100,25 @@ class UserController extends Controller
 
 	public function getPassword($email)
 	{
-		return $user_pass = $this->userManager->getUserPass($email);
+		$user = $this->userManager->getUser($userId = null, $email);
+		return $user_pass = $user->password();
 	}
 
 	public function newUserSession($email)
 	{
-		$sessionInfos = $this->userManager->getSessionInfos($email);
-        $_SESSION['id'] = $sessionInfos[0]['userId'];
-        $_SESSION['pseudo'] = $sessionInfos[0]['pseudo'];
-        $_SESSION['role'] = $sessionInfos[0]['role'];
-        $_SESSION['avatar'] = $sessionInfos[0]['avatar'];
+		$user = $this->userManager->getUser($userId = null, $email);
+
+        $_SESSION['id'] = $user->id();
+        $_SESSION['pseudo'] = $user->pseudo();
+        $_SESSION['role'] = $user->userRoleId();
+        $_SESSION['avatar'] = $user->avatar();
         $_SESSION['email'] = $email;
 	}
 
 	public function isAdmin($userId)
 	{
-		$role = $this->userManager->getUserRole($userId);
-		if ($role == 1)
+		$user = $this->userManager->getUser($userId);
+		if ($user->userRoleId() == 1)
 		{
 			return true;
 		}
@@ -122,8 +127,8 @@ class UserController extends Controller
 
 	public function isSuperAdmin($userId)
 	{
-		$role = $this->userManager->getUserRole($userId);
-		if ($role == 3)
+		$user = $this->userManager->getUser($userId);
+		if ($user->userRoleId() == 3)
 		{
 			return true;
 		}
@@ -161,7 +166,8 @@ class UserController extends Controller
 
 	public function getNewPassCode($email)
 	{
-		return $reinit_code = $this->userManager->getNewPassCode($email);
+		$user = $this->userManager->getUser($userId = null, $email);
+		return $reinit_code = $user->reinitCode();
 	}
 
 	public function newPassView($email, $message = null, $status)
