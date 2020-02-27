@@ -2,7 +2,6 @@
 
 namespace src\entity;
 
-require_once 'src/entity/Entity.php';
 use src\entity\Entity;
 
 abstract class Entity

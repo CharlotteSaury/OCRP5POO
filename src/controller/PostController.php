@@ -2,7 +2,6 @@
 
 namespace src\controller;
 
-require_once 'src/controller/Controller.php';
 use src\controller\Controller;
 
 class PostController extends Controller

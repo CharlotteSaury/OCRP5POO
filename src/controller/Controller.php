@@ -2,14 +2,6 @@
 
 namespace src\controller;
 
-require_once 'src/model/Manager.php';
-require_once 'src/model/PostManager.php';
-require_once 'src/model/CommentManager.php';
-require_once 'src/model/UserManager.php';
-require_once 'src/model/ContactManager.php';
-require_once 'src/model/ContentManager.php';
-require_once 'src/view/View.php';
-
 use src\model\PostManager;
 use src\model\CommentManager;
 use src\model\UserManager;
