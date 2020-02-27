@@ -2,8 +2,6 @@
 
 namespace src\model;
 
-require_once 'src/model/Manager.php';
-
 class ContentManager extends Manager
 {
 	public function getPostContents($postId)

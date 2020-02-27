@@ -2,8 +2,6 @@
 
 namespace src\model;
 
-require_once 'src/model/Manager.php';
-
 class UserManager extends Manager
 {
 	public function getUsers($usersNb = null, $userRoleId = null)

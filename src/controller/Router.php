@@ -2,12 +2,6 @@
 
 namespace src\controller;
 
-require_once 'src/controller/HomeController.php';
-require_once 'src/controller/PostController.php';
-require_once 'src/controller/AdminController.php';
-require_once 'src/controller/UserController.php';
-require_once 'src/controller/ErrorController.php';
-
 use src\controller\HomeController;
 use src\controller\PostController;
 use src\controller\AdminController;

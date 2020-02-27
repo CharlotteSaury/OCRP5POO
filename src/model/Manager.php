@@ -2,13 +2,6 @@
 
 namespace src\model;
 
-require_once 'src/entity/Post.php';
-require_once 'src/entity/Content.php';
-require_once 'src/entity/User.php';
-require_once 'src/entity/Contact.php';
-require_once 'src/entity/Answer.php';
-require_once 'src/entity/Comment.php';
-
 use src\entity\Post;
 use src\entity\Content;
 use src\entity\User;

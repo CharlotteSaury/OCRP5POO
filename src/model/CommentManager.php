@@ -2,8 +2,6 @@
 
 namespace src\model;
 
-require_once 'src/model/Manager.php';
-
 class CommentManager extends Manager
 {
 	public function getComments($commentsNb = null, $status = null, $sortingDate = null)

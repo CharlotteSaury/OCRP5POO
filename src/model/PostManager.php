@@ -2,8 +2,6 @@
 
 namespace src\model;
 
-require_once 'src/model/Manager.php';
-
 class PostManager extends Manager
 {
 	
