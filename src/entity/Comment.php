@@ -6,7 +6,7 @@ use src\entity\Entity;
 
 class Comment extends Entity
 {
-	protected $postId,
+	private $postId,
 	$userId,
 	$content,
 	$commentDate,
