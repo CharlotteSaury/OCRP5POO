@@ -91,35 +91,24 @@ class CommentManager extends Manager
 		$req->execute();
 	}
 
-	public function getTotalCommentsNb()
+	public function getCommentsNb($status = null)
 	{
 		$sql = 'SELECT COUNT(*) AS commentsNb FROM comment';
-		$req = $this->dbRequest($sql);
+
+		if ($status != null)
+		{
+			$sql .= ' WHERE comment.status = :status';
+			$req = $this->dbRequest($sql, array($status));
+			$req->bindValue('status', $status, \PDO::PARAM_INT);
+			$req->execute();
+		}
+		else
+		{
+			$req = $this->dbRequest($sql);
+		}
 
 		$commentsNb = $req->fetch(\PDO::FETCH_COLUMN);
 		return $commentsNb;
-	}
-
-	public function getApprovedCommentsNb()
-	{
-		$sql = 'SELECT COUNT(*) AS commentsNb FROM comment WHERE comment.status=1';
-		$req = $this->dbRequest($sql);
-
-		$commentsNb = $req->fetch(\PDO::FETCH_COLUMN);
-		return $commentsNb;
-	}
-
-	
-
-	public function getPostCommentsNb($postId)
-	{
-		$sql = ('SELECT COUNT(*) AS commentsNb FROM comment WHERE comment.post_id = :postId');
-
-		$req = $this->dbRequest($sql, array($postId));
-		$req->bindValue('postId', $postId, \PDO::PARAM_INT);
-		$req->execute();
-
-		return $req;
 	}
 
 	public function approveComment($commentId)

@@ -7,11 +7,7 @@ use Exception;
 class View
 
 {
-	private $_file,
-			$_title,
-			$_header,
-			$_content,
-			$_contentTitle;
+	private $_file;
 
 	public function render($app, $template, $data = [])
 	{

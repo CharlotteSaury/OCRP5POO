@@ -9,10 +9,10 @@ class AdminController extends Controller
 {
 	public function dashboardView($message = null)
 	{
-		$publishedPostsNb = $this->postManager->getPublishedPostsNb();
-		$totalPostsNb = $this->postManager->getTotalPostsNb();
-		$approvedCommentsNb = $this->commentManager->getApprovedCommentsNb();
-		$totalCommentsNb = $this->commentManager->getTotalCommentsNb();
+		$publishedPostsNb = $this->postManager->getPostsNb(2);
+		$totalPostsNb = $this->postManager->getPostsNb();
+		$approvedCommentsNb = $this->commentManager->getCommentsNb(1);
+		$totalCommentsNb = $this->commentManager->getCommentsNb();
 		$usersNb = $this->userManager->getUserNb();
 		$recentPosts = $this->postManager->getRecentPosts();
 		$recentComments = $this->commentManager->getComments(5);
@@ -34,8 +34,8 @@ class AdminController extends Controller
 
 	public function adminPostsView($message = null, $sorting = null, $sortingDate = null)
 	{
-		$totalPostsNb = $this->postManager->getTotalPostsNb();
-		$publishedPostsNb = $this->postManager->getPublishedPostsNb();
+		$totalPostsNb = $this->postManager->getPostsNb();
+		$publishedPostsNb = $this->postManager->getPostsNb(2);
 		$unpublishedPostsNb = $totalPostsNb - $publishedPostsNb;
 
 		if ($sorting != null)
@@ -49,7 +49,7 @@ class AdminController extends Controller
 			$posts = $this->postManager->getPosts($status = null, $first_post = null, $postsPerPage = null, $sortingDate);
 		}
 		
-		$allPostsCategories = $this->postManager->getAllPostsCategories();
+		$allPostsCategories = $this->postManager->getPostsCategories();
 
 		foreach ($allPostsCategories as $key => $value)
 		{
@@ -75,7 +75,7 @@ class AdminController extends Controller
 	public function adminPostView($postId, $message = null)
 	{
 		$post = $this->postManager->getPostInfos($postId);
-		$post->setCategories($this->postManager->getPostCategories($postId));
+		$post->setCategories($this->postManager->getPostsCategories($postId));
 		$contents = $this->contentManager->getPostContents($postId);
 		$postComments = $this->commentManager->getPostComments($postId);	
 		$unreadContactsNb = $this->contactManager->getUnreadContactsNb();
@@ -119,7 +119,7 @@ class AdminController extends Controller
 	public function editPostView($postId, $message = null)
 	{
 		$post = $this->postManager->getPostInfos($postId);
-		$post->setCategories($this->postManager->getPostCategories($postId));
+		$post->setCategories($this->postManager->getPostsCategories($postId));
 		$contents = $this->contentManager->getPostContents($postId);
 		$unreadContactsNb = $this->contactManager->getUnreadContactsNb();
 		
@@ -176,7 +176,7 @@ class AdminController extends Controller
 
 	public function addParagraph($postId)
 	{
-		$this->contentManager->addParagraph($postId);
+		$this->contentManager->addContent($postId);
 		$this->postManager->dateUpdate($postId);
 		$message = 'Bloc paragraphe ajouté ! ';
 		$this->editPostView($postId, $message);
@@ -192,7 +192,7 @@ class AdminController extends Controller
 
 	public function addPicture($postId, $content)
 	{
-		$this->contentManager->addPicture($postId, $content);
+		$this->contentManager->addContent($postId, $content);
 		$this->postManager->dateUpdate($postId);
 	}
 
@@ -237,8 +237,8 @@ class AdminController extends Controller
 
 	public function adminCommentsView($message = null, $sorting = null, $sortingDate = null)
 	{
-		$totalCommentsNb = $this->commentManager->getTotalCommentsNb();
-		$approvedCommentsNb = $this->commentManager->getApprovedCommentsNb();
+		$totalCommentsNb = $this->commentManager->getCommentsNb();
+		$approvedCommentsNb = $this->commentManager->getCommentsNb(1);
 		$unapprovedCommentsNb = $totalCommentsNb - $approvedCommentsNb;
 
 		if ($sorting != null)

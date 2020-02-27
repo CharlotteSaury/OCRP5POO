@@ -55,10 +55,8 @@ class Router
 				return false;
 			}
 		}
-		else
-		{
-			return false;
-		}
+		
+		return false;
 	}
 
 	public function connexionAuto($email)

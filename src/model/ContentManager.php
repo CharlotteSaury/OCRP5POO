@@ -57,13 +57,24 @@ class ContentManager extends Manager
 		$req->execute();
 	}
 
-	public function addParagraph($postId)
+	public function addContent($postId, $content = null)
 	{
-		$sql = 'INSERT INTO content (post_id, content_type_id, content) 
-				VALUES (:postId, 2, "")';
+		$sql = 'INSERT INTO content (post_id, content_type_id, content)';
 
-		$req = $this->dbRequest($sql, array($postId));
-		$req->bindValue('postId', $postId, \PDO::PARAM_INT);
+		if ($content != null)
+		{
+			$sql .= 'VALUES (:postId, 1, :content)';
+			$req = $this->dbRequest($sql, array($postId, $content));
+			$req->bindValue('postId', $postId, \PDO::PARAM_INT);
+			$req->bindValue('content', $content);
+		}
+		else
+		{
+			$sql .= ' VALUES (:postId, 2, "")';
+			$req = $this->dbRequest($sql, array($postId));
+			$req->bindValue('postId', $postId, \PDO::PARAM_INT);
+		}
+
 		$req->execute();
 	}
 
@@ -81,16 +92,6 @@ class ContentManager extends Manager
 		}
 	}
 
-	public function addPicture($postId, $content)
-	{
-		$sql = 'INSERT INTO content (post_id, content_type_id, content) 
-				VALUES (:postId, 1, :content)';
-
-		$req = $this->dbRequest($sql, array($postId, $content));
-		$req->bindValue('postId', $postId, \PDO::PARAM_INT);
-		$req->bindValue('content', $content);
-		$req->execute();
-	}
 
 	public function updatePostPicture($contentId, $url)
 	{

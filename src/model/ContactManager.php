@@ -10,7 +10,7 @@ class ContactManager extends Manager
 		$req = $this->dbRequest($sql);
 
 		$totalContactNb = $req->fetch(\PDO::FETCH_COLUMN);
-		return $$totalContactNb;
+		return $totalContactNb;
 	}
 
 	public function getUnreadContactsNb()

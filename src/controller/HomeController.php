@@ -13,7 +13,7 @@ class HomeController extends Controller
 	{
 		return $this->view->render('frontend', 'indexView', ['message' => $message]); 
 	}
-
+	
 	public function legalView()
 	{
 		return $this->view->render('frontend', 'legalView');

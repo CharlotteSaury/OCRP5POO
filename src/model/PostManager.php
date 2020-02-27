@@ -4,24 +4,24 @@ namespace src\model;
 
 class PostManager extends Manager
 {
-	
-	public function getTotalPostsNb()
+	public function getPostsNb($status = null)
 	{
-		// total post number
 		$sql = 'SELECT COUNT(*) AS postsNb FROM post';
-		$req = $this->dbRequest($sql);
 
+		if ($status != null)
+		{
+			$sql .= ' WHERE post.status = :status';
+			$req = $this->dbRequest($sql, array($status));
+			$req->bindValue(':status', $status, \PDO::PARAM_INT);
+			$req->execute();
+		}
+		else
+		{
+			$req = $this->dbRequest($sql);
+		}
+		
 		$postsNb = $req->fetch(\PDO::FETCH_COLUMN);
 		return $postsNb;
-	}
-
-	public function getPublishedPostsNb()
-	{
-		$sql = 'SELECT COUNT(*) AS postsNb FROM post WHERE post.status=2';
-		$req = $this->dbRequest($sql);
-
-		$publishedPostNb = $req->fetch(\PDO::FETCH_COLUMN);
-		return $publishedPostNb;
 	}
 
 	public function getPagination($postsPerPage, $postsNb)
@@ -141,36 +141,28 @@ class PostManager extends Manager
 		return $post;
 	}
 
-	public function getAllPostsCategories() {
-		
+	public function getPostsCategories($postId = null)
+	{
 		$sql = 'SELECT post_category.post_id AS postId,
 			category.name AS name,
 			category.id AS id
 			FROM post_category
 			JOIN category ON category.id = post_category.category_id';
 
-		$req = $this->dbRequest($sql);
+		if ($postId != null)
+		{
+			$sql .= ' WHERE post_category.post_id = :postId';
+			$req = $this->dbRequest($sql, array($postId));
+			$req->bindValue('postId', $postId, \PDO::PARAM_INT);
+			$req->execute();
+			$categories = $req->fetchAll(\PDO::FETCH_ASSOC);
+		}
+		else
+		{
+			$req = $this->dbRequest($sql);
+			$categories = $req->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_ASSOC);
+		}
 
-		$allPostsCategories = $req->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_ASSOC);
-
-		return $allPostsCategories;
-		
-	}
-
-	public function getPostCategories($postId) {
-		
-		$sql = 'SELECT category.name AS name,
-			category.id AS id,
-			post_category.post_id AS postId
-			FROM category 
-			JOIN post_category ON category.id = post_category.category_id
-			WHERE post_category.post_id = :postId';
-
-		$req = $this->dbRequest($sql, array($postId));
-		$req->bindValue('postId', $postId, \PDO::PARAM_INT);
-		$req->execute();
-
-		$categories = $req->fetchAll(\PDO::FETCH_ASSOC);
 		return $categories;
 	}
 
@@ -250,7 +242,7 @@ class PostManager extends Manager
 	public function addCategory($postId, $category)
 	{
 		//Récupération des catégories du post
-		$postCategories = $this->getPostCategories($postId);
+		$postCategories = $this->getPostsCategories($postId);
 
 		// Récupération de l'id de la catégorie 
 

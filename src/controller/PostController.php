@@ -9,12 +9,12 @@ class PostController extends Controller
 {
 	public function listPostView($current_page, $postsPerPage)
 	{
-		$publishedPostsNb = $this->postManager->getPublishedPostsNb();
+		$publishedPostsNb = $this->postManager->getPostsNb(2);
 		$page_number = $this->postManager->getPagination($postsPerPage, $publishedPostsNb);
 		$first_post = $this->postManager->getFirstPost($current_page, $postsPerPage);
 		$posts = $this->postManager->getPosts(2, $first_post, $postsPerPage);
 
-		$allPostsCategories = $this->postManager->getAllPostsCategories();
+		$allPostsCategories = $this->postManager->getPostsCategories();
 
 		foreach ($allPostsCategories as $key => $value)
 		{
@@ -39,7 +39,7 @@ class PostController extends Controller
 	public function postView($postId, $messageComment = null)
 	{
 		$post = $this->postManager->getPostInfos($postId);
-		$post->setCategories($this->postManager->getPostCategories($postId));
+		$post->setCategories($this->postManager->getPostsCategories($postId));
 		$contents = $this->contentManager->getPostContents($postId);
 		$postComments = $this->commentManager->getpostComments($postId, 1);
 		$recentPosts = $this->postManager->getRecentPosts(2);
