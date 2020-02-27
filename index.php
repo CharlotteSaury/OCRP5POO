@@ -1,9 +1,9 @@
 <?php
 
-require_once 'controller/Router.php';
+require_once 'src/controller/Router.php';
 require_once 'config/dev.php';
 
-use controller\Router;
+use src\controller\Router;
 
 if (isset($_COOKIE['auth']) && isset($_COOKIE['email']) && !empty($_COOKIE['auth']) && !isset($_SESSION['id']))
 {
