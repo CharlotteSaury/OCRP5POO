@@ -7,7 +7,7 @@ use src\entity\Entity;
 class Content extends Entity
 
 {
-	protected $postId,
+	private $postId,
 			$contentTypeId,
 			$content;
 

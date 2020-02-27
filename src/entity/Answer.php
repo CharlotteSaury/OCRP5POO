@@ -6,7 +6,7 @@ use src\entity\Entity;
 
 class Answer extends Entity
 {
-	protected $subject,
+	private $subject,
 	$content,
 	$dateAnswer,
 	$contactId;

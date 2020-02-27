@@ -6,7 +6,7 @@ use src\entity\Entity;
 
 class User extends Entity
 {
-	protected $pseudo,
+	private $pseudo,
 	$email,
 	$password,
 	$userRoleId,

@@ -64,7 +64,6 @@ class Router
 	public function connexionAuto($email)
 	{
 		$this->_userController->newUserSession($email);
-		var_dump($_SESSION);
 		$this->routerRequest();
 	}
 

@@ -6,7 +6,7 @@ use src\entity\Entity;
 
 class Contact extends Entity
 {
-	protected $name,
+	private $name,
 	$email,
 	$subject,
 	$content,

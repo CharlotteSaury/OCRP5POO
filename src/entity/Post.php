@@ -7,7 +7,7 @@ use src\entity\Entity;
 class Post extends Entity
 
 {
-	protected $title,
+	private $title,
 			$chapo,
 			$status,
 			$dateCreation,
