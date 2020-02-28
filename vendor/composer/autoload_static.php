@@ -16,6 +16,10 @@ class ComposerStaticInit910807a095391365cfdf5b32406455f6
         array (
             'src\\' => 4,
         ),
+        'c' => 
+        array (
+            'config\\' => 7,
+        ),
         'T' => 
         array (
             'Twig\\' => 5,
@@ -35,6 +39,10 @@ class ComposerStaticInit910807a095391365cfdf5b32406455f6
         'src\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
+        ),
+        'config\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/config',
         ),
         'Twig\\' => 
         array (
@@ -230,6 +238,8 @@ class ComposerStaticInit910807a095391365cfdf5b32406455f6
         'Twig\\TwigTest' => __DIR__ . '/..' . '/twig/twig/src/TwigTest.php',
         'Twig\\Util\\DeprecationCollector' => __DIR__ . '/..' . '/twig/twig/src/Util/DeprecationCollector.php',
         'Twig\\Util\\TemplateDirIterator' => __DIR__ . '/..' . '/twig/twig/src/Util/TemplateDirIterator.php',
+        'config\\Parameter' => __DIR__ . '/../..' . '/config/Parameter.php',
+        'config\\Request' => __DIR__ . '/../..' . '/config/Request.php',
         'src\\controller\\AdminController' => __DIR__ . '/../..' . '/src/controller/AdminController.php',
         'src\\controller\\Controller' => __DIR__ . '/../..' . '/src/controller/Controller.php',
         'src\\controller\\ErrorController' => __DIR__ . '/../..' . '/src/controller/ErrorController.php',
