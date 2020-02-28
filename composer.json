@@ -2,7 +2,8 @@
    	"autoload": {
     "psr-4": {
     	"OCRP5POO\\": "OCRP5POO/",
-    	"src\\": "src/"
+    	"src\\": "src/",
+    	"config\\": "config/"
     	}
   	}
 

@@ -181,6 +181,8 @@ return array(
     'Twig\\TwigTest' => $vendorDir . '/twig/twig/src/TwigTest.php',
     'Twig\\Util\\DeprecationCollector' => $vendorDir . '/twig/twig/src/Util/DeprecationCollector.php',
     'Twig\\Util\\TemplateDirIterator' => $vendorDir . '/twig/twig/src/Util/TemplateDirIterator.php',
+    'config\\Parameter' => $baseDir . '/config/Parameter.php',
+    'config\\Request' => $baseDir . '/config/Request.php',
     'src\\controller\\AdminController' => $baseDir . '/src/controller/AdminController.php',
     'src\\controller\\Controller' => $baseDir . '/src/controller/Controller.php',
     'src\\controller\\ErrorController' => $baseDir . '/src/controller/ErrorController.php',
