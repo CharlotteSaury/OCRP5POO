@@ -87,7 +87,7 @@
 
                                 <div class="modal-footer">
                                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                    <button type="submit" name="deleteMainPicture" class="btn btn-primary-custom" >Valider</button>
+                                    <button type="submit" name="deleteMainPicture" class="btn btn-primary-custom" value="Valider">Valider</button>
                                 </div>
                             </div>
                         </div>
@@ -210,7 +210,7 @@
                 ?>       
 
                 <div class="my-2">
-                    <button type="submit" name="addParagraph" class="d-none d-sm-inline-block btn btn-sm btn-light shadow-sm"><i class="fas fa-plus fa-sm mr-1"></i> Ajouter un paragraphe</button>
+                    <button type="submit" name="addParagraph" class="d-none d-sm-inline-block btn btn-sm btn-light shadow-sm"  value="add"><i class="fas fa-plus fa-sm mr-1"></i> Ajouter un paragraphe</button>
                     <a data-toggle="modal" data-target="#addPictureModal<?= $postId; ?>" class="d-none d-sm-inline-block btn btn-sm btn-light shadow-sm"><i class="fas fa-plus fa-sm mr-1"></i> Ajouter une image</a>
 
                     <!-- addPicture Modal-->
@@ -229,7 +229,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                    <button type="submit" class="btn btn-primary-custom" name="addPicture">Envoyer</button>
+                                    <button type="submit" class="btn btn-primary-custom" name="addPicture" value="add">Envoyer</button>
                                 </div>
 
                             </div>
@@ -263,7 +263,7 @@
                 <div class="form-group form-inline mt-3">
                     <label for="new-category">Sélectionner / Ajouter une catégorie</label>
                     <input type="text" class="form-control mx-2" id="new-category" name="categoryName"/> 
-                    <button type="submit" name="addCategory" class="d-none d-sm-inline-block btn btn-sm btn-light shadow-sm"><i class="fas fa-plus"></i></button>
+                    <button type="submit" name="addCategory" class="d-none d-sm-inline-block btn btn-sm btn-light shadow-sm" value="add"><i class="fas fa-plus"></i></button>
                 </div>
 
                 <hr class="d-none d-lg-block ml-0">

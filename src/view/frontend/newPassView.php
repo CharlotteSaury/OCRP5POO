@@ -18,7 +18,7 @@
                 echo '<div class="adminMessage text-white-50 text-center">' . $message . '</div>';
             }
 
-            if ($status = true)
+            if ($status == true)
             {
             ?>
 

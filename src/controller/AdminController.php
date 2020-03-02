@@ -3,6 +3,7 @@
 namespace src\controller;
 
 use src\controller\Controller;
+use config\Parameter;
 
 class AdminController extends Controller
 
@@ -32,21 +33,26 @@ class AdminController extends Controller
 			'unreadContactsNb' => $unreadContactsNb]);
 	}
 
-	public function adminPostsView($message = null, $sorting = null, $sortingDate = null)
+	public function adminPostsView($message = null, $sorting = null)
 	{
 		$totalPostsNb = $this->postManager->getPostsNb();
 		$publishedPostsNb = $this->postManager->getPostsNb(2);
 		$unpublishedPostsNb = $totalPostsNb - $publishedPostsNb;
 
-		if ($sorting != null)
+		if ($message == null)
+		{
+			$message = $sorting[0];
+		}		
+
+		if ($sorting[1] != null)
 		{
 			$contentTitle = 'Articles non publiés';
-			$posts = $this->postManager->getPosts(1, $first_post = null, $postsPerPage = null, $sortingDate);
+			$posts = $this->postManager->getPosts(1, $first_post = null, $postsPerPage = null, $sorting[2]);
 		}
 		else
 		{
 			$contentTitle = 'Tous les articles';
-			$posts = $this->postManager->getPosts($status = null, $first_post = null, $postsPerPage = null, $sortingDate);
+			$posts = $this->postManager->getPosts($status = null, $first_post = null, $postsPerPage = null, $sorting[2]);
 		}
 		
 		$allPostsCategories = $this->postManager->getPostsCategories();
@@ -95,15 +101,15 @@ class AdminController extends Controller
 		return $this->view->render('backend', 'newPostInfosView', ['unreadContactsNb' => $unreadContactsNb]);
 	}
 
-	public function newPostInfos($title, $chapo, $userId, $mainImage)
+	public function newPostInfos(Parameter $post, $mainImage)
 	{
-		$postId = $this->postManager->newPostInfos($title, $chapo, $userId, $mainImage);
+		$postId = $this->postManager->newPostInfos($post->get('title'), $post->get('chapo'), $post->get('userId'), $mainImage);
 		$this->editPostView($postId);
 	}
 
-	public function publishPost($postId, $status, $dashboard = null)
+	public function publishPost(Parameter $get, $dashboard = null)
 	{
-		$this->postManager->publishPost($postId, $status);
+		$this->postManager->publishPost($get);
 		$message = "Statut du post modifié ! ";
 
 		if ($dashboard != null)
@@ -130,13 +136,13 @@ class AdminController extends Controller
 			'unreadContactsNb' => $unreadContactsNb]);
 	}
 
-	public function editMainPostPicture($postId, $url)
+	/*public function editMainPostPicture($postId, $url)
 	{
 		$this->postManager->updateMainPostPicture($postId, $url);
 		$this->postManager->dateUpdate($postId);
 		$message = 'Photo modifiée ! ';
 		$this->editPostView($postId, $message);
-	}
+	}*/
 
 	public function deleteMainPostPicture($postId)
 	{
@@ -159,19 +165,19 @@ class AdminController extends Controller
 		unlink($oldImgUrl);
 	}
 
-	public function deleteContent($postId, $contentId, $contentType)
+	public function deleteContent(Parameter $get)
 	{
-		if ($contentType == 1)
+		if ($get->get('type') == 1)
 		{
-			$content = $this->contentManager->getContent($contentId);
+			$content = $this->contentManager->getContent($get->get('content'));
 			$imgUrl = $content->content();
 			unlink($imgUrl);
 		}
 
-		$this->contentManager->deleteContent($contentId);
-		$this->postManager->dateUpdate($postId);
+		$this->contentManager->deleteContent($get->get('content'));
+		$this->postManager->dateUpdate($get->get('id'));
 		$message = 'Contenu supprimé ! ';
-		$this->editPostView($postId, $message);
+		$this->editPostView($get->get('id'), $message);
 	}
 
 	public function addParagraph($postId)
@@ -196,27 +202,33 @@ class AdminController extends Controller
 		$this->postManager->dateUpdate($postId);
 	}
 
-	public function addCategory($postId, $category)
+	public function addCategory(Parameter $post)
 	{
-		$message = $this->postManager->addCategory($postId, $category);
-		$this->postManager->dateUpdate($postId);
-		$this->editPostView($postId, $message);
+		$message = $this->postManager->addCategory($post->get('postId'), $post->get('categoryName'));
+		$this->postManager->dateUpdate($post->get('postId'));
+		$this->editPostView($post->get('postId'), $message);
 	}
 
-	public function deleteCategory($postId, $categoryId)
+	public function deleteCategory(Parameter $get)
 	{
-		$this->postManager->deleteCategory($postId, $categoryId);
-		$this->postManager->dateUpdate($postId);
+		$this->postManager->deleteCategory($get);
+		$this->postManager->dateUpdate($get->get('id'));
 		$message = 'Catégorie supprimée ! ';
-		$this->editPostView($postId, $message);
+		$this->editPostView($get->get('id'), $message);
 	}
 
-	public function editPostInfos($newPostInfos, $message = null)
+	public function editPostInfos(Parameter $post, $message = null)
 	{
-		$postId = $newPostInfos['postId'];
-		$this->postManager->editPostInfos($newPostInfos, $postId);
-		$this->postManager->dateUpdate($postId);
-		$this->editPostView($postId, $message);
+		if (empty($post->get('title')) || empty($post->get('chapo')))
+		{
+			$message = 'Les champs titre et chapo ne peuvent être vides.';
+		}
+		else
+		{
+			$this->postManager->editPostInfos($post);
+			$this->postManager->dateUpdate($post->get('postId'));
+		}
+		$this->editPostView($post->get('postId'), $message);
 	}
 
 	public function deletePost($postId, $dashboard = null)
@@ -235,22 +247,27 @@ class AdminController extends Controller
 		}
 	}
 
-	public function adminCommentsView($message = null, $sorting = null, $sortingDate = null)
+	public function adminCommentsView($message = null, $sorting = null)
 	{
 		$totalCommentsNb = $this->commentManager->getCommentsNb();
 		$approvedCommentsNb = $this->commentManager->getCommentsNb(1);
 		$unapprovedCommentsNb = $totalCommentsNb - $approvedCommentsNb;
 
-		if ($sorting != null)
+		if ($message == null)
+		{
+			$message = $sorting[0];
+		}
+
+		if ($sorting[1] != null)
 		{
 			$contentTitle = 'Commentaires non approuvés';
 			$status = 0;
-			$allComments = $this->commentManager->getComments($commentsNb = null, $status, $sortingDate);
+			$allComments = $this->commentManager->getComments($commentsNb = null, $status, $sorting[2]);
 		}
 		else
 		{
 			$contentTitle = 'Tous les Commentaires';
-			$allComments = $this->commentManager->getComments($commentsNb = null, $status = null, $sortingDate);
+			$allComments = $this->commentManager->getComments($commentsNb = null, $status = null, $sorting[2]);
 		}
 
 		$unreadContactsNb = $this->contactManager->getUnreadContactsNb();
@@ -384,28 +401,35 @@ class AdminController extends Controller
 		$this->userManager->updateProfilePicture($userId, $avatarUrl);
 	}
 
-	public function adminContactsView($message = null, $sorting = null, $sortingDate = null)
+	public function adminContactsView($message = null, $sorting = null)
 	{
 		$allContactsNb = $this->contactManager->getTotalContactsNb();
 		$unreadContactsNb = $this->contactManager->getUnreadContactsNb();
 
-		if ($sorting != null)
+		if ($message == null)
+		{
+			$message = $sorting[0];
+		}
+		
+
+		if ($sorting[1] != null)
 		{
 			$contentTitle = 'Contacts non lus';
 			$status = 1;
-			$allContacts = $this->contactManager->getContacts($contactId = null, $status, $sortingDate);
+			$allContacts = $this->contactManager->getContacts($contactId = null, $status, $sorting[2]);
 		}
 		else
 		{
 			$contentTitle = 'Tous les contacts';
-			$allContacts = $this->contactManager->getContacts($contactId = null, $status = null, $sortingDate);
+			$allContacts = $this->contactManager->getContacts($contactId = null, $status = null, $sorting[2]);
 		}
 
 
 		return $this->view->render('backend', 'adminContactsView', ['allContactsNb' => $allContactsNb,
 			'unreadContactsNb' => $unreadContactsNb,
 			'contentTitle' => $contentTitle,
-			'allContacts' => $allContacts]);
+			'allContacts' => $allContacts,
+			'message' => $message]);
 	}
 
 	public function adminContactView($contactId, $message = null)
@@ -441,30 +465,77 @@ class AdminController extends Controller
 		
 	}
 
-	public function adminAnswerEmail($contactId, $answerSubject, $answerContent, $email)
+	public function adminAnswerEmail(Parameter $post)
 	{
-		$contact = $this->contactManager->getContacts($contactId);
+		$contact = $this->contactManager->getContacts($post->get('id'));
 
-		$subject = $answerSubject;
+		$subject = $post->get('answerSubject');
 		$headers = "From: " . BLOG_AUTHOR . "/r/n";
-		$message = $answerContent . 
+		$message = $post->get('answerContent') . 
 					" /r/n
 					----------------/r/n/r/n
-					De: " . $contact->name() . " <" . $email . ">/r/n
+					De: " . $contact->name() . " <" . $post->get('email') . ">/r/n
 					Le: " . $contact->dateMessage() . "/r/n
 					Objet: " . $contact->subject() . "/r/n/r/n"
 					. $contact->content();
 			
 
 		$message = wordwrap($message, 70, "\r\n");
-		mail($email, $subject, $message, $headers);	     
+		mail($post->get('email'), $subject, $message, $headers);	     
 	}
 
-	public function addAnswer($contactId, $answerSubject, $answerContent)
+	public function addAnswer(Parameter $post)
 	{
-		$contact = $this->contactManager->getContacts($contactId);
-		$this->contactManager->updateStatus($contactId, 3);   
-		$this->contactManager->addAnswer($contactId, $answerSubject, $answerContent);
+		$contact = $this->contactManager->getContacts($post->get('id'));
+		$this->contactManager->updateStatus($post->get('id'), 3);   
+		$this->contactManager->addAnswer($post);
+	}
+
+	public function getSortingResults(Parameter $get, $sortingTitle)
+	{
+		$sort = $get->get('sort');
+		$date = $get->get('date');
+
+		if ($sort && !$date)
+		{
+			if ($sort == $sortingTitle)
+			{
+				$message = $sortingDate = null;
+			}
+			else
+			{
+				$message = 'Le choix de tri n\'est pas valide';
+				$sort = $sortingDate = null;
+			}
+		}
+		elseif (!$sort && $date)
+		{
+			if ($date == 'asc')
+			{
+				$message = $sort = null;
+				$sortingDate = $date;
+			}
+			else
+			{
+				$message = 'Le choix de tri n\'est pas valide';
+				$sort = $sortingDate = null;
+			}
+		}
+		else
+		{
+			if ($sort == $sortingTitle && $date == 'asc')
+			{
+				$message = null;
+				$sortingDate = $date;
+			}
+			else
+			{
+				$message = 'Le choix de tri n\'est pas valide';
+				$sort = $sortingDate = null;
+			}
+		}
+
+		return [$message, $sort, $sortingDate];
 	}
 	
 }

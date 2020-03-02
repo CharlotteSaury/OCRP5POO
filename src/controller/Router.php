@@ -31,25 +31,6 @@ class Router
 		$this->request = new Request();
 	}
 
-	private function adminAccess()
-	{
-		if (isset($_SESSION['id']))
-		{
-			$userId = htmlspecialchars($_SESSION['id']);
-
-			if ($this->_userController->isAdmin($userId) || $this->_userController->isSuperAdmin($userId))
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		
-		return false;
-	}
-
 	public function connexionAuto($email)
 	{
 		$this->_userController->newUserSession($email);
@@ -63,43 +44,17 @@ class Router
 		{
 			if (isset($action))
 			{
-				if ($action === 'listPosts') 
+				if ($action == 'listPosts') 
 				{
-					$page = $this->request->getGet()->get('page');
-					if (isset($page))
-					{
-						if ($page > 0)
-						{
-							$current_page = $this->request->getGet()->get('page');
-						}
-						else
-						{
-							throw new Exception('Numéro de page erroné');
-						}
-
-					}
-					else 
-					{
-						$current_page = 1;
-					}
-
-					$postsPerPage = $this->request->getGet()->get('postsPerPage');
-					if (isset($postsPerPage))
-					{
-						$postsNb = $this->request->getGet()->get('postsPerPage');
-					}
-					else
-					{
-						$postsNb = 3;
-					}
-
-					$this->_postController->listPostView($current_page, $postsNb);
+					$get = $this->request->getGet();
+					$sorting = $this->_postController->listPostSorting($get);
+					$this->_postController->listPostView($sorting);
 				} 
 
 				elseif ($action == 'postView') 
 				{
 					$postId = $this->request->getGet()->get('id');
-					if ($postId > 0) 
+					if ($this->_postController->isValid($postId)) 
 					{
 						$this->_postController->postView($postId);
 					}
@@ -111,12 +66,8 @@ class Router
 
 				elseif ($action == "addComment") 
 				{
-					$postId = $this->getParameter($_POST, 'postId');
-					$userId = $this->getParameter($_POST, 'userId');
-					$content = $this->getParameter($_POST, 'content');
-
-					$this->_postController->addComment($postId, $userId, $content);
-
+					$post = $this->request->getPost();
+					$this->_postController->addComment($post);
 				}
 
 				elseif ($action == 'legalView') 
@@ -136,77 +87,14 @@ class Router
 
 				elseif ($action == 'inscription')
 				{
-					$pseudo = $this->getParameter($_POST, 'pseudo');
-					$pass1 = $this->getParameter($_POST, 'pass1');
-					$pass2 = $this->getParameter($_POST, 'pass2');
-					$email = $this->getParameter($_POST, 'email');
-
-					if (strlen($pseudo) < 25)
-					{
-						if (filter_var($email, FILTER_VALIDATE_EMAIL))
-						{
-							if ($pass1 == $pass2)
-							{
-								$pass = password_hash($pass1, PASSWORD_DEFAULT);
-
-								if (($this->_userController->checkEmail($email)) || ($this->_userController->checkPseudo($pseudo)) )
-								{
-									if ($this->_userController->checkEmail($email))
-									{
-										$message = "Cet email est déjà associé à un compte. Essayez de vous connecter !";
-										$this->_userController->connexionView($message);
-									}
-									else
-									{
-										$message = "Ce pseudo n'est pas disponible. Merci d'en choisir un nouveau.";
-										$this->_userController->inscriptionView($message);
-									}								
-								}
-								else
-								{
-									$activation_code = $this->_userController->newUser($pseudo, $pass, $email);
-									$this->_userController->sendEmailActivation($email, $pseudo, $activation_code);
-									$message = 'Merci pour votre inscription ! Un email de confirmation vous a été envoyé afin de confirmer votre adresse email. Merci de vous reporter à cet email pour activer votre compte ! ';
-									$this->_userController->inscriptionView($message);
-								}
-							}
-							else
-							{
-								$message = 'Les mots de passe saisis sont différents ! ';
-								$this->_userController->inscriptionView($message);
-							}
-						}
-						else
-						{
-							$message = 'L\'adresse email n\'est pas valide !';
-							$this->_userController->inscriptionView($message);
-						}							
-					}
-					else
-					{
-						$message = 'Le pseudo ne doit pas dépasser 25 caractères ! ';
-						$this->_userController->inscriptionView($message);
-					}				
-
+					$post = $this->request->getPost();
+					$this->_userController->inscription($post);
 				}
-
 
 				elseif ($action == 'activation')
 				{
-					$email = $this->request->getGet()->get('email');
-					$key = $this->$this->request->getGet()->get('key');
-
-					if ($this->_userController->userActivated($email))
-					{
-						$message = 'Votre compte est déjà activé, vous pouvez vous connecter ! ';
-						$this->_userController->connexionView($message);
-					}
-					else
-					{
-						$message = $this->_userController->userActivation($email, $key);
-						$this->_userController->connexionView($message);
-					}
-
+					$get = $this->request->getGet();
+					$this->_userController->userActivation($get);
 				}
 
 				elseif ($action == 'connexionView')
@@ -216,44 +104,16 @@ class Router
 
 				elseif ($action == 'connexion')
 				{
-					$email = $this->getParameter($_POST, 'email');
-					$pass = $this->getParameter($_POST, 'pass');
-
-					if ($this->_userController->checkEmail($email))
+					$post = $this->request->getPost();
+					$message = $this->_userController->connexion($post);
+					if (isset($message))
 					{
-						if (!$this->_userController->userActivated($email))
-						{
-							$message = 'Votre compte n\'est pas activé. Veuillez cliquer sur le lien d\'activation qui vous a été envoyé sur votre adresse email lors de votre inscription.';
-							$this->_userController->connexionView($message);
-						}
-						else
-						{
-							$user_pass = $this->_userController->getPassword($email);
-
-							if (password_verify($pass, $user_pass))
-							{
-								if (isset($_POST['rememberme']))
-								{
-									setcookie('email', $email, time() + 365*24*3600, null, null, false, true);
-									setcookie('auth', password_hash($email, PASSWORD_DEFAULT) . '-----' . password_hash($_SERVER['REMOTE_ADDR'], PASSWORD_DEFAULT), time() + 365*24*3600, null, null, false, true);
-								}
-								$this->_userController->newUserSession($email);
-
-								$this->_homeController->indexView();
-							}
-							else
-							{
-								$message = "L'identifiant et/ou le mot de passe sont erronés.";
-								$this->_userController->connexionView($message);
-							}
-						}							
-					}				
-					else
-					{
-						$message = "L'adresse email saisie est inconnue";
 						$this->_userController->connexionView($message);
 					}
-
+					else
+					{
+						$this->_homeController->indexView();
+					}
 				}
 
 				elseif ($action == 'deconnexion')
@@ -263,14 +123,9 @@ class Router
 						$_SESSION = array();
 						session_destroy();
 						setcookie('auth', '', time()-3600, null, null, false, true);
-
-						$this->_homeController->indexView();
-					}
-					else
-					{
-						$this->_homeController->indexView();
 					}
 
+					$this->_homeController->indexView();
 				}
 
 				elseif ($action == 'forgotPassView')
@@ -280,110 +135,39 @@ class Router
 
 				elseif ($action == 'forgotPassMail')
 				{
-					$email = $this->getParameter($_POST, 'email');
+					$email = $this->request->getPost()->get('email');
 
 					$reinit_code = $this->_userController->newPassCode($email);
-					$this->_userController->forgotPassMail($email, $reinit_code);
+					$message = $this->_userController->forgotPassMail($email, $reinit_code);
 
-					$message = "Un email contenant un lien de réinitialisation de mot de passe a été envoyé à votre adresse email.";
 					$this->_userController->forgotPassView($message);
 				}
 
 				elseif ($action == 'newPassView')
 				{
-					$email = $this->request->getGet()->get('email');
-					$reinit_code = $this->request->getGet()->get('key');
-
-					$user_reinit_code = $this->_userController->getNewPassCode($email);
-
-					if ($reinit_code != $user_reinit_code)
-					{
-						$message = 'La clé de réinitialization n\'est pas bonne, veuillez retourner sur votre mail.';
-						$this->_userController->newPassView($email, $message, false);
-					}
-					else
-					{
-						$message = 'Veuillez entrer votre nouveau mot de passe';
-						$this->_userController->newPassView($email, $message, true);
-					}
+					$get = $this->request->getGet();
+					$this->_userController->checkReinitCode($get);
 				}
 
 				elseif ($action == 'newPass')
 				{
-					$email = $this->getParameter($_POST, 'email');
-					$pass1 = $this->getParameter($_POST, 'pass1');
-					$pass2 = $this->getParameter($_POST, 'pass2');
-
-					if ($pass1 == $pass2)
-					{
-						$newPass = password_hash($pass1, PASSWORD_DEFAULT);
-
-						$this->_userController->newUserPass($email, $newPass);
-						$message = 'Votre mot de passe a été réinitialisé. Vous pouvez maintenant vous connecter ! ';
-						$this->_userController->connexionView($message);
-					}
-					else
-					{
-						$message = 'Les mots de passe saisis sont différents ! ';
-						$this->_userController->newPassView($email, $message, true);
-					}
+					$post = $this->request->getPost();
+					$this->_userController->newPass($post);
 				}
 
-				elseif ($action == 'admin' && $this->adminAccess())
+				elseif ($action == 'admin' && $this->_userController->adminAccess())
 				{
 					$this->_adminController->dashboardView();
 				}
 
-				elseif ($action == 'adminPosts' && $this->adminAccess())
+				elseif ($action == 'adminPosts' && $this->_userController->adminAccess())
 				{
-					if ($this->request->getGet()->get('sort') || $this->request->getGet()->get('date'))
+					$get = $this->request->getGet();
+
+					if ($get->get('sort') || $get->get('date'))
 					{
-						if ($this->request->getGet()->get('sort') && !$this->request->getGet()->get('date'))
-						{
-							if ($this->request->getGet()->get('sort') == 'unpublished')
-							{
-								$message = null;
-								$sorting = $this->request->getGet()->get('sort');
-								$sortingDate = null;
-							}
-							else
-							{
-								$message = 'Le choix de tri n\'est pas valide';
-								$sorting = null;
-								$sortingDate = null;
-							}
-						}
-						elseif (!$this->request->getGet()->get('sort') && $this->request->getGet()->get('date'))
-						{
-							if ($this->request->getGet()->get('date') == 'asc')
-							{
-								$message = null;
-								$sorting = null;
-								$sortingDate = $this->request->getGet()->get('date');
-							}
-							else
-							{
-								$message = 'Le choix de tri n\'est pas valide';
-								$sorting = null;
-								$sortingDate = null;
-							}
-						}
-						else
-						{
-							if ($this->request->getGet()->get('sort') == 'unpublished' && $this->request->getGet()->get('date') == 'asc')
-							{
-								$message = null;
-								$sorting = $this->request->getGet()->get('sort');
-								$sortingDate = $this->request->getGet()->get('date');
-							}
-							else
-							{
-								$message = 'Le choix de tri n\'est pas valide';
-								$sorting = null;
-								$sortingDate = null;
-							}
-						}
-						$this->_adminController->adminPostsView($message, $sorting, $sortingDate);	
+						$sorting = $this->_adminController->getSortingResults($get, 'unpublished');
+						$this->_adminController->adminPostsView($message = null, $sorting);	
 					}
 					else
 					{
@@ -391,23 +175,27 @@ class Router
 					}
 				}
 
-				elseif ($action == 'adminPostView' && $this->adminAccess())
+				elseif ($action == 'adminPostView' && $this->_userController->adminAccess())
 				{
 					$postId = $this->request->getGet()->get('id');
-
-					$this->_adminController->adminPostView($postId);
+					if ($this->_postController->isValid($postId))
+					{
+						$this->_adminController->adminPostView($postId);
+					}
+					else
+					{
+						throw new Exception('Identifiant de post non valide');
+					}
 				}
 
-				elseif ($action == 'adminNewPost' && $this->adminAccess())
+				elseif ($action == 'adminNewPost' && $this->_userController->adminAccess())
 				{
 					$this->_adminController->adminNewPostView();
 				}
 
-				elseif ($action == 'newPostInfos' && $this->adminAccess())
+				elseif ($action == 'newPostInfos' && $this->_userController->adminAccess())
 				{
-					$title = $this->getParameter($_POST, 'title');
-					$chapo = $this->getParameter($_POST, 'chapo');
-					$userId = $this->getParameter($_POST, 'user_id');
+					$post = $this->request->getPost();
 
 					if (isset($_FILES['picture']) && $_FILES['picture']['error'] != 4)
 					{
@@ -420,83 +208,68 @@ class Router
 						else
 						{
 							$mainImage = $uploadResults;
-							$this->_adminController->NewPostInfos($title, $chapo, $userId, $mainImage);
+							$this->_adminController->NewPostInfos($post, $mainImage);
 						}
 					}
 					else
 					{
-						$this->_adminController->NewPostInfos($title, $chapo, $userId, $mainImage = null);
+						$this->_adminController->NewPostInfos($post, $mainImage = null);
 					}
 
 				}
 
-				elseif ($action == 'editPostView' && $this->adminAccess())
+				elseif ($action == 'editPostView' && $this->_userController->adminAccess())
 				{
 					$postId = $this->request->getGet()->get('id');
 					$this->_adminController->editPostView($postId);
 				}
 
-				elseif ($action == 'editPost' && $this->adminAccess())
+				elseif ($action == 'editPost' && $this->_userController->adminAccess())
 				{
-					if (isset($_POST['deleteMainPicture']))
+					$post = $this->request->getPost();
+
+					if ($post->get('deleteMainPicture'))
 					{
-						$postId = $this->getParameter($_POST, 'postId');
-						$this->_adminController->deleteMainPostPicture($postId);
+						$this->_adminController->deleteMainPostPicture($post->get('postId'));
 					}
 
-
-					elseif (isset($_POST['addParagraph']))
+					elseif ($post->get('addParagraph'))
 					{
-						$postId = $this->getParameter($_POST, 'postId');
-						$this->_adminController->addParagraph($postId);
+						$this->_adminController->addParagraph($post->get('postId'));
 					}
 
-					elseif (isset($_POST['addCategory']))
+					elseif ($post->get('addCategory'))
 					{
-						$category = $this->getParameter($_POST, 'categoryName');
-						$postId = $this->getParameter($_POST, 'postId');
-						$this->_adminController->addCategory($postId, $category);
+						$this->_adminController->addCategory($post);
 					}
 
-					elseif (isset($_POST['updatePostInfos']))
+					elseif ($post->get('updatePostInfos'))
 					{
-						$newPostInfos = [];
-
-						foreach ($_POST as $key => $value)
-						{
-							if ($_POST[$key] != '')
-							{
-								$newPostInfos[$key] = $value;
-							}
-						}
-
 						if (isset($_FILES['MainPicture']) && $_FILES['MainPicture']['error'] != 4)
 						{
 							$uploadResults = $this->_homeController->pictureUpload($namePicture = 'MainPicture');
+
 							if (strrpos($uploadResults, 'uploads') === false)
 							{
 								$message = "Information(s) modifiée(s) \n 
 								/!\ Erreur de téléchargement de l'image principale : " . $uploadResults;
-								$this->_adminController->editPostInfos($newPostInfos, $message);
 							}
 							else
 							{
-								$newPostInfos['main_image'] = $uploadResults;
+								$post->set('main_image', $uploadResults);
 								$message = "Information(s) modifiée(s) ! ";
-								$this->_adminController->editPostInfos($newPostInfos, $message);
 							}
 						}
 						else
 						{
 							$message = "Information(s) modifiée(s) ! ";
-							$this->_adminController->editPostInfos($newPostInfos, $message);
 						}
+						$this->_adminController->editPostInfos($post, $message);
 
 					}
 
-					elseif (isset($_POST['editContent']))
+					elseif ($post->get('editContent'))
 					{
-						$postId = $this->getParameter($_POST, 'postId');
 						$newParagraphs = [];
 
 						foreach ($_POST as $key => $value)
@@ -507,32 +280,28 @@ class Router
 							}
 						}
 
-						$this->_adminController->editParagraph($postId, $newParagraphs);
+						$this->_adminController->editParagraph($post->get('postId'), $newParagraphs);
 					}
 
-					elseif (isset($_POST['addPicture']))
+					elseif ($post->get('addPicture'))
 					{
-						$postId = $this->getParameter($_POST, 'postId');
-
 						$uploadResults = $this->_homeController->pictureUpload($namePicture = 'picture');
 
 						if (strrpos($uploadResults, 'uploads') === false)
 						{
 							$message = $uploadResults;
-							$this->_adminController->editPostView($postId, $message);
 						}
 						else
 						{
-							$this->_adminController->addPicture($postId, $uploadResults);
+							$this->_adminController->addPicture($post->get('postId'), $uploadResults);
 							$message = 'Image ajoutée !';
-							$this->_adminController->editPostView($postId, $message);
 						}
+
+						$this->_adminController->editPostView($post->get('postId'), $message);
 					}
 
-					elseif (isset($_POST['updatePicture']))
+					elseif ($post->get('updatePicture'))
 					{
-						$postId = $this->getParameter($_POST, 'postId');
-
 						foreach ($_FILES AS $key => $value)
 						{
 							if ($value['name'] !='')
@@ -546,116 +315,53 @@ class Router
 						if (strrpos($uploadResults, 'uploads') === false)
 						{
 							$message = $uploadResults;
-							$this->_adminController->editPostView($postId, $message);
 						}
 						else
 						{
-							$this->_adminController->editPostPicture($postId, $contentId, $uploadResults);
+							$this->_adminController->editPostPicture($post->get('postId'), $contentId, $uploadResults);
 							$message = 'Image modifiée !';
-							$this->_adminController->editPostView($postId, $message);
 						}
+
+						$this->_adminController->editPostView($post->get('postId'), $message);
 					}
 				}
 
-				elseif ($action == 'deleteContent' && $this->adminAccess())
+				elseif ($action == 'deleteContent' && $this->_userController->adminAccess())
 				{
-					$contentId = $this->request->getGet()->get('content');
-					$postId = $this->request->getGet()->get('id');
-					$contentType = $this->request->getGet()->get('type');
-
-					$this->_adminController->deleteContent($postId, $contentId, $contentType);
-
+					$get = $this->request->getGet();
+					$this->_adminController->deleteContent($get);
 				}
 
-				elseif ($action == 'deleteCategory' && $this->adminAccess())
+				elseif ($action == 'deleteCategory' && $this->_userController->adminAccess())
 				{
-					$categoryId = $this->request->getGet()->get('cat');
-					$postId = $this->request->getGet()->get('id');
-					$this->_adminController->deleteCategory($postId, $categoryId);
+					$get = $this->request->getGet();
+					$this->_adminController->deleteCategory($get);
 				}
 
-				elseif ($action == 'publishPost' || ($action == 'publishPostDashboard') && $this->adminAccess())
+				elseif ($action == 'publishPost' || ($action == 'publishPostDashboard') && $this->_userController->adminAccess())
 				{
-					$postId = $this->request->getGet()->get('id');
-					$status = $this->request->getGet()->get('status');
+					$get = $this->request->getGet();
 
-					if ($_GET['action'] == 'publishPostDashboard')
-					{
-						$dashboard = 1;
-						$this->_adminController->publishPost($postId, $status, $dashboard);
-					}
-					else
-					{
-						$this->_adminController->publishPost($postId, $status);
-					}
-
+					$dashboard = ($action == 'publishPostDashboard') ? 1 : null ;
+					$this->_adminController->publishPost($get, $dashboard);
 				}
 
-				elseif (($action == 'deletePost') || ($action == 'deletePostDashboard') && $this->adminAccess())
+				elseif (($action == 'deletePost') || ($action == 'deletePostDashboard') && $this->_userController->adminAccess())
 				{
 					$postId = $this->request->getGet()->get('id');
 
-					if ($_GET['action'] == 'deletePostDashboard')
-					{
-						$dashboard = 1;
-						$this->_adminController->deletePost($postId, $dashboard);
-					}
-					else
-					{
-						$this->_adminController->deletePost($postId);
-					}					
+					$dashboard = ($action == 'deletePostDashboard') ? 1 : null;
+					$this->_adminController->deletePost($postId, $dashboard);	
 				}
 
-				elseif ($action == 'adminComments' && $this->adminAccess())
+				elseif ($action == 'adminComments' && $this->_userController->adminAccess())
 				{
-					if ($this->request->getGet()->get('sort') || $this->request->getGet()->get('date'))
+					$get = $this->request->getGet();
+
+					if ($get->get('sort') || $get->get('date'))
 					{
-						if ($this->request->getGet()->get('sort') && !$this->request->getGet()->get('date'))
-						{
-							if ($_GET['sort'] == 'unapproved')
-							{
-								$message = null;
-								$sorting = $this->request->getGet()->get('sort');
-								$sortingDate = null;
-							}
-							else
-							{
-								$message = 'Le choix de tri n\'est pas valide';
-								$sorting = null;
-								$sortingDate = null;
-							}
-						}
-						elseif (!$this->request->getGet()->get('sort') && $this->request->getGet()->get('date'))
-						{
-							if ($_GET['date'] == 'asc')
-							{
-								$message = null;
-								$sorting = null;
-								$sortingDate = $this->request->getGet()->get('date');
-							}
-							else
-							{
-								$message = 'Le choix de tri n\'est pas valide';
-								$sorting = null;
-								$sortingDate = null;
-							}
-						}
-						else
-						{
-							if ($this->request->getGet()->get('sort') == 'unapproved' && $this->request->getGet()->get('date') == 'asc')
-							{
-								$message = null;
-								$sorting = $this->request->getGet()->get('sort');
-								$sortingDate = $this->request->getGet()->get('date');
-							}
-							else
-							{
-								$message = 'Le choix de tri n\'est pas valide';
-								$sorting = null;
-								$sortingDate = null;
-							}
-						}
-						$this->_adminController->adminCommentsView($message, $sorting, $sortingDate);	
+						$sorting = $this->_adminController->getSortingResults($get, 'unapproved');
+						$this->_adminController->adminCommentsView($message = null, $sorting);	
 					}
 					else
 					{
@@ -663,44 +369,33 @@ class Router
 					}
 				}
 
-				elseif (($action == 'approveComment') || ($action == 'approveCommentDashboard') || ($action == 'approveCommentView') && $this->adminAccess())
+				elseif (($action == 'approveComment') || ($action == 'approveCommentDashboard') || ($action == 'approveCommentView') && $this->_userController->adminAccess())
 				{
-					$commentId = $this->request->getGet()->get('id');
 
-					if ($_GET['action'] == 'approveCommentDashboard')
+					if ($action == 'approveCommentDashboard')
 					{
 						$view = 1;
-						$this->_adminController->approveComment($commentId, $view);
+						$postId = null;
 					}
-					elseif ($_GET['action'] == 'approveCommentView')
+					elseif ($action == 'approveCommentView')
 					{
 						$view = 2;
 						$postId = $this->request->getGet()->get('post');
-						$this->_adminController->approveComment($commentId, $view, $postId);
 					}
-
 					else
 					{
-						$this->_adminController->approveComment($commentId);
+						$view = $postId = null;
 					}					
+					$this->_adminController->approveComment($this->request->getGet()->get('id'), $view, $postId);
 				}
 
-				elseif (($action == 'deleteComment') || ($action == 'deleteCommentDashboard') && $this->adminAccess())
+				elseif (($action == 'deleteComment') || ($action == 'deleteCommentDashboard') && $this->_userController->adminAccess())
 				{
-					$commentId = $this->request->getGet()->get('id');
-
-					if ($this->request->getGet()->get('action') == 'deleteCommentDashboard')
-					{
-						$dashboard = 1;
-						$this->_adminController->deleteComment($commentId, $dashboard);
-					}
-					else
-					{
-						$this->_adminController->deleteComment($commentId);
-					}					
+					$dashboard = ($action == 'deleteCommentDashboard') ? 1 : null;
+					$this->_adminController->deleteComment($this->request->getGet()->get('id'), $dashboard);		
 				}
 
-				elseif ($action == 'adminUsers' && $this->adminAccess())
+				elseif ($action == 'adminUsers' && $this->_userController->adminAccess())
 				{
 					if ($this->request->getGet()->get('sort'))
 					{
@@ -723,8 +418,7 @@ class Router
 
 				elseif ($action == 'profileUser')
 				{
-					$userId = $this->request->getGet()->get('id');
-					$this->_adminController->profileUserView($userId);
+					$this->_adminController->profileUserView($this->request->getGet()->get('id'));
 				}
 
 				elseif ($action == 'editUser')
@@ -732,7 +426,7 @@ class Router
 					$userId = $this->request->getGet()->get('id');
 					$currentUserId = $this->getParameter($_SESSION, 'id');
 
-					if ($currentUserId == $userId || $this->adminAccess())
+					if ($currentUserId == $userId || $this->_userController->adminAccess())
 					{
 						$this->_adminController->editUserView($userId);
 					}
@@ -873,56 +567,14 @@ class Router
 					}
 				}
 
-				elseif ($action == 'adminContacts' && $this->adminAccess())
+				elseif ($action == 'adminContacts' && $this->_userController->adminAccess())
 				{
-					if ($this->request->getGet()->get('sort') || $this->request->getGet()->get('date'))
+					$get = $this->request->getGet();
+
+					if ($get->get('sort') || $get->get('date'))
 					{
-						if ($this->request->getGet()->get('sort') && !$this->request->getGet()->get('date'))
-						{
-							if ($_GET['sort'] == 'unread')
-							{
-								$message = null;
-								$sorting = $this->request->getGet()->get('sort');
-								$sortingDate = null;
-							}
-							else
-							{
-								$message = 'Le choix de tri n\'est pas valide';
-								$sorting = null;
-								$sortingDate = null;
-							}
-						}
-						elseif (!$this->request->getGet()->get('sort') && $this->request->getGet()->get('date'))
-						{
-							if ($this->request->getGet()->get('date') == 'asc')
-							{
-								$message = null;
-								$sorting = null;
-								$sortingDate = $this->request->getGet()->get('date');
-							}
-							else
-							{
-								$message = 'Le choix de tri n\'est pas valide';
-								$sorting = null;
-								$sortingDate = null;
-							}
-						}
-						else
-						{
-							if ($this->request->getGet()->get('sort') == 'unread' && $this->request->getGet()->get('date') == 'asc')
-							{
-								$message = null;
-								$sorting = $this->request->getGet()->get('sort');
-								$sortingDate = $this->request->getGet()->get('date');
-							}
-							else
-							{
-								$message = 'Le choix de tri n\'est pas valide';
-								$sorting = null;
-								$sortingDate = null;
-							}
-						}
-						$this->_adminController->adminContactsView($message, $sorting, $sortingDate);	
+						$sorting = $this->_adminController->getSortingResults($get, 'unread');
+						$this->_adminController->adminContactsView($message = null, $sorting);	
 					}
 					else
 					{
@@ -932,44 +584,34 @@ class Router
 
 				elseif ($action == 'contactForm')
 				{
-					$name = $this->getParameter($_POST, 'name');
-					$email = $this->getParameter($_POST, 'email');
-					$subject = $this->getParameter($_POST, 'subject');
-					$content = $this->getParameter($_POST, 'content');
+					$post = $this->request->getPost();
+					$contactId = $this->_homeController->newContactForm($post);
 
-					$contactId = $this->_homeController->newContactForm($name, $email, $subject, $content);
-					$this->_homeController->mailContactForm($name, $email, $subject, $content, $contactId);
+					$this->_homeController->mailContactForm($post, $contactId);
 
 					$message = "Votre message a bien été envoyé. Nous vous remercions et vous recontacterons dans les plus brefs délais.";
 					$this->_homeController->indexView($message);
 				}
 
-				elseif ($action == 'contactView' && $this->adminAccess())
+				elseif ($action == 'contactView' && $this->_userController->adminAccess())
 				{
-					$contactId = $this->request->getGet()->get('id');
-
-					$this->_adminController->adminContactView($contactId);
+					$this->_adminController->adminContactView($this->request->getGet()->get('id'));
 				}
 
-				elseif (($action == 'deleteContact') && $this->adminAccess())
+				elseif (($action == 'deleteContact') && $this->_userController->adminAccess())
 				{
-					$contactId = $this->request->getGet()->get('id');
-
-					$this->_adminController->deleteContact($contactId);				
+					$this->_adminController->deleteContact($this->request->getGet()->get('id'));				
 				}
 
-				elseif (($action == 'answer') && $this->adminAccess())
+				elseif (($action == 'answer') && $this->_userController->adminAccess())
 				{
-					$contactId = $this->getParameter($_POST, 'id');
-					$answerSubject = $this->getParameter($_POST, 'answerSubject');
-					$email = $this->getParameter($_POST, 'email');
-					$answerContent = $this->getParameter($_POST, 'answerContent');
+					$post = $this->request->getPost();
 
-					$this->_adminController->addAnswer($contactId, $answerSubject, $answerContent);
-					$this->_adminController->adminAnswerEmail($contactId, $answerSubject, $answerContent, $email);
+					$this->_adminController->addAnswer($post);
+					$this->_adminController->adminAnswerEmail($post);
 
 					$message = "La réponse a bien été envoyée.";
-					$this->_adminController->adminContactView($contactId, $message);  			
+					$this->_adminController->adminContactView($post->get('id'), $message);  			
 				}
 
 				else 

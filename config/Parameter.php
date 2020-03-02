@@ -2,6 +2,8 @@
 
 namespace config;
 
+use Exception;
+
 class Parameter
 {
 	private $parameter;

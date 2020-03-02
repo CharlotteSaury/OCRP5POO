@@ -1,6 +1,7 @@
 <?php
 
 namespace src\model;
+use config\Parameter;
 
 class ContactManager extends Manager
 {
@@ -69,23 +70,22 @@ class ContactManager extends Manager
 		return $contacts;
 	}
 
-	public function addNewContact($name, $email, $subject, $content)
+	public function addNewContact(Parameter $post)
 	{
 		$sql = 'INSERT INTO contact_form 
 			(name, email, subject, content, date_message, contact_status_id) 
 			VALUES (:name, :email, :subject, :content, NOW(), 1)';
 
-		$req = $this->dbRequest($sql, array($name, $email, $subject, $content));
-		$req->bindValue('name', $name);
-		$req->bindValue('email', $email);
-		$req->bindValue('subject', $subject);
-		$req->bindValue('content', $content);
+		$req = $this->dbRequest($sql, array($post->get('name'), $post->get('email'), $post->get('subject'), $post->get('content')));
+		$req->bindValue('name', $post->get('name'));
+		$req->bindValue('email', $post->get('email'));
+		$req->bindValue('subject', $post->get('subject'));
+		$req->bindValue('content', $post->get('content'));
 		$req->execute();
 
 		$sql = 'SELECT id AS contactId FROM contact_form ORDER BY id DESC LIMIT 1';
 		$req = $this->dbRequest($sql);
-		$donnees = $req->fetch(\PDO::FETCH_ASSOC);
-		$contactId = $donnees['contactId'];
+		$contactId = $req->fetch(\PDO::FETCH_COLUMN);
 		return $contactId;
 	}
 
@@ -107,26 +107,25 @@ class ContactManager extends Manager
 		$req->execute();
 	}
 
-	public function addAnswer($contactId, $answerSubject, $answerContent)
+	public function addAnswer(Parameter $post)
 	{
 		$sql = 'INSERT INTO answer 
 			(subject, content, date_answer) 
 			VALUES (:subject, :content, NOW())';
 
-		$req = $this->dbRequest($sql, array($answerSubject, $answerContent));
-		$req->bindValue('subject', $answerSubject);
-		$req->bindValue('content', $answerContent);
+		$req = $this->dbRequest($sql, array($post->get('answerSubject'), $post->get('answerContent')));
+		$req->bindValue('subject', $post->get('answerSubject'));
+		$req->bindValue('content', $post->get('answerContent'));
 		$req->execute();
 
 		$sql = 'SELECT id AS answerId FROM answer ORDER BY id DESC LIMIT 1';
 		$req = $this->dbRequest($sql);
-		$donnees = $req->fetch(\PDO::FETCH_ASSOC);
-		$answerId = $donnees['answerId'];
+		$answerId = $req->fetch(\PDO::FETCH_COLUMN);
 
 		$sql = 'INSERT INTO contact_answer (contact_id, answer_id)
 				VALUE (:contact_id, :answer_id)';
-		$req = $this->dbRequest($sql, array($contactId, $answerId));
-		$req->bindValue('contact_id', $contactId, \PDO::PARAM_INT);
+		$req = $this->dbRequest($sql, array($post->get('id'), $answerId));
+		$req->bindValue('contact_id', $post->get('id'), \PDO::PARAM_INT);
 		$req->bindValue('answer_id', $answerId, \PDO::PARAM_INT);
 		$req->execute();
 	}

@@ -29,7 +29,7 @@
             </div>         
                            
             <div class="mt-4">
-                <input type="hidden" class="form-control" name="user_id" value="<?= $_SESSION['id']; ?>" />
+                <input type="hidden" class="form-control" name="userId" value="<?= $_SESSION['id']; ?>" />
                 <button type="submit" class="btn btn-primary-custom">Continuer</button>
             </div>
                                 

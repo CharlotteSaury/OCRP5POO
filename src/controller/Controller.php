@@ -8,6 +8,7 @@ use src\model\UserManager;
 use src\model\ContactManager;
 use src\model\ContentManager;
 use src\view\View;
+use config\Parameter;
 use Exception;
 
 abstract class Controller
