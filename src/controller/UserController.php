@@ -3,16 +3,31 @@
 namespace src\controller;
 
 use src\controller\Controller;
+use config\Request;
 use config\Parameter;
+use config\Session;
 
 class UserController extends Controller
 
 {
+	public function isValid($userId)
+	{
+		$users = $this->userManager->getUsers();
+		foreach ($users as $user) 
+		{
+			if ($user->id() == $userId)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public function adminAccess()
 	{
-		if (isset($_SESSION['id']))
+		if ($this->request->getSession()->get('id'))
 		{
-			$userId = htmlspecialchars($_SESSION['id']);
+			$userId = $this->request->getSession()->get('id');
 
 			if ($this->isAdmin($userId) || $this->isSuperAdmin($userId))
 			{
@@ -29,12 +44,14 @@ class UserController extends Controller
 
 	public function inscriptionView($message = null) 
 	{
-		return $this->view->render('frontend', 'inscriptionView', ['message' => $message]);
+		return $this->view->render('frontend', 'inscriptionView', ['message' => $message,
+			'session' => $this->request->getSession()]);
 	}
 
 	public function connexionView($message = null) 
 	{
-		return $this->view->render('frontend', 'connexionView', ['message' => $message]);
+		return $this->view->render('frontend', 'connexionView', ['message' => $message,
+			'session' => $this->request->getSession()]);
 	}
 
 	public function newUser(Parameter $post)
@@ -195,11 +212,11 @@ class UserController extends Controller
 	{
 		$user = $this->userManager->getUser($userId = null, $email);
 
-        $_SESSION['id'] = $user->id();
-        $_SESSION['pseudo'] = $user->pseudo();
-        $_SESSION['role'] = $user->userRoleId();
-        $_SESSION['avatar'] = $user->avatar();
-        $_SESSION['email'] = $email;
+		$this->request->getSession()->set('id', $user->id());
+		$this->request->getSession()->set('pseudo', $user->pseudo());
+        $this->request->getSession()->set('role', $user->userRoleId());
+        $this->request->getSession()->set('avatar', $user->avatar());
+       	$this->request->getSession()->set('email', $email);
 	}
 
 	public function isAdmin($userId)
@@ -224,7 +241,8 @@ class UserController extends Controller
 
 	public function forgotPassView($message = null)
 	{
-		return $this->view->render('frontend', 'forgotPassView', ['message' => $message]);
+		return $this->view->render('frontend', 'forgotPassView', ['message' => $message,
+			'session' => $this->request->getSession()]);
 	}
 
 	public function newPassCode($email)
@@ -261,7 +279,8 @@ class UserController extends Controller
 
 	public function newPassView($email, $message = null, $status)
 	{
-		return $this->view->render('frontend', 'newPassView', ['message' => $message, 'email' => $email, 'status' => $status]);
+		return $this->view->render('frontend', 'newPassView', ['message' => $message, 'email' => $email, 'status' => $status,
+			'session' => $this->request->getSession()]);
 	}
 
 	public function checkReinitCode(Parameter $get)

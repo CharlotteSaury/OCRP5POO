@@ -3,6 +3,7 @@
 namespace config;
 
 use config\Parameter;
+use config\Session;
 
 class Request
 {
@@ -14,7 +15,7 @@ class Request
 	{
 		$this->get = new Parameter($_GET);
 		$this->post = new Parameter($_POST);
-		$this->session = $_SESSION;
+		$this->session = new Session($_SESSION);
 	}
 
 	public function getGet()

@@ -18,15 +18,15 @@
         
         <?php
 
-        if (!isset($_GET['sort']))
+        if (!$get->get('sort'))
         {
-            if (!isset($_GET['date']))
+            if (!$get->get('date'))
             {
                 echo '<a href="index.php?action=adminContacts&date=asc" title="Trier du plus ancien au plus récent"><i class="fas fa-sort-down fa-2x ml-2"></i></a>';
             }
             else
             {
-                if ($_GET['date'] == 'asc')
+                if ($get->get('date') == 'asc')
                 {
                    echo '<a href="index.php?action=adminContacts" title="Trier du plus récent au plus ancien"><i class="fas fa-sort-up fa-2x ml-2 mb-0"></i></a>';
                 }
@@ -34,15 +34,15 @@
         }
         else
         {
-            if ($_GET['sort'] == 'unread')
+            if ($get->get('sort') == 'unread')
             {
-                if (!isset($_GET['date']))
+                if (!$get->get('date'))
                 {
                     echo '<a href="index.php?action=adminContacts&sort=unread&date=asc" title="Trier du plus ancien au plus récent"><i class="fas fa-sort-down fa-2x ml-2"></i></a>';
                 }
                 else
                 {
-                    if ($_GET['date'] == 'asc')
+                    if ($get->get('date') == 'asc')
                     {
                      echo '<a href="index.php?action=adminContacts&sort=unread" title="Trier du plus récent au plus ancien"><i class="fas fa-sort-up fa-2x ml-2 mb-0"></i></a>';
                     }

@@ -34,7 +34,7 @@
     <div id="wrapper">
 
         <?php
-        if (isset($_SESSION['role']) && ($_SESSION['role'] == 1 || $_SESSION['role'] == 3))
+        if ($session->get('role') && ($session->get('role') == 1 || $session->get('role') == 3))
         {
             ?>
             <!-- Sidebar -->
@@ -42,7 +42,7 @@
 
                 <!-- Sidebar - Brand -->
                 <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php?action=admin">
-                    <div class="sidebar-brand-text mx-3"><?= htmlspecialchars($_SESSION['pseudo']); ?></div>
+                    <div class="sidebar-brand-text mx-3"><?= htmlspecialchars($session->get('pseudo')); ?></div>
                 </a>
 
                 <!-- Divider -->
@@ -94,7 +94,7 @@
                 </li>
 
                 <?php
-                if ($_SESSION['role'] == 3)
+                if ($session->get('role') == 3)
                 {
                     ?>
 
@@ -130,10 +130,10 @@
 
                         <div class="adminProfileNavCard text-center mb-4">
 
-                            <a href="index.php?action=profileUser&amp;id=<?= htmlspecialchars($_SESSION['id']); ?>">
-                                <img class="my-4" src="<?= htmlspecialchars($_SESSION['avatar']); ?>" alt="User profil picture" />
+                            <a href="index.php?action=profileUser&amp;id=<?= htmlspecialchars($session->get('id')); ?>">
+                                <img class="my-4" src="<?= htmlspecialchars($session->get('avatar')); ?>" alt="User profil picture" />
                             </a>
-                            <a href="index.php?action=editUser&id=<?= htmlspecialchars($_SESSION['id']); ?>" class="btn btn-primary-custom">
+                            <a href="index.php?action=editUser&id=<?= htmlspecialchars($session->get('id')); ?>" class="btn btn-primary-custom">
                               <i class="fas fa-user mr-1"></i> Modifier mon profil</a>
 
                           </div>
@@ -172,12 +172,12 @@
                                 <!-- Nav Item - User Information -->
                                 <li class="nav-item dropdown no-arrow">
                                   <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="mr-3 d-none d-lg-inline text-primary-custom font-weight-bold">Bonjour, <?= htmlspecialchars($_SESSION['pseudo']); ?></span>
-                                    <img class="img-profile rounded-circle" src="<?= htmlspecialchars($_SESSION['avatar']); ?>">
+                                    <span class="mr-3 d-none d-lg-inline text-primary-custom font-weight-bold">Bonjour, <?= htmlspecialchars($session->get('pseudo')); ?></span>
+                                    <img class="img-profile rounded-circle" src="<?= htmlspecialchars($session->get('avatar')); ?>">
                                 </a>
                                 <!-- Dropdown - User Information -->
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                    <a class="dropdown-item" href="index.php?action=profileUser&id=<?= htmlspecialchars($_SESSION['id']); ?>">
+                                    <a class="dropdown-item" href="index.php?action=profileUser&id=<?= htmlspecialchars($session->get('id')); ?>">
                                       <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                       Mon profil
                                   </a>

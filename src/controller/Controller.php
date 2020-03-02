@@ -8,6 +8,7 @@ use src\model\UserManager;
 use src\model\ContactManager;
 use src\model\ContentManager;
 use src\view\View;
+use config\Request;
 use config\Parameter;
 use Exception;
 
@@ -18,7 +19,8 @@ abstract class Controller
 			$userManager,
 			$contactManager,
 			$contentManager,
-			$view;
+			$view,
+			$request;
 
 	public function __construct()
 	{
@@ -28,5 +30,7 @@ abstract class Controller
 		$this->contactManager = new ContactManager();
 		$this->contentManager = new ContentManager();
 		$this->view = new View();
+		$this->request = new Request();
+
 	}
 }

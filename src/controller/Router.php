@@ -39,6 +39,7 @@ class Router
 
 	public function routerRequest()
 	{
+		var_dump($_SESSION);
 		$action = $this->request->getGet()->get('action');
 		try
 		{
@@ -48,7 +49,7 @@ class Router
 				{
 					$get = $this->request->getGet();
 					$sorting = $this->_postController->listPostSorting($get);
-					$this->_postController->listPostView($sorting);
+					$this->_postController->listPostView($sorting, $get);
 				} 
 
 				elseif ($action == 'postView') 
@@ -118,10 +119,17 @@ class Router
 
 				elseif ($action == 'deconnexion')
 				{
-					if (isset($_SESSION['id']))
+					$session = $this->request->getSession();
+
+					if ($session->get('id'))
 					{
-						$_SESSION = array();
-						session_destroy();
+						$session->remove('id');
+						$session->remove('pseudo');
+						$session->remove('role');
+						$session->remove('avatar');
+						$session->remove('email');
+						$session->stop();
+
 						setcookie('auth', '', time()-3600, null, null, false, true);
 					}
 
@@ -167,11 +175,11 @@ class Router
 					if ($get->get('sort') || $get->get('date'))
 					{
 						$sorting = $this->_adminController->getSortingResults($get, 'unpublished');
-						$this->_adminController->adminPostsView($message = null, $sorting);	
+						$this->_adminController->adminPostsView($message = null, $sorting, $get);	
 					}
 					else
 					{
-						$this->_adminController->adminPostsView();
+						$this->_adminController->adminPostsView($message = null, $sorting = null, $get);
 					}
 				}
 
@@ -220,8 +228,7 @@ class Router
 
 				elseif ($action == 'editPostView' && $this->_userController->adminAccess())
 				{
-					$postId = $this->request->getGet()->get('id');
-					$this->_adminController->editPostView($postId);
+					$this->_adminController->editPostView($this->request->getGet()->get('id'));
 				}
 
 				elseif ($action == 'editPost' && $this->_userController->adminAccess())
@@ -361,11 +368,11 @@ class Router
 					if ($get->get('sort') || $get->get('date'))
 					{
 						$sorting = $this->_adminController->getSortingResults($get, 'unapproved');
-						$this->_adminController->adminCommentsView($message = null, $sorting);	
+						$this->_adminController->adminCommentsView($message = null, $sorting, $get);	
 					}
 					else
 					{
-						$this->_adminController->adminCommentsView();
+						$this->_adminController->adminCommentsView($message = null, $sorting = null, $get);
 					}
 				}
 
@@ -397,11 +404,13 @@ class Router
 
 				elseif ($action == 'adminUsers' && $this->_userController->adminAccess())
 				{
-					if ($this->request->getGet()->get('sort'))
+					$userRoleId = $this->request->getGet()->get('sort');
+
+					if ($userRoleId != null)
 					{
-						if (in_array($this->request->getGet()->get('sort'), [1, 2, 3]))
+						if (in_array($userRoleId, ['1', '2', '3']))
 						{
-							$userRoleId = $this->request->getGet()->get('sort');
+							$this->_adminController->adminUsersView($userRoleId);
 						}
 						else
 						{
@@ -410,31 +419,45 @@ class Router
 					}
 					else
 					{
-						$userRoleId = null;
+						$this->_adminController->adminUsersView();
 					}
-
-					$this->_adminController->adminUsersView($userRoleId);
+					
 				}
 
 				elseif ($action == 'profileUser')
 				{
-					$this->_adminController->profileUserView($this->request->getGet()->get('id'));
+					if ($this->_userController->isValid($this->request->getGet()->get('id')))
+					{
+						$this->_adminController->profileUserView($this->request->getGet()->get('id'));
+					}
+					else
+					{
+						throw new Exception('Le profil demandé n\'existe pas');
+					}
+					
 				}
 
 				elseif ($action == 'editUser')
 				{
 					$userId = $this->request->getGet()->get('id');
-					$currentUserId = $this->getParameter($_SESSION, 'id');
-
-					if ($currentUserId == $userId || $this->_userController->adminAccess())
+					
+					if ($this->_userController->isValid($userId))
 					{
-						$this->_adminController->editUserView($userId);
+						$currentUserId = $this->request->getSession()->get('id');
+
+						if ($currentUserId == $userId || $this->_userController->adminAccess())
+						{
+							$this->_adminController->editUserView($userId);
+						}
+						else
+						{
+							throw new Exception('Vous n\'avez pas accès à cette page');
+						}
 					}
 					else
 					{
-						throw new Exception('Vous n\'avez pas accès à cette page');
+						throw new Exception('Le profil demandé n\'existe pas');
 					}
-
 				}
 
 				elseif ($action == 'editUserInfos')
@@ -468,7 +491,7 @@ class Router
 							{
 								if (!isset($newUserInfos['user_role_id']))
 								{
-									$role = $this->getParameter($_SESSION, 'role');
+									$role = $this->request->getSession()->get('role');
 									$newUserInfos['user_role_id'] = $role;
 								}
 
@@ -481,7 +504,7 @@ class Router
 
 									$email = $newUserInfos['email'];
 									$userId = $newUserInfos['id'];
-									$currentUserId = $this->getParameter($_SESSION, 'id');	
+									$currentUserId = $this->request->getSession()->get('id');	
 
 									$this->_adminController->editUserInfos($newUserInfos);
 
@@ -510,7 +533,7 @@ class Router
 										$newUserInfos['birth_date'] = $checkDate[2] . '-' . $checkDate[1] . '-' . $checkDate[0];
 										$email = $newUserInfos['email'];
 										$userId = $newUserInfos['id'];
-										$currentUserId = $this->getParameter($_SESSION, 'id');	
+										$currentUserId = $this->request->getSession()->get('id');	
 
 										$this->_adminController->editUserInfos($newUserInfos);
 
@@ -559,7 +582,7 @@ class Router
 
 						// Si l'utilisateur a modifié son propre profil, alors on modifie les variables de session
 
-						$currentUserId = $this->getParameter($_SESSION, 'id');	
+						$currentUserId = $this->request->getSession()->get('id');	
 						if ($currentUserId == $userId)
 						{
 							$_SESSION['avatar'] = $uploadResults;
@@ -574,11 +597,11 @@ class Router
 					if ($get->get('sort') || $get->get('date'))
 					{
 						$sorting = $this->_adminController->getSortingResults($get, 'unread');
-						$this->_adminController->adminContactsView($message = null, $sorting);	
+						$this->_adminController->adminContactsView($message = null, $sorting, $get);	
 					}
 					else
 					{
-						$this->_adminController->adminContactsView();
+						$this->_adminController->adminContactsView($message = null, $sorting = null, $get);
 					}
 				}
 
@@ -595,7 +618,7 @@ class Router
 
 				elseif ($action == 'contactView' && $this->_userController->adminAccess())
 				{
-					$this->_adminController->adminContactView($this->request->getGet()->get('id'));
+					$this->_adminController->adminContactView($this->request->getGet()->get('id'));				
 				}
 
 				elseif (($action == 'deleteContact') && $this->_userController->adminAccess())

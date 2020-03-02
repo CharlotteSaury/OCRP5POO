@@ -121,9 +121,9 @@
           <input type="text" name="name" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="contactName" placeholder="Votre nom" required/>
 
           <?php
-          if (isset($_SESSION['email']))
+          if ($session->get('email'))
           {
-           echo '<input type="email" name="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="contactEmail" value="' . htmlspecialchars($_SESSION['email']) . '" required/>'; 
+           echo '<input type="email" name="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="contactEmail" value="' . htmlspecialchars($session->get('email')) . '" required/>'; 
          }
          else
          {
