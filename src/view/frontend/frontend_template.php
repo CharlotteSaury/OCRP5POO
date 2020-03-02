@@ -56,24 +56,24 @@
 
               <?php
 
-              if (isset($_SESSION['id']) && isset($_SESSION['pseudo']))
+              if ($session->get('id') && $session->get('pseudo'))
               {
                 ?>
                 <li class="nav-item dropdown no-arrow nav-avatar">
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Bonjour, <?= htmlspecialchars($_SESSION['pseudo']); ?><img class="img-profile rounded-circle ml-2" src="<?= htmlspecialchars($_SESSION['avatar']); ?>" />
+                        Bonjour, <?= htmlspecialchars($session->get('pseudo')); ?><img class="img-profile rounded-circle ml-2" src="<?= htmlspecialchars($session->get('avatar')); ?>" />
                         
                     </a>
                     <!-- Dropdown - User Information -->
                     <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="index.php?action=profileUser&id=<?= $_SESSION['id']; ?>">
+                        <a class="dropdown-item" href="index.php?action=profileUser&id=<?= $session->get('id'); ?>">
                             <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                             Mon profil
                         </a>
 
                         <?php
 
-                        if ($_SESSION['role'] == 1 || $_SESSION['role'] == 3)
+                        if ($session->get('role') == 1 || $session->get('role') == 3)
                         {
                             ?>
                             <div class="dropdown-divider"></div>
@@ -157,7 +157,7 @@ if (isset($this->_header))
 
         <?php
 
-        if (isset($_SESSION['role']) && ($_SESSION['role'] == 1  || $_SESSION['role'] == 3))
+        if ($session->get('role') && $session->get('role') == 1  || $session->get('role') == 3)
         {
             echo '<a href="index.php?action=admin">ADMIN</a> | ';
         }

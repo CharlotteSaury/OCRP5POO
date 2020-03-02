@@ -3,6 +3,7 @@
 namespace src\controller;
 
 use src\controller\Controller;
+use config\Request;
 use config\Parameter;
 
 class HomeController extends Controller
@@ -12,17 +13,20 @@ class HomeController extends Controller
 
 	public function indexView($message = null) 
 	{
-		return $this->view->render('frontend', 'indexView', ['message' => $message]); 
+		return $this->view->render('frontend', 'indexView', ['message' => $message,
+			'session' => $this->request->getSession()]); 
 	}
 	
 	public function legalView()
 	{
-		return $this->view->render('frontend', 'legalView');
+		return $this->view->render('frontend', 'legalView',
+			['session' => $this->request->getSession()]);
 	}
 
 	public function confidentialityView()
 	{
-		return $this->view->render('frontend', 'confidentialityView');
+		return $this->view->render('frontend', 'confidentialityView',
+			['session' => $this->request->getSession()]);
 	}
 
 	public function newContactForm(Parameter $post)

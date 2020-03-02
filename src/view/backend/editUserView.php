@@ -78,7 +78,7 @@
 
                             <?php
 
-                            if (isset($_SESSION['role']) && $_SESSION['role'] == 3)
+                            if ($session->get('role') && $session->get('role') == 3)
                             {                           
 
                                 if ($user->userRoleId() == 1)

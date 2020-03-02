@@ -59,7 +59,7 @@ class PostController extends Controller
 		return [$current_page, $postsPerPage];
 	}
 
-	public function listPostView($sorting = [])
+	public function listPostView($sorting = [], Parameter $get = null)
 	{
 		$current_page = $sorting[0];
 		$postsPerPage = $sorting[1];
@@ -87,7 +87,9 @@ class PostController extends Controller
 			['posts' => $posts, 
 			'postsPerPage' => $postsPerPage,
 			'page_number' => $page_number,
-			'recentPosts' => $recentPosts]);
+			'recentPosts' => $recentPosts,
+			'session' => $this->request->getSession(),
+			'get' => $get]);
 	}
 
 	public function postView($postId, $messageComment = null)
@@ -103,7 +105,8 @@ class PostController extends Controller
 			'contents' => $contents,
 			'postComments' => $postComments,
 			'recentPosts' => $recentPosts,
-			'messageComment' => $messageComment]
+			'messageComment' => $messageComment,
+			'session' => $this->request->getSession()]
 			);
 	}
 

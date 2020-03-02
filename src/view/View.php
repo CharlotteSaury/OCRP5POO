@@ -2,12 +2,20 @@
 
 namespace src\view;
 
+use config\Request;
+use config\Session;
 use Exception;
 
 class View
 
 {
 	private $_file;
+
+	/*public function __contruct()
+	{
+		$this->_request = new Request();
+		$this->_session = $this->request->getSession();
+	}*/
 
 	public function render($app, $template, $data = [])
 	{

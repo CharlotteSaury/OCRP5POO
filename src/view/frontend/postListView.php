@@ -102,9 +102,9 @@
                     <ul class="pagination post-pagination">
                         <li class="page-item">
                             <?php 
-                            if (isset($_GET['page']) && ($_GET['page'] > 1))
+                            if ($get->get('page') && ($get->get('page') > 1))
                             {
-                                echo '<a class="page-link" href="index.php?action=listPosts&page=' . ((int)htmlspecialchars($_GET['page'])-1) . '&amp;postsPerPage=' . $postsPerPage . '#posts-list" aria-label="Previous">';
+                                echo '<a class="page-link" href="index.php?action=listPosts&page=' . ((int)htmlspecialchars($get->get('page'))-1) . '&amp;postsPerPage=' . $postsPerPage . '#posts-list" aria-label="Previous">';
                             ?>
                                     <span aria-hidden="true">&laquo;</span>
                                     <span class="sr-only">Previous</span>
@@ -134,16 +134,16 @@
 
                         <li class="page-item">
                             <?php 
-                            if (isset($_GET['page']) && ($_GET['page'] < $page_number))
+                            if ($get->get('page') && ($get->get('page') < $page_number))
                             {
-                                echo '<a class="page-link" href="index.php?action=listPosts&page=' . ((int)htmlspecialchars($_GET['page'])+1) . '&amp;postsPerPage=' . $postsPerPage . '#posts-list" aria-label="Next">';
+                                echo '<a class="page-link" href="index.php?action=listPosts&page=' . ((int)htmlspecialchars($get->get('page'))+1) . '&amp;postsPerPage=' . $postsPerPage . '#posts-list" aria-label="Next">';
                             ?>
                                     <span aria-hidden="true">&raquo;</span>
                                     <span class="sr-only">Next</span>
                                 </a>
                             <?php
                             }
-                            elseif (!isset($_GET['page']) && $page_number > 1) 
+                            elseif (!$get->get('page') && $page_number > 1) 
                             {
                                 echo '<a class="page-link" href="index.php?action=listPosts&page=2&amp;postsPerPage=' . $postsPerPage . '#posts-list" aria-label="Next">';
                             ?>
@@ -181,10 +181,10 @@
                     <label for="postsPerPage" hidden>Nombre de posts par page</label>
                     <select class="form-control block" id="postsPerPage" name="postsPerPage">
                         <?php
-                        if (isset($_GET['postsPerPage']))
+                        if ($get->get('postsPerPage'))
                         {
-                            echo '<option selected disabled>' . htmlspecialchars($_GET['postsPerPage']) . '</option>';
-                            switch ($_GET['postsPerPage'])
+                            echo '<option selected disabled>' . htmlspecialchars($get->get('postsPerPage')) . '</option>';
+                            switch ($get->get('postsPerPage'))
                             {
                                 case 3:
                                     echo '<option value="5">5</option>';
