@@ -8,6 +8,7 @@ use src\entity\User;
 use src\entity\Contact;
 use src\entity\Answer;
 use src\entity\Comment;
+use config\Parameter;
 
 
 abstract class Manager

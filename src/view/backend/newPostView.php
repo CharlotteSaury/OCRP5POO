@@ -16,15 +16,15 @@
         <form action="" method="post">
             <div class="form-group">
                 <label for="new-post-title" hidden>Titre</label>
-                <input type="text" class="form-control" id="" placeholder="Titre de l'article *" required/>
+                <input type="text" class="form-control" id="new-post-title" placeholder="Titre de l'article *" required/>
             </div>
             <div class="form-group">
                 <label for="new-post-chapo" hidden>Chapô</label>
-                <input type="text" class="form-control" id="" placeholder="Chapo *" required/>
+                <input type="text" class="form-control" id="new-post-chapo" placeholder="Chapo *" required/>
             </div>
             <div class="form-group mt-4">
                 <label for="main-post-img">Image principale</label>
-                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary-custom shadow-sm ml-1"><i class="fas fa-upload mr-1"></i> Ajouter</button>
+                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary-custom shadow-sm ml-1" id="main-post-img"><i class="fas fa-upload mr-1"></i> Ajouter</button>
             </div>
             <div class="form-group">
                 <label for="new-post-content">Contenu *</label>

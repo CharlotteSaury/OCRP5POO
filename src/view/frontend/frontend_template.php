@@ -137,8 +137,13 @@
 <!-- Header -->
 
 
-<?= $this->_header ?>
-
+<?php 
+if (isset($this->_header)) 
+{
+    echo $this->_header; 
+}
+?>
+  
 
 <!-- Content -->
 

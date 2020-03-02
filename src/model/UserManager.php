@@ -80,7 +80,7 @@ class UserManager extends Manager
 		return $user;
 	}
 
-	public function addUser ($pseudo, $pass, $email)
+	public function addUser ($post)
 	{
 		// Activation_code generation
 		$permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz';
@@ -90,10 +90,10 @@ class UserManager extends Manager
 		$sql = 'INSERT INTO user (pseudo, email, password, user_role_id, register_date, activation_code, avatar)
 				VALUES (:pseudo, :email, :pass, 2, NOW(), :activation_code, "public/images/profile.png")';
 
-		$req = $this->dbRequest($sql, array($pseudo, $email, $pass, $activation_code));
-		$req->bindValue('pseudo', $pseudo);
-		$req->bindValue('email', $email);
-		$req->bindValue('pass', $pass);
+		$req = $this->dbRequest($sql, array($post->get('pseudo'), $post->get('email'), $post->get('pass'), $activation_code));
+		$req->bindValue('pseudo', $post->get('pseudo'));
+		$req->bindValue('email', $post->get('email'));
+		$req->bindValue('pass', $post->get('pass'));
 		$req->bindValue('activation_code', $activation_code);
 
 		$req->execute();

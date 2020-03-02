@@ -3,6 +3,7 @@
 namespace src\controller;
 
 use src\controller\Controller;
+use config\Parameter;
 
 class HomeController extends Controller
 
@@ -24,20 +25,20 @@ class HomeController extends Controller
 		return $this->view->render('frontend', 'confidentialityView');
 	}
 
-	public function newContactForm($name, $email, $subject, $content)
+	public function newContactForm(Parameter $post)
 	{
-		$contactId = $this->contactManager->addNewContact($name, $email, $subject, $content);
+		$contactId = $this->contactManager->addNewContact($post);
 		return $contactId;
 	}
 
-	public function mailContactForm($name, $email, $subject, $content, $contactId)
+	public function mailContactForm(Parameter $post, $contactId)
 	{
 		// Email sent to administrator
 
 		$mailSubject = "Blog : Nouveau message via le formulaire de contact.";
-		$mailMessage = "De : " . $name . " <" . $email . ">\r\n
-					Objet : " . $subject . "\r\n
-					Message : " . $content . "\r\n\r\n
+		$mailMessage = "De : " . $post->get('name') . " <" . $post->get('email') . ">\r\n
+					Objet : " . $post->get('subject') . "\r\n
+					Message : " . $post->get('content') . "\r\n\r\n
 					Pour y répondre, cliquez sur le lien suivant : http://www.blogphp.charlottesaury.fr/index.php?action=contactView&id=" . $contactId . "\r\n\r\n
 					----------------------\r\n
 					Ceci est un mail automatique, Merci de ne pas y répondre.";
@@ -50,16 +51,16 @@ class HomeController extends Controller
 
 		$mailSubject = "Votre message sur le blog de Charlotte SAURY";
 		$headers = "From: " . BLOG_AUTHOR . "\r\n";
-		$mailMessage = "Bonjour " . $name .  ",\r\n
+		$mailMessage = "Bonjour " . $post->get('name') .  ",\r\n
 					Votre message ci-dessous a bien été envoyé à l'auteur du blog. Nous vous remercions pour ce contact et tâcherons d'y répondre dans les plus brefs délais.\r\n
 					----------------------\r\n
-					Objet : " . $subject . "\r\n
-					Message : " . $content . "\r\n\r\n
+					Objet : " . $post->get('subject') . "\r\n
+					Message : " . $post->get('content') . "\r\n\r\n
 					----------------------\r\n
 					Ceci est un mail automatique, Merci de ne pas y répondre.";
 
 		$mailMessage = wordwrap($mailMessage, 70, "\r\n");
-		mail($email, $mailSubject, $mailMessage, $headers);
+		mail($post->get('email'), $mailSubject, $mailMessage, $headers);
 	}
 
 	public function pictureUpload($namePicture)

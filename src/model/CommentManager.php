@@ -2,6 +2,8 @@
 
 namespace src\model;
 
+use config\Parameter;
+
 class CommentManager extends Manager
 {
 	public function getComments($commentsNb = null, $status = null, $sortingDate = null)
@@ -80,14 +82,14 @@ class CommentManager extends Manager
 		return $comments;
 	}
 
-	public function addComment($postId, $userId, $content)
+	public function addComment(Parameter $post)
 	{
 		$sql = 'INSERT INTO comment (post_id, user_id, content, comment_date) 
 				VALUES (:postId, :userId, :content, NOW())';
-		$req = $this->dbRequest($sql, array($postId, $userId, $content));
-		$req->bindValue('postId', $postId, \PDO::PARAM_INT);
-		$req->bindValue('userId', $userId);
-		$req->bindValue('content', $content);
+		$req = $this->dbRequest($sql, array($post->get('postId'), $post->get('userId'), $post->get('content')));
+		$req->bindValue('postId', $post->get('postId'), \PDO::PARAM_INT);
+		$req->bindValue('userId', $post->get('userId'), \PDO::PARAM_INT);
+		$req->bindValue('content', $post->get('content'));
 		$req->execute();
 	}
 

@@ -2,6 +2,8 @@
 
 namespace src\model;
 
+use config\Parameter;
+
 class PostManager extends Manager
 {
 	public function getPostsNb($status = null)
@@ -39,7 +41,7 @@ class PostManager extends Manager
 		return $first_post;
 	}
 
-	public function getPosts($status, $first_post = null, $postsPerPage = null, $sortingDate = null)
+	public function getPosts($status = null, $first_post = null, $postsPerPage = null, $sortingDate = null)
 	{
 		$sql = 'SELECT post.id AS id, 
 			post.title AS title, 
@@ -186,9 +188,9 @@ class PostManager extends Manager
 		return $postId;
 	}
 
-	public function publishPost($postId, $status)
+	public function publishPost(Parameter $get)
 	{
-		if ($status == 1)
+		if ($get->get('status') == 1)
 		{
 			$sql = 'UPDATE post SET status=2 WHERE post.id = :postId';
 		}
@@ -197,8 +199,8 @@ class PostManager extends Manager
 			$sql = 'UPDATE post SET status=1 WHERE post.id = :postId';
 		}
 		
-		$req = $this->dbRequest($sql, array($postId));
-		$req->bindValue('postId', $postId, \PDO::PARAM_INT);
+		$req = $this->dbRequest($sql, array($get->get('id')));
+		$req->bindValue('postId', $get->get('id'), \PDO::PARAM_INT);
 		$req->execute();
 	}
 
@@ -288,31 +290,41 @@ class PostManager extends Manager
 		return $message; 
 	}
 
-	public function deleteCategory($postId, $categoryId)
+	public function deleteCategory(Parameter $get)
 	{
 		$sql = 'DELETE FROM post_category WHERE post_id = :postId AND category_id = :categoryId';
 				
-		$req = $this->dbRequest($sql, array($postId, $categoryId));
-		$req->bindValue('postId', $postId, \PDO::PARAM_INT);
-		$req->bindValue('categoryId', $categoryId, \PDO::PARAM_INT);
+		$req = $this->dbRequest($sql, array($get->get('id'), $get->get('cat')));
+		$req->bindValue('postId', $get->get('id'), \PDO::PARAM_INT);
+		$req->bindValue('categoryId', $get->get('cat'), \PDO::PARAM_INT);
 		$req->execute();
 	}
 
-	public function editPostInfos($newPostInfos, $postId)
+	public function editPostInfos(Parameter $post)
 	{
-		$sql = 'UPDATE post SET';
+		$sql = 'UPDATE post SET post.title = :title, post.chapo = :chapo, ';
 
-		foreach ($newPostInfos AS $key => $value)
+		if ($post->get('main_image'))
 		{
-			if ($key == 'title' || $key == 'chapo' || $key == 'main_image')
-			{
-				$sql .= ' ' . $key . '="' . $value . '", ';
-			}
+			$sql .= ' post.main_image = :main_image, ';
 		}
 					
 		$sql .= 'date_update = NOW() WHERE post.id = :id';
-		$req = $this->dbRequest($sql, array($postId));
-		$req->bindValue('id', $postId, \PDO::PARAM_INT);
+
+		if ($post->get('main_image'))
+		{
+			$req = $this->dbRequest($sql, array($post->get('title'), $post->get('chapo'), $post->get('main_image'), $post->get('postId')));
+			$req->bindValue('main_image', $post->get('main_image'));
+		}
+		else
+		{
+			$req = $this->dbRequest($sql, array($post->get('title'), $post->get('chapo'), $post->get('postId')));
+		}
+
+		$req->bindValue('title', $post->get('title'));
+		$req->bindValue('chapo', $post->get('chapo'));
+		$req->bindValue('id', $post->get('postId'), \PDO::PARAM_INT);
+		
 		$req->execute();
 	}
 
