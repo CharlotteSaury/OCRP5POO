@@ -156,14 +156,6 @@ class AdminController extends Controller
 			'session' => $this->request->getSession()]);
 	}
 
-	/*public function editMainPostPicture($postId, $url)
-	{
-		$this->postManager->updateMainPostPicture($postId, $url);
-		$this->postManager->dateUpdate($postId);
-		$message = 'Photo modifiée ! ';
-		$this->editPostView($postId, $message);
-	}*/
-
 	public function deleteMainPostPicture($postId)
 	{
 		$post = $this->postManager->getPostInfos($postId);

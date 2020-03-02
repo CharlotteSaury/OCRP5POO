@@ -39,7 +39,6 @@ class Router
 
 	public function routerRequest()
 	{
-		var_dump($_SESSION);
 		$action = $this->request->getGet()->get('action');
 		try
 		{
@@ -204,8 +203,9 @@ class Router
 				elseif ($action == 'newPostInfos' && $this->_userController->adminAccess())
 				{
 					$post = $this->request->getPost();
+					$file = $this->request->getFile();
 
-					if (isset($_FILES['picture']) && $_FILES['picture']['error'] != 4)
+					if ($file->get('picture') && $file->get('picture', 'error') != 4)
 					{
 						$uploadResults = $this->_homeController->pictureUpload($namePicture = 'picture');
 						if (strrpos($uploadResults, 'uploads') === false)
@@ -252,7 +252,9 @@ class Router
 
 					elseif ($post->get('updatePostInfos'))
 					{
-						if (isset($_FILES['MainPicture']) && $_FILES['MainPicture']['error'] != 4)
+						$file = $this->request->getFile();
+
+						if ($file->get('MainPicture') && $file->get('MainPicture', 'error') != 4)
 						{
 							$uploadResults = $this->_homeController->pictureUpload($namePicture = 'MainPicture');
 

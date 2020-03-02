@@ -5,6 +5,7 @@ namespace src\controller;
 use src\controller\Controller;
 use config\Request;
 use config\Parameter;
+use config\File;
 
 class HomeController extends Controller
 
@@ -69,21 +70,23 @@ class HomeController extends Controller
 
 	public function pictureUpload($namePicture)
 	{
-		if (isset($_FILES[$namePicture]))
+		$file = $this->request->getFile();
+
+		if ($file->get($namePicture))
 		{
-			if ($_FILES[$namePicture]['error'] == 0)
+			if ($file->get($namePicture, 'error') == 0)
 			{
-				if ($_FILES[$namePicture]['size'] <= 2000000)
+				if ($file->get($namePicture, 'size') <= 2000000)
 				{
-					$fileInfos = pathinfo($_FILES[$namePicture]['name']);
+					$fileInfos = pathinfo($file->get($namePicture, 'name'));
 					$extension_upload = $fileInfos['extension'];
 					$allowed_extensions = array('jpg', 'jpeg', 'gif', 'png');
 
 					if (in_array($extension_upload, $allowed_extensions))
 					{
-						$uploadResults = 'public/uploads/' . microtime(true) . '_' . basename($_FILES[$namePicture]['name']);
+						$uploadResults = 'public/uploads/' . microtime(true) . '_' . basename($file->get($namePicture, 'name'));
 
-						move_uploaded_file($_FILES[$namePicture]['tmp_name'], $uploadResults);
+						move_uploaded_file($file->get($namePicture, 'tmp_name'), $uploadResults);
 					}
 					else
 					{
@@ -95,7 +98,7 @@ class HomeController extends Controller
 					$uploadResults = 'Fichier trop volumineux, merci de ne pas dépasser 2Mo.';
 				}
 			}
-			elseif ($_FILES[$namePicture]['error'] == 1 || $_FILES[$namePicture]['error'] == 2)
+			elseif ($file->get($namePicture, 'error') == 1 || $file->get($namePicture, 'error') == 2)
 			{
 				$uploadResults = 'Fichier trop volumineux, merci de ne pas dépasser 2Mo.';
 			}

@@ -138,7 +138,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                        <button type="submit" class="btn btn-primary-custom" name="updatePicture">Envoyer</button>
+                                        <button type="submit" class="btn btn-primary-custom" name="updatePicture" value="updatePicture">Envoyer</button>
                                     </div>
 
                                 </div>

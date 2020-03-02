@@ -9,13 +9,15 @@ class Request
 {
 	private $get,
 			$post,
-			$session;
+			$session,
+			$file;
 
 	public function __construct()
 	{
 		$this->get = new Parameter($_GET);
 		$this->post = new Parameter($_POST);
 		$this->session = new Session($_SESSION);
+		$this->file = new File($_FILES);
 	}
 
 	public function getGet()
@@ -31,6 +33,11 @@ class Request
 	public function getSession()
 	{
 		return $this->session;
+	}
+
+	public function getFile()
+	{
+		return $this->file;
 	}
 
 }
