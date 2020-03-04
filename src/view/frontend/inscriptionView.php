@@ -15,16 +15,25 @@
             <?php
             if (isset($message))
             {
-                echo '<div class="adminMessage text-white-50 text-center">' . $message . '</div>';
+                echo '<div class="adminMessage text-white text-center">' . $message . '</div>';
             }
             ?>
             
             <form class="form-inline d-flex flex-column" method="POST" action="index.php?action=inscription">
 
                 <input type="text" name="pseudo" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" placeholder="Votre pseudo...*" required>
+
+                <?= isset($errors['pseudo']) ? '<p class="text-white">' . $errors['pseudo'] . '</p>' : ''; ?>
+
                 <input type="password" name="pass1" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" placeholder="Votre mot de passe...*" required>
+
+                <?= isset($errors['pass1']) ? '<p class="text-white">' . $errors['pass1'] . '</p>' : ''; ?>
+
                 <input type="password" name="pass2" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" placeholder="Retapez votre mot de passe...*" required>
                 <input type="email" name="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" placeholder="Votre adresse email...*" required>
+
+                <?= isset($errors['email']) ? '<p class="text-white">' . $errors['email'] . '</p>' : ''; ?>
+
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" name="confidentiality" id="confidentiality" required/>
                     <label class="form-check-label text-white-50" for="confidentiality" >* J'ai lu et j'accepte la <a href="index.php?action=confidentiality"> Politique de confidentialité des données personnelles</a></label>

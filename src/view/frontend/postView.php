@@ -95,7 +95,12 @@
                     echo '<div class="adminMessage text-dark-50 text-center">' . $messageComment . '</div>';
                 }
 
-                if (isset($_SESSION['id']))
+                if (isset($errors['content']))
+                {
+                    echo '<div class="adminMessage text-dark-50 text-center">' . $errors['content'] . '</div>';                    
+                }
+
+                if ($session->get('id'))
                 {
                     ?>
                     <div class="comment-form">
@@ -105,7 +110,6 @@
                             </div>
                             <div class="form-row">
                                 <div class="col">
-                                    <input type="hidden" name="userId" value="<?= $_SESSION['id']; ?>" />
                                     <input type="hidden" name="postId" value="<?= $postId; ?>" />
 
                                 </div>

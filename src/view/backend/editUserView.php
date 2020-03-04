@@ -23,7 +23,9 @@
                     <div class="form-group">
                         <label for="pseudo" hidden>Pseudo : </label>
                         <input type="text" class="form-control" name="pseudo" value="<?= htmlspecialchars($user->pseudo()); ?>"/>
-                        <small id="pseudoHelpBlock" class="form-text text-muted">Le pseudo ne doit pas dépasser 25 caractères.</small>
+                        
+                        <?= isset($errors['pseudo']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $errors['pseudo'] . '</small>': '' ?>
+
                     </div>
                 </div>
 
@@ -39,10 +41,14 @@
                             <div class="form-group">
                                 <label for="firstname">Prénom : </label>
                                 <input type="text" class="form-control" name="first_name" value="<?= htmlspecialchars($user->firstName()); ?>"/>
+
+                                <?= isset($errors['first_name']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $errors['first_name'] . '</small>': '' ?>
                             </div>
                             <div class="form-group">
                                 <label for="lastname">Nom : </label>
                                 <input type="text" class="form-control" name="last_name" value="<?= htmlspecialchars($user->lastName()); ?>"/>
+
+                                <?= isset($errors['last_name']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $errors['last_name'] . '</small>': '' ?>
                             </div>
                         </div>
 
@@ -52,26 +58,32 @@
                                 <label for="birthdate">Né(e) le : </label>
                                     <input type="text" class="form-control" name="birth_date" value="<?= $user->birthDate(); ?>"/>
                                     <small id="birthDateHelpBlock" class="form-text text-muted">La date doit être au format JJ-MM-AAAA.</small>
+                                    <?= isset($errors['birth_date']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $errors['birth_date'] . '</small>': '' ?>
                             </div>
                             <div class="form-group">
                                 <label for="home">Habite à : </label>
                                 <input type="text" class="form-control" name="home" value="<?= htmlspecialchars($user->home()); ?>"/>
+                                <?= isset($errors['home']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $errors['home'] . '</small>': '' ?>
                             </div>
                             <div class="form-group">
                                 <label for="user_about">A propos de moi : </label>
-                                <textarea type="text" class="form-control" name="user_about"><?= htmlspecialchars($user->userAbout()); ?></textarea>                               
+                                <textarea type="text" class="form-control" name="user_about"><?= htmlspecialchars($user->userAbout()); ?></textarea>
+                                <?= isset($errors['user_about']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $errors['user_about'] . '</small>': '' ?>                               
                             </div>
                             <div class="form-group">
                                 <label for="email">Email : </label>
                                 <input type="text" class="form-control" name="email" value="<?= htmlspecialchars($user->email()); ?>"/>
+                                <?= isset($errors['email']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $errors['email'] . '</small>': '' ?>
                             </div>
                             <div class="form-group">
                                 <label for="mobile">Tel : </label>
                                 <input type="text" class="form-control" name="mobile" value="<?= htmlspecialchars($user->mobile()); ?>"/>
+                                <?= isset($errors['mobile']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $errors['mobile'] . '</small>': '' ?>
                             </div>
                             <div class="form-group">
                                 <label for="website">Site internet : </label>
                                 <input type="text" class="form-control" name="website" value="<?= htmlspecialchars($user->website()); ?>"/>
+                                <?= isset($errors['website']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $errors['website'] . '</small>': '' ?>
                             </div>
                             
                             <hr>

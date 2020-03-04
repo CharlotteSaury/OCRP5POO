@@ -103,6 +103,11 @@ a:focus, a:hover {
 	width: 100% !important;
 }
 
+.form-error p {
+	color: red;
+	font-style: italic;
+}
+
 /* //////////////////////////////// */
 /* /////// backend_template ////////// */
 /* //////////////////////////////// */

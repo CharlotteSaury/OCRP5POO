@@ -68,13 +68,19 @@
 
                 <div class="profile-card-info">
                     <h5 class="card-title"><?= htmlspecialchars($user->firstName()); ?> <?= htmlspecialchars($user->lastName()); ?></h5>
-                    <p class="card-text">Née le <?= $user->birthDate(); ?></p>
-                    <p class="card-text">Habite à <?= htmlspecialchars($user->home()); ?></p>
-                    <p class="card-text"><strong>A propos de moi : </strong> <?= htmlspecialchars($user->userAbout()); ?></p>
+                    
+                    <?= $user->birthDate() ? '<p class="card-text">Née le ' . $user->birthDate() . ' </p>' : ''; ?>
+
+                    <?= $user->home() ? '<p class="card-text">Habite à ' . $user->home() . ' </p>' : ''; ?>
+
+                    <?= $user->userAbout() ? '<p class="card-text"><strong>A propos de moi : </strong>' . $user->userAbout() . ' </p>' : ''; ?>
                     <hr>
                     <p class="card-text"><strong>Email : </strong><?= htmlspecialchars($user->email()); ?></p>
-                    <p class="card-text"><strong>Tel : </strong><?= htmlspecialchars($user->mobile()); ?></p>
-                    <p class="card-text"><strong>Site internet : </strong><?= htmlspecialchars($user->website()); ?></p>
+
+                    <?= $user->mobile() ? '<p class="card-text"><strong>Tel : </strong>' . $user->mobile() . ' </p>' : ''; ?>
+
+                    <?= $user->website() ? '<p class="card-text"><strong>Website : </strong>' . $user->website() . ' </p>' : ''; ?>
+                    
                     <hr>
                     <p class="card-text"><strong>Rôle : </strong><?= htmlspecialchars($user->role()); ?></p>
                     <p class="card-text"><strong>Date de création : </strong><?= $user->registerDate(); ?></p>

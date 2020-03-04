@@ -2,6 +2,8 @@
 
 namespace src\model;
 
+use config\Parameter;
+
 class UserManager extends Manager
 {
 	public function getUsers($usersNb = null, $userRoleId = null)
@@ -189,25 +191,35 @@ class UserManager extends Manager
 		return $usersNb;
 	}
 
-	public function editUserInfos($newUserInfos)
+	public function editUserInfos(Parameter $post)
 	{
 		$sql = 'UPDATE user SET';
 
-		foreach ($newUserInfos as $key => $value)
+		foreach ($post->all() as $key => $value)
 		{
 			if ($key != 'user_role_id')
 			{
-				$sql .= ' ' . $key . '="' . $value . '", ';
+				if ($key != 'birth_date')
+				{
+					$sql .= ' ' . $key . '="' . $value . '", ';
+				}
+				else
+				{
+					if ($value != '')
+					{
+						$sql .= ' ' . $key . '="' . $value . '", ';
+					}
+				}
 			}
 			else  
 			{
-				$sql .= ' ' . $key . '="' . $value . '"';
+					$sql .= ' ' . $key . '="' . $value . '"';
 			}			
 		}
 
 		$sql .= ' WHERE user.id = :id';
-		$req = $this->dbRequest($sql, array($newUserInfos['id']));
-		$req->bindValue('id', $newUserInfos['id'], \PDO::PARAM_INT);
+		$req = $this->dbRequest($sql, array($post->get('id')));
+		$req->bindValue('id', $post->get('id'), \PDO::PARAM_INT);
 		$req->execute();
 	}
 

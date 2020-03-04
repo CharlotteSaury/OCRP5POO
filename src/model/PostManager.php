@@ -168,16 +168,16 @@ class PostManager extends Manager
 		return $categories;
 	}
 
-	public function newPostInfos($title, $chapo, $userId, $mainImage)
+	public function newPostInfos(Parameter $post, $mainImage)
 	{
 		$sql = 'INSERT INTO post 
 			(title, chapo, status, user_id, date_creation, date_update, main_image) 
 			VALUES (:title, :chapo, 1, :userId, NOW(), NOW(), :mainImage)';
 
-		$req = $this->dbRequest($sql, array($title, $chapo, $userId, $mainImage));
-		$req->bindValue('title', $title);
-		$req->bindValue('chapo', $chapo);
-		$req->bindValue('userId', $userId, \PDO::PARAM_INT);
+		$req = $this->dbRequest($sql, array($post->get('title'), $post->get('chapo'), $post->get('userId'), $mainImage));
+		$req->bindValue('title', $post->get('title'));
+		$req->bindValue('chapo', $post->get('chapo'));
+		$req->bindValue('userId', $post->get('userId'), \PDO::PARAM_INT);
 		$req->bindValue('mainImage', $mainImage);
 		$req->execute();
 
@@ -292,11 +292,20 @@ class PostManager extends Manager
 
 	public function deleteCategory(Parameter $get)
 	{
-		$sql = 'DELETE FROM post_category WHERE post_id = :postId AND category_id = :categoryId';
-				
-		$req = $this->dbRequest($sql, array($get->get('id'), $get->get('cat')));
-		$req->bindValue('postId', $get->get('id'), \PDO::PARAM_INT);
-		$req->bindValue('categoryId', $get->get('cat'), \PDO::PARAM_INT);
+		$sql = 'DELETE FROM post_category WHERE post_id = :postId';
+
+		if (!$get->get('cat'))
+		{
+			$req = $this->dbRequest($sql, array($get->get('id')));
+			$req->bindValue('postId', $get->get('id'), \PDO::PARAM_INT);
+		}
+		else
+		{
+			$sql .= ' AND category_id = :categoryId';
+			$req = $this->dbRequest($sql, array($get->get('id'), $get->get('cat')));
+			$req->bindValue('postId', $get->get('id'), \PDO::PARAM_INT);
+			$req->bindValue('categoryId', $get->get('cat'), \PDO::PARAM_INT);
+		}
 		$req->execute();
 	}
 

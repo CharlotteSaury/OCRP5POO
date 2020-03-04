@@ -15,22 +15,24 @@
          | Trier par date
 
         <?php
-        if (!$get->get('sort'))
+        if (isset($get))
         {
-            if (!$get->get('date'))
+            if (!$get->get('sort'))
             {
-                echo '<a href="index.php?action=adminPosts&date=asc" title="Trier du plus ancien au plus récent"><i class="fas fa-sort-down fa-2x ml-2"></i></a>';
-            }
-            else
-            {
-                if ($get->get('date') == 'asc')
+                if (!$get->get('date'))
                 {
-                 echo '<a href="index.php?action=adminPosts" title="Trier du plus récent au plus ancien"><i class="fas fa-sort-up fa-2x ml-2 mb-0"></i></a>';
+                    echo '<a href="index.php?action=adminPosts&date=asc" title="Trier du plus ancien au plus récent"><i class="fas fa-sort-down fa-2x ml-2"></i></a>';
                 }
-            }
-        }
-        else
-        {
+                else
+                {
+                    if ($get->get('date') == 'asc')
+                    {
+                       echo '<a href="index.php?action=adminPosts" title="Trier du plus récent au plus ancien"><i class="fas fa-sort-up fa-2x ml-2 mb-0"></i></a>';
+                   }
+               }
+           }
+           else
+           {
             if ($get->get('sort') == 'unpublished')
             {
                 if (!$get->get('date'))
@@ -41,11 +43,13 @@
                 {
                     if ($get->get('date') == 'asc')
                     {
-                     echo '<a href="index.php?action=adminPosts&sort=unpublished" title="Trier du plus récent au plus ancien"><i class="fas fa-sort-up fa-2x ml-2 mb-0"></i></a>';
-                    }
-                }
-            }
+                       echo '<a href="index.php?action=adminPosts&sort=unpublished" title="Trier du plus récent au plus ancien"><i class="fas fa-sort-up fa-2x ml-2 mb-0"></i></a>';
+                   }
+               }
+           }
+       }
         }
+        
 
         ?>
     </div>

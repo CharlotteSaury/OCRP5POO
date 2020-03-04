@@ -138,7 +138,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                        <button type="submit" class="btn btn-primary-custom" name="updatePicture">Envoyer</button>
+                                        <button type="submit" class="btn btn-primary-custom" name="updatePicture" value="updatePicture">Envoyer</button>
                                     </div>
 
                                 </div>
@@ -176,7 +176,7 @@
 
                             <textarea class="form-control" name="<?= htmlspecialchars($content->id()); ?>" rows="5"><?= htmlspecialchars($content->content()); ?></textarea>
                             
-                            <input type="submit" name="editContent" class="btn btn-outline-success btn-sm mx-2" title="Enregistrer les modifications" value="Enregistrer"/>
+                            <button type="submit" name="editContent" class="btn btn-outline-success btn-sm mx-2" title="Enregistrer les modifications" value="<?= htmlspecialchars($content->id()); ?>">Enregistrer</button>
                             
                             <a data-toggle="modal" data-target="#deleteContentModal<?= htmlspecialchars($content->id()); ?>" class="btn btn-outline-dark btn-sm mr-2" title="Supprimer">
                                 <i class="fas fa-trash-alt"></i>
@@ -207,7 +207,7 @@
                     }
                 }
 
-                ?>       
+                ?> 
 
                 <div class="my-2">
                     <button type="submit" name="addParagraph" class="d-none d-sm-inline-block btn btn-sm btn-light shadow-sm"  value="add"><i class="fas fa-plus fa-sm mr-1"></i> Ajouter un paragraphe</button>
@@ -263,6 +263,7 @@
                 <div class="form-group form-inline mt-3">
                     <label for="new-category">Sélectionner / Ajouter une catégorie</label>
                     <input type="text" class="form-control mx-2" id="new-category" name="categoryName"/> 
+
                     <button type="submit" name="addCategory" class="d-none d-sm-inline-block btn btn-sm btn-light shadow-sm" value="add"><i class="fas fa-plus"></i></button>
                 </div>
 
