@@ -12,10 +12,11 @@ class HomeController extends Controller
 {
 	// Home page
 
-	public function indexView($message = null) 
+	public function indexView($message = null, $errors = null) 
 	{
 		return $this->view->render('frontend', 'indexView', ['message' => $message,
-			'session' => $this->request->getSession()]); 
+			'session' => $this->request->getSession(),
+			'errors' => $errors]); 
 	}
 	
 	public function legalView()
@@ -32,8 +33,20 @@ class HomeController extends Controller
 
 	public function newContactForm(Parameter $post)
 	{
-		$contactId = $this->contactManager->addNewContact($post);
-		return $contactId;
+		$errors = $this->validation->validate($post, 'Contact');
+
+		if (!$errors)
+		{
+			$contactId = $this->contactManager->addNewContact($post);
+			$this->mailContactForm($post, $contactId);
+			$message = "Votre message a bien été envoyé. Nous vous remercions et vous recontacterons dans les plus brefs délais.";
+			$this->indexView($message);
+		}
+		else
+		{
+			$this->indexView($message = null, $errors);
+		}
+		
 	}
 
 	public function mailContactForm(Parameter $post, $contactId)

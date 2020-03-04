@@ -10,6 +10,7 @@ use src\model\ContentManager;
 use src\view\View;
 use config\Request;
 use config\Parameter;
+use src\constraint\Validation;
 use Exception;
 
 abstract class Controller
@@ -20,7 +21,8 @@ abstract class Controller
 			$contactManager,
 			$contentManager,
 			$view,
-			$request;
+			$request,
+			$validation;
 
 	public function __construct()
 	{
@@ -31,6 +33,6 @@ abstract class Controller
 		$this->contentManager = new ContentManager();
 		$this->view = new View();
 		$this->request = new Request();
-
+		$this->validation = new Validation();
 	}
 }

@@ -4,6 +4,16 @@ namespace src\model;
 
 class ContentManager extends Manager
 {
+	public function getContents()
+	{
+		$sql = 'SELECT content.id AS id FROM content';
+		
+		$req = $this->dbRequest($sql);
+
+		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\src\entity\Content');
+		return $req->fetchAll();
+	}
+
 	public function getPostContents($postId)
 	{
 		$sql = 'SELECT post.id AS postId,
@@ -78,18 +88,15 @@ class ContentManager extends Manager
 		$req->execute();
 	}
 
-	public function editParagraph($newParagraphs)
+	public function editParagraph($contentId, $content)
 	{
-		foreach ($newParagraphs AS $key => $value)
-		{
-			$sql = 'UPDATE content SET content.content = :content 
+		$sql = 'UPDATE content SET content.content = :content 
 				WHERE content.id = :contentId';
 
-			$req = $this->dbRequest($sql, array($value, $key));
-			$req->bindValue('content', $value);
-			$req->bindValue('contentId', $key, \PDO::PARAM_INT);
-			$req->execute();
-		}
+		$req = $this->dbRequest($sql, array($content, $contentId));
+		$req->bindValue('content', $content);
+		$req->bindValue('contentId', $contentId, \PDO::PARAM_INT);
+		$req->execute();
 	}
 
 

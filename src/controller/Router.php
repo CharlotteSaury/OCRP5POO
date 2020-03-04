@@ -53,21 +53,14 @@ class Router
 
 				elseif ($action == 'postView') 
 				{
-					$postId = $this->request->getGet()->get('id');
-					if ($this->_postController->isValid($postId)) 
-					{
-						$this->_postController->postView($postId);
-					}
-					else 
-					{
-						throw new Exception('Identifiant de billet non valide');
-					}	
+					$this->_postController->postView($this->request->getGet()->get('id'));
 				}
 
 				elseif ($action == "addComment") 
 				{
 					$post = $this->request->getPost();
-					$this->_postController->addComment($post);
+					$userId = $this->request->getSession()->get('id');
+					$this->_postController->addComment($post, $userId);
 				}
 
 				elseif ($action == 'legalView') 
@@ -105,15 +98,7 @@ class Router
 				elseif ($action == 'connexion')
 				{
 					$post = $this->request->getPost();
-					$message = $this->_userController->connexion($post);
-					if (isset($message))
-					{
-						$this->_userController->connexionView($message);
-					}
-					else
-					{
-						$this->_homeController->indexView();
-					}
+					$this->_userController->connexion($post);
 				}
 
 				elseif ($action == 'deconnexion')
@@ -131,7 +116,6 @@ class Router
 
 						setcookie('auth', '', time()-3600, null, null, false, true);
 					}
-
 					$this->_homeController->indexView();
 				}
 
@@ -143,11 +127,7 @@ class Router
 				elseif ($action == 'forgotPassMail')
 				{
 					$email = $this->request->getPost()->get('email');
-
-					$reinit_code = $this->_userController->newPassCode($email);
-					$message = $this->_userController->forgotPassMail($email, $reinit_code);
-
-					$this->_userController->forgotPassView($message);
+					$this->_userController->newPassCode($email);
 				}
 
 				elseif ($action == 'newPassView')
@@ -159,7 +139,8 @@ class Router
 				elseif ($action == 'newPass')
 				{
 					$post = $this->request->getPost();
-					$this->_userController->newPass($post);
+					$email = $this->request->getSession()->get('email');
+					$this->_userController->newPass($post, $email);
 				}
 
 				elseif ($action == 'admin' && $this->_userController->adminAccess())
@@ -169,30 +150,12 @@ class Router
 
 				elseif ($action == 'adminPosts' && $this->_userController->adminAccess())
 				{
-					$get = $this->request->getGet();
-
-					if ($get->get('sort') || $get->get('date'))
-					{
-						$sorting = $this->_adminController->getSortingResults($get, 'unpublished');
-						$this->_adminController->adminPostsView($message = null, $sorting, $get);	
-					}
-					else
-					{
-						$this->_adminController->adminPostsView($message = null, $sorting = null, $get);
-					}
+					$this->_adminController->adminPostsView($message = null, $this->request->getGet());
 				}
 
 				elseif ($action == 'adminPostView' && $this->_userController->adminAccess())
 				{
-					$postId = $this->request->getGet()->get('id');
-					if ($this->_postController->isValid($postId))
-					{
-						$this->_adminController->adminPostView($postId);
-					}
-					else
-					{
-						throw new Exception('Identifiant de post non valide');
-					}
+					$this->_adminController->adminPostView($this->request->getGet()->get('id'));
 				}
 
 				elseif ($action == 'adminNewPost' && $this->_userController->adminAccess())
@@ -203,27 +166,10 @@ class Router
 				elseif ($action == 'newPostInfos' && $this->_userController->adminAccess())
 				{
 					$post = $this->request->getPost();
+					$post->set('userId', $this->request->getSession()->get('id'));
 					$file = $this->request->getFile();
 
-					if ($file->get('picture') && $file->get('picture', 'error') != 4)
-					{
-						$uploadResults = $this->_homeController->pictureUpload($namePicture = 'picture');
-						if (strrpos($uploadResults, 'uploads') === false)
-						{
-							$message = $uploadResults;
-							$this->_adminController->adminNewPostView($message);
-						}
-						else
-						{
-							$mainImage = $uploadResults;
-							$this->_adminController->NewPostInfos($post, $mainImage);
-						}
-					}
-					else
-					{
-						$this->_adminController->NewPostInfos($post, $mainImage = null);
-					}
-
+					$this->_adminController->newPostInfos($post, $file);
 				}
 
 				elseif ($action == 'editPostView' && $this->_userController->adminAccess())
@@ -252,150 +198,59 @@ class Router
 
 					elseif ($post->get('updatePostInfos'))
 					{
-						$file = $this->request->getFile();
-
-						if ($file->get('MainPicture') && $file->get('MainPicture', 'error') != 4)
-						{
-							$uploadResults = $this->_homeController->pictureUpload($namePicture = 'MainPicture');
-
-							if (strrpos($uploadResults, 'uploads') === false)
-							{
-								$message = "Information(s) modifiée(s) \n 
-								/!\ Erreur de téléchargement de l'image principale : " . $uploadResults;
-							}
-							else
-							{
-								$post->set('main_image', $uploadResults);
-								$message = "Information(s) modifiée(s) ! ";
-							}
-						}
-						else
-						{
-							$message = "Information(s) modifiée(s) ! ";
-						}
-						$this->_adminController->editPostInfos($post, $message);
-
+						$this->_adminController->editPostInfos($post);
 					}
 
 					elseif ($post->get('editContent'))
 					{
-						$newParagraphs = [];
-
-						foreach ($_POST as $key => $value)
-						{
-							if (is_numeric($key))
-							{
-								$newParagraphs[$key] = $value;
-							}
-						}
-
-						$this->_adminController->editParagraph($post->get('postId'), $newParagraphs);
+						$post = $this->request->getPost();
+						$this->_adminController->editParagraph($post);		
 					}
 
 					elseif ($post->get('addPicture'))
 					{
-						$uploadResults = $this->_homeController->pictureUpload($namePicture = 'picture');
-
-						if (strrpos($uploadResults, 'uploads') === false)
-						{
-							$message = $uploadResults;
-						}
-						else
-						{
-							$this->_adminController->addPicture($post->get('postId'), $uploadResults);
-							$message = 'Image ajoutée !';
-						}
-
-						$this->_adminController->editPostView($post->get('postId'), $message);
+						$this->_adminController->addPicture($post);
 					}
 
 					elseif ($post->get('updatePicture'))
 					{
-						foreach ($_FILES AS $key => $value)
-						{
-							if ($value['name'] !='')
-							{
-								$contentId = substr($key, 7);
-							}
-						}
-
-						$uploadResults = $this->_homeController->pictureUpload($namePicture = 'picture' . $contentId);
-
-						if (strrpos($uploadResults, 'uploads') === false)
-						{
-							$message = $uploadResults;
-						}
-						else
-						{
-							$this->_adminController->editPostPicture($post->get('postId'), $contentId, $uploadResults);
-							$message = 'Image modifiée !';
-						}
-
-						$this->_adminController->editPostView($post->get('postId'), $message);
+						$this->_adminController->editPostPicture($post);
 					}
 				}
 
 				elseif ($action == 'deleteContent' && $this->_userController->adminAccess())
 				{
-					$get = $this->request->getGet();
-					$this->_adminController->deleteContent($get);
+					$this->_adminController->deleteContent($this->request->getGet());
 				}
 
 				elseif ($action == 'deleteCategory' && $this->_userController->adminAccess())
 				{
-					$get = $this->request->getGet();
-					$this->_adminController->deleteCategory($get);
+					$this->_adminController->deleteCategory($this->request->getGet());
 				}
 
 				elseif ($action == 'publishPost' || ($action == 'publishPostDashboard') && $this->_userController->adminAccess())
 				{
 					$get = $this->request->getGet();
-
-					$dashboard = ($action == 'publishPostDashboard') ? 1 : null ;
-					$this->_adminController->publishPost($get, $dashboard);
+					$this->_adminController->publishPost($get);
 				}
 
 				elseif (($action == 'deletePost') || ($action == 'deletePostDashboard') && $this->_userController->adminAccess())
 				{
-					$postId = $this->request->getGet()->get('id');
-
+					$get = $this->request->getGet();
 					$dashboard = ($action == 'deletePostDashboard') ? 1 : null;
-					$this->_adminController->deletePost($postId, $dashboard);	
+					$this->_adminController->deletePost($get, $dashboard);	
 				}
 
 				elseif ($action == 'adminComments' && $this->_userController->adminAccess())
 				{
-					$get = $this->request->getGet();
-
-					if ($get->get('sort') || $get->get('date'))
-					{
-						$sorting = $this->_adminController->getSortingResults($get, 'unapproved');
-						$this->_adminController->adminCommentsView($message = null, $sorting, $get);	
-					}
-					else
-					{
-						$this->_adminController->adminCommentsView($message = null, $sorting = null, $get);
-					}
+					$this->_adminController->adminCommentsView($message = null, $this->request->getGet());
 				}
 
 				elseif (($action == 'approveComment') || ($action == 'approveCommentDashboard') || ($action == 'approveCommentView') && $this->_userController->adminAccess())
 				{
+					$get = $this->request->getGet();
+					$this->_adminController->approveComment($get);
 
-					if ($action == 'approveCommentDashboard')
-					{
-						$view = 1;
-						$postId = null;
-					}
-					elseif ($action == 'approveCommentView')
-					{
-						$view = 2;
-						$postId = $this->request->getGet()->get('post');
-					}
-					else
-					{
-						$view = $postId = null;
-					}					
-					$this->_adminController->approveComment($this->request->getGet()->get('id'), $view, $postId);
 				}
 
 				elseif (($action == 'deleteComment') || ($action == 'deleteCommentDashboard') && $this->_userController->adminAccess())
@@ -406,216 +261,40 @@ class Router
 
 				elseif ($action == 'adminUsers' && $this->_userController->adminAccess())
 				{
-					$userRoleId = $this->request->getGet()->get('sort');
-
-					if ($userRoleId != null)
-					{
-						if (in_array($userRoleId, ['1', '2', '3']))
-						{
-							$this->_adminController->adminUsersView($userRoleId);
-						}
-						else
-						{
-							throw new Exception("La page que vous recherchez n'existe pas. ");
-						}
-					}
-					else
-					{
-						$this->_adminController->adminUsersView();
-					}
-					
+					$this->_adminController->adminUsersView( $this->request->getGet()->get('sort'));					
 				}
 
 				elseif ($action == 'profileUser')
 				{
-					if ($this->_userController->isValid($this->request->getGet()->get('id')))
-					{
-						$this->_adminController->profileUserView($this->request->getGet()->get('id'));
-					}
-					else
-					{
-						throw new Exception('Le profil demandé n\'existe pas');
-					}
-					
+					$this->_adminController->profileUserView($this->request->getGet()->get('id'));
 				}
 
 				elseif ($action == 'editUser')
 				{
-					$userId = $this->request->getGet()->get('id');
-					
-					if ($this->_userController->isValid($userId))
-					{
-						$currentUserId = $this->request->getSession()->get('id');
-
-						if ($currentUserId == $userId || $this->_userController->adminAccess())
-						{
-							$this->_adminController->editUserView($userId);
-						}
-						else
-						{
-							throw new Exception('Vous n\'avez pas accès à cette page');
-						}
-					}
-					else
-					{
-						throw new Exception('Le profil demandé n\'existe pas');
-					}
+					$this->_adminController->editUser($this->request->getGet()->get('id'));
 				}
 
 				elseif ($action == 'editUserInfos')
 				{
-					$newUserInfos = [];
-
-					foreach ($_POST as $key => $value)
-					{
-						$newUserInfos[$key] = $value;
-					}
-
-					if (strlen($newUserInfos['pseudo']) < 25)
-					{
-						if (filter_var($newUserInfos['email'], FILTER_VALIDATE_EMAIL))
-						{
-							if (($this->_userController->checkEmail($newUserInfos['email'], $newUserInfos['id'])) || ($this->_userController->checkPseudo($newUserInfos['pseudo'], $newUserInfos['id'])))
-							{
-								if ($this->_userController->checkEmail($newUserInfos['email'], $newUserInfos['id']))
-								{
-									$message = "Cet email est déjà associé à un compte.";
-
-									$this->_adminController->editUserView($newUserInfos['id'], $message);
-								}
-								else
-								{
-									$message = "Ce pseudo n'est pas disponible. Merci d'en choisir un nouveau.";
-									$this->_adminController->editUserView($newUserInfos['id'], $message);
-								}								
-							}
-							else
-							{
-								if (!isset($newUserInfos['user_role_id']))
-								{
-									$role = $this->request->getSession()->get('role');
-									$newUserInfos['user_role_id'] = $role;
-								}
-
-								$date = $newUserInfos['birth_date'];
-
-								if (empty($date))
-								{
-									unset($newUserInfos['birth_date']);
-									$this->_adminController->deleteBirthDate($newUserInfos['id']);
-
-									$email = $newUserInfos['email'];
-									$userId = $newUserInfos['id'];
-									$currentUserId = $this->request->getSession()->get('id');	
-
-									$this->_adminController->editUserInfos($newUserInfos);
-
-										// Si l'utilisateur a modifié son propre profil, alors on modifie les variables de session
-
-									if ($currentUserId == $userId)
-									{
-										$this->_userController->newUserSession($email);
-									}
-								}
-								else
-								{
-									$checkDate = explode('-', $date);						
-									if (!preg_match('#^([0-9]{2})(-)([0-9]{2})(-)([0-9]{4})$#' , $date)) // check date format (DD/MM/AAAA)
-									{
-										$message = "La date de naissance n'est pas dans le format autorisé.";
-										$this->_adminController->editUserView($newUserInfos['id'], $message);
-									}
-									elseif (!checkdate($checkDate[1], $checkDate[0], $checkDate[2]) || ($checkDate[2] < 1900 )) // check date validity
-									{
-										$message = "La date de naissance n'est pas valide.";
-										$this->_adminController->editUserView($newUserInfos['id'], $message);
-									}
-									else // date valide
-									{
-										$newUserInfos['birth_date'] = $checkDate[2] . '-' . $checkDate[1] . '-' . $checkDate[0];
-										$email = $newUserInfos['email'];
-										$userId = $newUserInfos['id'];
-										$currentUserId = $this->request->getSession()->get('id');	
-
-										$this->_adminController->editUserInfos($newUserInfos);
-
-											// Si l'utilisateur a modifié son propre profil, alors on modifie les variables de session
-
-										if ($currentUserId == $userId)
-										{
-											$this->_userController->newUserSession($email);
-										}
-
-									}
-								}
-									
-							}
-
-						}
-						else
-						{
-							$message = 'L\'adresse email n\'est pas valide !';
-							$this->_adminController->editUserView($message);
-						}							
-					}
-					else
-					{
-						$message = 'Le pseudo ne doit pas dépasser 25 caractères ! ';
-						$this->_adminController->editUserView($message);
-					}	
+					$post = $this->request->getPost();
+					var_dump($post);
+					$this->_adminController->editUserInfos($post);
 				}
 
 				elseif ($action == 'updateProfilePicture')
 				{
 					$userId = $this->request->getGet()->get('id');
-					$uploadResults = $this->_homeController->pictureUpload($namePicture = 'picture');
-
-					if (strrpos($uploadResults, 'uploads') === false)
-					{
-						$message = $uploadResults;
-						$this->_adminController->profileUserView($userId, $message);
-					}
-					else
-					{
-						$this->_adminController->updateProfilePicture($userId, $uploadResults);
-						$message = 'Photo de profil modifiée !';
-
-						$this->_adminController->profileUserView($userId, $message);
-
-						// Si l'utilisateur a modifié son propre profil, alors on modifie les variables de session
-
-						$currentUserId = $this->request->getSession()->get('id');	
-						if ($currentUserId == $userId)
-						{
-							$_SESSION['avatar'] = $uploadResults;
-						}
-					}
+					$this->_adminController->updateProfilePicture($userId);
 				}
 
 				elseif ($action == 'adminContacts' && $this->_userController->adminAccess())
 				{
-					$get = $this->request->getGet();
-
-					if ($get->get('sort') || $get->get('date'))
-					{
-						$sorting = $this->_adminController->getSortingResults($get, 'unread');
-						$this->_adminController->adminContactsView($message = null, $sorting, $get);	
-					}
-					else
-					{
-						$this->_adminController->adminContactsView($message = null, $sorting = null, $get);
-					}
+					$this->_adminController->adminContactsView($message = null, $this->request->getGet());
 				}
 
 				elseif ($action == 'contactForm')
 				{
-					$post = $this->request->getPost();
-					$contactId = $this->_homeController->newContactForm($post);
-
-					$this->_homeController->mailContactForm($post, $contactId);
-
-					$message = "Votre message a bien été envoyé. Nous vous remercions et vous recontacterons dans les plus brefs délais.";
-					$this->_homeController->indexView($message);
+					$this->_homeController->newContactForm($this->request->getPost());
 				}
 
 				elseif ($action == 'contactView' && $this->_userController->adminAccess())
@@ -630,13 +309,7 @@ class Router
 
 				elseif (($action == 'answer') && $this->_userController->adminAccess())
 				{
-					$post = $this->request->getPost();
-
-					$this->_adminController->addAnswer($post);
-					$this->_adminController->adminAnswerEmail($post);
-
-					$message = "La réponse a bien été envoyée.";
-					$this->_adminController->adminContactView($post->get('id'), $message);  			
+					$this->_adminController->addAnswer($this->request->getPost());
 				}
 
 				else 

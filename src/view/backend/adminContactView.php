@@ -69,11 +69,17 @@
             ?>
             <h2 class="mb-5">Répondre</h2>
 
-            <form method="POST" action="index.php?action=answer" class="answer-form form-inline d-flex flex-column">
-                <input type="text" name="answerSubject" class="answer-form form-control mr-0 mr-sm-2 mb-2" placeholder="Votre nom" value="Re: <?= htmlspecialchars($contact->subject()); ?>" required/>
-                <input type="hidden" name="id" class="answer-form form-control flex-fill mr-0 mr-sm-2 mb-2" value="<?= htmlspecialchars($contact->id()); ?>"/>
+            <form method="POST" action="index.php?action=answer" class="answer-form form-inline d-flex flex-column align-items-start">
+                <input type="text" name="answerSubject" class="answer-form form-control mr-0 mr-sm-2 mb-2" placeholder="Objet" value="Re: <?= htmlspecialchars($contact->subject()); ?>" required/>
+
+                <?= isset($errors['answerSubject']) ? '<p class="form-error">' . $errors['answerSubject'] . '</p>' : ''; ?>
+
+                <input type="hidden" name="contactId" class="answer-form form-control flex-fill mr-0 mr-sm-2 mb-2" value="<?= htmlspecialchars($contact->id()); ?>"/>
                 <input type="hidden" name="email" class="answer-form form-control flex-fill mr-0 mr-sm-2 mb-2" value="<?= htmlspecialchars($contact->email()); ?>"/>
                 <textarea name="answerContent" class="answer-form form-control flex-fill mr-0 mr-sm-2 mb-2" rows="8" required></textarea>
+
+                <?= isset($errors['answerContent']) ? '<p class="form-error">' . $errors['answerContent'] . '</p>' : ''; ?>
+
                 <button type="submit" class="btn btn-primary-custom">Répondre</button>
             </form>
             <?php

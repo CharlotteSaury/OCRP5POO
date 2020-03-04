@@ -24,7 +24,6 @@
 
             <form method="POST" action="index.php?action=newPass" class="form-inline d-flex flex-column">
 
-                <input type="hidden" name="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" value="<?= $email ?>">
                 <input type="password" name="pass1" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" placeholder="Nouveau mot de passe">
                 <input type="password" name="pass2" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" placeholder="Retapez vorte mot de passe">
                     

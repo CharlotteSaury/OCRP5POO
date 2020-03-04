@@ -3,25 +3,13 @@
 namespace src\controller;
 
 use src\controller\Controller;
+use src\constraint\Validation;
 use config\Parameter;
 use Exception;
 
 class PostController extends Controller
 
 {
-	public function isValid($postId)
-	{
-		$posts = $this->postManager->getPosts();
-		foreach ($posts as $post) 
-		{
-			if ($post->id() == $postId)
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-
 	public function listPostSorting(Parameter $get)
 	{
 		if ($get->get('page'))
@@ -92,29 +80,55 @@ class PostController extends Controller
 			'get' => $get]);
 	}
 
-	public function postView($postId, $messageComment = null)
+	public function postView($postId, $messageComment = null, $errors = null)
 	{
-		$post = $this->postManager->getPostInfos($postId);
-		$post->setCategories($this->postManager->getPostsCategories($postId));
-		$contents = $this->contentManager->getPostContents($postId);
-		$postComments = $this->commentManager->getpostComments($postId, 1);
-		$recentPosts = $this->postManager->getRecentPosts(2);
+		$errorExists = $this->validation->exists('postId', $postId);
+
+		if (!$errorExists)
+		{
+			$post = $this->postManager->getPostInfos($postId);
+			$post->setCategories($this->postManager->getPostsCategories($postId));
+			$contents = $this->contentManager->getPostContents($postId);
+			$postComments = $this->commentManager->getpostComments($postId, 1);
+			$recentPosts = $this->postManager->getRecentPosts(2);
+
+			return $this->view->render('frontend', 'postView', ['postId' => $postId,
+				'post' => $post,
+				'contents' => $contents,
+				'postComments' => $postComments,
+				'recentPosts' => $recentPosts,
+				'messageComment' => $messageComment,
+				'session' => $this->request->getSession(),
+				'errors' => $errors]);
+		}
+		else
+		{
+			throw new Exception('Identifiant de billet non valide.');
+		}
 		
-		return $this->view->render('frontend', 'postView', ['postId' => $postId,
-			'post' => $post,
-			'contents' => $contents,
-			'postComments' => $postComments,
-			'recentPosts' => $recentPosts,
-			'messageComment' => $messageComment,
-			'session' => $this->request->getSession()]
-			);
 	}
 
-	public function addComment(Parameter $post)
+	public function addComment(Parameter $post, $userId)
 	{
-		$this->commentManager->addComment($post);
-		$messageComment = 'Votre commentaire a bien été envoyé, et est en attente de validation.';
-		$this->postView($post->get('postId'), $messageComment);
+		$errors = $this->validation->validate($post, 'Comment');
+		if (!$errors)
+		{
+			$this->commentManager->addComment($post, $userId);
+			$messageComment = 'Votre commentaire a bien été envoyé, et est en attente de validation.';
+			$this->postView($post->get('postId'), $messageComment);
+		}
+		else
+		{
+			if (isset($errors['postId']))
+			{
+				throw new Exception($errors['postId']);
+			}
+			else
+			{
+				$this->postView($post->get('postId'), $messageComment = null, $errors);
+			}
+		}
+		
 	}
 
 }

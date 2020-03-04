@@ -115,11 +115,29 @@
         {
           echo '<div class="adminMessage text-white-50 text-center">' . $message . '</div>';
         }
+
+        if (isset($errors))
+        {
+          ?>
+          
+          <div class="adminMessage text-white-50 text-center">
+            <?php
+
+            foreach($errors as $key => $value)
+            {
+                echo '<p>' . $value . '</p>';
+            }
+            ?>
+          </div>
+
+            <?php
+          
+        }
         ?>
 
         <form method="POST" action="index.php?action=contactForm#contact-form" class="form-inline d-flex flex-column">
           <input type="text" name="name" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="contactName" placeholder="Votre nom" required/>
-
+          
           <?php
           if ($session->get('email'))
           {

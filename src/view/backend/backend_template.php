@@ -219,6 +219,24 @@
                         {
                             echo '<div class="adminMessage text-center">' . $message . '</div>';
                         }
+
+                        /*if (isset($errors))
+                        {
+                            ?>
+
+                            <div class="adminMessage text-center">
+
+                            <?php
+                            foreach ($errors as $key => $value)
+                            {
+                                echo '<p>' . $value . '</p>';
+                            }
+                            ?>
+
+                            </div>
+
+                        <?php    
+                        }*/
                         ?>
                     </div>
 

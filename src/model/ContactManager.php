@@ -124,8 +124,8 @@ class ContactManager extends Manager
 
 		$sql = 'INSERT INTO contact_answer (contact_id, answer_id)
 				VALUE (:contact_id, :answer_id)';
-		$req = $this->dbRequest($sql, array($post->get('id'), $answerId));
-		$req->bindValue('contact_id', $post->get('id'), \PDO::PARAM_INT);
+		$req = $this->dbRequest($sql, array($post->get('contactId'), $answerId));
+		$req->bindValue('contact_id', $post->get('contactId'), \PDO::PARAM_INT);
 		$req->bindValue('answer_id', $answerId, \PDO::PARAM_INT);
 		$req->execute();
 	}

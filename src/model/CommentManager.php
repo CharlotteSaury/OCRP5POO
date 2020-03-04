@@ -82,13 +82,13 @@ class CommentManager extends Manager
 		return $comments;
 	}
 
-	public function addComment(Parameter $post)
+	public function addComment(Parameter $post, $userId)
 	{
 		$sql = 'INSERT INTO comment (post_id, user_id, content, comment_date) 
 				VALUES (:postId, :userId, :content, NOW())';
-		$req = $this->dbRequest($sql, array($post->get('postId'), $post->get('userId'), $post->get('content')));
+		$req = $this->dbRequest($sql, array($post->get('postId'), $userId, $post->get('content')));
 		$req->bindValue('postId', $post->get('postId'), \PDO::PARAM_INT);
-		$req->bindValue('userId', $post->get('userId'), \PDO::PARAM_INT);
+		$req->bindValue('userId', $userId, \PDO::PARAM_INT);
 		$req->bindValue('content', $post->get('content'));
 		$req->execute();
 	}
