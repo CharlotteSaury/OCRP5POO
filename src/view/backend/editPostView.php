@@ -13,9 +13,9 @@
     <form class="form" enctype="multipart/form-data"  method="POST" action="index.php?action=editPost">
         <div class="row adminPostView">
 
-            <div class="col-11 mx-auto my-3 d-flex justify-content-between">
+            <div class="col-11 mx-auto d-flex flex-column flex-md-row justify-content-between">
 
-                <div class="col-8">
+                <div class="col-md-8">
                     <div class="form-group">
                         <input type="hidden" class="form-control" name="postId" value="<?= htmlspecialchars($post->id()); ?>"/>
                     </div>
@@ -28,20 +28,20 @@
                     <hr class="d-none d-lg-block ml-0">
 
                     <div class="post-content post-content-text text-black-50 text-justify">
-                        <p class="mb-0">Auteur : <?= htmlspecialchars($post->pseudo()); ?></p>
+                        <p class="mb-0"><strong>Auteur : </strong><?= htmlspecialchars($post->pseudo()); ?></p>
                         <p class="mb-0">le <?= htmlspecialchars($post->dateCreation()); ?></p>
                         <p class="mb-0">Dernière modification le <?= htmlspecialchars($post->dateUpdate()); ?></p>
                     </div>
 
                     <hr class="d-none d-lg-block ml-0">
 
-                    <div class="form-group">
-                        <label for="post-chapo">Chapô : </label>
-                        <textarea class="form-control" name="chapo" required><?= htmlspecialchars($post->chapo()); ?></textarea>   
+                    <div class="form-group mt-3">
+                        <label for="post-chapo"><strong>Chapô : </strong></label>
+                        <textarea class="form-control" name="chapo" rows="5" required><?= htmlspecialchars($post->chapo()); ?></textarea>   
                     </div>
-                    <input type="submit" name="updatePostInfos" class="d-none d-sm-inline-block btn btn-sm btn-primary-custom shadow-sm ml-1" value="Enregistrer les modifications"/> 
+                    <button type="submit" name="updatePostInfos" class="d-sm-inline-block btn btn-sm btn-primary-custom shadow-sm ml-1 btnUpdate" value="Enregistrer">Enregistrer</button> 
                 </div>
-                <div class="col-4">
+                <div class="col-md-4">
                     <?php
                     if ($post->mainImage() != null)
                     {
@@ -100,7 +100,7 @@
 
                 <hr class="d-none d-lg-block ml-0">
 
-                <h4>Contenu</h4>
+                <h4  class="my-4">Contenu</h4>
 
                 <?php
 
@@ -172,13 +172,13 @@
                     {
                         ?>
 
-                        <div class="form-group d-flex">                        
+                        <div class="form-group d-flex flex-column flex-md-row">                        
 
                             <textarea class="form-control" name="<?= htmlspecialchars($content->id()); ?>" rows="5"><?= htmlspecialchars($content->content()); ?></textarea>
                             
-                            <button type="submit" name="editContent" class="btn btn-outline-success btn-sm mx-2" title="Enregistrer les modifications" value="<?= htmlspecialchars($content->id()); ?>">Enregistrer</button>
+                            <button type="submit" name="editContent" class="btn btn-outline-success btn-sm mx-md-2 mt-2 mt-md-0" title="Enregistrer les modifications" value="<?= htmlspecialchars($content->id()); ?>">Enregistrer</button>
                             
-                            <a data-toggle="modal" data-target="#deleteContentModal<?= htmlspecialchars($content->id()); ?>" class="btn btn-outline-dark btn-sm mr-2" title="Supprimer">
+                            <a data-toggle="modal" data-target="#deleteContentModal<?= htmlspecialchars($content->id()); ?>" class="btn btn-outline-dark btn-sm mr-md-2 mt-2 mt-md-0" title="Supprimer">
                                 <i class="fas fa-trash-alt"></i>
                             </a>
 
@@ -210,8 +210,8 @@
                 ?> 
 
                 <div class="my-2">
-                    <button type="submit" name="addParagraph" class="d-none d-sm-inline-block btn btn-sm btn-light shadow-sm"  value="add"><i class="fas fa-plus fa-sm mr-1"></i> Ajouter un paragraphe</button>
-                    <a data-toggle="modal" data-target="#addPictureModal<?= $postId; ?>" class="d-none d-sm-inline-block btn btn-sm btn-light shadow-sm"><i class="fas fa-plus fa-sm mr-1"></i> Ajouter une image</a>
+                    <button type="submit" name="addParagraph" class="d-sm-inline-block btn btn-sm btn-light shadow-sm mb-2"  value="add"><i class="fas fa-plus fa-sm mr-1"></i> Ajouter un paragraphe</button>
+                    <a data-toggle="modal" data-target="#addPictureModal<?= $postId; ?>" class="d-sm-inline-block btn btn-sm btn-light shadow-sm mb-2"><i class="fas fa-plus fa-sm mr-1"></i> Ajouter une image</a>
 
                     <!-- addPicture Modal-->
                     <div class="modal fade" id="addPictureModal<?= $postId; ?>" tabindex="-1" role="dialog" aria-labelledby="addPictureLabel" aria-hidden="true">
@@ -239,8 +239,8 @@
 
                 <hr class="d-none d-lg-block ml-0">
 
-                <h4 class="mb-4">Catégories</h4>
-                <div class="">
+                <h4 class="my-4">Catégories</h4>
+                <div>
 
                     <?php
                     if ($post->categories() != null)
@@ -248,7 +248,7 @@
                         foreach($post->categories() as $category)
                         {
                             ?>
-                            <a href="index.php?action=deleteCategory&amp;id=<?= htmlspecialchars($category['postId']); ?>&amp;cat=<?= htmlspecialchars($category['id']); ?>" class="btn btn-outline-secondary mr-2"><?= htmlspecialchars($category['name']); ?> <i class="ml-1 fas fa-times"></i></a>
+                            <a href="index.php?action=deleteCategory&amp;id=<?= htmlspecialchars($category['postId']); ?>&amp;cat=<?= htmlspecialchars($category['id']); ?>" class="btn btn-outline-secondary mr-2 mb-2"><?= htmlspecialchars($category['name']); ?> <i class="ml-1 fas fa-times"></i></a>
                             <?php 
                         }
                     }
@@ -260,11 +260,11 @@
                     ?>
 
                 </div>
-                <div class="form-group form-inline mt-3">
+                <div class="form-group form-md-inline mt-3 text-center text-md-left">
                     <label for="new-category">Sélectionner / Ajouter une catégorie</label>
                     <input type="text" class="form-control mx-2" id="new-category" name="categoryName"/> 
 
-                    <button type="submit" name="addCategory" class="d-none d-sm-inline-block btn btn-sm btn-light shadow-sm" value="add"><i class="fas fa-plus"></i></button>
+                    <button type="submit" name="addCategory" class="d-sm-inline-block btn btn-sm btn-light shadow-sm mt-3 mt-md-0" value="add"><i class="fas fa-plus"></i></button>
                 </div>
 
                 <hr class="d-none d-lg-block ml-0">

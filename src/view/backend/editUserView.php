@@ -14,7 +14,7 @@
 
     <div class="row">
         <div class="col-11 mx-auto">
-            <div class="card profile-user-card">
+            <div class="card profile-user-card mb-5">
 
                 <div class="card-header">
                     <div class="form-group">
@@ -31,7 +31,7 @@
 
                 <div class="card-body editProfileView">
 
-                    <div class="profile-card-avatar text-center">
+                    <div class="profile-card-avatar text-center mb-3">
                         <img class="img-thumbnail" src="<?= htmlspecialchars($user->avatar()); ?>" alt="User profil picture" />
                     </div>
 
@@ -161,7 +161,7 @@
 
                         </div>
 
-                        <input type="submit" class="d-none d-sm-inline-block btn btn-sm btn-primary-custom shadow-sm ml-1" value="Enregistrer les modifications"/>
+                        <button type="submit" class="updateBtn d-inline-block btn btn-sm btn-primary-custom shadow-sm ml-1" value="Enregistrer les modifications">Enregistrer les modifications</button>
                     </div>
                 </div>
             </div>

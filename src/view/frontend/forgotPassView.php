@@ -6,10 +6,10 @@
 
 <?php ob_start(); ?>
 
-<div class="masthead" id="connexionSection">
+<div class="masthead connexionSection">
     <div class="container d-flex h-100 align-items-center">
         <div class="mx-auto text-center">
-            <h1 class="mx-auto my-0 text-uppercase">Mot de passe oublié</h1>
+            <h1 class="mx-auto mb-5 text-uppercase">Mot de passe oublié</h1>
             
             <?php
             if (isset($message))

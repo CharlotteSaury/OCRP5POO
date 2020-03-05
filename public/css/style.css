@@ -30,9 +30,9 @@ a:focus, a:hover {
 
 .btn-primary-custom {
   box-shadow: 0 0.1875rem 0.1875rem 0 rgba(0, 0, 0, 0.1) !important;
-  padding: 1rem 1.5rem;
+  padding: 0.75rem 1.35rem;
   font-family: 'Varela Round';
-  font-size: 80%;
+  font-size: 75%;
   text-transform: uppercase;
   letter-spacing: .15rem;
   border: 0;
@@ -59,6 +59,11 @@ a:focus, a:hover {
 
 .fa-toggle-off {
 	color: red;
+}
+
+.updateBtn
+{
+	font-size: 60%;
 }
 
 /******** TABLES ********/
@@ -195,7 +200,7 @@ a:focus, a:hover {
 
 
 .adminPostView .admin-post-img {
-	max-width: 25rem;
+	max-width: 95%;
 	max-height: 20rem;
 }
 

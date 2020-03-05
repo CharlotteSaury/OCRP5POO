@@ -79,14 +79,14 @@
             <!-- Card Content - Collapse -->
             <div class="collapse show" id="recentPostsCard">
                 <div class="card-body">
-                    <table class="table table-hover">
+                    <table class="table table-hover table-responsive">
                         <thead>
                          <tr>
-                            <th scope="col">Id</th>
+                            <th scope="col" class="responsive-table-custom">Id</th>
                             <th scope="col">Auteur</th>
                             <th scope="col">Titre</th>
                             <th scope="col">Chapô</th>
-                            <th scope="col">Date de création</th>
+                            <th scope="col"  class="responsive-table-custom">Date de création</th>
                             <th scope="col">Action</th>
                         </tr>
                         </thead>
@@ -104,11 +104,11 @@
                                     echo '<tr class="table-success-custom">';
                                 }
                             ?>
-                                <th scope="row"><?= htmlspecialchars($post->id()); ?></th>
+                                <th scope="row"  class="responsive-table-custom"><?= htmlspecialchars($post->id()); ?></th>
                                 <td><?= htmlspecialchars($post->pseudo()); ?></td>
                                 <td><?= htmlspecialchars($post->title()); ?></td>
                                 <td><?= substr(htmlspecialchars($post->chapo()), 0, 50); ?>...</td>
-                                <td><?= $post->dateCreation(); ?></td>
+                                <td class="responsive-table-custom"><?= $post->dateCreation(); ?></td>
                                 <td>
                                     
                                 <?php 
@@ -188,13 +188,13 @@
             <!-- Card Content - Collapse -->
             <div class="collapse show" id="recentCommentsCard">
                 <div class="card-body">
-                    <table class="table table-hover">
+                    <table class="table table-hover table-responsive">
                         <thead>
                             <tr>
-                                <th scope="col">Id</th>
+                                <th scope="col" class="responsive-table-custom">Id</th>
                                 <th scope="col">Auteur</th>
                                 <th scope="col">Contenu</th>
-                                <th scope="col">Date</th>
+                                <th scope="col" class="responsive-table-custom">Date</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
@@ -212,10 +212,10 @@
                                     echo '<tr class="table-success-custom">';
                                 }
                             ?>
-                                <th scope="row"><?= htmlspecialchars($comment->id()); ?></th>
+                                <th scope="row" class="responsive-table-custom"><?= htmlspecialchars($comment->id()); ?></th>
                                 <td><?= htmlspecialchars($comment->userPseudo()); ?></td>
                                 <td><?= substr(htmlspecialchars($comment->content()), 0, 50); ?></td>
-                                <td><?= $comment->commentDate(); ?></td>
+                                <td class="responsive-table-custom"><?= $comment->commentDate(); ?></td>
                                 <td>
                                     <a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($comment->postId()); ?>"class="btn btn-outline-dark btn-sm" title="Voir l'article concerné">
                                         <i class="fas fa-eye"></i>
@@ -283,13 +283,13 @@
             <!-- Card Content - Collapse -->
             <div class="collapse show" id="recentUsersCard">
                 <div class="card-body">
-                    <table class="table table-hover">
+                    <table class="table table-hover table-responsive">
                         <thead>
                          <tr>
-                            <th scope="col">Id</th>
+                            <th scope="col" class="responsive-table-custom">Id</th>
                             <th scope="col">Pseudo</th>
                             <th scope="col">Email</th>
-                            <th scope="col">Rôle</th>
+                            <th scope="col" class="responsive-table-custom">Rôle</th>
                             <th scope="col">Action</th>
                         </tr>
                         </thead>
@@ -300,10 +300,10 @@
                             {
                             ?>
                             <tr>
-                                <th scope="row"><?= htmlspecialchars($user->id()); ?></th>
+                                <th scope="row" class="responsive-table-custom"><?= htmlspecialchars($user->id()); ?></th>
                                 <td><?= htmlspecialchars($user->pseudo()); ?></td>
                                 <td><?= htmlspecialchars($user->email()); ?></td>
-                                <td><?= htmlspecialchars($user->role()); ?></td>
+                                <td class="responsive-table-custom"><?= htmlspecialchars($user->role()); ?></td>
                                 <td>
                                     <a href="index.php?action=profileUser&amp;id=<?= htmlspecialchars($user->id()); ?>" class="btn btn-outline-dark btn-sm" title="Voir">
                                         <i class="fas fa-eye"></i>

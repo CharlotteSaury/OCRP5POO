@@ -6,11 +6,11 @@
 
 <?php ob_start(); ?>
 
-<div class="masthead" id="connexionSection">
+<div class="masthead connexionSection">
     <div class="container d-flex h-100 align-items-center">
         <div class="mx-auto text-center">
-            <h1 class="mx-auto my-0 text-uppercase">Bienvenue !</h1>
-            <h2 class="text-white-50 mx-auto mt-2 mb-5">Se connecter | <a href="index.php?action=inscriptionView">S'inscrire</a></h2>
+            <h1 class="mx-auto mb-5 text-uppercase">Bienvenue !</h1>
+            <h2 class="text-white-50 mx-auto mt-2 mb-3">Se connecter | <a href="index.php?action=inscriptionView">S'inscrire</a></h2>
 
             <?php
             if (isset($message))

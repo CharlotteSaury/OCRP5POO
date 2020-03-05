@@ -23,7 +23,7 @@
 
 
 <section class="bg-light">
-    <div class="post-section row container-fluid mx-0">
+    <div class="post-section row container-fluid mx-0 text-justify">
         <div class="blog-post col-lg-9 col-sm-12 mx-auto">
 
             <p>Charlotte SAURY est soucieuse de préserver la confidentialité de vos informations personnelles et attache une grande importance à la protection de la vie privée des utilisateurs de ses services.</p>

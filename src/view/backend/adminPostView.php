@@ -12,8 +12,8 @@
 
 <div class="row adminPostView">
     <div class="col-11 mx-auto my-3">
-        <div class="d-flex flex-row justify-content-between">
-            <h2 class="mb-4"><?= htmlspecialchars($post->title()); ?></h2>
+        <div class="d-flex flex-column flex-md-row justify-content-between mb-4">
+            <h3 class="mb-4"><?= htmlspecialchars($post->title()); ?></h3>
             <div>
                 <?php 
                 if ($post->status() == 2)
@@ -108,12 +108,16 @@
             {
                 foreach ($post->categories() as $category)
                 {
-                    echo '<a class="btn btn-outline-secondary mr-2" href="#">' . htmlspecialchars($category['name']) . '</a>';
+                    ?>
+                    <a class="btn btn-outline-secondary mr-2" href="#"><?= htmlspecialchars($category['name']); ?></a>
+                    <?php
                 }
             }
             else
             {
-                echo '<p>Pas de catégorie associée à ce post.</p>';
+                ?>
+                <p>Pas de catégorie associée à ce post.</p>
+                <?php
             }
             ?> 
 
@@ -126,7 +130,7 @@
 <!-- Comments section -->
 <div class="row mt-4">
     <div class="post-comments col-11 mx-auto mb-5">
-        <h2>Commentaires</h2>
+        <h4>Commentaires</h4>
         <hr class="d-none d-lg-block ml-0">
 
         <div class="comments mt-5">
@@ -136,21 +140,24 @@
             {
                 if ($comment->status() == 0)
                 {
-
-                    echo '<div class="comment-content text-black-50 text-justify mt-4 mt-4 unapproved-comment">';
+                    ?>
+                    <div class="comment-content text-black-50 text-justify mt-4 mt-4 unapproved-comment">
+                    <?php
                 }
                 else
                 {
-                    echo '<div class="comment-content text-black-50 text-justify mt-4">';
+                    ?>
+                    <div class="comment-content text-black-50 text-justify mt-4">
+                    <?php
                 }
-                ?>
+                    ?>
 
-                    <div class="comment-infos">
-                        <p><strong><?= htmlspecialchars($comment->userPseudo()); ?></strong> - le <?= htmlspecialchars($comment->commentDate()); ?></p>
-                    </div>
-                    <div class="comment-text">
-                        <p class="mb-0"><?= htmlspecialchars($comment->content()); ?></p>
-                    </div>
+                        <div class="comment-infos">
+                            <p><strong><?= htmlspecialchars($comment->userPseudo()); ?></strong> - le <?= htmlspecialchars($comment->commentDate()); ?></p>
+                        </div>
+                        <div class="comment-text">
+                            <p class="mb-0"><?= htmlspecialchars($comment->content()); ?></p>
+                        </div>
                 
                 <?php
                 if ($comment->status() == 0)
@@ -163,10 +170,12 @@
                         <a href='index.php?action=deleteComment&id=<?= htmlspecialchars($comment->id()); ?>' class="btn btn-outline-dark btn-sm" title="Supprimer">
                             <i class="fas fa-times"></i>
                         </a>
-                    </div>
-                </div>   
+                    </div>   
                 <?php
                 }
+                ?>
+                </div>
+                <?php
             }
             ?>
             
@@ -174,7 +183,7 @@
 
 
     </div>
-</div>  
+</div>
 
 <?php $this->_content = ob_get_clean(); ?>
 

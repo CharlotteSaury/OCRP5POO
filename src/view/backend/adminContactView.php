@@ -12,19 +12,10 @@
 
 <div class="row adminPostView">
     <div class="col-11 mx-auto my-3">
-        <div class="d-flex flex-row justify-content-between">
-
-            <!--<div>
-                <a href="index.php?action=deletePost&amp;id=<?= htmlspecialchars($donnees['postId']); ?>" class="btn btn-outline-dark btn-sm" title="Supprimer">
-                    <i class="fas fa-trash-alt"></i>
-                </a>
-            </div>-->
-        </div>
-
-        <div class="post-content post-content-text text-black-50 text-justify">
+        <div class="post-content post-content-text text-black-50 text-left">
             <p>De : <strong><?= htmlspecialchars($contact->name()); ?></strong> <"<?= htmlspecialchars($contact->email()); ?>"></p>
             <p>Le : <?= htmlspecialchars($contact->dateMessage()); ?></p>
-            <p>Objet : <strong><?= htmlspecialchars($contact->subject()); ?></strong></p>
+            <p class="text-justify">Objet : <strong><?= htmlspecialchars($contact->subject()); ?></strong></p>
         </div>
 
         <hr class="d-none d-lg-block ml-0">

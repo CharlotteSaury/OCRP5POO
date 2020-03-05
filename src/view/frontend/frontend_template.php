@@ -152,7 +152,7 @@ if (isset($this->_header))
 
 
 <!-- Footer -->
-<footer class="bg-black small text-center text-white-50">
+<footer class="bg-black small text-center text-white-50 px-1">
     <div class="text-center" id="footerLinks">
 
         <?php
@@ -168,7 +168,7 @@ if (isset($this->_header))
         <a href="index.php?action=confidentiality">POLITIQUE DE CONFIDENTIALITE</a>
         
     </div>
-    <div class="text-center">
+    <div class="text-center mx-2">
         Copyright &copy; Site réalisé par Charlotte SAURY dans le cadre de la formation OpenClassrooms parcours "Développeur d'applications"
     </div>
 </footer>
