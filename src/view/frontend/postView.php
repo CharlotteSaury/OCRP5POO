@@ -37,13 +37,13 @@
 <!-- Post Section -->
 
 <section class="bg-light">
-    <div class="post-section row container-fluid mx-0">
+    <div class="post-section row container-fluid mx-0 px-0">
 
         <!-- Blog post -->
-        <div class="blog-post col-lg-9 col-sm-12 mx-auto">
+        <div class="blog-post col-md-9 mx-auto px-0">
                     
             <!-- Post  content -->
-            <div class="post-content col-sm-10 mx-auto mb-5">
+            <div class="post-content px-4 px-md-5 mb-5">
                
                 <h2 class="mb-4"><?= htmlspecialchars($post->title()); ?></h2>
                 <hr class="d-none d-lg-block ml-0">
@@ -85,7 +85,7 @@
 
             <!-- Comments section -->
 
-            <div class="post-comments col-sm-10 mx-auto mb-5" id="comments-section">
+            <div class="post-comments px-4 px-md-5 mb-5" id="comments-section">
                 <h2>Commentaires</h2>
                 <hr class="d-none d-lg-block ml-0">
 
@@ -111,10 +111,9 @@
                             <div class="form-row">
                                 <div class="col">
                                     <input type="hidden" name="postId" value="<?= $postId; ?>" />
-
                                 </div>
                             </div>
-                            <input class="btn btn-primary-custom my-4" type="submit" value="Commenter"/>
+                            <input class="btn btn-primary-custom mb-4" type="submit" value="Commenter"/>
                         </form>
                     </div>
                     <?php
@@ -146,11 +145,11 @@
                             </div>
                         </div>
                     </div>
-
-                    <?php
-                    }
-                    ?>                    
                 </div>
+                <?php
+                }
+                ?>                    
+                
             </div>         
 
         </div>
@@ -158,13 +157,13 @@
 
         <!-- Right column -->
 
-        <div class="blog-right-col col-lg-3 col-sm-10 pl-3 mx-auto">
+        <div class="blog-right-col col-md-3 col-12 mx-auto px-4 pl-md-0 pr-md-4">
 
             <?php
             if ($post->categories() != null)
             {
                ?>
-                <div class="blog-right-col-div mb-5">
+                <div class="blog-right-col-div mb-3">
                     <h4 class="mb-4">Catégories</h4>
                     <div>
 
@@ -194,7 +193,7 @@
                     foreach ($recentPosts as $post)
                     {
                     ?>
-                        <h5><?= htmlspecialchars($post->title()); ?><em>(posté le <?= $post->dateCreation(); ?>)</em></h5>
+                        <h5><?= htmlspecialchars($post->title()); ?><em> (posté le <?= $post->dateCreation(); ?>)</em></h5>
                         <p><?= substr(htmlspecialchars($post->chapo()), 0, 30);?>... - <a href="index.php?action=postView&amp;id=<?= htmlspecialchars($post->id()); ?>">En savoir plus</a></p>
 
                     <?php

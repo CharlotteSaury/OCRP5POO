@@ -44,22 +44,22 @@
             ?>
             
             <div class="col-lg-11 bg-black justify-content-center no-gutters mb-4 py-auto mx-auto">
-                <div class="post-text d-flex h-100 flex-column justify-content-between  px-2 px-md-4 py-3 py-md-5">
+                <div class="post-text d-flex h-100 flex-column justify-content-between  px-2 px-md-4 py-4">
                     <div class="d-flex flex-md-row flex-column">
 
                         <?php
                         if ($post->mainImage() != null)
                         {
                         ?>
-                            <div class="post-list-picture col-md-4 col-12" style="background-image: url('<?= htmlspecialchars($post->mainImage()); ?>')">     
+                            <div class="post-list-picture col-md-4 col-12" style="background-image: url('<?= htmlspecialchars($post->mainImage()); ?>')"><a href="index.php?action=postView&amp;id=<?= $post->id(); ?>"></a>     
                             </div>
                         <?php
                         }
                         ?>
                         
-                        <div class="post-chapo col-md-8 col-12 text-center text-lg-left ml-md-3 pt-4">
-                            <h4 class="text-white"><?= htmlspecialchars($post->title()); ?></h4>
-                            <p class="mb-0 text-white-50"><?= substr(htmlspecialchars($post->chapo()), 0, 200); ?>... - <a href="index.php?action=postView&amp;id=<?= $post->id(); ?>">En savoir plus</a></p>
+                        <div class="post-chapo col-md-8 col-12 text-center text-lg-left pl-md-4 pt-2 px-0">
+                            <h4 class="text-white"><a href="index.php?action=postView&amp;id=<?= $post->id(); ?>"><?= htmlspecialchars($post->title()); ?></a></h4>
+                            <p class="mb-3 text-white-50 text-justify"><?= substr(htmlspecialchars($post->chapo()), 0, 200); ?>... - <a href="index.php?action=postView&amp;id=<?= $post->id(); ?>">En savoir plus</a></p>
                             <hr class="d-none d-lg-block mb-4 ml-0">
 
                             <?php
@@ -67,12 +67,8 @@
                             {
                                 foreach ($post->categories() as $category)
                                 {
-                                    echo '<a class="btn btn-outline-secondary mr-2" href="#">' . htmlspecialchars($category['name']) . '</a>';
+                                    echo '<span class="btn btn-outline-secondary mx-1 my-1">' . htmlspecialchars($category['name']) . '</span>';
                                 }
-                            }
-                            else
-                            {
-                                echo 'pas ok';
                             }
                             ?>
                         </div>
@@ -173,7 +169,7 @@
 
         <!-- Right column -->
 
-        <div class="blog-right-col col-lg-3 col-sm-10 pl-3 mx-auto">
+        <div class="blog-right-col col-lg-3 col-sm-10 pl-0 mx-auto">
             <div class="blog-right-col-div nb-posts mb-5">
                 <h4 class="mb-4">Nombre de posts par page</h4>
                 <form action="index.php#posts-list" method="GET">
@@ -210,7 +206,7 @@
                         }
                         ?>
                     </select>
-                    <input class="btn btn-primary-custom" type="submit" value="Afficher"/>
+                    <input class="btn btn-primary-custom mt-3" type="submit" value="Afficher"/>
                 </form>
             </div>
             <div class="blog-right-col-div recent-posts mb-5">
@@ -220,8 +216,8 @@
                     foreach ($recentPosts as $post)
                     {
                     ?>
-                        <h5><?= htmlspecialchars($post->title()); ?><em>(posté le <?= $post->dateCreation(); ?>)</em></h5>
-                        <p><?= substr(htmlspecialchars($post->chapo()), 0, 30);?>... - <a href="index.php?action=postView&amp;id=<?= htmlspecialchars($post->id()); ?>">En savoir plus</a></p>
+                        <h5><?= htmlspecialchars($post->title()); ?><em> (posté le <?= $post->dateCreation(); ?>)</em></h5>
+                        <p><?= substr(htmlspecialchars($post->chapo()), 0, 50);?>... - <a href="index.php?action=postView&amp;id=<?= htmlspecialchars($post->id()); ?>">En savoir plus</a></p>
 
                     <?php
                     }

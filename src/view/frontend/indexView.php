@@ -44,18 +44,18 @@
 
     <!-- Featured Project Row -->
     <div class="row align-items-center no-gutters mb-4 mb-lg-5">
-      <div class="col-lg-5">
+      <div class="col-lg-4 col-sm-6 mx-auto">
         <img class="img-fluid mb-3 mb-lg-0" src="public/images/photo.jpg" alt="">
       </div>
-      <div class="col-lg-7">
+      <div class="col-lg-8 col-sm-12">
         <div class="featured-text text-center text-lg-left">
           <h4>Charlotte SAURY</h4>
           <p class="text-black-50 mb-0">Née le 12 avril 1990</p>
-          <p class="text-black-50 mb-0" id="about-me-text">Fusce egestas elit eget lorem. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Sed augue ipsum, egestas nec, vestibulum et, malesuada adipiscing, dui. Curabitur ullamcorper ultricies nisi. Nunc sed turpis.</br>
+          <p class="text-black-50 mb-0 text-justify" id="about-me-text">Fusce egestas elit eget lorem. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Sed augue ipsum, egestas nec, vestibulum et, malesuada adipiscing, dui. Curabitur ullamcorper ultricies nisi. Nunc sed turpis.</br>
           Cras dapibus. Phasellus nec sem in justo pellentesque facilisis. Pellentesque libero tortor, tincidunt et, tincidunt eget, semper nec, quam. Aenean commodo ligula eget dolor.</br>
-        Sed in libero ut nibh placerat accumsan. Quisque ut nisi. Sed cursus turpis vitae tortor. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc, quis gravida magna mi a libero. Vestibulum turpis sem, aliquet eget, lobortis pellentesque, rutrum eu, nisl.</p>
+        Sed in libero ut nibh placerat accumsan. Quisque ut nisi. Sed cursus turpis vitae tortor. Sed consequat, leo eget bibendum sodales.</p>
       </div>
-      <div class="featured-btn text-center text-lg-left">
+      <div class="featured-btn text-center">
         <a href="#contact-form" class="btn btn-primary-custom js-scroll-trigger">Me contacter</a>
         <a href="public/pdf/cv_saury.pdf" class="btn btn-primary-custom" id="btnCV" download="cv_saury.pdf">Télécharger mon CV</a>
       </div>
@@ -63,7 +63,7 @@
   </div>
 
   <!-- Project One Row -->
-  <div class="row justify-content-center no-gutters mb-5 mb-lg-0">
+  <div class="row justify-content-center no-gutters my-5 mb-lg-0">
     <div class="col-lg-6">
       <img class="img-fluid" src="public/vendor/startbootstrap-grayscale-gh-pages/img/demo-image-01.jpg" alt="">
     </div>
@@ -171,7 +171,7 @@
             <i class="fas fa-map-marked-alt fa-2x text-primary mb-2"></i>
             <h4 class="text-uppercase m-1">Adresse</h4>
             <hr class="my-4">
-            <div class="small text-black-50">8 rue du 28E R.A, 56000 Vannes</div>
+            <div class="small text-black-50">16 rue du bois, 56250 ST NOLFF</div>
           </div>
         </div>
       </div>

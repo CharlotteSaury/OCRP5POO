@@ -10,8 +10,21 @@
 
 h4
 {
+    font-size: 1.25rem;
     font-weight: bold;
     margin-top: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  h4 {
+    font-size: 1.5rem;
+  }
+}
+
+.row
+{
+  margin-right: 0px !important;
+  margin-left: 0px !important;
 }
 
 
@@ -24,18 +37,34 @@ h4
 
 .form-inline input, .form-inline textarea {
   box-shadow: 0 0.1875rem 0.1875rem 0 rgba(0, 0, 0, 0.1) !important;
-  padding: 1rem 2rem;
+  padding: 0.75rem 1.5rem;
   height: auto;
   font-family: 'Varela Round';
   font-size: 80%;
-  text-transform: uppercase;
   letter-spacing: 0.15rem;
   border: 0;
-  margin-bottom: 1rem !important;
+  margin-bottom: 0.75rem !important;
+}
+
+.form-check
+{
+  padding-left : none !important;
+}
+
+.form-check-label
+{
+  text-transform: none;
+  font-size: 1rem;
 }
 
 form button {
-  margin-top: 2.5rem;
+  margin-top: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .form-inline input, .form-inline textarea {
+    padding: 0.75rem 1.5rem;
+  }
 }
 
 /********** Main Nav ************/
@@ -152,9 +181,10 @@ form button {
 
 .masthead h1 {
   font-family: 'Varela Round';
-  font-size: 2.5rem;
-  line-height: 2.5rem;
-  letter-spacing: 0.8rem;
+  font-size: 2rem;
+  line-height: 3rem;
+  letter-spacing: 0.3rem;
+  font-weight: 1000;
   background: -webkit-linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
   -webkit-text-fill-color: transparent;
   -webkit-background-clip: text;
@@ -168,7 +198,7 @@ form button {
 
 @media (min-width: 768px) {
   .masthead h1 {
-    font-size: 4rem;
+    font-size: 3.5rem;
     line-height: 4rem;
   }
 }
@@ -179,9 +209,9 @@ form button {
     padding: 0;
   }
   .masthead h1 {
-    font-size: 5rem;
-    line-height: 6.5rem;
-    letter-spacing: 0.8rem;
+    font-size: 4rem;
+    line-height: 5rem;
+    letter-spacing: 0.3rem;
   }
   .masthead h2 {
     max-width: 30rem;
@@ -192,21 +222,23 @@ form button {
 /********** A propos ************/
 
 .emphase-section {
-  padding-top: 5rem;
+  padding: 4rem 0;
   background: linear-gradient(to bottom, #161616 0%, rgba(22, 22, 22, 0.9) 75%, rgba(22, 22, 22, 0.8) 100%);
 }
 
-.emphase-section p {
-  margin-bottom: 5rem;
+.profile-section {
+  padding: 5rem 0.5rem;
 }
 
-
-.profile-section {
-  padding: 5rem 0;
+@media (min-width: 1200px) {
+  .profile-section .container
+  {
+    padding: 0 5rem;
+  }
 }
 
 .profile-section .featured-text {
-  padding: 2rem;
+  padding: 1rem;
 }
 
 #about-me-text {
@@ -214,10 +246,26 @@ form button {
 }
 
 @media (min-width: 992px) {
+  .profile-section {
+    padding: 5rem 3rem;
+  }
+
   .profile-section .featured-text {
     padding: 0 0 0 2rem;
     border-left: 0.5rem solid #64a19d;
   }
+
+  .profile-section .project-text {
+    padding: 3rem;
+  }
+
+  .profile-section .project-text hr {
+    border-color: #64a19d;
+    border-width: .25rem;
+    width: 30%;
+  }
+
+
 }
 
 .profile-section .project-text {
@@ -225,23 +273,15 @@ form button {
   font-size: 90%;
 }
 
-@media (min-width: 992px) {
-  .profile-section .project-text {
-    padding: 5rem;
-  }
-  .profile-section .project-text hr {
-    border-color: #64a19d;
-    border-width: .25rem;
-    width: 30%;
-  }
-}
 
 .featured-btn {
-  padding: 3rem 0 0 2.5rem;
+  padding: 3rem 0 3rem 0;
 }
 
-#btnCV {
-  margin-left: 1.5rem;
+@media (max-width: 459px) {
+  .profile-section #btnCV {
+    margin-top: 1rem;
+  }
 }
 
 /********* CONTACT FORM SECTION *********/
@@ -332,29 +372,63 @@ footer {
 /***** ConnexionView, InscriptionView *****/
 /*************************/
 
-#connexionSection {
-  padding-top: 6rem;
+.connexionSection {
+  padding-top: 8rem;
 }
 
-#connexionSection .form-inline a {
+.connexionSection label, .connexionSection p
+{
+  font-size: 0.75rem;
+}
+
+@media (min-width: 768px) {
+    .connexionSection {
+    padding-top: 10rem;
+    }
+}
+
+
+.connexionSection .form-inline a {
   text-align: left !important;
 }
 
-#connexionSection .form-check {
-    padding-top: 1.5rem;
+.connexionSection .form-check {
+    padding-top: 0.25rem;
     align-items: baseline;
     font-family: 'Varela Round';
-    text-transform: uppercase;
-    letter-spacing: 0.15rem;
+    letter-spacing: 0.1rem;
     justify-content: left;
 }
 
-#connexionSection .form-check-input {
-  margin: 0 1rem 0 0 !important;
+.connexionSection .form-inline button {
+  margin-bottom: 1rem;
 }
 
-#connexionSection .form-inline button {
-  margin-bottom: 1rem;
+/*************************/
+/******* errorView **********/
+/*************************/
+
+#errorSection h2
+{
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+@media (min-width: 768px) {
+
+    #errorSection h2
+    {
+      font-size: 2.5rem;
+      line-height: 3rem;
+    }
+}
+
+@media (min-width: 992px) {
+    #errorSection h2
+    {
+      font-size: 3rem;
+      line-height: 5rem;
+    }
 }
 
 
@@ -375,39 +449,59 @@ footer {
   font-size: 90%;
 }
 
+.post-chapo h4 a 
+{
+  color: white;
+}
+
 @media (min-width: 992px) {
   .profile-section .post-text hr {
     border-color: #64a19d;
     border-width: .25rem;
     width: 30%;
   }
+
+  .blog-right-col-div {
+    padding: 0 0 0 1rem;
+    border-left: 0.2rem solid #64a19d;
+  }
 }
 
-.blog-right-col-div {
-    padding: 0 0 0 2rem;
-    border-left: 0.25rem solid #64a19d;
-}
 
 .blog-right-col-div h4 {
     color: #64a19d;
+    font-size: 1.25rem;
+}
+
+.blog-right-col-div h5 {
+    font-size: 1.1rem;
+    font-weight: bold;
 }
 
 .blog-right-col .recent-posts em {
-  font-size: 1rem;
+  font-size: 0.85rem;
+  font-weight: normal;
 }
 
 .blog-right-col .btn {
-  margin-top: 1rem;
-  padding: 1rem 1.5rem;
+  padding: 0.75rem 1.5rem;
 }
 
 .avatar {
-  min-width: 5rem;
-  height: 5rem;
+  min-width: 4rem;
+  height: 4rem;
   background-repeat: none;
   background-size: cover;
   background-position: center;
   border-radius: 2.5rem;
+}
+
+@media (min-width: 768px)
+{
+  .avatar {
+    min-width: 5rem;
+    height: 5rem;
+  }
 }
 
 .posts-informations p{
@@ -438,7 +532,7 @@ footer {
 .post-view-head {
   position: relative;
   width: 100%;
-  height: 30rem;
+  height: 25rem;
   background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%), url("../img/bg-masthead.jpg");
   background-position: center;
   background-repeat: no-repeat;
@@ -448,9 +542,10 @@ footer {
 
 .post-view-head h1 {
   font-family: 'Varela Round';
-  font-size: 2rem;
+  font-size: 1.35rem;
   line-height: 2rem;
-  letter-spacing: 0.8rem;
+  letter-spacing: 0.35rem;
+  font-weight: 1000;
   background: -webkit-linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
   -webkit-text-fill-color: transparent;
   -webkit-background-clip: text;
@@ -459,21 +554,20 @@ footer {
 
 @media (min-width: 768px) {
   .post-view-head h1 {
-    font-size: 3rem;
+    font-size: 2.5rem;
     line-height: 3rem;
   }
 }
 
 @media (min-width: 992px) {
   .post-view-head h1 {
-    font-size: 4rem;
+    font-size: 3rem;
     line-height: 5rem;
-    letter-spacing: 0.8rem;
   }
 }
 
 .post-section {
-  padding: 5rem 0;
+  padding: 4rem 1rem;
 }
 
 .blog-post hr {
