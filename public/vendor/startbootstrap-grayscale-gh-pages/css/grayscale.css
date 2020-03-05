@@ -158,6 +158,16 @@ form button {
   padding: 1.70rem 1.5rem 2rem 1.5rem;
 }
 
+#userDropdown
+{
+  padding-top: 1.8rem !important;
+}
+
+.show #userDropdown
+{
+  padding-left: 0;
+}
+
 
 /*************************/
 /******* indexView *******/

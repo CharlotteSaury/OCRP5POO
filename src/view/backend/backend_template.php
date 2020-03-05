@@ -60,7 +60,7 @@
 
                 <!-- Heading -->
                 <div class="sidebar-heading">
-                    Administration
+                    Admin
                 </div>
 
                 <!-- Nav Item - Pages Collapse Menu -->
@@ -133,8 +133,8 @@
                             <a href="index.php?action=profileUser&amp;id=<?= htmlspecialchars($session->get('id')); ?>">
                                 <img class="my-4" src="<?= htmlspecialchars($session->get('avatar')); ?>" alt="User profil picture" />
                             </a>
-                            <a href="index.php?action=editUser&id=<?= htmlspecialchars($session->get('id')); ?>" class="btn btn-primary-custom">
-                              <i class="fas fa-user mr-1"></i> Modifier mon profil</a>
+                            <a href="index.php?action=editUser&id=<?= htmlspecialchars($session->get('id')); ?>" class="btn btn-primary-custom updateBtn px-1 px-md-3 py-md-3">
+                              <i class="fas fa-user mr-1"></i> Modifier</a>
 
                           </div>
 

@@ -10,9 +10,11 @@
 <!-- Sorting Row -->
 
 <div class="row mb-5">
-    <div class="col-12 mb-3">
+    <div class="col-12">
         <a href="index.php?action=adminComments">Tous (<?= $totalCommentsNb ?>)</a> | <a href="index.php?action=adminComments&sort=unapproved">Non approuvés (<?= $unapprovedCommentsNb ?>)</a>
-             | trier par date 
+    </div>
+    <div class="col-12">
+        trier par date 
 
         <?php
         if (isset($get))
@@ -61,13 +63,13 @@
 <div class="row">
 
     <div class="col-12">
-        <table class="table table-hover">
+        <table class="table table-hover table-responsive">
             <thead>
                 <tr>
                     <th scope="col">Id</th>
-                    <th scope="col">Article</th>
                     <th scope="col">Auteur</th>
                     <th scope="col">Contenu</th>
+                    <th scope="col">Article</th>
                     <th scope="col">Date</th>
                     <th scope="col">Action</th>
                 </tr>
@@ -87,9 +89,9 @@
                     }
                 ?>
                     <th scope="row"><?= htmlspecialchars($comment->id()); ?></th>
-                    <td><a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($comment->postId()); ?>"><?= htmlspecialchars($comment->postTitle()); ?></a></td>
                     <td><?= htmlspecialchars($comment->userPseudo()); ?></td>
                     <td><?= htmlspecialchars($comment->content()); ?></td>
+                    <td><a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($comment->postId()); ?>"><?= htmlspecialchars($comment->postTitle()); ?></a></td>
                     <td><?= htmlspecialchars($comment->commentDate()); ?></td>
                     <td>
                         <a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($comment->postId()); ?>" class="btn btn-outline-dark btn-sm" title="Voir l'article">

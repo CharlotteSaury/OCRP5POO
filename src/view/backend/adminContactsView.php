@@ -10,11 +10,13 @@
 <!-- Sorting Row -->
 
 <div class="row mb-5">
-    <div class="col-12 mb-3">
+    <div class="col-12">
         <a href="index.php?action=adminContacts">Tous (<?= $allContactsNb ?>)</a>
          | 
          <a href="index.php?action=adminContacts&sort=unread">Non lus (<?= $unreadContactsNb ?>)</a>
-         | Trier par date 
+     </div>
+     <div class="col-12 mb-3">
+        Trier par date 
         
         <?php
         if (isset($get))
@@ -62,7 +64,7 @@
 <div class="row">
 
     <div class="col-12">
-        <table class="table table-hover">
+        <table class="table table-hover table-responsive">
             <thead>
                 <tr>
                     <th scope="col">Id</th>
@@ -96,25 +98,25 @@
                     <?php
                     if ($contact->statusId() == 1)
                     {
-                        echo '<td class="responsive-table-custom" title="Non lu"><i class="fas fa-envelope"></i></td>';
+                        echo '<td title="Non lu"><i class="fas fa-envelope"></i></td>';
                     }
                     elseif ($contact->statusId() == 2)
                     {
-                        echo '<td class="responsive-table-custom" title="Lu"><i class="fas fa-envelope-open-text"></i></td>';
+                        echo '<td title="Lu"><i class="fas fa-envelope-open-text"></i></td>';
                     }
                     else
                     {
-                        echo '<td class="responsive-table-custom" title="Répondu"><i class="fas fa-envelope-open-text"></i><i class="fas fa-reply"></i></td>';
+                        echo '<td title="Répondu"><i class="fas fa-envelope-open-text"></i><i class="fas fa-reply"></i></td>';
                     }
                     ?>
 
                     
-                    <td class="responsive-table-custom"><?= htmlspecialchars($contact->name()); ?></td>
-                    <td class="responsive-table-custom"><?= htmlspecialchars($contact->email()); ?></td>
-                    <td class="responsive-table-custom"><a href="index.php?action=contactView&amp;id=<?= htmlspecialchars($contact->id()); ?>" ><?= htmlspecialchars($contact->subject()); ?></a></td>
-                    <td class="responsive-table-custom"><a href="index.php?action=contactView&amp;id=<?= htmlspecialchars($contact->id()); ?>" ><?= substr(htmlspecialchars($contact->content()), 0, 50); ?>...</a></td>
-                    <td class="responsive-table-custom"><?= $contact->dateMessage(); ?></td>
-                    <td class="responsive-table-custom">
+                    <td><?= htmlspecialchars($contact->name()); ?></td>
+                    <td><?= htmlspecialchars($contact->email()); ?></td>
+                    <td><a href="index.php?action=contactView&amp;id=<?= htmlspecialchars($contact->id()); ?>" ><?= htmlspecialchars($contact->subject()); ?></a></td>
+                    <td><a href="index.php?action=contactView&amp;id=<?= htmlspecialchars($contact->id()); ?>" ><?= substr(htmlspecialchars($contact->content()), 0, 50); ?>...</a></td>
+                    <td><?= $contact->dateMessage(); ?></td>
+                    <td>
 
                         <?php
                         if ($contact->statusId() != 3)

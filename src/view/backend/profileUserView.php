@@ -14,7 +14,7 @@
 
     <div class="col-11 mx-auto">
 
-        <div class="card profile-user-card">
+        <div class="card profile-user-card mb-5 text-md-center">
 
             <h5 class="card-header text-primary-custom"><?= htmlspecialchars($user->pseudo()); ?></h5>
 
@@ -37,7 +37,7 @@
                     ?>
                     
                     <div class="form-group mt-2">
-                        <a data-toggle="modal" data-target="#updateProfilePictureModal<?= htmlspecialchars($user->id()); ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary-custom shadow-sm ml-1"><i class="fas fa-upload mr-1"></i> Modifier la photo de profil</a>
+                        <a data-toggle="modal" data-target="#updateProfilePictureModal<?= htmlspecialchars($user->id()); ?>" class="d-inline-block btn btn-sm btn-primary-custom shadow-sm ml-1 text-white updateBtn"><i class="fas fa-upload mr-1"></i> Modifier la photo de profil</a>
                     </div>
                 </div>
 
