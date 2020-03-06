@@ -9,7 +9,6 @@ class ContentManager extends Manager
 		$sql = 'SELECT content.id AS id FROM content';
 		
 		$req = $this->dbRequest($sql);
-
 		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\src\entity\Content');
 		return $req->fetchAll();
 	}
@@ -29,9 +28,7 @@ class ContentManager extends Manager
 		$req = $this->dbRequest($sql, array($postId));
 		$req->bindValue(':postId', $postId, \PDO::PARAM_INT);
 		$req->execute();
-
 		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\src\entity\Content');
-		
 		$contents = $req->fetchAll();
 		return $contents;
 	}
@@ -51,9 +48,7 @@ class ContentManager extends Manager
 		$req = $this->dbRequest($sql, array($contentId));
 		$req->bindValue(':contentId', $contentId, \PDO::PARAM_INT);
 		$req->execute();
-
 		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\src\entity\Content');
-		
 		$content = $req->fetch();
 		return $content;
 	}
@@ -71,20 +66,17 @@ class ContentManager extends Manager
 	{
 		$sql = 'INSERT INTO content (post_id, content_type_id, content)';
 
-		if ($content != null)
-		{
+		if ($content != null) {
 			$sql .= 'VALUES (:postId, 1, :content)';
 			$req = $this->dbRequest($sql, array($postId, $content));
 			$req->bindValue('postId', $postId, \PDO::PARAM_INT);
 			$req->bindValue('content', $content);
-		}
-		else
-		{
+		
+		} else {
 			$sql .= ' VALUES (:postId, 2, "")';
 			$req = $this->dbRequest($sql, array($postId));
 			$req->bindValue('postId', $postId, \PDO::PARAM_INT);
 		}
-
 		$req->execute();
 	}
 

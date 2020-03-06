@@ -17,34 +17,33 @@
 
                 <div class="col-md-8">
                     <div class="form-group">
-                        <input type="hidden" class="form-control" name="postId" value="<?= htmlspecialchars($post->id()); ?>"/>
+                        <input type="hidden" class="form-control" name="postId" value="<?= htmlspecialchars($post->getId()); ?>"/>
                     </div>
 
                     <div class="form-group">
                         <label for="post-title">Titre : </label>
-                        <input type="text" class="form-control" name="title" value="<?= htmlspecialchars($post->title()); ?>" required/>
+                        <input type="text" class="form-control" name="title" value="<?= htmlspecialchars($post->getTitle()); ?>" required/>
                     </div>
 
                     <hr class="d-none d-lg-block ml-0">
 
                     <div class="post-content post-content-text text-black-50 text-justify">
-                        <p class="mb-0"><strong>Auteur : </strong><?= htmlspecialchars($post->pseudo()); ?></p>
-                        <p class="mb-0">le <?= htmlspecialchars($post->dateCreation()); ?></p>
-                        <p class="mb-0">Dernière modification le <?= htmlspecialchars($post->dateUpdate()); ?></p>
+                        <p class="mb-0"><strong>Auteur : </strong><?= htmlspecialchars($post->getPseudo()); ?></p>
+                        <p class="mb-0">le <?= htmlspecialchars($post->getDateCreation()); ?></p>
+                        <p class="mb-0">Dernière modification le <?= htmlspecialchars($post->getDateUpdate()); ?></p>
                     </div>
 
                     <hr class="d-none d-lg-block ml-0">
 
                     <div class="form-group mt-3">
                         <label for="post-chapo"><strong>Chapô : </strong></label>
-                        <textarea class="form-control" name="chapo" rows="5" required><?= htmlspecialchars($post->chapo()); ?></textarea>   
+                        <textarea class="form-control" name="chapo" rows="5" required><?= htmlspecialchars($post->getChapo()); ?></textarea>   
                     </div>
                     <button type="submit" name="updatePostInfos" class="d-sm-inline-block btn btn-sm btn-primary-custom shadow-sm ml-1 btnUpdate" value="Enregistrer">Enregistrer</button> 
                 </div>
                 <div class="col-md-4">
                     <?php
-                    if ($post->mainImage() != null)
-                    {
+                    if ($post->getMainImage() != null) {
                         ?>
 
                         <div class="my-4 text-center">
@@ -53,13 +52,11 @@
                                 <a data-toggle="modal" data-target="#deleteMainPictureModal" class="btn btn-outline-dark btn-sm mr-2" title="Supprimer"><i class="fas fa-trash-alt"></i>
                                 </a>
                             </p>
-                            <img class="admin-post-img mb-4" src="<?= htmlspecialchars($post->mainImage()); ?>"/>
+                            <img class="admin-post-img mb-4" src="<?= htmlspecialchars($post->getMainImage()); ?>"/>
                         </div>
 
                         <?php
-                    }
-                    else
-                    {
+                    } else {
                         ?>
                         <div class="my-4 text-center">
                             <p class=""><strong>Image principale</strong></p>
@@ -105,17 +102,15 @@
                 <?php
 
 
-                foreach ($contents as $content)
-                {
-                    if ($content->contentTypeId() == 1) 
-                    {
+                foreach ($contents as $content) {
+                    if ($content->getContentTypeId() == 1) {
                         ?>
                         <div class="my-4 text-center d-flex flex-column align-items-center">  
-                            <img class="admin-post-img mb-4" src="<?= htmlspecialchars($content->content()); ?>" /> 
+                            <img class="admin-post-img mb-4" src="<?= htmlspecialchars($content->getContent()); ?>" /> 
                             <div>
 
-                                <a data-toggle="modal" data-target="#updatePictureModal<?= htmlspecialchars($content->id()); ?>" class="btn btn-outline-dark btn-sm mr-2" title="Modifier l'image"><i class="fas fa-pencil-alt mr-1"></i></a> 
-                                <a data-toggle="modal" data-target="#deleteContentModal<?= htmlspecialchars($content->id()); ?>" class="btn btn-outline-dark btn-sm mr-2" title="Supprimer">
+                                <a data-toggle="modal" data-target="#updatePictureModal<?= htmlspecialchars($content->getId()); ?>" class="btn btn-outline-dark btn-sm mr-2" title="Modifier l'image"><i class="fas fa-pencil-alt mr-1"></i></a> 
+                                <a data-toggle="modal" data-target="#deleteContentModal<?= htmlspecialchars($content->getId()); ?>" class="btn btn-outline-dark btn-sm mr-2" title="Supprimer">
                                     <i class="fas fa-trash-alt"></i>
                                 </a>
                             </div> 
@@ -123,7 +118,7 @@
 
                         <!-- updatePicture Modal-->
 
-                        <div class="modal fade" id="updatePictureModal<?= htmlspecialchars($content->id()); ?>" tabindex="-1" role="dialog" aria-labelledby="updatePictureLabel" aria-hidden="true">
+                        <div class="modal fade" id="updatePictureModal<?= htmlspecialchars($content->getId()); ?>" tabindex="-1" role="dialog" aria-labelledby="updatePictureLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -134,7 +129,7 @@
                                     </div>
                                     <div class="modal-body">
                                         <p><em>Veuillez enregistrer les autres modifications avant de modifier ce contenu au risque que les informations soient perdues.</em></p>
-                                        <input name="picture<?= htmlspecialchars($content->id()); ?>" type="file" />
+                                        <input name="picture<?= htmlspecialchars($content->getId()); ?>" type="file" />
                                     </div>
                                     <div class="modal-footer">
                                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
@@ -146,7 +141,7 @@
                         </div>
                         
                         <!-- deleteContent Modal-->
-                        <div class="modal fade" id="deleteContentModal<?= htmlspecialchars($content->id()); ?>" tabindex="-1" role="dialog" aria-labelledby="deleteContentLabel" aria-hidden="true">
+                        <div class="modal fade" id="deleteContentModal<?= htmlspecialchars($content->getId()); ?>" tabindex="-1" role="dialog" aria-labelledby="deleteContentLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -154,38 +149,36 @@
                                         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">×</span>
                                         </button>
-                                        <input type="hidden" name="postId" value="<?= htmlspecialchars($content->postId()); ?>"/>
-                                        <input type="hidden" name="contentId" value="<?= htmlspecialchars($content->id()); ?>"/>
+                                        <input type="hidden" name="postId" value="<?= htmlspecialchars($content->getPostId()); ?>"/>
+                                        <input type="hidden" name="contentId" value="<?= htmlspecialchars($content->getId()); ?>"/>
                                     </div>
                                     <div class="modal-body">Cliquez sur "Valider" pour supprimer définitivement ce contenu</div>
                                     <div class="modal-footer">
                                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                        <a href="index.php?action=deleteContent&amp;id=<?= htmlspecialchars($content->postId()); ?>&amp;content=<?= htmlspecialchars($content->id()); ?>&amp;type=<?= htmlspecialchars($content->contentTypeId()); ?>" class="btn btn-primary-custom" >Valider</a>
+                                        <a href="index.php?action=deleteContent&amp;id=<?= htmlspecialchars($content->getPostId()); ?>&amp;content=<?= htmlspecialchars($content->getId()); ?>&amp;type=<?= htmlspecialchars($content->getContentTypeId()); ?>" class="btn btn-primary-custom" >Valider</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <?php
-                    }
-                    else
-                    {
+                    } else {
                         ?>
 
                         <div class="form-group d-flex flex-column flex-md-row">                        
 
-                            <textarea class="form-control" name="<?= htmlspecialchars($content->id()); ?>" rows="5"><?= htmlspecialchars($content->content()); ?></textarea>
+                            <textarea class="form-control" name="<?= htmlspecialchars($content->getId()); ?>" rows="5"><?= htmlspecialchars($content->getContent()); ?></textarea>
                             
-                            <button type="submit" name="editContent" class="btn btn-outline-success btn-sm mx-md-2 mt-2 mt-md-0" title="Enregistrer les modifications" value="<?= htmlspecialchars($content->id()); ?>">Enregistrer</button>
+                            <button type="submit" name="editContent" class="btn btn-outline-success btn-sm mx-md-2 mt-2 mt-md-0" title="Enregistrer les modifications" value="<?= htmlspecialchars($content->getId()); ?>">Enregistrer</button>
                             
-                            <a data-toggle="modal" data-target="#deleteContentModal<?= htmlspecialchars($content->id()); ?>" class="btn btn-outline-dark btn-sm mr-md-2 mt-2 mt-md-0" title="Supprimer">
+                            <a data-toggle="modal" data-target="#deleteContentModal<?= htmlspecialchars($content->getId()); ?>" class="btn btn-outline-dark btn-sm mr-md-2 mt-2 mt-md-0" title="Supprimer">
                                 <i class="fas fa-trash-alt"></i>
                             </a>
 
                         </div>
 
                         <!-- deleteContent Modal-->
-                        <div class="modal fade" id="deleteContentModal<?= htmlspecialchars($content->id()); ?>" tabindex="-1" role="dialog" aria-labelledby="deleteContentLabel" aria-hidden="true">
+                        <div class="modal fade" id="deleteContentModal<?= htmlspecialchars($content->getId()); ?>" tabindex="-1" role="dialog" aria-labelledby="deleteContentLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -197,7 +190,7 @@
                                     <div class="modal-body">Cliquez sur "Valider" pour supprimer définitivement ce contenu</div>
                                     <div class="modal-footer">
                                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                        <a href="index.php?action=deleteContent&amp;id=<?= htmlspecialchars($content->postId()); ?>&amp;content=<?= htmlspecialchars($content->id()); ?>&amp;type=<?= htmlspecialchars($content->contentTypeId()); ?>" class="btn btn-primary-custom" >Valider</a>
+                                        <a href="index.php?action=deleteContent&amp;id=<?= htmlspecialchars($content->getPostId()); ?>&amp;content=<?= htmlspecialchars($content->getId()); ?>&amp;type=<?= htmlspecialchars($content->getContentTypeId()); ?>" class="btn btn-primary-custom" >Valider</a>
                                     </div>
                                 </div>
                             </div>
@@ -243,17 +236,13 @@
                 <div>
 
                     <?php
-                    if ($post->categories() != null)
-                    {
-                        foreach($post->categories() as $category)
-                        {
+                    if ($post->getCategories() != null) {
+                        foreach($post->getCategories() as $category) {
                             ?>
                             <a href="index.php?action=deleteCategory&amp;id=<?= htmlspecialchars($category['postId']); ?>&amp;cat=<?= htmlspecialchars($category['id']); ?>" class="btn btn-outline-secondary mr-2 mb-2"><?= htmlspecialchars($category['name']); ?> <i class="ml-1 fas fa-times"></i></a>
                             <?php 
                         }
-                    }
-                    else
-                    {
+                    } else {
                         echo '<p>Pas de catégorie associée à ce post. </p>';
                     }
                     
@@ -262,7 +251,7 @@
                 </div>
                 <div class="form-group form-md-inline mt-3 text-center text-md-left">
                     <label for="new-category">Sélectionner / Ajouter une catégorie</label>
-                    <input type="text" class="form-control mx-2" id="new-category" name="categoryName"/> 
+                    <input type="text" class="form-control" id="new-category" name="categoryName"/> 
 
                     <button type="submit" name="addCategory" class="d-sm-inline-block btn btn-sm btn-light shadow-sm mt-3 mt-md-0" value="add"><i class="fas fa-plus"></i></button>
                 </div>

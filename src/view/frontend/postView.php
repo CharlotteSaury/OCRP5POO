@@ -1,4 +1,4 @@
-<?php $this->_title = htmlspecialchars($post->title()); ?>
+<?php $this->_title = htmlspecialchars($post->getTitle()); ?>
 
 
 <!-- $header definition -->
@@ -9,15 +9,15 @@
     <div class="container d-flex h-100 align-items-end">
         <div class="mx-auto text-center">
 
-            <h1 class="mx-auto my-0 text-uppercase"><?= htmlspecialchars($post->title()); ?></h1>
+            <h1 class="mx-auto my-0 text-uppercase"><?= htmlspecialchars($post->getTitle()); ?></h1>
             <div class="d-flex mt-4 align-items-center">
-                <div class="avatar mr-3" style="background-image: url('<?= htmlspecialchars($post->avatar()); ?>');">
+                <div class="avatar mr-3" style="background-image: url('<?= htmlspecialchars($post->getAvatar()); ?>');">
                 </div>
                 <div class="text-white-50 posts-informations">
-                    <p class="mb-0">Posté par <strong><?= htmlspecialchars($post->pseudo()); ?></strong>
+                    <p class="mb-0">Posté par <strong><?= htmlspecialchars($post->getPseudo()); ?></strong>
                     </p>
-                    <p class="mb-0">le <?= $post->dateCreation(); ?></p>
-                    <p class="mb-0">Dernière modification le <?= $post->dateUpdate(); ?></p>
+                    <p class="mb-0">le <?= $post->getDateCreation(); ?></p>
+                    <p class="mb-0">Dernière modification le <?= $post->getDateUpdate(); ?></p>
                 </div>
             </div>
           </div>
@@ -45,39 +45,34 @@
             <!-- Post  content -->
             <div class="post-content px-4 px-md-5 mb-5">
                
-                <h2 class="mb-4"><?= htmlspecialchars($post->title()); ?></h2>
+                <h2 class="mb-4"><?= htmlspecialchars($post->getTitle()); ?></h2>
                 <hr class="d-none d-lg-block ml-0">
 
-                <p><?= htmlspecialchars($post->chapo()); ?></p>
+                <p><?= htmlspecialchars($post->getChapo()); ?></p>
 
                 <?php
 
-                    if ($post->mainImage() != null)
-                    {
-                    ?>
-                        <div class="post-picture my-3" style="background-image: url('<?= htmlspecialchars($post->mainImage()); ?>');">     
+                    if ($post->getMainImage() != null) {
+                        ?>
+                        <div class="post-picture my-3" style="background-image: url('<?= htmlspecialchars($post->getMainImage()); ?>');">     
                         </div>
-                    <?php
+                        <?php
                     } 
 
-                foreach ($contents as $content)
-                {
+                foreach ($contents as $content) {
 
-                    if ($content->contentTypeId() == 1) 
-                    {
-                    ?>
-                        <div class="post-picture my-3" style="background-image: url('<?= htmlspecialchars($content->content()); ?>');">     
+                    if ($content->getContentTypeId() == 1) {
+                        ?>
+                        <div class="post-picture my-3" style="background-image: url('<?= htmlspecialchars($content->getContent()); ?>');">     
                         </div>
 
-                    <?php
-                    }
-                    else
-                    {
-                    ?> 
+                        <?php
+                    } else {
+                        ?> 
                         <div class="post-content post-content-text text-black-50 text-justify">
-                            <p><?= htmlspecialchars($content->content()); ?></p>
+                            <p><?= htmlspecialchars($content->getContent()); ?></p>
                         </div>                        
-                <?php
+                        <?php
                     }
                 }
                 ?>
@@ -90,18 +85,15 @@
                 <hr class="d-none d-lg-block ml-0">
 
                 <?php
-                if (isset($messageComment))
-                {
+                if (isset($messageComment)) {
                     echo '<div class="adminMessage text-dark-50 text-center">' . $messageComment . '</div>';
                 }
 
-                if (isset($errors['content']))
-                {
+                if (isset($errors['content'])) {
                     echo '<div class="adminMessage text-dark-50 text-center">' . $errors['content'] . '</div>';                    
                 }
 
-                if ($session->get('id'))
-                {
+                if ($session->get('id')) {
                     ?>
                     <div class="comment-form">
                         <form method="POST" action="index.php?action=addComment#comments-section">
@@ -117,9 +109,8 @@
                         </form>
                     </div>
                     <?php
-                }
-                else
-                {
+                
+                } else {
                     echo '<a href="index.php?action=connexionView" class="btn btn-primary-custom my-4">Se connecter pour laisser un commentaire</a>';
                 }
                 ?>
@@ -128,25 +119,23 @@
 
                 <?php
                
-                foreach ($postComments as $postComment)
-                {
-
-                ?>
-                <div class="comments mt-3">
-                    <div class="comment d-flex flex-column flex-sm-row align-items-center mb-4">
-                        <div class="avatar mr-md-4 ml-md-2 mx-auto mb-4 mb-md-0" style="background-image: url('<?= htmlspecialchars($postComment->userAvatar()); ?>');">
-                        </div>
-                        <div class="comment-content text-black-50 text-justify">
-                            <div class="comment-infos">
-                                <p class=""><strong><?= htmlspecialchars($postComment->userPseudo()); ?></strong> - le <?= $postComment->commentDate(); ?></p>
+                foreach ($postComments as $postComment) {
+                    ?>
+                    <div class="comments mt-3">
+                        <div class="comment d-flex flex-column flex-sm-row align-items-center mb-4">
+                            <div class="avatar mr-md-4 ml-md-2 mx-auto mb-4 mb-md-0" style="background-image: url('<?= htmlspecialchars($postComment->getUserAvatar()); ?>');">
                             </div>
-                            <div class="comment-text">
-                                <p class="mb-0"><?= htmlspecialchars($postComment->content()); ?></p>
+                            <div class="comment-content text-black-50 text-justify">
+                                <div class="comment-infos">
+                                    <p class=""><strong><?= htmlspecialchars($postComment->getUserPseudo()); ?></strong> - le <?= $postComment->getCommentDate(); ?></p>
+                                </div>
+                                <div class="comment-text">
+                                    <p class="mb-0"><?= htmlspecialchars($postComment->getContent()); ?></p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <?php
+                    <?php
                 }
                 ?>                    
                 
@@ -160,20 +149,16 @@
         <div class="blog-right-col col-md-3 col-12 mx-auto px-4 pl-md-0 pr-md-4">
 
             <?php
-            if ($post->categories() != null)
-            {
-               ?>
+            if ($post->getCategories() != null) {
+                ?>
                 <div class="blog-right-col-div mb-3">
                     <h4 class="mb-4">Catégories</h4>
                     <div>
 
                     <?php
-                        foreach($post->categories() as $category)
-                        {
+                        foreach($post->getCategories() as $category) {
                             ?>
-
                             <a class="btn btn-outline-secondary" href="#"><?= htmlspecialchars($category['name']); ?></a>
-
                             <?php
                         }
                     ?> 
@@ -190,11 +175,10 @@
                 <h4 class="mb-4">Articles récents</h4>
                 <div class="recent-post">
                     <?php
-                    foreach ($recentPosts as $post)
-                    {
+                    foreach ($recentPosts as $post) {
                     ?>
-                        <h5><?= htmlspecialchars($post->title()); ?><em> (posté le <?= $post->dateCreation(); ?>)</em></h5>
-                        <p><?= substr(htmlspecialchars($post->chapo()), 0, 30);?>... - <a href="index.php?action=postView&amp;id=<?= htmlspecialchars($post->id()); ?>">En savoir plus</a></p>
+                        <h5><?= htmlspecialchars($post->getTitle()); ?><em> (posté le <?= $post->getDateCreation(); ?>)</em></h5>
+                        <p><?= substr(htmlspecialchars($post->getChapo()), 0, 30);?>... - <a href="index.php?action=postView&amp;id=<?= htmlspecialchars($post->getId()); ?>">En savoir plus</a></p>
 
                     <?php
                     }

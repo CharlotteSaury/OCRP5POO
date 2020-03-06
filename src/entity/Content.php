@@ -7,12 +7,11 @@ use src\entity\Entity;
 class Content extends Entity
 
 {
-	private $postId,
-			$contentTypeId,
-			$content;
+	private $postId;
+	private $contentTypeId;
+	private $content;
 
   	// SETTERS //
-
 
 	public function setPostId($postId)
 	{
@@ -28,21 +27,20 @@ class Content extends Entity
 	{
 		$this->content = $content;
 	}
-
 	
   	// GETTERS //
 
-	public function postId()
+	public function getPostId()
 	{
 		return $this->postId;
 	}
 
-	public function contentTypeId()
+	public function getContentTypeId()
 	{
 		return $this->contentTypeId;
 	}
 
-	public function content()
+	public function getContent()
 	{
 		return $this->content;
 	}

@@ -16,20 +16,17 @@
 
         <div class="card profile-user-card mb-5 text-md-center">
 
-            <h5 class="card-header text-primary-custom"><?= htmlspecialchars($user->pseudo()); ?></h5>
+            <h5 class="card-header text-primary-custom"><?= htmlspecialchars($user->getPseudo()); ?></h5>
 
             <div class="card-body profileView">
                 <div class="profile-card-avatar">
 
                     <?php
-                    if ($user->avatar() != null)
-                    {
+                    if ($user->getAvatar() != null) {
                         ?>
-                        <img class="img-thumbnail" src="<?= htmlspecialchars($user->avatar()); ?>" alt="User profil picture" />
+                        <img class="img-thumbnail" src="<?= htmlspecialchars($user->getAvatar()); ?>" alt="User profil picture" />
                         <?php
-                    }
-                    else
-                    {
+                    } else {
                         ?>
                         <img class="img-thumbnail" src="public/images/profile.jpg" alt="User profil picture" />
                         <?php
@@ -37,12 +34,12 @@
                     ?>
                     
                     <div class="form-group mt-2">
-                        <a data-toggle="modal" data-target="#updateProfilePictureModal<?= htmlspecialchars($user->id()); ?>" class="d-inline-block btn btn-sm btn-primary-custom shadow-sm ml-1 text-white updateBtn"><i class="fas fa-upload mr-1"></i> Modifier la photo de profil</a>
+                        <a data-toggle="modal" data-target="#updateProfilePictureModal<?= htmlspecialchars($user->getId()); ?>" class="d-inline-block btn btn-sm btn-primary-custom shadow-sm ml-1 text-white updateBtn"><i class="fas fa-upload mr-1"></i> Modifier la photo de profil</a>
                     </div>
                 </div>
 
                 <!-- updateProfilePicture Modal-->
-                    <div class="modal fade" id="updateProfilePictureModal<?= htmlspecialchars($user->id()); ?>" tabindex="-1" role="dialog" aria-labelledby="updateProfilePictureLabel" aria-hidden="true">
+                    <div class="modal fade" id="updateProfilePictureModal<?= htmlspecialchars($user->getId()); ?>" tabindex="-1" role="dialog" aria-labelledby="updateProfilePictureLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -52,7 +49,7 @@
                                     </button>
                                 </div>
                                 
-                                <form enctype="multipart/form-data" action="index.php?action=updateProfilePicture&amp;id=<?= htmlspecialchars($user->id()); ?>" method="POST">
+                                <form enctype="multipart/form-data" action="index.php?action=updateProfilePicture&amp;id=<?= htmlspecialchars($user->getId()); ?>" method="POST">
                                     <div class="modal-body">
                                         <input name="picture" type="file" />
                                     </div>
@@ -67,29 +64,29 @@
                     </div>
 
                 <div class="profile-card-info">
-                    <h5 class="card-title"><?= htmlspecialchars($user->firstName()); ?> <?= htmlspecialchars($user->lastName()); ?></h5>
+                    <h5 class="card-title"><?= htmlspecialchars($user->getFirstName()); ?> <?= htmlspecialchars($user->getLastName()); ?></h5>
                     
-                    <?= $user->birthDate() ? '<p class="card-text">Née le ' . $user->birthDate() . ' </p>' : ''; ?>
+                    <?= $user->getBirthDate() ? '<p class="card-text">Née le ' . $user->getBirthDate() . ' </p>' : ''; ?>
 
-                    <?= $user->home() ? '<p class="card-text">Habite à ' . $user->home() . ' </p>' : ''; ?>
+                    <?= $user->getHome() ? '<p class="card-text">Habite à ' . $user->getHome() . ' </p>' : ''; ?>
 
-                    <?= $user->userAbout() ? '<p class="card-text"><strong>A propos de moi : </strong>' . $user->userAbout() . ' </p>' : ''; ?>
+                    <?= $user->getUserAbout() ? '<p class="card-text"><strong>A propos de moi : </strong>' . $user->getUserAbout() . ' </p>' : ''; ?>
                     <hr>
-                    <p class="card-text"><strong>Email : </strong><?= htmlspecialchars($user->email()); ?></p>
+                    <p class="card-text"><strong>Email : </strong><?= htmlspecialchars($user->getEmail()); ?></p>
 
-                    <?= $user->mobile() ? '<p class="card-text"><strong>Tel : </strong>' . $user->mobile() . ' </p>' : ''; ?>
+                    <?= $user->getMobile() ? '<p class="card-text"><strong>Tel : </strong>' . $user->getMobile() . ' </p>' : ''; ?>
 
-                    <?= $user->website() ? '<p class="card-text"><strong>Website : </strong>' . $user->website() . ' </p>' : ''; ?>
+                    <?= $user->getWebsite() ? '<p class="card-text"><strong>Website : </strong>' . $user->getWebsite() . ' </p>' : ''; ?>
                     
                     <hr>
-                    <p class="card-text"><strong>Rôle : </strong><?= htmlspecialchars($user->role()); ?></p>
-                    <p class="card-text"><strong>Date de création : </strong><?= $user->registerDate(); ?></p>
+                    <p class="card-text"><strong>Rôle : </strong><?= htmlspecialchars($user->getRole()); ?></p>
+                    <p class="card-text"><strong>Date de création : </strong><?= $user->getRegisterDate(); ?></p>
                     <hr>
 
 
-                    <p class="card-text"><i class="fas fa-newspaper"> <?= $user->postsNb(); ?></i> - <i class="fas fa-comments"> <?= $user->commentsNb(); ?></i></p>
+                    <p class="card-text"><i class="fas fa-newspaper"> <?= $user->getPostsNb(); ?></i> - <i class="fas fa-comments"> <?= $user->getCommentsNb(); ?></i></p>
                     <hr>
-                    <a href="index.php?action=editUser&amp;id=<?= htmlspecialchars($user->id()); ?>" class="btn btn-outline-dark btn-sm" title="Modifier">
+                    <a href="index.php?action=editUser&amp;id=<?= htmlspecialchars($user->getId()); ?>" class="btn btn-outline-dark btn-sm" title="Modifier">
                         <i class="fas fa-pencil-alt"></i>
                     </a>
 

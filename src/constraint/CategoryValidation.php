@@ -16,8 +16,7 @@ class CategoryValidation extends Validation
 
     public function check(Parameter $post)
     {
-        foreach ($post->all() as $key => $value) 
-        {
+        foreach ($post->all() as $key => $value) {
             $this->checkField($key, $value);
         }
         return $this->errors;
@@ -25,7 +24,7 @@ class CategoryValidation extends Validation
 
     private function checkField($name, $value)
     {
-        if($name === 'categoryName')
+        if ($name === 'categoryName')
         {
             $error = $this->checkCategory($name, $value);
             $this->addError($name, $error);
@@ -34,7 +33,7 @@ class CategoryValidation extends Validation
 
     private function addError($name, $error) 
     {
-        if($error) {
+        if ($error) {
             $this->errors += [
                 $name => $error
             ];
@@ -43,18 +42,15 @@ class CategoryValidation extends Validation
 
     private function checkCategory($name, $value)
     {
-        if($this->constraint->notBlank($name, $value)) 
-        {
+        if ($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('catégorie', $value);
         }
 
-        if($this->constraint->maxLength($name, $value, 25)) 
-        {
+        if ($this->constraint->maxLength($name, $value, 25)) {
             return $this->constraint->maxLength('catégorie', $value, 25);
         }
 
-        if($this->constraint->minLength($name, $value, 2)) 
-        {
+        if ($this->constraint->minLength($name, $value, 2)) {
             return $this->constraint->minLength('catégorie', $value, 2);
         }
     }

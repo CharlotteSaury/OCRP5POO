@@ -26,20 +26,19 @@ class ContentValidation extends Validation
 
     private function checkField($name, $value)
     {
-        if($name === 'content') 
+        if ($name === 'content') 
         {
             $error = $this->checkContent($name, $value);
             $this->addError($name, $error);
-        }
-        elseif($name === 'contentId') 
-        {
+        
+        } elseif ($name === 'contentId') {
             $error = $this->checkContentId($name, $value);
             $this->addError($name, $error);
         }
     }
 
     private function addError($name, $error) {
-        if($error) {
+        if ($error) {
             $this->errors += [
                 $name => $error
             ];
@@ -48,26 +47,22 @@ class ContentValidation extends Validation
 
     private function checkContent($name, $value)
     {
-        if($this->constraint->notBlank($name, $value)) 
-        {
+        if ($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('paragraphe', $value);
         }
 
-        if($this->constraint->minLength($name, $value, 2)) 
-        {
+        if ($this->constraint->minLength($name, $value, 2)) {
             return $this->constraint->minLength('paragraphe', $value, 2);
         }
 
-        if($this->constraint->maxLength($name, $value, 2000)) 
-        {
+        if ($this->constraint->maxLength($name, $value, 2000)) {
             return $this->constraint->maxLength('paragraphe', $value, 2000);
         }
     }
 
     private function checkContentId($name, $value)
     {
-        if ($this->constraint->exists($name, $value))
-        {
+        if ($this->constraint->exists($name, $value)) {
             return $this->constraint->exists('contentId', $value);
         }
     }

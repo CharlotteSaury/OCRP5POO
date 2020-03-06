@@ -10,11 +10,10 @@ use config\File;
 class HomeController extends Controller
 
 {
-	// Home page
-
 	public function indexView($message = null, $errors = null) 
 	{
-		return $this->view->render('frontend', 'indexView', ['message' => $message,
+		return $this->view->render('frontend', 'indexView', 
+			['message' => $message,
 			'session' => $this->request->getSession(),
 			'errors' => $errors]); 
 	}
@@ -35,15 +34,14 @@ class HomeController extends Controller
 	{
 		$errors = $this->validation->validate($post, 'Contact');
 
-		if (!$errors)
-		{
+		if (!$errors) {
+
 			$contactId = $this->contactManager->addNewContact($post);
 			$this->mailContactForm($post, $contactId);
 			$message = "Votre message a bien été envoyé. Nous vous remercions et vous recontacterons dans les plus brefs délais.";
 			$this->indexView($message);
-		}
-		else
-		{
+		
+		} else {
 			$this->indexView($message = null, $errors);
 		}
 		
@@ -85,49 +83,44 @@ class HomeController extends Controller
 	{
 		$file = $this->request->getFile();
 
-		if ($file->get($namePicture))
-		{
-			if ($file->get($namePicture, 'error') == 0)
-			{
-				if ($file->get($namePicture, 'size') <= 2000000)
-				{
+		if ($file->get($namePicture)) {
+
+			if ($file->get($namePicture, 'error') == 0) {
+
+				if ($file->get($namePicture, 'size') <= 2000000) {
+
 					$fileInfos = pathinfo($file->get($namePicture, 'name'));
 					$extension_upload = $fileInfos['extension'];
 					$allowed_extensions = array('jpg', 'jpeg', 'gif', 'png');
 
-					if (in_array($extension_upload, $allowed_extensions))
-					{
-						$uploadResults = 'public/uploads/' . microtime(true) . '_' . basename($file->get($namePicture, 'name'));
+					if (in_array($extension_upload, $allowed_extensions)) {
 
+						$uploadResults = 'public/uploads/' . microtime(true) . '_' . basename($file->get($namePicture, 'name'));
 						move_uploaded_file($file->get($namePicture, 'tmp_name'), $uploadResults);
-					}
-					else
-					{
+					
+					} else {
+
 						$uploadResults = 'L\'extension du fichier n\'est pas acceptée, merci de ne charger que des fichiers .jpg, .jpeg, .gif ou .png';
 					}
-				}
-				else
-				{
+				
+				} else {
+
 					$uploadResults = 'Fichier trop volumineux, merci de ne pas dépasser 2Mo.';
 				}
-			}
-			elseif ($file->get($namePicture, 'error') == 1 || $file->get($namePicture, 'error') == 2)
-			{
+			
+			} elseif ($file->get($namePicture, 'error') == 1 || $file->get($namePicture, 'error') == 2) {
 				$uploadResults = 'Fichier trop volumineux, merci de ne pas dépasser 2Mo.';
-			}
-			else
-			{
+			
+			} else {
 				$uploadResults = 'Erreur. Le fichier n\'a pu être téléchargé.';
 			}
-		}
-		else
-		{
+		
+		} else {
 			$uploadResults = 'Aucun fichier téléchargé.';
 		}
 
 		return $uploadResults;
 	}
-	
 }
 
 

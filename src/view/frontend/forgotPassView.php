@@ -12,28 +12,23 @@
             <h1 class="mx-auto mb-5 text-uppercase">Mot de passe oublié</h1>
             
             <?php
-            if (isset($message))
-            {
+            if (isset($message)) {
                 echo '<div class="adminMessage text-white-50 text-center">' . $message . '</div>';
-            }
-            else
-            {
+            
+            } else {
             ?>
 
             <form method="POST" action="index.php?action=forgotPassMail" class="form-inline d-flex flex-column">
 
                 <?php
-                if (isset($_COOKIE['email']))
-                {
+                if (isset($_COOKIE['email'])) {
                     ?>
                     <input type="email" name="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" value="<?= htmlspecialchars($_COOKIE['email']); ?>" required>
                     <?php
-                }
-                else
-                {
+                
+                } else {
                     ?>
                     <input type="email" name="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" placeholder="Votre email..." required>
-                    
                     <?php
                 }
                 ?>

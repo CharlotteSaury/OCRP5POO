@@ -14,327 +14,286 @@ use Exception;
 
 class Router 
 {
-	private $_homeController,
-	$_postController,
-	$_userController,
-	$_adminController,
-	$_errorController,
-	$request;
+	private $homeController;
+	private $postController;
+	private $userController;
+	private $adminController;
+	private $errorController;
+	private $request;
 
 	public function __construct()
 	{
-		$this->_homeController = new HomeController();
-		$this->_postController = new PostController();
-		$this->_userController = new UserController();
-		$this->_adminController = new AdminController();
-		$this->_errorController = new ErrorController();
+		$this->homeController = new HomeController();
+		$this->postController = new PostController();
+		$this->userController = new UserController();
+		$this->adminController = new AdminController();
+		$this->errorController = new ErrorController();
 		$this->request = new Request();
 	}
 
 	public function connexionAuto($email)
 	{
-		$this->_userController->newUserSession($email);
+		$this->userController->newUserSession($email);
 		$this->routerRequest();
 	}
 
 	public function routerRequest()
 	{
 		$action = $this->request->getGet()->get('action');
-		try
-		{
-			if (isset($action))
-			{
-				if ($action == 'listPosts') 
-				{
-					$get = $this->request->getGet();
-					$sorting = $this->_postController->listPostSorting($get);
-					$this->_postController->listPostView($sorting, $get);
-				} 
+		try {
+			if (isset($action)) {
 
-				elseif ($action == 'postView') 
-				{
-					$this->_postController->postView($this->request->getGet()->get('id'));
-				}
+				if ($action === 'listPosts') {
+					$this->postController->listPostView($this->request->getGet());
+				
+				} elseif ($action === 'postView') {
 
-				elseif ($action == "addComment") 
-				{
+					$this->postController->postView($this->request->getGet()->get('id'));
+				
+				} elseif ($action === "addComment") {
+
 					$post = $this->request->getPost();
 					$userId = $this->request->getSession()->get('id');
-					$this->_postController->addComment($post, $userId);
-				}
+					$this->postController->addComment($post, $userId);
+				
+				} elseif ($action === 'legalView') {
 
-				elseif ($action == 'legalView') 
-				{
-					$this->_homeController->legalView();
-				}
+					$this->homeController->legalView();
+				
+				} elseif ($action === 'confidentiality') {
 
-				elseif ($action == 'confidentiality') 
-				{
-					$this->_homeController->confidentialityView();
-				}
+					$this->homeController->confidentialityView();
+				
+				} elseif ($action === 'inscriptionView') {
 
-				elseif ($action == 'inscriptionView')
-				{
-					$this->_userController->inscriptionView();
-				}
+					$this->userController->inscriptionView();
+				
+				} elseif ($action === 'inscription') {
 
-				elseif ($action == 'inscription')
-				{
 					$post = $this->request->getPost();
-					$this->_userController->inscription($post);
-				}
+					$this->userController->inscription($post);
+				
+				} elseif ($action === 'activation') {
 
-				elseif ($action == 'activation')
-				{
 					$get = $this->request->getGet();
-					$this->_userController->userActivation($get);
-				}
+					$this->userController->userActivation($get);
 
-				elseif ($action == 'connexionView')
-				{
-					$this->_userController->connexionView();
-				}
+				} elseif ($action === 'connexionView') {
 
-				elseif ($action == 'connexion')
-				{
+					$this->userController->connexionView();
+
+				} elseif ($action === 'connexion') {
+
 					$post = $this->request->getPost();
-					$this->_userController->connexion($post);
-				}
+					$this->userController->connexion($post);
 
-				elseif ($action == 'deconnexion')
-				{
+				} elseif ($action === 'deconnexion')	{
+
 					$session = $this->request->getSession();
 
-					if ($session->get('id'))
-					{
+					if ($session->get('id')) {
+
 						$session->remove('id');
 						$session->remove('pseudo');
 						$session->remove('role');
 						$session->remove('avatar');
 						$session->remove('email');
 						$session->stop();
-
 						setcookie('auth', '', time()-3600, null, null, false, true);
 					}
-					$this->_homeController->indexView();
-				}
+					$this->homeController->indexView();
 
-				elseif ($action == 'forgotPassView')
-				{
-					$this->_userController->forgotPassView();
-				}
+				} elseif ($action === 'forgotPassView') {
 
-				elseif ($action == 'forgotPassMail')
-				{
+					$this->userController->forgotPassView();
+
+				} elseif ($action === 'forgotPassMail') {
+
 					$email = $this->request->getPost()->get('email');
-					$this->_userController->newPassCode($email);
-				}
+					$this->userController->newPassCode($email);
 
-				elseif ($action == 'newPassView')
-				{
+				} elseif ($action === 'newPassView') {
+
 					$get = $this->request->getGet();
-					$this->_userController->checkReinitCode($get);
-				}
+					$this->userController->checkReinitCode($get);
 
-				elseif ($action == 'newPass')
-				{
+				} elseif ($action === 'newPass') {
+
 					$post = $this->request->getPost();
 					$email = $this->request->getSession()->get('email');
-					$this->_userController->newPass($post, $email);
-				}
+					$this->userController->newPass($post, $email);
+				
+				} elseif ($action === 'admin' && $this->userController->adminAccess()) {
 
-				elseif ($action == 'admin' && $this->_userController->adminAccess())
-				{
-					$this->_adminController->dashboardView();
-				}
+					$this->adminController->dashboardView();
+				
+				} elseif ($action === 'adminPosts' && $this->userController->adminAccess()) {
 
-				elseif ($action == 'adminPosts' && $this->_userController->adminAccess())
-				{
-					$this->_adminController->adminPostsView($message = null, $this->request->getGet());
-				}
+					$this->adminController->adminPostsView($message = null, $this->request->getGet());
+				
+				} elseif ($action === 'adminPostView' && $this->userController->adminAccess()) {
 
-				elseif ($action == 'adminPostView' && $this->_userController->adminAccess())
-				{
-					$this->_adminController->adminPostView($this->request->getGet()->get('id'));
-				}
+					$this->adminController->adminPostView($this->request->getGet()->get('id'));
+				
+				} elseif ($action === 'adminNewPost' && $this->userController->adminAccess()) {
 
-				elseif ($action == 'adminNewPost' && $this->_userController->adminAccess())
-				{
-					$this->_adminController->adminNewPostView();
-				}
+					$this->adminController->adminNewPostView();
+				
+				} elseif ($action === 'newPostInfos' && $this->userController->adminAccess()) {
 
-				elseif ($action == 'newPostInfos' && $this->_userController->adminAccess())
-				{
 					$post = $this->request->getPost();
 					$post->set('userId', $this->request->getSession()->get('id'));
 					$file = $this->request->getFile();
+					$this->adminController->newPostInfos($post, $file);
+				
+				} elseif ($action === 'editPostView' && $this->userController->adminAccess()) {
 
-					$this->_adminController->newPostInfos($post, $file);
-				}
+					$this->adminController->editPostView($this->request->getGet()->get('id'));
 
-				elseif ($action == 'editPostView' && $this->_userController->adminAccess())
-				{
-					$this->_adminController->editPostView($this->request->getGet()->get('id'));
-				}
+				} elseif ($action === 'editPost' && $this->userController->adminAccess()) {
 
-				elseif ($action == 'editPost' && $this->_userController->adminAccess())
-				{
 					$post = $this->request->getPost();
 
-					if ($post->get('deleteMainPicture'))
-					{
-						$this->_adminController->deleteMainPostPicture($post->get('postId'));
-					}
+					if ($post->get('deleteMainPicture')) {
 
-					elseif ($post->get('addParagraph'))
-					{
-						$this->_adminController->addParagraph($post->get('postId'));
-					}
+						$this->adminController->deleteMainPostPicture($post->get('postId'));
+					
+					} elseif ($post->get('addParagraph')) {
 
-					elseif ($post->get('addCategory'))
-					{
-						$this->_adminController->addCategory($post);
-					}
+						$this->adminController->addParagraph($post->get('postId'));
+					
+					} elseif ($post->get('addCategory')) {
 
-					elseif ($post->get('updatePostInfos'))
-					{
-						$this->_adminController->editPostInfos($post);
-					}
+						$this->adminController->addCategory($post);
+					
+					} elseif ($post->get('updatePostInfos')) {
 
-					elseif ($post->get('editContent'))
-					{
+						$this->adminController->editPostInfos($post);
+					
+					} elseif ($post->get('editContent')) {
+
 						$post = $this->request->getPost();
-						$this->_adminController->editParagraph($post);		
+						$this->adminController->editParagraph($post);		
+					
+					} elseif ($post->get('addPicture')) {
+
+						$this->adminController->addPicture($post);
+					
+					} elseif ($post->get('updatePicture')) {
+
+						$this->adminController->editPostPicture($post);
 					}
+				
+				} elseif ($action === 'deleteContent' && $this->userController->adminAccess()) {
 
-					elseif ($post->get('addPicture'))
-					{
-						$this->_adminController->addPicture($post);
-					}
+					$this->adminController->deleteContent($this->request->getGet());
+				
+				} elseif ($action === 'deleteCategory' && $this->userController->adminAccess()) {
 
-					elseif ($post->get('updatePicture'))
-					{
-						$this->_adminController->editPostPicture($post);
-					}
-				}
+					$this->adminController->deleteCategory($this->request->getGet());
+				
+				} elseif (
+					$action === 'publishPost' 
+					|| $action === 'publishPostDashboard' 
+					&& $this->userController->adminAccess()
+				) {
 
-				elseif ($action == 'deleteContent' && $this->_userController->adminAccess())
-				{
-					$this->_adminController->deleteContent($this->request->getGet());
-				}
-
-				elseif ($action == 'deleteCategory' && $this->_userController->adminAccess())
-				{
-					$this->_adminController->deleteCategory($this->request->getGet());
-				}
-
-				elseif ($action == 'publishPost' || ($action == 'publishPostDashboard') && $this->_userController->adminAccess())
-				{
 					$get = $this->request->getGet();
-					$this->_adminController->publishPost($get);
-				}
+					$this->adminController->publishPost($get);
+				
+				} elseif (
+					$action === 'deletePost' 
+					|| $action === 'deletePostDashboard' 
+					&& $this->userController->adminAccess()
+				) {
 
-				elseif (($action == 'deletePost') || ($action == 'deletePostDashboard') && $this->_userController->adminAccess())
-				{
 					$get = $this->request->getGet();
-					$dashboard = ($action == 'deletePostDashboard') ? 1 : null;
-					$this->_adminController->deletePost($get, $dashboard);	
-				}
+					$dashboard = ($action === 'deletePostDashboard') ? 1 : null;
+					$this->adminController->deletePost($get, $dashboard);	
+				
+				} elseif ($action === 'adminComments' && $this->userController->adminAccess()) {
 
-				elseif ($action == 'adminComments' && $this->_userController->adminAccess())
-				{
-					$this->_adminController->adminCommentsView($message = null, $this->request->getGet());
-				}
+					$this->adminController->adminCommentsView($message = null, $this->request->getGet());
+				
+				} elseif (
+					$action === 'approveComment'
+					|| $action === 'approveCommentDashboard'
+					|| $action === 'approveCommentView' 
+					&& $this->userController->adminAccess()
+				) {
 
-				elseif (($action == 'approveComment') || ($action == 'approveCommentDashboard') || ($action == 'approveCommentView') && $this->_userController->adminAccess())
-				{
 					$get = $this->request->getGet();
-					$this->_adminController->approveComment($get);
+					$this->adminController->approveComment($get);
+				
+				} elseif (
+					$action === 'deleteComment'
+					|| $action === 'deleteCommentDashboard'
+					&& $this->userController->adminAccess()
+				) {
 
-				}
+					$dashboard = ($action === 'deleteCommentDashboard') ? 1 : null;
+					$this->adminController->deleteComment($this->request->getGet()->get('id'), $dashboard);		
+				
+				} elseif ($action === 'adminUsers' && $this->userController->adminAccess()) {
 
-				elseif (($action == 'deleteComment') || ($action == 'deleteCommentDashboard') && $this->_userController->adminAccess())
-				{
-					$dashboard = ($action == 'deleteCommentDashboard') ? 1 : null;
-					$this->_adminController->deleteComment($this->request->getGet()->get('id'), $dashboard);		
-				}
+					$this->adminController->adminUsersView( $this->request->getGet()->get('sort'));					
+				
+				} elseif ($action === 'profileUser') {
 
-				elseif ($action == 'adminUsers' && $this->_userController->adminAccess())
-				{
-					$this->_adminController->adminUsersView( $this->request->getGet()->get('sort'));					
-				}
+					$this->adminController->profileUserView($this->request->getGet()->get('id'));
+				
+				} elseif ($action === 'editUser') {
 
-				elseif ($action == 'profileUser')
-				{
-					$this->_adminController->profileUserView($this->request->getGet()->get('id'));
-				}
+					$this->adminController->editUser($this->request->getGet()->get('id'));
+				
+				} elseif ($action === 'editUserInfos') {
 
-				elseif ($action == 'editUser')
-				{
-					$this->_adminController->editUser($this->request->getGet()->get('id'));
-				}
-
-				elseif ($action == 'editUserInfos')
-				{
 					$post = $this->request->getPost();
 					var_dump($post);
-					$this->_adminController->editUserInfos($post);
-				}
+					$this->adminController->editUserInfos($post);
+				
+				} elseif ($action === 'updateProfilePicture') {
 
-				elseif ($action == 'updateProfilePicture')
-				{
 					$userId = $this->request->getGet()->get('id');
-					$this->_adminController->updateProfilePicture($userId);
-				}
+					$this->adminController->updateProfilePicture($userId);
+				
+				} elseif ($action === 'adminContacts' && $this->userController->adminAccess()) {
 
-				elseif ($action == 'adminContacts' && $this->_userController->adminAccess())
-				{
-					$this->_adminController->adminContactsView($message = null, $this->request->getGet());
-				}
+					$this->adminController->adminContactsView($message = null, $this->request->getGet());
+				
+				} elseif ($action === 'contactForm') {
 
-				elseif ($action == 'contactForm')
-				{
-					$this->_homeController->newContactForm($this->request->getPost());
-				}
+					$this->homeController->newContactForm($this->request->getPost());
+				
+				} elseif ($action === 'contactView' && $this->userController->adminAccess()) {
 
-				elseif ($action == 'contactView' && $this->_userController->adminAccess())
-				{
-					$this->_adminController->adminContactView($this->request->getGet()->get('id'));				
-				}
+					$this->adminController->adminContactView($this->request->getGet()->get('id'));				
+				
+				} elseif (($action === 'deleteContact') && $this->userController->adminAccess()) {
 
-				elseif (($action == 'deleteContact') && $this->_userController->adminAccess())
-				{
-					$this->_adminController->deleteContact($this->request->getGet()->get('id'));				
-				}
+					$this->adminController->deleteContact($this->request->getGet()->get('id'));				
+				
+				} elseif (($action === 'answer') && $this->userController->adminAccess()) {
 
-				elseif (($action == 'answer') && $this->_userController->adminAccess())
-				{
-					$this->_adminController->addAnswer($this->request->getPost());
-				}
+					$this->adminController->addAnswer($this->request->getPost());
+				
+				} else {
 
-				else 
-				{
 					throw new Exception('La page demandée n\'existe pas');
 				}
 
-			}
-			else
-			{
-				if (isset($_GET) && !empty($_GET))
-				{
+			} else {
+
+				if (isset($_GET) && !empty($_GET)) {
 					throw new Exception("La page demandée n'existe pas.");
-				}
-				else
-				{
-					$this->_homeController->indexView();
+				} else {
+					$this->homeController->indexView();
 				}
 			}
 
-		}
-		catch(Exception $e)
-		{
+		} catch(Exception $e) {
 			$errorMessage = $e->getMessage();
-			$this->_errorController->errorView($errorMessage);
+			$this->errorController->errorView($errorMessage);
 		}
 	}
 }

@@ -10,15 +10,13 @@ class PostManager extends Manager
 	{
 		$sql = 'SELECT COUNT(*) AS postsNb FROM post';
 
-		if ($status != null)
-		{
+		if ($status != null) {
 			$sql .= ' WHERE post.status = :status';
 			$req = $this->dbRequest($sql, array($status));
 			$req->bindValue(':status', $status, \PDO::PARAM_INT);
 			$req->execute();
-		}
-		else
-		{
+		
+		} else {
 			$req = $this->dbRequest($sql);
 		}
 		
@@ -30,13 +28,11 @@ class PostManager extends Manager
 	{
 		// required page number
 		$page_number = ceil((int)$postsNb/$postsPerPage);
-
-		return $page_number;
+ 		return $page_number;
 	}
 
 	public function getFirstPost($current_page, $postsPerPage)
 	{
-		/* Billets à récupérer */
 		$first_post = $current_page*$postsPerPage-$postsPerPage;
 		return $first_post;
 	}
@@ -57,33 +53,29 @@ class PostManager extends Manager
             FROM post 
 			JOIN user ON post.user_id = user.id';
 
-		if ($status != null)
-		{
+		if ($status != null) {
 			$sql .= ' WHERE post.status =' . $status;
 		}
 		
+		if (($first_post != null) || ($postsPerPage != null)) {
 
-		if (($first_post != null) || ($postsPerPage != null))
-		{
 			$sql .= ' ORDER BY post.id DESC LIMIT :first_post, :postsPerPage';
 			$req = $this->dbRequest($sql, array($first_post, $postsPerPage));
 			$req->bindValue(':first_post', $first_post, \PDO::PARAM_INT);
 			$req->bindValue(':postsPerPage', $postsPerPage, \PDO::PARAM_INT);
 			$req->execute();
-		}
-		elseif ($sortingDate != null)
-		{
+		
+		} elseif ($sortingDate != null) {
+
 			$sql .= ' ORDER BY post.date_creation ASC';
 			$req = $this->dbRequest($sql);
-		}
-		else
-		{
+		
+		} else {
 			$sql .= ' ORDER BY post.id DESC';
 			$req = $this->dbRequest($sql);
 		}
 
 		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\src\entity\Post');
-		
 		$posts = $req->fetchAll();
 		return $posts;
 	}
@@ -99,13 +91,11 @@ class PostManager extends Manager
 			FROM post
 			JOIN user ON post.user_id = user.id';
 
-		if ($status == null)
-		{
+		if ($status == null) {
 			$sql .= ' ORDER BY post.date_creation DESC
 	        LIMIT 5';
-		}
-		else
-		{
+		
+		} else {
 			$sql .= ' WHERE post.status=2
 	        ORDER BY post.date_creation DESC
 	        LIMIT 3';
@@ -113,7 +103,6 @@ class PostManager extends Manager
 
 		$req = $this->dbRequest($sql);
 		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\src\entity\Post');
-		
 		$posts = $req->fetchAll();
 		return $posts;
 	}
@@ -136,9 +125,7 @@ class PostManager extends Manager
 		$req = $this->dbRequest($sql, array($postId));
 		$req->bindValue(':id', $postId, \PDO::PARAM_INT);
 		$req->execute();
-
 		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\src\entity\Post');
-		
 		$post = $req->fetch();
 		return $post;
 	}
@@ -151,16 +138,14 @@ class PostManager extends Manager
 			FROM post_category
 			JOIN category ON category.id = post_category.category_id';
 
-		if ($postId != null)
-		{
+		if ($postId != null) {
 			$sql .= ' WHERE post_category.post_id = :postId';
 			$req = $this->dbRequest($sql, array($postId));
 			$req->bindValue('postId', $postId, \PDO::PARAM_INT);
 			$req->execute();
 			$categories = $req->fetchAll(\PDO::FETCH_ASSOC);
-		}
-		else
-		{
+		
+		} else {
 			$req = $this->dbRequest($sql);
 			$categories = $req->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_ASSOC);
 		}
@@ -184,18 +169,15 @@ class PostManager extends Manager
 		$sql = 'SELECT id AS postId FROM post ORDER BY date_creation DESC LIMIT 1';
 		$req = $this->dbRequest($sql);
 		$postId = $req->fetch(\PDO::FETCH_COLUMN);
-
 		return $postId;
 	}
 
 	public function publishPost(Parameter $get)
 	{
-		if ($get->get('status') == 1)
-		{
+		if ($get->get('status') == 1) {
 			$sql = 'UPDATE post SET status=2 WHERE post.id = :postId';
-		}
-		else
-		{
+		
+		} else {
 			$sql = 'UPDATE post SET status=1 WHERE post.id = :postId';
 		}
 		
@@ -254,10 +236,8 @@ class PostManager extends Manager
 			$req->execute();
 			$categoryId = $req->fetch(\PDO::FETCH_COLUMN);
 			
-		foreach ($postCategories as $postCategory)
-		{
-			if ($categoryId == $postCategory['id'])
-			{
+		foreach ($postCategories as $postCategory) {
+			if ($categoryId == $postCategory['id']) {
 				$message = 'Catégorie déjà associée à ce post';
 				return $message; 
 			}
@@ -269,8 +249,7 @@ class PostManager extends Manager
 		$req->execute();
 		$exists = $req->fetch(\PDO::FETCH_COLUMN);
 
-		if ($exists != 1)
-		{
+		if ($exists != 1) {
 			$sql = 'INSERT INTO category (name) VALUES (:category)';
 			$req = $this->dbRequest($sql, array($category));
 			$req->bindValue('category', $category);
@@ -294,13 +273,11 @@ class PostManager extends Manager
 	{
 		$sql = 'DELETE FROM post_category WHERE post_id = :postId';
 
-		if (!$get->get('cat'))
-		{
+		if (!$get->get('cat')) {
 			$req = $this->dbRequest($sql, array($get->get('id')));
 			$req->bindValue('postId', $get->get('id'), \PDO::PARAM_INT);
-		}
-		else
-		{
+		
+		} else {
 			$sql .= ' AND category_id = :categoryId';
 			$req = $this->dbRequest($sql, array($get->get('id'), $get->get('cat')));
 			$req->bindValue('postId', $get->get('id'), \PDO::PARAM_INT);
@@ -313,29 +290,24 @@ class PostManager extends Manager
 	{
 		$sql = 'UPDATE post SET post.title = :title, post.chapo = :chapo, ';
 
-		if ($post->get('main_image'))
-		{
+		if ($post->get('main_image')) {
 			$sql .= ' post.main_image = :main_image, ';
 		}
 					
 		$sql .= 'date_update = NOW() WHERE post.id = :id';
 
-		if ($post->get('main_image'))
-		{
+		if ($post->get('main_image')) {
 			$req = $this->dbRequest($sql, array($post->get('title'), $post->get('chapo'), $post->get('main_image'), $post->get('postId')));
 			$req->bindValue('main_image', $post->get('main_image'));
-		}
-		else
-		{
+		
+		} else {
 			$req = $this->dbRequest($sql, array($post->get('title'), $post->get('chapo'), $post->get('postId')));
 		}
 
 		$req->bindValue('title', $post->get('title'));
 		$req->bindValue('chapo', $post->get('chapo'));
 		$req->bindValue('id', $post->get('postId'), \PDO::PARAM_INT);
-		
 		$req->execute();
 	}
-
 }
 

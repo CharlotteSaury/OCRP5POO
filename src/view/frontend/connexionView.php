@@ -13,8 +13,7 @@
             <h2 class="text-white-50 mx-auto mt-2 mb-3">Se connecter | <a href="index.php?action=inscriptionView">S'inscrire</a></h2>
 
             <?php
-            if (isset($message))
-            {
+            if (isset($message)) {
                 echo '<div class="adminMessage text-white-50 text-center">' . $message . '</div>';
             }
             ?>
@@ -22,17 +21,14 @@
             <form method="POST" action="index.php?action=connexion" class="form-inline d-flex flex-column">
 
                 <?php
-                if (isset($_COOKIE['email']))
-                {
+                if (isset($_COOKIE['email'])) {
                     ?>
                     <input type="email" name="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" value="<?= htmlspecialchars($_COOKIE['email']); ?>" required>
                     <?php
-                }
-                else
-                {
+                
+                } else {
                     ?>
                     <input type="email" name="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" placeholder="Votre email..." required>
-                    
                     <?php
                 }
                 ?>

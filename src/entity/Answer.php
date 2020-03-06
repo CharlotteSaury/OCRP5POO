@@ -6,10 +6,10 @@ use src\entity\Entity;
 
 class Answer extends Entity
 {
-	private $subject,
-	$content,
-	$dateAnswer,
-	$contactId;
+	private $subject;
+	private $content;
+	private $dateAnswer;
+	private $contactId;
 
 
   	// SETTERS //
@@ -37,23 +37,23 @@ class Answer extends Entity
 
   	// GETTERS //
 
-	public function contactId()
+	public function getContactId()
 	{
 		return $this->contactId;
 	}
 	
 
-	public function content()
+	public function getContent()
 	{
 		return $this->content;
 	}
 
-	public function subject()
+	public function getSubject()
 	{
 		return $this->subject;
 	}
 
-	public function dateAnswer()
+	public function getDateAnswer()
 	{
 		return $this->dateAnswer;
 	}

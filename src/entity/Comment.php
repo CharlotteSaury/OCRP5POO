@@ -6,14 +6,14 @@ use src\entity\Entity;
 
 class Comment extends Entity
 {
-	private $postId,
-	$userId,
-	$content,
-	$commentDate,
-	$status,
-	$userAvatar,
-	$userPseudo,
-	$postTitle;
+	private $postId;
+	private $userId;
+	private $content;
+	private $commentDate;
+	private $status;
+	private $userAvatar;
+	private $userPseudo;
+	private $postTitle;
 
 
   	// SETTERS //
@@ -63,42 +63,42 @@ class Comment extends Entity
 
   	// GETTERS //
 
-	public function postId()
+	public function getPostId()
 	{
 		return $this->postId;
 	}
 
-	public function userId()
+	public function getUserId()
 	{
 		return $this->userId;
 	}
 
-	public function content()
+	public function getContent()
 	{
 		return $this->content;
 	}
 
-	public function status()
+	public function getStatus()
 	{
 		return $this->status;
 	}
 
-	public function commentDate()
+	public function getCommentDate()
 	{
 		return $this->commentDate;
 	}
 
-	public function userAvatar()
+	public function getUserAvatar()
 	{
 		return $this->userAvatar;
 	}
 
-	public function userPseudo()
+	public function getUserPseudo()
 	{
 		return $this->userPseudo;
 	}
 
-	public function postTitle()
+	public function getPostTitle()
 	{
 		return $this->postTitle;
 	}

@@ -6,24 +6,24 @@ use src\entity\Entity;
 
 class User extends Entity
 {
-	private $pseudo,
-	$email,
-	$password,
-	$userRoleId,
-	$role,
-	$registerDate,
-	$firstName,
-	$lastName,
-	$mobile,
-	$website,
-	$home,
-	$birthDate,
-	$avatar,
-	$userAbout,
-	$actCode,
-	$reinitCode,
-	$postsNb,
-	$commentsNb;
+	private $pseudo;
+	private $email;
+	private $password;
+	private $userRoleId;
+	private $role;
+	private $registerDate;
+	private $firstName;
+	private $lastName;
+	private $mobile;
+	private $website;
+	private $home;
+	private $birthDate;
+	private $avatar;
+	private $userAbout;
+	private $actCode;
+	private $reinitCode;
+	private $postsNb;
+	private $commentsNb;
 
 
   	// SETTERS //
@@ -122,92 +122,92 @@ class User extends Entity
 
   	// GETTERS //
 
-	public function pseudo()
+	public function getPseudo()
 	{
 		return $this->pseudo;
 	}
 
-	public function email()
+	public function getEmail()
 	{
 		return $this->email;
 	}
 
-	public function password()
+	public function getPassword()
 	{
 		return $this->password;
 	}
 
-	public function userRoleId()
+	public function getUserRoleId()
 	{
 		return $this->userRoleId;
 	}
 
-	public function registerDate()
+	public function getRegisterDate()
 	{
 		return $this->registerDate;
 	}
 
-	public function firstName()
+	public function getFirstName()
 	{
 		return $this->firstName;
 	}
 
-	public function lastName()
+	public function getLastName()
 	{
 		return $this->lastName;
 	}
 
-	public function mobile()
+	public function getMobile()
 	{
 		return $this->mobile;
 	}
 
-	public function website()
+	public function getWebsite()
 	{
 		return $this->website;
 	}
 
-	public function home()
+	public function getHome()
 	{
 		return $this->home;
 	}
 
-	public function role()
+	public function getRole()
 	{
 		return $this->role;
 	}
 
-	public function birthDate()
+	public function getBirthDate()
 	{
 		return $this->birthDate;
 	}
 
-	public function avatar()
+	public function getAvatar()
 	{
 		return $this->avatar;
 	}
 
-	public function userAbout()
+	public function getUserAbout()
 	{
 		return $this->userAbout;
 	}
 
-	public function actCode()
+	public function getActCode()
 	{
 		return $this->actCode;
 	}
 
-	public function reinitCode()
+	public function getReinitCode()
 	{
 		return $this->reinitCode;
 	}
 
-	public function postsNb()
+	public function getPostsNb()
 	{
 		return $this->postsNb;
 	}
 
-	public function commentsNb()
+	public function getCommentsNb()
 	{
 		return $this->commentsNb;
 	}

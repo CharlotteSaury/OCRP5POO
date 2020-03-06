@@ -4,30 +4,32 @@ require_once 'config/dev.php';
 require_once 'vendor/autoload.php';
 
 use src\controller\Router;
+ 
 
-if (isset($_COOKIE['auth']) && isset($_COOKIE['email']) && !empty($_COOKIE['auth']) && !isset($_SESSION['id']))
-{
+if (
+	isset($_COOKIE['auth']) 
+	&& isset($_COOKIE['email']) 
+	&& !empty($_COOKIE['auth']) 
+	&& !isset($_SESSION['id'])
+) {
 	$auth = htmlspecialchars($_COOKIE['auth']);
 	$auth = explode('-----', $auth);
 	$email = htmlspecialchars($_COOKIE['email']);
 	$ip = $_SERVER['REMOTE_ADDR'];
 
-	if (password_verify($email, $auth[0]) && password_verify($ip, $auth[1]))
-	{
-		var_dump('connexion auto');
+	if (password_verify($email, $auth[0]) && password_verify($ip, $auth[1])) {
 		session_start();
 		$router = new Router();
 		$router->connexionAuto($email);
-	}
-	else
-	{
+
+	} else {
 		session_start();
 		$router = new Router();
 		$router->routerRequest();
+
 	}
-}
-else
-{
+
+} else {
 	session_start();
 	$router = new Router();
 	$router->routerRequest();

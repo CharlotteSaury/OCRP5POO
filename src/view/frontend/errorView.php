@@ -11,7 +11,6 @@
         <div class="mx-auto text-center">
             <h1 class="mx-auto my-0 text-uppercase">Erreur : </h1>
             <h2 class="text-white-50"><?= $errorMessage;?></h2>
-            
         </div>
     </div>
 </div>

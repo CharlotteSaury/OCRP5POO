@@ -38,53 +38,47 @@
 
             <?php
 
-            foreach ($posts as $post)
-            {
-
-            ?>
-            
-            <div class="col-lg-11 bg-black justify-content-center no-gutters mb-4 py-auto mx-auto">
-                <div class="post-text d-flex h-100 flex-column justify-content-between  px-2 px-md-4 py-4">
-                    <div class="d-flex flex-md-row flex-column">
-
-                        <?php
-                        if ($post->mainImage() != null)
-                        {
-                        ?>
-                            <div class="post-list-picture col-md-4 col-12" style="background-image: url('<?= htmlspecialchars($post->mainImage()); ?>')"><a href="index.php?action=postView&amp;id=<?= $post->id(); ?>"></a>     
-                            </div>
-                        <?php
-                        }
-                        ?>
-                        
-                        <div class="post-chapo col-md-8 col-12 text-center text-lg-left pl-md-4 pt-2 px-0">
-                            <h4 class="text-white"><a href="index.php?action=postView&amp;id=<?= $post->id(); ?>"><?= htmlspecialchars($post->title()); ?></a></h4>
-                            <p class="mb-3 text-white-50 text-justify"><?= substr(htmlspecialchars($post->chapo()), 0, 200); ?>... - <a href="index.php?action=postView&amp;id=<?= $post->id(); ?>">En savoir plus</a></p>
-                            <hr class="d-none d-lg-block mb-4 ml-0">
+            foreach ($posts as $post) {
+                ?>
+                <div class="col-lg-11 bg-black justify-content-center no-gutters mb-4 py-auto mx-auto">
+                    <div class="post-text d-flex h-100 flex-column justify-content-between  px-2 px-md-4 py-4">
+                        <div class="d-flex flex-md-row flex-column">
 
                             <?php
-                            if ($post->categories() != null)
-                            {
-                                foreach ($post->categories() as $category)
-                                {
-                                    echo '<span class="btn btn-outline-secondary mx-1 my-1">' . htmlspecialchars($category['name']) . '</span>';
-                                }
+                            if ($post->getMainImage() != null) {
+                                ?>
+                                <div class="post-list-picture col-md-4 col-12" style="background-image: url('<?= htmlspecialchars($post->getMainImage()); ?>')"><a href="index.php?action=postView&amp;id=<?= $post->getId(); ?>"></a>     
+                                </div>
+                                <?php
                             }
                             ?>
+                            
+                            <div class="post-chapo col-md-8 col-12 text-center text-lg-left pl-md-4 pt-2 px-0">
+                                <h4 class="text-white"><a href="index.php?action=postView&amp;id=<?= $post->getId(); ?>"><?= htmlspecialchars($post->getTitle()); ?></a></h4>
+                                <p class="mb-3 text-white-50 text-justify"><?= substr(htmlspecialchars($post->getChapo()), 0, 200); ?>... - <a href="index.php?action=postView&amp;id=<?= $post->getId(); ?>">En savoir plus</a></p>
+                                <hr class="d-none d-lg-block mb-4 ml-0">
+
+                                <?php
+                                if ($post->getCategories() != null) {
+                                    foreach ($post->getCategories() as $category) {
+                                        echo '<span class="btn btn-outline-secondary mx-1 my-1">' . htmlspecialchars($category['name']) . '</span>';
+                                    }
+                                }
+                                ?>
+                            </div>
                         </div>
-                    </div>
-                        
-                    <div class="post-author d-flex mt-4 align-items-center">
-                        <div class="avatar mr-3" style="background-image: url('<?= htmlspecialchars($post->avatar()); ?>')">
-                        </div>
-                        <div class="text-white-50 posts-informations">
-                            <p class="mb-0">Posté par <strong><?= htmlspecialchars($post->pseudo()); ?></strong></p>
-                            <p class="mb-0">le <?= $post->dateCreation(); ?></p>
-                            <p class="mb-0">Dernière modification le <?= $post->dateUpdate(); ?></p>
+                            
+                        <div class="post-author d-flex mt-4 align-items-center">
+                            <div class="avatar mr-3" style="background-image: url('<?= htmlspecialchars($post->getAvatar()); ?>')">
+                            </div>
+                            <div class="text-white-50 posts-informations">
+                                <p class="mb-0">Posté par <strong><?= htmlspecialchars($post->getPseudo()); ?></strong></p>
+                                <p class="mb-0">le <?= $post->getDateCreation(); ?></p>
+                                <p class="mb-0">Dernière modification le <?= $post->getDateUpdate(); ?></p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
             <?php
 
@@ -98,31 +92,27 @@
                     <ul class="pagination post-pagination">
                         <li class="page-item">
                             <?php 
-                            if ($get->get('page') && ($get->get('page') > 1))
-                            {
-                                echo '<a class="page-link" href="index.php?action=listPosts&page=' . ((int)htmlspecialchars($get->get('page'))-1) . '&amp;postsPerPage=' . $postsPerPage . '#posts-list" aria-label="Previous">';
-                            ?>
+                            if ($get->get('page') && ($get->get('page') > 1)) {
+                                ?>
+                                <a class="page-link" href="index.php?action=listPosts&page=<?= (int)htmlspecialchars($get->get('page'))-1; ?>&amp;postsPerPage=<?= $postsPerPage; ?>#posts-list" aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                     <span class="sr-only">Previous</span>
                                 </a>
 
-                            <?php
-                            }
-                            else 
-                            {
-                            ?>
+                                <?php
+                            } else {
+                                ?>
                                 <button class="page-link" disabled aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                     <span class="sr-only">Previous</span>
                                 </button>
-                            <?php
+                                <?php
                             }
                             ?>
                         </li>
 
                         <?php
-                        for ($page=1 ; $page<=$page_number ; $page++)
-                        {
+                        for ($page = 1 ; $page <= $page_number ; $page ++) {
                             echo '<li class="page-item"><a class="page-link" href="index.php?action=listPosts&amp;page='. $page . '&amp;postsPerPage=' . $postsPerPage . '#posts-list">' . $page . '</a></li>';
                         }
 
@@ -130,26 +120,23 @@
 
                         <li class="page-item">
                             <?php 
-                            if ($get->get('page') && ($get->get('page') < $page_number))
-                            {
-                                echo '<a class="page-link" href="index.php?action=listPosts&page=' . ((int)htmlspecialchars($get->get('page'))+1) . '&amp;postsPerPage=' . $postsPerPage . '#posts-list" aria-label="Next">';
-                            ?>
+                            if ($get->get('page') && ($get->get('page') < $page_number)) {
+                                ?>
+                                <a class="page-link" href="index.php?action=listPosts&page=<?= (int)htmlspecialchars($get->get('page'))+1; ?>&amp;postsPerPage=<?= $postsPerPage; ?>#posts-list" aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                     <span class="sr-only">Next</span>
                                 </a>
-                            <?php
-                            }
-                            elseif (!$get->get('page') && $page_number > 1) 
-                            {
-                                echo '<a class="page-link" href="index.php?action=listPosts&page=2&amp;postsPerPage=' . $postsPerPage . '#posts-list" aria-label="Next">';
-                            ?>
+                                <?php
+                            
+                            } elseif (!$get->get('page') && $page_number > 1) {
+                                ?>
+                                <a class="page-link" href="index.php?action=listPosts&page=2&amp;postsPerPage=<?= $postsPerPage; ?>#posts-list" aria-label="Next">';
                                     <span aria-hidden="true">&raquo;</span>
                                     <span class="sr-only">Next</span>
                                 </a>
-                            <?php
-                            } 
-                            else
-                            {
+                                <?php
+                            
+                            } else {
                             ?>
                                 <button type="button" class="page-link" disabled aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
@@ -177,11 +164,10 @@
                     <label for="postsPerPage" hidden>Nombre de posts par page</label>
                     <select class="form-control block" id="postsPerPage" name="postsPerPage">
                         <?php
-                        if ($get->get('postsPerPage'))
-                        {
+                        if ($get->get('postsPerPage')) {
+
                             echo '<option selected disabled>' . htmlspecialchars($get->get('postsPerPage')) . '</option>';
-                            switch ($get->get('postsPerPage'))
-                            {
+                            switch ($get->get('postsPerPage')) {
                                 case 3:
                                     echo '<option value="5">5</option>';
                                     echo '<option value="10">10</option>';
@@ -195,16 +181,16 @@
                                     echo '<option value="5">5</option>';
                                     break;
                             }
-                        }
-                        else 
-                        {
-                        ?>
+                        
+                        } else {
+                            ?>
                             <option value="3" selected disabled>3</option>
                             <option value="5">5</option>
                             <option value="10">10</option>
-                        <?php
+                            <?php
                         }
                         ?>
+
                     </select>
                     <input class="btn btn-primary-custom mt-3" type="submit" value="Afficher"/>
                 </form>
@@ -213,13 +199,11 @@
                 <h4 class="mb-4">Articles récents</h4>
                 <div class="recent-post">
                     <?php
-                    foreach ($recentPosts as $post)
-                    {
-                    ?>
-                        <h5><?= htmlspecialchars($post->title()); ?><em> (posté le <?= $post->dateCreation(); ?>)</em></h5>
-                        <p><?= substr(htmlspecialchars($post->chapo()), 0, 50);?>... - <a href="index.php?action=postView&amp;id=<?= htmlspecialchars($post->id()); ?>">En savoir plus</a></p>
-
-                    <?php
+                    foreach ($recentPosts as $post) {
+                        ?>
+                        <h5><?= htmlspecialchars($post->getTitle()); ?><em> (posté le <?= $post->getDateCreation(); ?>)</em></h5>
+                        <p><?= substr(htmlspecialchars($post->getChapo()), 0, 50);?>... - <a href="index.php?action=postView&amp;id=<?= htmlspecialchars($post->getId()); ?>">En savoir plus</a></p>
+                        <?php
                     }
                     ?>                      
                 </div>
