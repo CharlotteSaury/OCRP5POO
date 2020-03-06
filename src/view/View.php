@@ -7,26 +7,24 @@ use Exception;
 class View
 
 {
-	private $_file;
+	private $file;
 
 	public function render($app, $template, $data = [])
 	{
-		$this->_file = 'src/view/' . $app . '/' . $template . '.php';
-		$this->renderFile($this->_file, $data);
+		$this->file = 'src/view/' . $app . '/' . $template . '.php';
+		$this->renderFile($this->file, $data);
 		$view = $this->renderFile('src/view/' . $app . '/' . $app . '_template.php', $data);
 		echo $view;
 	}
 
-	private function renderFile($_file, $data)
+	private function renderFile($file, $data)
 	{
-		if (file_exists($_file))
-		{
+		if (file_exists($file)) {
 			extract($data);
             ob_start();
-            require $_file;
+            require $file;
             return ob_get_clean();
 		}
 		throw new Exception ('Vue non trouvée');
-		
 	}
 }

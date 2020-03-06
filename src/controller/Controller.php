@@ -15,14 +15,14 @@ use Exception;
 
 abstract class Controller
 {
-	protected $postManager,
-			$commentManager,
-			$userManager,
-			$contactManager,
-			$contentManager,
-			$view,
-			$request,
-			$validation;
+	protected $postManager;
+	protected $commentManager;
+	protected $userManager;
+	protected $contactManager;
+	protected $contentManager;
+	protected $view;
+	protected $request;
+	protected $validation;
 
 	public function __construct()
 	{

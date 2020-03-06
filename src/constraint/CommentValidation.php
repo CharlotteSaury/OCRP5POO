@@ -16,8 +16,7 @@ class CommentValidation extends Validation
 
     public function check(Parameter $post)
     {
-        foreach ($post->all() as $key => $value) 
-        {
+        foreach ($post->all() as $key => $value) {
             $this->checkField($key, $value);
         }
         return $this->errors;
@@ -25,13 +24,11 @@ class CommentValidation extends Validation
 
     private function checkField($name, $value)
     {
-        if($name === 'content') 
-        {
+        if ($name === 'content') {
             $error = $this->checkContent($name, $value);
             $this->addError($name, $error);
-        }
-        elseif($name === 'postId') 
-        {
+        
+        } elseif ($name === 'postId') {
             $error = $this->checkPostId($name, $value);
             $this->addError($name, $error);
         }
@@ -39,7 +36,7 @@ class CommentValidation extends Validation
 
     private function addError($name, $error) 
     {
-        if($error) {
+        if ($error) {
             $this->errors += [
                 $name => $error
             ];
@@ -48,21 +45,18 @@ class CommentValidation extends Validation
 
     private function checkContent($name, $value)
     {
-        if($this->constraint->notBlank($name, $value)) 
-        {
+        if ($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('contenu', $value);
         }
 
-        if($this->constraint->maxLength($name, $value, 2000)) 
-        {
+        if ($this->constraint->maxLength($name, $value, 2000)) {
             return $this->constraint->maxLength('contenu', $value, 2000);
         }
     }
 
     private function checkPostId($name, $value)
     {
-        if ($this->constraint->exists($name, $value))
-        {
+        if ($this->constraint->exists($name, $value)) {
             return $this->constraint->exists('postId', $value);
         }
     }

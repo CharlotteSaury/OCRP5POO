@@ -13,33 +13,30 @@ class UserController extends Controller
 {
 	public function adminAccess()
 	{
-		if ($this->request->getSession()->get('id'))
-		{
-			$userId = $this->request->getSession()->get('id');
+		if ($this->request->getSession()->get('id')) {
 
-			if ($this->isAdmin($userId) || $this->isSuperAdmin($userId))
-			{
+			$userId = $this->request->getSession()->get('id');
+			if ($this->isAdmin($userId) || $this->isSuperAdmin($userId)) {
 				return true;
-			}
-			else
-			{
+			} else {
 				return false;
 			}
 		}
-		
 		return false;
 	}
 
 	public function inscriptionView($message = null, $errors = null) 
 	{
-		return $this->view->render('frontend', 'inscriptionView', ['message' => $message,
+		return $this->view->render('frontend', 'inscriptionView',
+			['message' => $message,
 			'session' => $this->request->getSession(),
 			'errors' => $errors]);
 	}
 
 	public function connexionView($message = null) 
 	{
-		return $this->view->render('frontend', 'connexionView', ['message' => $message,
+		return $this->view->render('frontend', 'connexionView',
+			['message' => $message,
 			'session' => $this->request->getSession()]);
 	}
 
@@ -63,24 +60,20 @@ class UserController extends Controller
 	{
 		$errors = $this->validation->validate($post, 'Inscription');
 
-		if (!$errors)
-		{
-			if ($post->get('pass1') == $post->get('pass2'))
-			{
-				$post->set('pass', password_hash($post->get('pass1'), PASSWORD_DEFAULT));
+		if (!$errors) {
 
+			if ($post->get('pass1') == $post->get('pass2')) {
+
+				$post->set('pass', password_hash($post->get('pass1'), PASSWORD_DEFAULT));
 				$activation_code = $this->newUser($post);
 				$this->sendEmailActivation($post, $activation_code);
 				$message = 'Merci pour votre inscription ! Un email de confirmation vous a été envoyé afin de confirmer votre adresse email. Merci de vous reporter à cet email pour activer votre compte ! ';
-			}
-			else
-			{
+			
+			} else {
 				$message = 'Les mots de passe saisis sont différents ! ';
 			}
 			$this->inscriptionView($message);
-		}
-		else
-		{
+		} else {
 			$this->inscriptionView($message = null, $errors);
 		}
 	}
@@ -102,29 +95,27 @@ class UserController extends Controller
 
 	public function userActivation(Parameter $get)
 	{
-		if ($this->checkEmail($get->get('email')))
-		{
+		if ($this->checkEmail($get->get('email'))) {
+
 			$user = $this->userManager->getUser($userId = null, $get->get('email'));
 
-			if ($user->actCode() != null)
-			{
-				if ($user->actCode() != $get->get('key'))
-				{
+			if ($user->actCode() != null) {
+
+				if ($user->actCode() != $get->get('key')) {
 					$message = 'La clé d\'activation n\'est pas bonne, veuillez retourner sur votre mail d\'activation.';
-				}
-				else
-				{
+
+				} else {
+
 					$this->userManager->userActivation($get->get('email'));
 					$message = 'Votre compte est maintenant activé, vous pouvez vous connecter ! ';
+
 				}
-			}
-			else
-			{
+
+			} else {
 				$message = 'Votre compte est déjà activé, vous pouvez vous connecter ! ';
 			}
-		}
-		else
-		{
+
+		} else {
 			$message = 'Le lien d\'activation n\'est pas bon, veuillez retourner sur votre mail d\'activation.';
 		}
 
@@ -133,22 +124,22 @@ class UserController extends Controller
 
 	public function connexion(Parameter $post)
 	{
-		if ($this->checkEmail($post->get('email')))
-		{
+		if ($this->checkEmail($post->get('email'))) {
+
 			$user = $this->userManager->getUser($userId = null, $post->get('email'));
 
-			if ($user->actCode() != null)
-			{
+			if ($user->getActCode() != null) {
+
 				$message = 'Votre compte n\'est pas activé. Veuillez cliquer sur le lien d\'activation qui vous a été envoyé sur votre adresse email lors de votre inscription.';
-			}
-			else
-			{
+			
+			} else {
+
 				$user_pass = $this->getPassword($post->get('email'));
 
-				if (password_verify($post->get('pass'), $user_pass))
-				{
-					if ($post->get('rememberme'))
-					{
+				if (password_verify($post->get('pass'), $user_pass)) {
+
+					if ($post->get('rememberme')) {
+
 						setcookie('email', $post->get('email'), time() + 365*24*3600, null, null, false, true);
 						setcookie('auth', password_hash($post->get('email'), PASSWORD_DEFAULT) . '-----' . password_hash($_SERVER['REMOTE_ADDR'], PASSWORD_DEFAULT), time() + 365*24*3600, null, null, false, true);
 					}
@@ -156,16 +147,14 @@ class UserController extends Controller
 					$this->newUserSession($post->get('email'));
 					$infos = new HomeController();
 					$infos->indexView();
-				}
-				else
-				{
+				
+				} else {
 					$message = "L'identifiant et/ou le mot de passe sont erronés.";
 					$this->connexionView($message);
 				}
-			}							
-		}				
-		else
-		{
+			}
+
+		} else {
 			$message = "L'identifiant et/ou le mot de passe sont erronés.";
 			$this->connexionView($message);
 		}
@@ -175,25 +164,23 @@ class UserController extends Controller
 	public function getPassword($email)
 	{
 		$user = $this->userManager->getUser($userId = null, $email);
-		return $user->password();
+		return $user->getPassword();
 	}
 
 	public function newUserSession($email)
 	{
 		$user = $this->userManager->getUser($userId = null, $email);
-
-		$this->request->getSession()->set('id', $user->id());
-		$this->request->getSession()->set('pseudo', $user->pseudo());
-        $this->request->getSession()->set('role', $user->userRoleId());
-        $this->request->getSession()->set('avatar', $user->avatar());
+		$this->request->getSession()->set('id', $user->getId());
+		$this->request->getSession()->set('pseudo', $user->getPseudo());
+        $this->request->getSession()->set('role', $user->getUserRoleId());
+        $this->request->getSession()->set('avatar', $user->getAvatar());
        	$this->request->getSession()->set('email', $email);
 	}
 
 	public function isAdmin($userId)
 	{
 		$user = $this->userManager->getUser($userId);
-		if ($user->userRoleId() == 1)
-		{
+		if ($user->getUserRoleId() == 1) {
 			return true;
 		}
 		return false;
@@ -202,8 +189,7 @@ class UserController extends Controller
 	public function isSuperAdmin($userId)
 	{
 		$user = $this->userManager->getUser($userId);
-		if ($user->userRoleId() == 3)
-		{
+		if ($user->getUserRoleId() == 3) {
 			return true;
 		}
 		return false;
@@ -211,7 +197,8 @@ class UserController extends Controller
 
 	public function forgotPassView($message = null)
 	{
-		return $this->view->render('frontend', 'forgotPassView', ['message' => $message,
+		return $this->view->render('frontend', 'forgotPassView', 
+			['message' => $message,
 			'session' => $this->request->getSession()]);
 	}
 
@@ -245,35 +232,39 @@ class UserController extends Controller
 	public function getNewPassCode($email)
 	{
 		$user = $this->userManager->getUser($userId = null, $email);
-		return $user->reinitCode();
+		return $user->getReinitCode();
 	}
 
 	public function newPassView($email, $message = null, $status)
 	{
-		return $this->view->render('frontend', 'newPassView', ['message' => $message, 'email' => $email, 'status' => $status,
+		return $this->view->render('frontend', 'newPassView', 
+			['message' => $message, 
+			'email' => $email, 
+			'status' => $status,
 			'session' => $this->request->getSession()]);
 	}
 
 	public function checkReinitCode(Parameter $get)
 	{
 		$email = $this->request->getSession()->set('email', $get->get('email'));
-		if ($this->checkEmail($get->get('email')))
-		{
+
+		if ($this->checkEmail($get->get('email'))) {
+
 			$user_reinit_code = $this->getNewPassCode($get->get('email'));
 
-			if ($get->get('key') != $user_reinit_code)
-			{
+			if ($get->get('key') != $user_reinit_code) {
+
 				$message = 'La clé de réinitialisation n\'est pas bonne, veuillez retourner sur votre mail.';
 				$status = false;
-			}
-			else
-			{
+
+			} else {
+
 				$message = 'Veuillez entrer votre nouveau mot de passe';
 				$status = true;
 			}
-		}
-		else
-		{
+
+		} else {
+
 			$message = 'Le lien de réinitialisation n\'est pas bon, veuillez retourner sur votre mail.';
 			$status = false;
 		}
@@ -284,28 +275,26 @@ class UserController extends Controller
 	{
 		$errors = $this->validation->validate($post, 'NewPass');
 
-		if (!$errors)
-		{
-			if ($post->get('pass1') == $post->get('pass2'))
-			{
-				$newPass = password_hash($post->get('pass1'), PASSWORD_DEFAULT);
+		if (!$errors) {
 
+			if ($post->get('pass1') == $post->get('pass2')) {
+
+				$newPass = password_hash($post->get('pass1'), PASSWORD_DEFAULT);
 				$this->userManager->newUserPass($email, $newPass);
 				$message = 'Votre mot de passe a été réinitialisé. Vous pouvez maintenant vous connecter ! ';
 				$this->connexionView($message);
-			}
-			else
-			{
+
+			} else {
+
 				$message = 'Les mots de passe saisis sont différents ! ';
 				$this->newPassView($email, $message, true);
 			}
-		}
-		else
-		{
+
+		} else {
+
 			$message = $errors['pass1'];
 			$this->newPassView($email, $message, true);
 		}
-
-		
 	}
+
 }

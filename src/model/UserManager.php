@@ -18,22 +18,18 @@ class UserManager extends Manager
 				FROM user 
 				JOIN user_role ON user.user_role_id = user_role.id';
 
-		if ($userRoleId != null)
-		{
+		if ($userRoleId != null) {
 			$sql .= ' WHERE user.user_role_id = ' . $userRoleId;
 		}
 
 		$sql .= ' ORDER BY user.register_date DESC';
 
-		if ($usersNb !== null)
-		{
+		if ($usersNb !== null) {
 			$sql.= ' LIMIT ' . $usersNb;
 		}
 
 		$req = $this->dbRequest($sql);
-
 		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\src\entity\User');
-		
 		$users = $req->fetchAll();
 		return $users;
 	}
@@ -62,21 +58,18 @@ class UserManager extends Manager
 				FROM user 
 				JOIN user_role ON user.user_role_id = user_role.id';
 
-		if ($userId != null)
-		{
+		if ($userId != null) {
 			$sql .= ' WHERE user.id = :userId';
 			$req = $this->dbRequest($sql, array($userId));
 			$req->bindValue('userId', $userId, \PDO::PARAM_INT);	
-		}
-		else
-		{
+		
+		} else {
 			$sql .= ' WHERE user.email = :email';
 			$req = $this->dbRequest($sql, array($email));
 			$req->bindValue('email', $email);
 		}
 		
 		$req->execute();
-
 		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\src\entity\User');
 		$user = $req->fetch();
 		return $user;
@@ -89,8 +82,10 @@ class UserManager extends Manager
 		$random_code = substr(str_shuffle($permitted_chars), 0, 10);
 		$activation_code = password_hash($random_code, PASSWORD_DEFAULT);
 
-		$sql = 'INSERT INTO user (pseudo, email, password, user_role_id, register_date, activation_code, avatar)
-				VALUES (:pseudo, :email, :pass, 2, NOW(), :activation_code, "public/images/profile.png")';
+		$sql = 'INSERT INTO user 
+				(pseudo, email, password, user_role_id, register_date, activation_code, avatar)
+				VALUES 
+				(:pseudo, :email, :pass, 2, NOW(), :activation_code, "public/images/profile.png")';
 
 		$req = $this->dbRequest($sql, array($post->get('pseudo'), $post->get('email'), $post->get('pass'), $activation_code));
 		$req->bindValue('pseudo', $post->get('pseudo'));
@@ -106,20 +101,17 @@ class UserManager extends Manager
 	{
 		$sql = 'SELECT COUNT(*) AS nbUser FROM user WHERE pseudo = :pseudo';
 		
-		if ($userId != null)
-		{
+		if ($userId != null) {
 			$sql .= ' AND id != :userId';
 			$req = $this->dbRequest($sql, array($pseudo, $userId));
 			$req->bindValue('userId', $userId);
-		}
-		else
-		{
+		
+		} else {
 			$req = $this->dbRequest($sql, array($pseudo));
 		}
 
 		$req->bindValue('pseudo', $pseudo);
 		$req->execute();
-
 		$pseudoExists = $req->fetch(\PDO::FETCH_COLUMN);
 		return $pseudoExists;
 	}
@@ -128,20 +120,17 @@ class UserManager extends Manager
 	{
 		$sql = 'SELECT COUNT(*) AS nbUser FROM user WHERE email = :email';
 		
-		if ($userId != null)
-		{
+		if ($userId != null) {
 			$sql .= ' AND id != :userId';
 			$req = $this->dbRequest($sql, array($email, $userId));
 			$req->bindValue('userId', $userId);
-		}
-		else
-		{
+		
+		} else {
 			$req = $this->dbRequest($sql, array($email));
 		}
 
 		$req->bindValue('email', $email);
 		$req->execute();
-
 		$emailExists = $req->fetch(\PDO::FETCH_COLUMN);
 		return $emailExists;
 	}
@@ -163,7 +152,6 @@ class UserManager extends Manager
 		$req = $this->dbRequest($sql, array($reinit_code, $email));
 		$req->bindValue('reinitialization_code', $reinit_code);
 		$req->bindValue('email', $email);
-
 		$req->execute();
 	}
 
@@ -180,13 +168,11 @@ class UserManager extends Manager
 	{
 		$sql = 'SELECT COUNT(*) AS usersNb FROM user';
 
-		if ($userRoleId != null)
-		{
+		if ($userRoleId != null) {
 			$sql .= ' WHERE user.user_role_id = ' . $userRoleId;
 		}
 
 		$req = $this->dbRequest($sql);
-
 		$usersNb = $req->fetch(\PDO::FETCH_COLUMN);
 		return $usersNb;
 	}
@@ -195,25 +181,22 @@ class UserManager extends Manager
 	{
 		$sql = 'UPDATE user SET';
 
-		foreach ($post->all() as $key => $value)
-		{
-			if ($key != 'user_role_id')
-			{
-				if ($key != 'birth_date')
-				{
+		foreach ($post->all() as $key => $value) {
+
+			if ($key != 'user_role_id') {
+
+				if ($key != 'birth_date') {
 					$sql .= ' ' . $key . '="' . $value . '", ';
-				}
-				else
-				{
-					if ($value != '')
-					{
+				
+				} else {
+
+					if ($value != '') {
 						$sql .= ' ' . $key . '="' . $value . '", ';
 					}
 				}
-			}
-			else  
-			{
-					$sql .= ' ' . $key . '="' . $value . '"';
+			
+			} else {
+				$sql .= ' ' . $key . '="' . $value . '"';
 			}			
 		}
 
@@ -226,6 +209,7 @@ class UserManager extends Manager
 	public function deleteBirthDate($userId)
 	{
 		$sql = 'UPDATE user SET birth_date = NULL WHERE user.id = :userId';
+		
 		$req = $this->dbRequest($sql, array($userId));
 		$req->bindValue('userId', $userId, \PDO::PARAM_INT);
 		$req->execute();

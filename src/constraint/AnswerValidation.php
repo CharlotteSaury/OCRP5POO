@@ -24,26 +24,26 @@ class AnswerValidation extends Validation
 
     private function checkField($name, $value)
     {
-        if($name === 'answerSubject') {
+        if ($name === 'answerSubject') {
             $error = $this->checkAnswerSubject($name, $value);
             $this->addError($name, $error);
-        }
-        elseif($name === 'email') {
+        
+        } elseif ($name === 'email') {
             $error = $this->checkEmail($name, $value);
             $this->addError($name, $error);
-        }
-        elseif($name === 'contactId') {
+        
+        } elseif ($name === 'contactId') {
             $error = $this->checkContactId($name, $value);
             $this->addError($name, $error);
-        }
-        elseif($name === 'answerContent') {
+        
+        } elseif ($name === 'answerContent') {
             $error = $this->checkAnswerContent($name, $value);
             $this->addError($name, $error);
         }
     }
 
     private function addError($name, $error) {
-        if($error) {
+        if ($error) {
             $this->errors += [
                 $name => $error
             ];
@@ -52,56 +52,48 @@ class AnswerValidation extends Validation
 
     private function checkAnswerSubject($name, $value)
     {
-        if($this->constraint->notBlank($name, $value)) 
-        {
+        if ($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('objet', $value);
         }
 
-        if($this->constraint->minLength($name, $value, 2)) 
-        {
+        if ($this->constraint->minLength($name, $value, 2)) {
             return $this->constraint->minLength('objet', $value, 2);
         }
 
-        if($this->constraint->maxLength($name, $value, 255)) {
+        if ($this->constraint->maxLength($name, $value, 255)) {
             return $this->constraint->maxLength('objet', $value, 255);
         }
     }
 
     private function checkEmail($name, $value)
     {
-        if($this->constraint->notBlank($name, $value)) 
-        {
+        if ($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('email', $value);
         }
 
-        if($this->constraint->isEmail($name, $value))
-        {
+        if ($this->constraint->isEmail($name, $value)) {
             return $this->constraint->isEmail('email', $value);
         }
     }
 
     private function checkAnswerContent($name, $value)
     {
-        if($this->constraint->notBlank($name, $value)) 
-        {
+        if ($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('contenu', $value);
         }
 
-        if($this->constraint->minLength($name, $value, 10)) 
-        {
+        if ($this->constraint->minLength($name, $value, 10)) {
             return $this->constraint->minLength('contenu', $value, 10);
         }
 
-        if($this->constraint->maxLength($name, $value, 1000)) 
-        {
+        if ($this->constraint->maxLength($name, $value, 1000)) {
             return $this->constraint->maxLength('contenu', $value, 1000);
         }
     }
 
     private function checkContactId($name, $value)
     {
-        if ($this->constraint->exists($name, $value))
-        {
+        if ($this->constraint->exists($name, $value)) {
             return $this->constraint->exists('contactId', $value);
         }
     }

@@ -19,29 +19,23 @@ class CommentManager extends Manager
 			JOIN user on comment.user_id = user.id
 			JOIN post on comment.post_id = post.id';
 
-		if (isset($status) && $status == 0)
-		{
+		if (isset($status) && $status == 0) {
 			$sql.= ' WHERE comment.status = ' . $status;
 		}
 
-		if ($sortingDate != null)
-		{
+		if ($sortingDate != null) {
 			$sql.= ' ORDER BY comment.comment_date ASC';
-		}
-		else
-		{
+
+		} else {
 			$sql.= ' ORDER BY comment.comment_date DESC';
 		}
 
-		if ($commentsNb !== null)
-		{
+		if ($commentsNb !== null) {
 			$sql.= ' LIMIT ' . $commentsNb;
 		}
 		
 		$req = $this->dbRequest($sql);
-
 		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\src\entity\Comment');
-		
 		$comments = $req->fetchAll();
 		return $comments;
 	}
@@ -60,13 +54,11 @@ class CommentManager extends Manager
 			JOIN user on comment.user_id = user.id
 			JOIN post on comment.post_id = post.id';
 
-		if ($status != null)
-		{
+		if ($status != null) {
 			$sql .= ' WHERE comment.status=1 AND post.id= :id
 			ORDER BY comment.comment_date DESC';
-		}
-		else
-		{
+		
+		} else {
 			$sql .= ' AND post.id= :id
 			ORDER BY comment.comment_date DESC';
 		}
@@ -74,11 +66,8 @@ class CommentManager extends Manager
 		$req = $this->dbRequest($sql, array($postId));
 		$req->bindValue(':id', $postId, \PDO::PARAM_INT);
 		$req->execute();
-
 		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\src\entity\Comment');
-		
 		$comments = $req->fetchAll();
-		
 		return $comments;
 	}
 
@@ -86,6 +75,7 @@ class CommentManager extends Manager
 	{
 		$sql = 'INSERT INTO comment (post_id, user_id, content, comment_date) 
 				VALUES (:postId, :userId, :content, NOW())';
+
 		$req = $this->dbRequest($sql, array($post->get('postId'), $userId, $post->get('content')));
 		$req->bindValue('postId', $post->get('postId'), \PDO::PARAM_INT);
 		$req->bindValue('userId', $userId, \PDO::PARAM_INT);
@@ -97,15 +87,13 @@ class CommentManager extends Manager
 	{
 		$sql = 'SELECT COUNT(*) AS commentsNb FROM comment';
 
-		if ($status != null)
-		{
+		if ($status != null) {
 			$sql .= ' WHERE comment.status = :status';
 			$req = $this->dbRequest($sql, array($status));
 			$req->bindValue('status', $status, \PDO::PARAM_INT);
 			$req->execute();
-		}
-		else
-		{
+		
+		} else {
 			$req = $this->dbRequest($sql);
 		}
 

@@ -7,20 +7,19 @@ use src\entity\Entity;
 class Post extends Entity
 
 {
-	private $title,
-			$chapo,
-			$status,
-			$dateCreation,
-			$dateUpdate,
-			$pseudo,
-			$avatar,
-			$mainImage,
-			$approvedCommentsNb,
-			$commentsNb,
-			$categories;
+	private $title;
+	private $chapo;
+	private $status;
+	private $dateCreation;
+	private $dateUpdate;
+	private $pseudo;
+	private $avatar;
+	private $mainImage;
+	private $approvedCommentsNb;
+	private $commentsNb;
+	private $categories;
 
   	// SETTERS //
-
 
 	public function setTitle($title)
 	{
@@ -80,57 +79,57 @@ class Post extends Entity
 
   	// GETTERS //
 
-	public function title()
+	public function getTitle()
 	{
 		return $this->title;
 	}
 
-	public function chapo()
+	public function getChapo()
 	{
 		return $this->chapo;
 	}
 
-	public function status()
+	public function getStatus()
 	{
 		return $this->status;
 	}
 
-	public function dateCreation()
+	public function getDateCreation()
 	{
 		return $this->dateCreation;
 	}
 
-	public function dateUpdate()
+	public function getDateUpdate()
 	{
 		return $this->dateUpdate;
 	}
 
-	public function pseudo()
+	public function getPseudo()
 	{
 		return $this->pseudo;
 	}
 
-	public function avatar()
+	public function getAvatar()
 	{
 		return $this->avatar;
 	}
 
-	public function mainImage()
+	public function getMainImage()
 	{
 		return $this->mainImage;
 	}
 
-	public function commentsNb()
+	public function getCommentsNb()
 	{
 		return $this->commentsNb;
 	}
 
-	public function approvedCommentsNb()
+	public function getApprovedCommentsNb()
 	{
 		return $this->approvedCommentsNb;
 	}
 
-	public function categories()
+	public function getCategories()
 	{
 		return $this->categories;
 	}

@@ -34,8 +34,7 @@
     <div id="wrapper">
 
         <?php
-        if ($session->get('role') && ($session->get('role') == 1 || $session->get('role') == 3))
-        {
+        if ($session->get('role') && ($session->get('role') == 1 || $session->get('role') == 3)) {
             ?>
             <!-- Sidebar -->
             <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -94,8 +93,7 @@
                 </li>
 
                 <?php
-                if ($session->get('role') == 3)
-                {
+                if ($session->get('role') == 3) {
                     ?>
 
                 <!-- Nav Item - Contacts -->
@@ -105,8 +103,7 @@
                         <span>Contacts</span>
 
                         <?php
-                        if ($unreadContactsNb != 0)
-                        {
+                        if ($unreadContactsNb != 0) {
                             echo '<span class="badge badge-light ml-2">' . $unreadContactsNb . '</span>';
                         }
                         ?>
@@ -206,37 +203,16 @@
                     <div class="mb-4">
                         <h1 class="h3 mb-0 text-gray-800">
                         <?php
-                        if (isset($this->_contentTitle))
-                        {
+                        if (isset($this->_contentTitle)) {
                             echo $this->_contentTitle . '</h1>';
-                        }
-                        else
-                        {
+                        } else {
                             echo $contentTitle . '</h1>';
                         }
 
-                        if (isset($message))
-                        {
+                        if (isset($message)) {
                             echo '<div class="adminMessage text-center">' . $message . '</div>';
                         }
 
-                        /*if (isset($errors))
-                        {
-                            ?>
-
-                            <div class="adminMessage text-center">
-
-                            <?php
-                            foreach ($errors as $key => $value)
-                            {
-                                echo '<p>' . $value . '</p>';
-                            }
-                            ?>
-
-                            </div>
-
-                        <?php    
-                        }*/
                         ?>
                     </div>
 

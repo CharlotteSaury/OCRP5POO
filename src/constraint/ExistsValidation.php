@@ -23,7 +23,7 @@ class ExistsValidation extends Validation
 
     private function addError($name, $error) 
     {
-        if($error) {
+        if ($error) {
             $this->errors += [
                 $name => $error
             ];

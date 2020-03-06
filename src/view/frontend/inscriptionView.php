@@ -13,8 +13,7 @@
             <h2 class="text-white-50 mx-auto mt-2 mb-3"><a href="index.php?action=connexionView">Se connecter</a> | S'inscrire</h2>
 
             <?php
-            if (isset($message))
-            {
+            if (isset($message)) {
                 echo '<div class="adminMessage text-white text-center">' . $message . '</div>';
             }
             ?>

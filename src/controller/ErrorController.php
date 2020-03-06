@@ -9,7 +9,8 @@ class ErrorController extends Controller
 {
 	public function errorView($errorMessage) 
 	{
-		return $this->view->render('frontend', 'errorView', ['errorMessage' => $errorMessage,
+		return $this->view->render('frontend', 'errorView', 
+			['errorMessage' => $errorMessage,
 			'session' => $this->request->getSession()]);
 	}
 

@@ -6,12 +6,12 @@ use src\entity\Entity;
 
 class Contact extends Entity
 {
-	private $name,
-	$email,
-	$subject,
-	$content,
-	$dateMessage,
-	$statusId;
+	private $name;
+	private $email;
+	private $subject;
+	private $content;
+	private $dateMessage;
+	private $statusId;
 
 
   	// SETTERS //
@@ -50,32 +50,32 @@ class Contact extends Entity
 
   	// GETTERS //
 
-	public function name()
+	public function getName()
 	{
 		return $this->name;
 	}
 
-	public function email()
+	public function getEmail()
 	{
 		return $this->email;
 	}
 
-	public function content()
+	public function getContent()
 	{
 		return $this->content;
 	}
 
-	public function subject()
+	public function getSubject()
 	{
 		return $this->subject;
 	}
 
-	public function dateMessage()
+	public function getDateMessage()
 	{
 		return $this->dateMessage;
 	}
 
-	public function statusId()
+	public function getStatusId()
 	{
 		return $this->statusId;
 	}
