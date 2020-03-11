@@ -40,4 +40,11 @@ class PostValidation extends Validation
         }
     }
 
+    protected function checkUserId($name, $value)
+    {
+        if ($this->constraint->exists($name, $value)) {
+            return $this->constraint->exists('pseudo', $value);
+        }
+    }
+
 }

@@ -18,12 +18,12 @@
                 <?php 
                 if ($post->getStatus() == 2) {
                     ?>
-                    <a href="index.php?action=publishPost&amp;id=<?= htmlspecialchars($post->getId()); ?>&amp;status=<?= htmlspecialchars($post->getStatus()); ?>" title="Ne plus publier" class="mr-2"><i class="fas fa-toggle-on"></i></a>
+                    <a href="index.php?action=publishPost&amp;id=<?= htmlspecialchars($post->getId()); ?>&amp;currstatus=<?= htmlspecialchars($post->getStatus()); ?>" title="Ne plus publier" class="mr-2"><i class="fas fa-toggle-on"></i></a>
                     <?php
 
                 } else {
                     ?>
-                    <a href="index.php?action=publishPost&amp;id=<?= htmlspecialchars($post->getId()); ?>&amp;status=<?= htmlspecialchars($post->getStatus()); ?>" title="Publier"  class="mr-2"><i class="fas fa-toggle-off"></i></a>
+                    <a href="index.php?action=publishPost&amp;id=<?= htmlspecialchars($post->getId()); ?>&amp;currstatus=<?= htmlspecialchars($post->getStatus()); ?>" title="Publier"  class="mr-2"><i class="fas fa-toggle-off"></i></a>
                     <?php
                 }
                 ?>

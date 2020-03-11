@@ -198,6 +198,36 @@ class PostManager extends Manager
 	}
 
 	/**
+	 * Update post informations in database
+	 * @param  Parameter $post [title, chapo, optional main_image]
+	 * @return void
+	 */
+	public function editPostInfos(Parameter $post)
+	{
+		$sql = 'UPDATE post SET post.title = :title, post.chapo = :chapo, post.user_id = :userId,';
+
+		if ($post->get('main_image')) {
+			$sql .= ' post.main_image = :main_image, ';
+		}
+					
+		$sql .= 'date_update = NOW() WHERE post.id = :id';
+
+		if ($post->get('main_image')) {
+			$req = $this->dbRequest($sql, array($post->get('title'), $post->get('chapo'), $post->get('userId'), $post->get('main_image'), $post->get('postId')));
+			$req->bindValue('main_image', $post->get('main_image'));
+		
+		} else {
+			$req = $this->dbRequest($sql, array($post->get('title'), $post->get('chapo'), $post->get('userId'), $post->get('postId')));
+		}
+
+		$req->bindValue('title', $post->get('title'));
+		$req->bindValue('chapo', $post->get('chapo'));
+		$req->bindValue('userId', $post->get('userId'), \PDO::PARAM_INT);
+		$req->bindValue('id', $post->get('postId'), \PDO::PARAM_INT);
+		$req->execute();
+	}
+
+	/**
 	 * Update post status (published = 2, unpublished = 1)
 	 * @param  Parameter $get [current status]
 	 * @return void
@@ -342,35 +372,6 @@ class PostManager extends Manager
 			$req->bindValue('postId', $get->get('id'), \PDO::PARAM_INT);
 			$req->bindValue('categoryId', $get->get('cat'), \PDO::PARAM_INT);
 		}
-		$req->execute();
-	}
-
-	/**
-	 * Update post informations in database
-	 * @param  Parameter $post [title, chapo, optional main_image]
-	 * @return void
-	 */
-	public function editPostInfos(Parameter $post)
-	{
-		$sql = 'UPDATE post SET post.title = :title, post.chapo = :chapo, ';
-
-		if ($post->get('main_image')) {
-			$sql .= ' post.main_image = :main_image, ';
-		}
-					
-		$sql .= 'date_update = NOW() WHERE post.id = :id';
-
-		if ($post->get('main_image')) {
-			$req = $this->dbRequest($sql, array($post->get('title'), $post->get('chapo'), $post->get('main_image'), $post->get('postId')));
-			$req->bindValue('main_image', $post->get('main_image'));
-		
-		} else {
-			$req = $this->dbRequest($sql, array($post->get('title'), $post->get('chapo'), $post->get('postId')));
-		}
-
-		$req->bindValue('title', $post->get('title'));
-		$req->bindValue('chapo', $post->get('chapo'));
-		$req->bindValue('id', $post->get('postId'), \PDO::PARAM_INT);
 		$req->execute();
 	}
 }

@@ -205,17 +205,20 @@ class AdminController extends Controller
 	 */
 	public function editPostView($postId, $errors = null)
 	{
+
 		$errorExists = $this->validation->exists('postId', $postId);
 
 		if (!$errorExists) {
 
 			$post = $this->postManager->getPostInfos($postId);
+			$users = $this->userManager->getUsers();
 			$post->setCategories($this->postManager->getPostsCategories($postId));
 			$contents = $this->contentManager->getContents($postId);
 			$unreadContactsNb = $this->contactManager->getContactsNb(1);
 
 			return $this->view->render('backend', 'editPostView', 
 				['postId' => $postId,
+				'users' => $users,
 				'post' => $post,
 				'contents' => $contents,
 				'unreadContactsNb' => $unreadContactsNb,

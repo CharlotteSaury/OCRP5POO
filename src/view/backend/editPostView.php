@@ -22,13 +22,26 @@
 
                     <div class="form-group">
                         <label for="post-title">Titre : </label>
-                        <input type="text" class="form-control" name="title" value="<?= htmlspecialchars($post->getTitle()); ?>" required/>
+                        <input type="text" class="form-control"  id="post-title" name="title" value="<?= htmlspecialchars($post->getTitle()); ?>" required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="post-author">Auteur : </label>
+                        <select class="form-control" name="userId" id="post-author">
+                        <?php
+                            foreach ($users as $user) {
+                                if ($user->getPseudo() == $post->getPseudo()) {
+                                    echo '<option value="' . $user->getId() . '" selected>' . $user->getPseudo() . ' - ' . $user->getRole() . '</option>';
+                                } else {
+                                    echo '<option value="' . $user->getId() . '"">' . $user->getPseudo() . ' - ' . $user->getRole() . '</option>';
+                                }
+                            }
+                        ?>
+                        </select>
                     </div>
 
                     <hr class="d-none d-lg-block ml-0">
 
                     <div class="post-content post-content-text text-black-50 text-justify">
-                        <p class="mb-0"><strong>Auteur : </strong><?= htmlspecialchars($post->getPseudo()); ?></p>
                         <p class="mb-0">le <?= htmlspecialchars($post->getDateCreation()); ?></p>
                         <p class="mb-0">Dernière modification le <?= htmlspecialchars($post->getDateUpdate()); ?></p>
                     </div>
