@@ -1,8 +1,8 @@
 <?php
 
-namespace src\constraint;
+namespace Src\Constraint;
 
-use config\Parameter;
+use Config\Parameter;
 
 /**
  * Class CategoryValidation

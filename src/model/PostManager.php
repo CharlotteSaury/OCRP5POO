@@ -1,8 +1,8 @@
 <?php
 
-namespace src\model;
+namespace Src\Model;
 
-use config\Parameter;
+use Config\Parameter;
 
 /**
  * Class PostManager
@@ -79,7 +79,7 @@ class PostManager extends Manager
 			$req = $this->dbRequest($sql);
 		}
 
-		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\src\entity\Post');
+		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Src\Entity\Post');
 		$posts = $req->fetchAll();
 		return $posts;
 	}
@@ -111,7 +111,7 @@ class PostManager extends Manager
 		}
 
 		$req = $this->dbRequest($sql);
-		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\src\entity\Post');
+		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Src\Entity\Post');
 		$posts = $req->fetchAll();
 		return $posts;
 	}
@@ -139,7 +139,7 @@ class PostManager extends Manager
 		$req = $this->dbRequest($sql, array($postId));
 		$req->bindValue(':id', $postId, \PDO::PARAM_INT);
 		$req->execute();
-		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\src\entity\Post');
+		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Src\Entity\Post');
 		$post = $req->fetch();
 		return $post;
 	}

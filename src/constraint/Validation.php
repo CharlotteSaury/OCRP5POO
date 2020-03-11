@@ -1,9 +1,9 @@
 <?php
 
-namespace src\constraint;
+namespace Src\Constraint;
 
-use src\constraint\Constraint;
-use config\Parameter;
+use Src\Constraint\Constraint;
+use Config\Parameter;
 
 
 /**
@@ -90,7 +90,7 @@ class Validation
             $validation = new PostValidation();
         
         } elseif ($name === 'Content') {
-            $vcvalidation = new ContentValidation();
+            $validation = new ContentValidation();
         
         } elseif ($name === 'Category') {
             $validation = new CategoryValidation();

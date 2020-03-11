@@ -3,7 +3,7 @@
 require_once 'config/dev.php';
 require_once 'vendor/autoload.php';
 
-use src\controller\Router;
+use Src\Controller\Router;
 
 if (
 	isset($_COOKIE['auth']) 

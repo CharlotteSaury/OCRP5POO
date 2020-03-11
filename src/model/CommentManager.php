@@ -1,8 +1,8 @@
 <?php
 
-namespace src\model;
+namespace Src\Model;
 
-use config\Parameter;
+use Config\Parameter;
 
 /**
  * Class CommentManager
@@ -46,7 +46,7 @@ class CommentManager extends Manager
 		}
 		
 		$req = $this->dbRequest($sql);
-		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\src\entity\Comment');
+		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Src\Entity\Comment');
 		$comments = $req->fetchAll();
 		return $comments;
 	}
@@ -72,7 +72,7 @@ class CommentManager extends Manager
 			JOIN post on comment.post_id = post.id';
 
 		if ($status != null) {
-			$sql .= ' WHERE comment.status=1 AND post.id= :id
+			$sql .= ' WHERE comment.status=2 AND post.id= :id
 			ORDER BY comment.comment_date DESC';
 		
 		} else {
@@ -83,7 +83,7 @@ class CommentManager extends Manager
 		$req = $this->dbRequest($sql, array($postId));
 		$req->bindValue(':id', $postId, \PDO::PARAM_INT);
 		$req->execute();
-		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\src\entity\Comment');
+		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Src\Entity\Comment');
 		$comments = $req->fetchAll();
 		return $comments;
 	}

@@ -1,10 +1,10 @@
 <?php
 
-namespace src\controller;
+namespace Src\Controller;
 
-use src\controller\Controller;
-use src\constraint\Validation;
-use config\Parameter;
+use Src\Controller\Controller;
+use Src\Constraint\Validation;
+use Config\Parameter;
 use Exception;
 
 /**

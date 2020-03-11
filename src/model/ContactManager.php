@@ -1,8 +1,8 @@
 <?php
 
-namespace src\model;
+namespace Src\Model;
 
-use config\Parameter;
+use Config\Parameter;
 
 /**
  * Class ContentManager
@@ -60,7 +60,7 @@ class ContactManager extends Manager
 			$req = $this->dbRequest($sql, array($contactId));
 			$req->bindValue('contactId', $contactId, \PDO::PARAM_INT);
 			$req->execute();
-			$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\src\entity\Contact');
+			$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Src\Entity\Contact');
 			$contacts = $req->fetch();
 		
 		} else {
@@ -73,7 +73,7 @@ class ContactManager extends Manager
 			}
 
 			$req = $this->dbRequest($sql);
-			$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\src\entity\Contact');
+			$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Src\Entity\Contact');
 			$contacts = $req->fetchAll();
 		}
 		return $contacts;
@@ -182,7 +182,7 @@ class ContactManager extends Manager
 		$req->bindValue('contactId', $contactId, \PDO::PARAM_INT);
 		$req->execute();
 
-		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\src\entity\Answer');
+		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Src\Entity\Answer');
 		
 		$answer = $req->fetch();
 		return $answer;

@@ -1,9 +1,8 @@
 <?php
 
-namespace src\entity;
+namespace Src\Entity;
 
-use src\entity\Entity;
-
+use Src\Entity\Entity;
 /**
  * Class Contact
  * 	Describes Contact entity 

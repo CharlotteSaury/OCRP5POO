@@ -1,12 +1,12 @@
 <?php
 
-namespace src\controller;
+namespace Src\Controller;
 
-use src\controller\Controller;
-use src\controller\HomeController;
-use config\Request;
-use config\Parameter;
-use config\Session;
+use Src\Controller\Controller;
+use Src\Controller\HomeController;
+use Config\Request;
+use Config\Parameter;
+use Config\Session;
 
 /**
  * Class UserController
