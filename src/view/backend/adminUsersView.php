@@ -29,7 +29,7 @@
 <div class="row">
 
     <div class="col-12">
-        <table class="table table-hover table-responsive">
+        <table class="table table-hover table-md-responsive">
             <thead>
                 <tr>
                     <th scope="col">Id</th>

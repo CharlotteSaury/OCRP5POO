@@ -12,8 +12,8 @@
             <h1 class="mx-auto mb-5 text-uppercase">Mot de passe oublié</h1>
             
             <?php
-            if (isset($message)) {
-                echo '<div class="adminMessage text-white-50 text-center">' . $message . '</div>';
+            if ($session->get('message')) {
+                echo '<div class="adminMessage text-white-50 text-center">' . $session->get('message') . '</div>';
             
             } else {
             ?>

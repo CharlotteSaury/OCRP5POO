@@ -2,6 +2,10 @@
 
 namespace config;
 
+/**
+ * Class File
+ * Manage $_FILES variables 
+ */
 class File
 {
     private $file;

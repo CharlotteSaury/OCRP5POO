@@ -4,8 +4,11 @@ namespace src\entity;
 
 use src\entity\Entity;
 
+/**
+ * Class Content
+ * 	Describes Content entity 
+ */
 class Content extends Entity
-
 {
 	private $postId;
 	private $contentTypeId;

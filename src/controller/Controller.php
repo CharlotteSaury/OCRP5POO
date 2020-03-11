@@ -13,15 +13,50 @@ use config\Parameter;
 use src\constraint\Validation;
 use Exception;
 
+/**
+ * Class Controller
+ * Generate new controllers 
+ */
 abstract class Controller
 {
+	/**
+	 * @var PostManager
+	 */
 	protected $postManager;
+
+	/**
+	 * @var CommentManager
+	 */
 	protected $commentManager;
+
+	/**
+	 * @var UserManager
+	 */
 	protected $userManager;
+
+	/**
+	 * @var ContactManager
+	 */
 	protected $contactManager;
+
+	/**
+	 * @var ContentManager
+	 */
 	protected $contentManager;
+
+	/**
+	 * @var View
+	 */
 	protected $view;
+
+	/**
+	 * @var Request
+	 */
 	protected $request;
+
+	/**
+	 * @var Validation
+	 */
 	protected $validation;
 
 	public function __construct()

@@ -4,6 +4,10 @@ namespace src\entity;
 
 use src\entity\Entity;
 
+/**
+ * Class Comment
+ * 	Describes Comment entity 
+ */
 class Comment extends Entity
 {
 	private $postId;

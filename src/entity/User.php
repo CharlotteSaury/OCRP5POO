@@ -4,6 +4,11 @@ namespace src\entity;
 
 use src\entity\Entity;
 
+
+/**
+ * Class User
+ * 	Describes User entity 
+ */
 class User extends Entity
 {
 	private $pseudo;
@@ -30,6 +35,7 @@ class User extends Entity
 
 	public function setPseudo($pseudo)
 	{
+
 		$this->pseudo = $pseudo;
 	}
 

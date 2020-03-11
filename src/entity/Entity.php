@@ -4,6 +4,10 @@ namespace src\entity;
 
 use src\entity\Entity;
 
+/**
+ * Abstract class Entity
+ * Hydrate daughter classes (User, Post, Comment...)
+ */
 abstract class Entity
 {
 	protected $id;

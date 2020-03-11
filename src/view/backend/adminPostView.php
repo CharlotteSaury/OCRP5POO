@@ -122,7 +122,7 @@
 
             <?php
             foreach($postComments as $comment) {
-                if ($comment->getStatus() == 0) {
+                if ($comment->getStatus() == 1) {
                     ?>
                     <div class="comment-content text-black-50 text-justify mt-4 mt-4 unapproved-comment">
                     <?php
@@ -141,7 +141,7 @@
                         </div>
                 
                 <?php
-                if ($comment->getStatus() == 0) {
+                if ($comment->getStatus() == 1) {
                     ?>
                     <div class="mt-2">
                         <a href='index.php?action=approveCommentView&id=<?= htmlspecialchars($comment->getId()); ?>&post=<?= htmlspecialchars($comment->getPostId()); ?>' class="btn btn-outline-dark btn-sm" title="Approuver">

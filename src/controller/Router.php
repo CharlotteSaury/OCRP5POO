@@ -11,14 +11,40 @@ use config\Request;
 
 use Exception;
 
-
+/**
+ * Class Router
+ * Redirect user request to corresponding controller
+ */
 class Router 
 {
+	/**
+	 * @var HomeController
+	 */
 	private $homeController;
+
+	/**
+	 * @var PostController
+	 */
 	private $postController;
+	
+	/**
+	 * @var UserController
+	 */
 	private $userController;
+
+	/**
+	 * @var AdminController
+	 */
 	private $adminController;
+
+	/**
+	 * @var ErrorController
+	 */
 	private $errorController;
+
+	/**
+	 * @var Request
+	 */
 	private $request;
 
 	public function __construct()
@@ -31,12 +57,21 @@ class Router
 		$this->request = new Request();
 	}
 
+	/**
+	 * Create new user session with email provided by cookies if user prealably checked "remember me " input of connexion form
+	 * @param  sring $email
+	 * @return void [redirect to routerRequest method]
+	 */
 	public function connexionAuto($email)
 	{
 		$this->userController->newUserSession($email);
 		$this->routerRequest();
 	}
 
+	/**
+	 * Get action asked by user in url and redirect to appropriate controller
+	 * @return void [redirect to appropriate controller]
+	 */
 	public function routerRequest()
 	{
 		$action = $this->request->getGet()->get('action');
@@ -129,7 +164,7 @@ class Router
 				
 				} elseif ($action === 'adminPosts' && $this->userController->adminAccess()) {
 
-					$this->adminController->adminPostsView($message = null, $this->request->getGet());
+					$this->adminController->adminPostsView($this->request->getGet());
 				
 				} elseif ($action === 'adminPostView' && $this->userController->adminAccess()) {
 
@@ -163,11 +198,10 @@ class Router
 						$this->adminController->addParagraph($post->get('postId'));
 					
 					} elseif ($post->get('addCategory')) {
-
 						$this->adminController->addCategory($post);
 					
 					} elseif ($post->get('updatePostInfos')) {
-
+						var_dump($post);
 						$this->adminController->editPostInfos($post);
 					
 					} elseif ($post->get('editContent')) {
@@ -213,7 +247,8 @@ class Router
 				
 				} elseif ($action === 'adminComments' && $this->userController->adminAccess()) {
 
-					$this->adminController->adminCommentsView($message = null, $this->request->getGet());
+					$get = $this->request->getGet();
+					$this->adminController->adminCommentsView($get);
 				
 				} elseif (
 					$action === 'approveComment'
@@ -259,7 +294,7 @@ class Router
 				
 				} elseif ($action === 'adminContacts' && $this->userController->adminAccess()) {
 
-					$this->adminController->adminContactsView($message = null, $this->request->getGet());
+					$this->adminController->adminContactsView($this->request->getGet());
 				
 				} elseif ($action === 'contactForm') {
 
@@ -295,7 +330,9 @@ class Router
 			$errorMessage = $e->getMessage();
 			$this->errorController->errorView($errorMessage);
 		}
+		$this->request->getSession()->remove('message');
 	}
+
 }
 
 

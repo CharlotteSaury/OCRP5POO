@@ -8,6 +8,10 @@ use src\model\ContactManager;
 use src\model\UserManager;
 use src\model\ContentManager;
 
+/**
+ * Class Constraint
+ * Manage validity constraints of form inputs
+ */
 class Constraint
 {
     private $postManager;
@@ -58,17 +62,17 @@ class Constraint
         }
     }
 
-    public function isString($name, $value)
-    {
-        if (!is_string($value)) {
-            return 'Le champ '. $name .' doit contenir des caractères alphabétiques.';
-        }
-    }
-
     public function containsLetter($name, $value)
     {
         if (!preg_match('#[a-zA-Z]+#', $value)) {
             return 'Le champ '. $name .' doit contenir au moins une lettre.';
+        }
+    }
+
+    public function containsOnlyLetter($name, $value)
+    {
+        if (!preg_match('#^[a-zA-Z]+$#', $value)) {
+            return 'Le champ '. $name .' ne doit contenir que des lettres.';
         }
     }
 

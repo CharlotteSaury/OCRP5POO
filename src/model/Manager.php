@@ -11,10 +11,20 @@ use src\entity\Comment;
 use config\Parameter;
 
 
+/**
+ * Class Manager
+ * Connexion to database and request managment
+ */
 abstract class Manager
 {
 	private $database;
 
+	/**
+	 * Database request
+	 * @param  string $sql    [SQL request]
+	 * @param  array $params [optional mixed type parameter regarding the method]
+	 * @return object PDOStatement
+	 */
 	protected function dbRequest($sql, $params = null)
 	{
 		if ($params == null) {
@@ -25,6 +35,10 @@ abstract class Manager
 		return $req;
 	}
 
+	/**
+	 * Database connexion
+	 * @return object PDO
+	 */
 	private function dbConnect()
 	{
 		if ($this->database == null) {

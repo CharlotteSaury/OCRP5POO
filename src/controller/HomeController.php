@@ -7,29 +7,50 @@ use config\Request;
 use config\Parameter;
 use config\File;
 
+/**
+ * Class HomeController
+ * Manage router to appropriate manager redirection associated with frontend actions
+ */
 class HomeController extends Controller
 
 {
-	public function indexView($message = null, $errors = null) 
+	/**
+	 * Home page
+	 * @param  array $errors  [optionnal error message]
+	 * @return void          [return home page view]
+	 */
+	public function indexView($errors = null) 
 	{
 		return $this->view->render('frontend', 'indexView', 
-			['message' => $message,
-			'session' => $this->request->getSession(),
+			['session' => $this->request->getSession(),
 			'errors' => $errors]); 
 	}
 	
+	/**
+	 * Legal Mention page
+	 * @return void [Legal Mention page]
+	 */
 	public function legalView()
 	{
 		return $this->view->render('frontend', 'legalView',
 			['session' => $this->request->getSession()]);
 	}
 
+	/**
+	 * Confidentiality policy page
+	 * @return void [Confidentiality policy page]
+	 */
 	public function confidentialityView()
 	{
 		return $this->view->render('frontend', 'confidentialityView',
 			['session' => $this->request->getSession()]);
 	}
 
+	/**
+	 * Check validity of contact form input, call contactManager to add new contact in database and call mailContactForm method to send a confirmation email to user and notification to administrator.
+	 * @param  Parameter $post [user name, email, subject and message]
+	 * @return void [Redirect to indexView with confirmation or error message]
+	 */
 	public function newContactForm(Parameter $post)
 	{
 		$errors = $this->validation->validate($post, 'Contact');
@@ -38,18 +59,24 @@ class HomeController extends Controller
 
 			$contactId = $this->contactManager->addNewContact($post);
 			$this->mailContactForm($post, $contactId);
-			$message = "Votre message a bien été envoyé. Nous vous remercions et vous recontacterons dans les plus brefs délais.";
-			$this->indexView($message);
+			$this->request->getSession()->set('message', "Votre message a bien été envoyé. Nous vous remercions et vous recontacterons dans les plus brefs délais.");
+			$this->indexView();
 		
 		} else {
-			$this->indexView($message = null, $errors);
+			$this->indexView($errors);
 		}
 		
 	}
 
+	/**
+	 * Send confirmation email to user after contact form user and notification email to administrator.
+	 * @param  Parameter $post      [name, email, subject, message]
+	 * @param  int    $contactId
+	 * @return void               
+	 */
 	public function mailContactForm(Parameter $post, $contactId)
 	{
-		// Email sent to administrator
+		// Notification email sent to administrator
 
 		$mailSubject = "Blog : Nouveau message via le formulaire de contact.";
 		$mailMessage = "De : " . $post->get('name') . " <" . $post->get('email') . ">\r\n
@@ -79,6 +106,12 @@ class HomeController extends Controller
 		mail($post->get('email'), $mailSubject, $mailMessage, $headers);
 	}
 
+	/**
+	 * Upload picture after error and size/ file extension validity check
+	 * @param  string $namePicture [name of file input]
+	 * @return sring $uploadResults [$uploadResults  = picture url of error message]              
+	 *
+	 */
 	public function pictureUpload($namePicture)
 	{
 		$file = $this->request->getFile();

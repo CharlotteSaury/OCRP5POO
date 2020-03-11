@@ -1,19 +1,16 @@
 <?php
 
 namespace src\constraint;
+
 use config\Parameter;
 
-
+/**
+ * Class UserValidation
+ * Manage input validity for user profile form
+ */
 class UserValidation extends Validation
 {
-    private $errors = [];
-    private $constraint;
-    private $userId;
-
-    public function __construct()
-    {
-        $this->constraint = new Constraint();
-    }
+    protected $userId;
 
     public function check(Parameter $post)
     {
@@ -22,57 +19,9 @@ class UserValidation extends Validation
             $this->checkField($key, $value);
         }
         return $this->errors;
-    }
+    }   
 
-    private function checkField($name, $value)
-    {
-        if ($name === 'pseudo') {
-            $error = $this->checkPseudo($name, $value);
-            $this->addError($name, $error);
-        
-        } elseif ($name === 'first_name' || $name === 'last_name') {
-            $error = $this->checkName($name, $value);
-            $this->addError($name, $error);
-        
-        } elseif ($name === 'birth_date') {
-            $error = $this->checkBirthDate($name, $value);
-            $this->addError($name, $error);
-        
-        } elseif ($name === 'home') {
-            $error = $this->checkHome($name, $value);
-            $this->addError($name, $error);
-        
-        } elseif ($name === 'user_about') {
-            $error = $this->checkUserAbout($name, $value);
-            $this->addError($name, $error);
-        
-        } elseif ($name === 'email') {
-            $error = $this->checkEmail($name, $value);
-            $this->addError($name, $error);
-        
-        } elseif ($name === 'mobile') {
-            $error = $this->checkMobile($name, $value);
-            $this->addError($name, $error);
-        
-        } elseif ($name === 'website') {
-            $error = $this->checkWebsite($name, $value);
-            $this->addError($name, $error);
-        
-        } elseif ($name === 'user_role_id') {
-            $error = $this->checkUserRoleId($name, $value);
-            $this->addError($name, $error);
-        }
-    }    
-
-    private function addError($name, $error) 
-    {
-        if ($error) {[
-            $this->errors += [$name => $error]
-        ];
-        }
-    }
-
-    private function checkPseudo($name, $value)
+    protected function checkPseudo($name, $value)
     {
         if ($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('pseudo', $value);
@@ -91,32 +40,43 @@ class UserValidation extends Validation
         }
     }
 
-    private function checkName($name, $value)
+    protected function checkFirst_name($name, $value)
     {
         if ($this->constraint->maxLength($name, $value, 255)) {
-            return $this->constraint->maxLength('nom/prénom', $value, 255);
+            return $this->constraint->maxLength('prénom', $value, 255);
         }
 
-        if ($this->constraint->isString($name, $value)) {
-            return $this->constraint->maxLength('nom/prénom', $value);
+        if ($this->constraint->containsOnlyLetter($name, $value)) {
+            return $this->constraint->containsOnlyLetter('prénom', $value);
         }
     }
 
-    private function checkHome($name, $value)
+    protected function checkLast_name($name, $value)
+    {
+        if ($this->constraint->maxLength($name, $value, 255)) {
+            return $this->constraint->maxLength('nom', $value, 255);
+        }
+
+        if ($this->constraint->containsOnlyLetter($name, $value)) {
+            return $this->constraint->containsOnlyLetter('nom', $value);
+        }
+    }
+
+    protected function checkHome($name, $value)
     {
         if ($this->constraint->maxLength($name, $value, 50)) {
             return $this->constraint->maxLength('home', $value, 50);
         }
     }
 
-    private function checkUserAbout($name, $value)
+    protected function checkUser_about($name, $value)
     {
         if ($this->constraint->maxLength($name, $value, 1000)) {
             return $this->constraint->maxLength('"A propos de moi"', $value, 1000);
         }
     }
 
-    private function checkEmail($name, $value)
+    protected function checkEmail($name, $value)
     {
         if ($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('email', $value);
@@ -130,7 +90,7 @@ class UserValidation extends Validation
             return $this->constraint->emailExists($name, $value, $this->userId);
         }
 
-    private function checkMobile($name, $value)
+    protected function checkMobile($name, $value)
     {
         if ($value != '') {
             if ($this->constraint->isMobile($name, $value)) {
@@ -140,14 +100,14 @@ class UserValidation extends Validation
         
     }
 
-    private function checkWebsite($name, $value)
+    protected function checkWebsite($name, $value)
     {
         if ($this->constraint->maxLength($name, $value, 100)) {
             return $this->constraint->maxLength('website', $value, 100);
         }
     }
 
-    private function checkBirthDate($name, $value)
+    protected function checkBirth_date($name, $value)
     {
         if ($value != '') {
             if ($this->constraint->hasBirthdateFormat($name, $value)) {
@@ -160,7 +120,7 @@ class UserValidation extends Validation
         }
     }
 
-    private function checkUserRoleId($name, $value)
+    protected function checkUser_role_id($name, $value)
     {
         if ($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('email', $value);

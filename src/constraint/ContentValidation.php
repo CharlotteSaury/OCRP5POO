@@ -1,19 +1,15 @@
 <?php
 
 namespace src\constraint;
+
 use config\Parameter;
 
-
+/**
+ * Class ContentValidation
+ * Manage input validity for content form
+ */
 class ContentValidation extends Validation
 {
-    private $errors = [];
-    private $constraint;
-
-    public function __construct()
-    {
-        $this->constraint = new Constraint();
-    }
-
     public function check(Parameter $post)
     {
         $contentId = $post->get('editContent');
@@ -24,28 +20,7 @@ class ContentValidation extends Validation
         return $this->errors;
     }
 
-    private function checkField($name, $value)
-    {
-        if ($name === 'content') 
-        {
-            $error = $this->checkContent($name, $value);
-            $this->addError($name, $error);
-        
-        } elseif ($name === 'contentId') {
-            $error = $this->checkContentId($name, $value);
-            $this->addError($name, $error);
-        }
-    }
-
-    private function addError($name, $error) {
-        if ($error) {
-            $this->errors += [
-                $name => $error
-            ];
-        }
-    }
-
-    private function checkContent($name, $value)
+    protected function checkContent($name, $value)
     {
         if ($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('paragraphe', $value);
@@ -60,7 +35,7 @@ class ContentValidation extends Validation
         }
     }
 
-    private function checkContentId($name, $value)
+    protected function checkContentId($name, $value)
     {
         if ($this->constraint->exists($name, $value)) {
             return $this->constraint->exists('contentId', $value);

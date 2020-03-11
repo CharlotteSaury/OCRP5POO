@@ -1,56 +1,16 @@
 <?php
 
 namespace src\constraint;
+
 use config\Parameter;
 
-
+/**
+ * Class AnswerValidation
+ * Manage input validity for answer form
+ */
 class AnswerValidation extends Validation
 {
-    private $errors = [];
-    private $constraint;
-
-    public function __construct()
-    {
-        $this->constraint = new Constraint();
-    }
-
-    public function check(Parameter $post)
-    {
-        foreach ($post->all() as $key => $value) {
-            $this->checkField($key, $value);
-        }
-        return $this->errors;
-    }
-
-    private function checkField($name, $value)
-    {
-        if ($name === 'answerSubject') {
-            $error = $this->checkAnswerSubject($name, $value);
-            $this->addError($name, $error);
-        
-        } elseif ($name === 'email') {
-            $error = $this->checkEmail($name, $value);
-            $this->addError($name, $error);
-        
-        } elseif ($name === 'contactId') {
-            $error = $this->checkContactId($name, $value);
-            $this->addError($name, $error);
-        
-        } elseif ($name === 'answerContent') {
-            $error = $this->checkAnswerContent($name, $value);
-            $this->addError($name, $error);
-        }
-    }
-
-    private function addError($name, $error) {
-        if ($error) {
-            $this->errors += [
-                $name => $error
-            ];
-        }
-    }
-
-    private function checkAnswerSubject($name, $value)
+    protected function checkAnswerSubject($name, $value)
     {
         if ($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('objet', $value);
@@ -65,7 +25,7 @@ class AnswerValidation extends Validation
         }
     }
 
-    private function checkEmail($name, $value)
+    protected function checkEmail($name, $value)
     {
         if ($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('email', $value);
@@ -76,7 +36,7 @@ class AnswerValidation extends Validation
         }
     }
 
-    private function checkAnswerContent($name, $value)
+    protected function checkAnswerContent($name, $value)
     {
         if ($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('contenu', $value);
@@ -91,7 +51,7 @@ class AnswerValidation extends Validation
         }
     }
 
-    private function checkContactId($name, $value)
+    protected function checkContactId($name, $value)
     {
         if ($this->constraint->exists($name, $value)) {
             return $this->constraint->exists('contactId', $value);

@@ -11,7 +11,7 @@
 
 <div class="row mb-5">
     <div class="col-12">
-        <a href="index.php?action=adminPosts">Tous (<?= $totalPostsNb ?>)</a> | <a href="index.php?action=adminPosts&sort=unpublished">Non publiés (<?= $unpublishedPostsNb ?>)</a>
+        <a href="index.php?action=adminPosts">Tous (<?= $totalPostsNb ?>)</a> | <a href="index.php?action=adminPosts&status=1">Non publiés (<?= $unpublishedPostsNb ?>)</a>
     </div>
     <div class="col-12 mb-3">
         Trier par date
@@ -19,7 +19,7 @@
         <?php
         if (isset($get)) {
 
-            if (!$get->get('sort')) {
+            if (!$get->get('status')) {
 
                 if (!$get->get('date')) {
 
@@ -32,14 +32,14 @@
                    }
                }
             } else {
-                if ($get->get('sort') == 'unpublished') {
+                if ($get->get('status') == 1) {
 
                     if (!$get->get('date')) {
-                        echo '<a href="index.php?action=adminPosts&sort=unpublished&date=asc" title="Trier du plus ancien au plus récent"><i class="fas fa-sort-down fa-2x ml-2"></i></a>';
+                        echo '<a href="index.php?action=adminPosts&status=1&date=asc" title="Trier du plus ancien au plus récent"><i class="fas fa-sort-down fa-2x ml-2"></i></a>';
                     
                     } else {
                         if ($get->get('date') == 'asc') {
-                           echo '<a href="index.php?action=adminPosts&sort=unpublished" title="Trier du plus récent au plus ancien"><i class="fas fa-sort-up fa-2x ml-2 mb-0"></i></a>';
+                           echo '<a href="index.php?action=adminPosts&status=1" title="Trier du plus récent au plus ancien"><i class="fas fa-sort-up fa-2x ml-2 mb-0"></i></a>';
                        }
                    }
                }
@@ -86,14 +86,14 @@
                     if ($post->getStatus() == 2) {
                         ?>
 
-                        <td><a href="index.php?action=publishPost&amp;id=<?= htmlspecialchars($post->getId()); ?>&amp;status=<?= htmlspecialchars($post->getStatus()); ?>" title="Ne plus publier"><i class="fas fa-toggle-on"></i></a></td>
+                        <td><a href="index.php?action=publishPost&amp;id=<?= htmlspecialchars($post->getId()); ?>&amp;currstatus=<?= htmlspecialchars($post->getStatus()); ?>" title="Ne plus publier"><i class="fas fa-toggle-on"></i></a></td>
                         
                         <?php
                     
                     } else {
                         ?>
 
-                        <td><a href="index.php?action=publishPost&amp;id=<?= htmlspecialchars($post->getId()); ?>&amp;status=<?= htmlspecialchars($post->getStatus()); ?>" title="Publier"><i class="fas fa-toggle-off"></i></a></td>
+                        <td><a href="index.php?action=publishPost&amp;id=<?= htmlspecialchars($post->getId()); ?>&amp;currstatus=<?= htmlspecialchars($post->getStatus()); ?>" title="Publier"><i class="fas fa-toggle-off"></i></a></td>
                         
                         <?php
                     }

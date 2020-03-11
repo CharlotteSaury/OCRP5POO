@@ -4,6 +4,10 @@ namespace config;
 
 use Exception;
 
+/**
+ * Class Parameter
+ * Manage $_GET and $_POST variables 
+ */
 class Parameter
 {
 	private $parameter;

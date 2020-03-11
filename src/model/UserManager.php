@@ -4,8 +4,18 @@ namespace src\model;
 
 use config\Parameter;
 
+/**
+ * Class UserManager
+ * Manage database requests related to users
+ */
 class UserManager extends Manager
 {
+	/**
+	 * Get users from database according to user role
+	 * @param  int $usersNb    [optional users number to get]
+	 * @param  int $userRoleId [optional user role id (admin = 1, user = 2, super-admin = 3)]
+	 * @return objects User
+	 */
 	public function getUsers($usersNb = null, $userRoleId = null)
 	{
 		$sql = 'SELECT user.id AS id,
@@ -34,6 +44,12 @@ class UserManager extends Manager
 		return $users;
 	}
 
+	/**
+	 * Get single user from database with userId or email
+	 * @param  int $userId 
+	 * @param  sring $email  
+	 * @return object User
+	 */
 	public function getUser($userId = null, $email = null)
 	{
 		$sql = 'SELECT user.id AS id,
@@ -75,13 +91,14 @@ class UserManager extends Manager
 		return $user;
 	}
 
-	public function addUser ($post)
+	/**
+	 * Add new user in database
+	 * @param Parameter $post [pseudo, email, password]
+	 * @param int $activation_code
+	 * @return void
+	 */
+	public function addUser (Parameter $post, $activation_code)
 	{
-		// Activation_code generation
-		$permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz';
-		$random_code = substr(str_shuffle($permitted_chars), 0, 10);
-		$activation_code = password_hash($random_code, PASSWORD_DEFAULT);
-
 		$sql = 'INSERT INTO user 
 				(pseudo, email, password, user_role_id, register_date, activation_code, avatar)
 				VALUES 
@@ -92,11 +109,15 @@ class UserManager extends Manager
 		$req->bindValue('email', $post->get('email'));
 		$req->bindValue('pass', $post->get('pass'));
 		$req->bindValue('activation_code', $activation_code);
-
 		$req->execute();
-		return $activation_code;
 	}
 
+	/**
+	 * Check if a pseuso exists in database and is related to a user (optional)
+	 * @param  string $pseudo
+	 * @param  int $userId [optional]
+	 * @return int [return 1 if pseudo exists in database]
+	 */
 	public function pseudoExists($pseudo, $userId = null)
 	{
 		$sql = 'SELECT COUNT(*) AS nbUser FROM user WHERE pseudo = :pseudo';
@@ -116,6 +137,12 @@ class UserManager extends Manager
 		return $pseudoExists;
 	}
 
+	/**
+	 * Check if a email exists in database and is related to a user (optional)
+	 * @param  string $email
+	 * @param  int $userId [optional]
+	 * @return int [return 1 if email exists in database]
+	 */
 	public function emailExists($email, $userId = null)
 	{
 		$sql = 'SELECT COUNT(*) AS nbUser FROM user WHERE email = :email';
@@ -135,6 +162,11 @@ class UserManager extends Manager
 		return $emailExists;
 	}
 
+	/**
+	 * Delete activation code from user database
+	 * @param  string $email 
+	 * @return void
+	 */
 	public function userActivation($email)
 	{
 		$sql = 'UPDATE user SET activation_code = null WHERE email = :email';
@@ -144,6 +176,12 @@ class UserManager extends Manager
 		$req->execute();
 	}
 
+	/**
+	 * Insert reinitialization password code in user table 
+	 * @param  string $email       
+	 * @param  string $reinit_code 
+	 * @return void
+	 */
 	public function newPassCode($email, $reinit_code)
 	{
 		$sql = 'UPDATE user SET reinitialization_code = :reinitialization_code
@@ -155,6 +193,12 @@ class UserManager extends Manager
 		$req->execute();
 	}
 
+	/**
+	 * Update user password in database and delete password reinitialization code
+	 * @param  string $email 
+	 * @param  string $newPass [new hashed password]
+	 * @return void
+	 */
 	public function newUserPass($email, $newPass)
 	{
 		$sql = 'UPDATE user SET password = :newPass, reinitialization_code = null WHERE email = :email';
@@ -164,6 +208,11 @@ class UserManager extends Manager
 		$req->execute();
 	}
 
+	/**
+	 * Get users number regarding to their role id
+	 * @param  int $userRoleId [amdin = 1, user = 2, super-admin = 3]
+	 * @return int [users number]
+	 */
 	public function getUserNb($userRoleId = null)
 	{
 		$sql = 'SELECT COUNT(*) AS usersNb FROM user';
@@ -177,6 +226,11 @@ class UserManager extends Manager
 		return $usersNb;
 	}
 
+	/**
+	 * Update user infos in database
+	 * @param  Parameter $post [pseudo, first_name, last_name, birth_date, home, mobile, website...]
+	 * @return void
+	 */
 	public function editUserInfos(Parameter $post)
 	{
 		$sql = 'UPDATE user SET';
@@ -206,6 +260,11 @@ class UserManager extends Manager
 		$req->execute();
 	}
 
+	/**
+	 * Delete birthdate user in database
+	 * @param  int $userId 
+	 * @return void
+	 */
 	public function deleteBirthDate($userId)
 	{
 		$sql = 'UPDATE user SET birth_date = NULL WHERE user.id = :userId';
@@ -215,6 +274,12 @@ class UserManager extends Manager
 		$req->execute();
 	}
 
+	/**
+	 * Update user profile picture
+	 * @param  int $userId    
+	 * @param  string $avatarUrl 
+	 * @return void
+	 */
 	public function updateProfilePicture($userId, $avatarUrl)
 	{
 		$sql = 'UPDATE user SET avatar = :avatarUrl WHERE id = :userId';

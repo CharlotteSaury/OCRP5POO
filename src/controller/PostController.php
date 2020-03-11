@@ -7,9 +7,18 @@ use src\constraint\Validation;
 use config\Parameter;
 use Exception;
 
+/**
+ * Class PostController
+ * Manage router to appropriate manager redirection associated with post actions
+ */
 class PostController extends Controller
 
 {
+	/**
+	 * Get sorting information from url used in posts list view
+	 * @param  Parameter $get [optional page number, optional postsPerPage number]
+	 * @return array [current page and posts per page number]
+	 */
 	public function listPostSorting(Parameter $get)
 	{
 		if ($get->get('page')) {
@@ -42,14 +51,19 @@ class PostController extends Controller
 		return [$current_page, $postsPerPage];
 	}
 
+	/**
+	 * Generate posts list page
+	 * @param  Parameter|null $get [optional sorting informations]
+	 * @return void
+	 */
 	public function listPostView(Parameter $get = null)
 	{
 		$sorting = $this->listPostSorting($get);
 		$current_page = $sorting[0];
 		$postsPerPage = $sorting[1];
 		$publishedPostsNb = $this->postManager->getPostsNb(2);
-		$page_number = $this->postManager->getPagination($postsPerPage, $publishedPostsNb);
-		$first_post = $this->postManager->getFirstPost($current_page, $postsPerPage);
+		$page_number = ceil((int)$publishedPostsNb/$postsPerPage);
+		$first_post = $current_page*$postsPerPage-$postsPerPage;
 		$posts = $this->postManager->getPosts(2, $first_post, $postsPerPage);
 
 		$allPostsCategories = $this->postManager->getPostsCategories();
@@ -73,7 +87,13 @@ class PostController extends Controller
 			'get' => $get]);
 	}
 
-	public function postView($postId, $messageComment = null, $errors = null)
+	/**
+	 * Generate single post page
+	 * @param  int $postId 
+	 * @param  array $errors [optional error messages after comment sending]
+	 * @return void
+	 */
+	public function postView($postId, $errors = null)
 	{
 		$errorExists = $this->validation->exists('postId', $postId);
 
@@ -81,8 +101,8 @@ class PostController extends Controller
 
 			$post = $this->postManager->getPostInfos($postId);
 			$post->setCategories($this->postManager->getPostsCategories($postId));
-			$contents = $this->contentManager->getPostContents($postId);
-			$postComments = $this->commentManager->getpostComments($postId, 1);
+			$contents = $this->contentManager->getContents($postId);
+			$postComments = $this->commentManager->getpostComments($postId, 2);
 			$recentPosts = $this->postManager->getRecentPosts(2);
 
 			return $this->view->render('frontend', 'postView',
@@ -91,7 +111,6 @@ class PostController extends Controller
 				'contents' => $contents,
 				'postComments' => $postComments,
 				'recentPosts' => $recentPosts,
-				'messageComment' => $messageComment,
 				'session' => $this->request->getSession(),
 				'errors' => $errors]);
 		
@@ -101,6 +120,12 @@ class PostController extends Controller
 		
 	}
 
+	/**
+	 * Check validity of comment form input
+	 * @param Parameter $post [comment content]
+	 * @param int $userId
+	 * @return  void [redirect to postView]
+	 */
 	public function addComment(Parameter $post, $userId)
 	{
 		$errors = $this->validation->validate($post, 'Comment');
@@ -108,8 +133,8 @@ class PostController extends Controller
 		if (!$errors) {
 
 			$this->commentManager->addComment($post, $userId);
-			$messageComment = 'Votre commentaire a bien été envoyé, et est en attente de validation.';
-			$this->postView($post->get('postId'), $messageComment);
+			$this->request->getSession()->set('message', 'Votre commentaire a bien été envoyé, et est en attente de validation.');
+			$this->postView($post->get('postId'));
 		
 		} else {
 			
@@ -117,7 +142,7 @@ class PostController extends Controller
 				throw new Exception($errors['postId']);
 			
 			} else {
-				$this->postView($post->get('postId'), $messageComment = null, $errors);
+				$this->postView($post->get('postId'), $errors);
 			}
 		}
 	}

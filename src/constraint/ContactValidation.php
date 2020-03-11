@@ -1,56 +1,16 @@
 <?php
 
 namespace src\constraint;
+
 use config\Parameter;
 
-
+/**
+ * Class ContactValidation
+ * Manage input validity for contact form
+ */
 class ContactValidation extends Validation
 {
-    private $errors = [];
-    private $constraint;
-
-    public function __construct()
-    {
-        $this->constraint = new Constraint();
-    }
-
-    public function check(Parameter $post)
-    {
-        foreach ($post->all() as $key => $value) {
-            $this->checkField($key, $value);
-        }
-        return $this->errors;
-    }
-
-    private function checkField($name, $value)
-    {
-        if ($name === 'name') {
-            $error = $this->checkName($name, $value);
-            $this->addError($name, $error);
-        
-        } elseif ($name === 'email') {
-            $error = $this->checkEmail($name, $value);
-            $this->addError($name, $error);
-        
-        } elseif ($name === 'subject') {
-            $error = $this->checkSubject($name, $value);
-            $this->addError($name, $error);
-        
-        } elseif ($name === 'content') {
-            $error = $this->checkContent($name, $value);
-            $this->addError($name, $error);
-        }
-    }
-
-    private function addError($name, $error) {
-        if ($error) {
-            $this->errors += [
-                $name => $error
-            ];
-        }
-    }
-
-    private function checkName($name, $value)
+    protected function checkName($name, $value)
     {
         if ($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('Nom', $value);
@@ -63,9 +23,13 @@ class ContactValidation extends Validation
         if ($this->constraint->maxLength($name, $value, 255)) {
             return $this->constraint->maxLength('Nom', $value, 255);
         }
+
+        if ($this->constraint->containsOnlyLetter($name, $value)) {
+            return $this->constraint->containsOnlyLetter('Nom', $value);
+        }
     }
 
-    private function checkEmail($name, $value)
+    protected function checkEmail($name, $value)
     {
         if ($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('email', $value);
@@ -76,7 +40,7 @@ class ContactValidation extends Validation
         }
     }
 
-    private function checkSubject($name, $value)
+    protected function checkSubject($name, $value)
     {
         if ($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('objet', $value);
@@ -91,7 +55,7 @@ class ContactValidation extends Validation
         }
     }
 
-    private function checkContent($name, $value)
+    protected function checkContent($name, $value)
     {
         if ($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('contenu', $value);

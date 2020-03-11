@@ -112,13 +112,13 @@
                                 if ($post->getStatus() == 2) {
                                     ?>
 
-                                    <a href="index.php?action=publishPostDashboard&amp;id=<?= htmlspecialchars($post->getId()); ?>&amp;status=<?= htmlspecialchars($post->getStatus()); ?>" class="mr-2" title="Ne plus publier"><i class="fas fa-toggle-on"></i></a>
+                                    <a href="index.php?action=publishPostDashboard&amp;id=<?= htmlspecialchars($post->getId()); ?>&amp;currstatus=<?= htmlspecialchars($post->getStatus()); ?>" class="mr-2" title="Ne plus publier"><i class="fas fa-toggle-on"></i></a>
 
                                     <?php
                                 } else {
                                     ?>
 
-                                    <a href="index.php?action=publishPostDashboard&amp;id=<?= htmlspecialchars($post->getId()); ?>&amp;status=<?= htmlspecialchars($post->getStatus()); ?>" class="mr-2"><i class="fas fa-toggle-off" title="Publier"></i></a>
+                                    <a href="index.php?action=publishPostDashboard&amp;id=<?= htmlspecialchars($post->getId()); ?>&amp;currstatus=<?= htmlspecialchars($post->getStatus()); ?>" class="mr-2"><i class="fas fa-toggle-off" title="Publier"></i></a>
 
                                     <?php
                                 }
@@ -196,7 +196,7 @@
                             <?php
 
                             foreach($recentComments as $comment) {
-                                if ($comment->getStatus() == 1) {
+                                if ($comment->getStatus() == 2) {
                                     echo '<tr>';
                                 } else {
                                     echo '<tr class="table-success-custom">';
@@ -212,7 +212,7 @@
                                     </a>
                                     
                                     <?php
-                                    if ($comment->getStatus() == 0) {
+                                    if ($comment->getStatus() == 1) {
                                         ?>
 
                                         <a href="index.php?action=approveCommentDashboard&amp;id=<?= htmlspecialchars($comment->getId()); ?>" class="btn btn-outline-dark btn-sm" title="Approuver">

@@ -1,33 +1,20 @@
 <?php
 
 namespace src\constraint;
+
 use config\Parameter;
 
-
+/**
+ * Class ExistsValidation
+ * Manage validity of entities (Post, User, Contact...)
+ */
 class ExistsValidation extends Validation
 {
-    private $errors = [];
-    private $constraint;
-
-    public function __construct()
-    {
-        $this->constraint = new Constraint();
-    }
-
-    public function check($name, $value)
+    public function checkExists($name, $value)
     {
         $error = $this->checkId($name, $value);
         $this->addError($name, $error);
         return $this->errors;
-    }
-
-    private function addError($name, $error) 
-    {
-        if ($error) {
-            $this->errors += [
-                $name => $error
-            ];
-        }
     }
 
     private function checkId($name, $value)

@@ -4,6 +4,10 @@ namespace src\entity;
 
 use src\entity\Entity;
 
+/**
+ * Class Post
+ * 	Describes Post entity 
+ */
 class Post extends Entity
 
 {

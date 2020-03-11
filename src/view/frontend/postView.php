@@ -85,8 +85,8 @@
                 <hr class="d-none d-lg-block ml-0">
 
                 <?php
-                if (isset($messageComment)) {
-                    echo '<div class="adminMessage text-dark-50 text-center">' . $messageComment . '</div>';
+                if ($session->get('message')) {
+                    echo '<div class="adminMessage text-dark-50 text-center">' . $session->get('message') . '</div>';
                 }
 
                 if (isset($errors['content'])) {

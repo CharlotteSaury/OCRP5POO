@@ -130,7 +130,7 @@
                             
                             } elseif (!$get->get('page') && $page_number > 1) {
                                 ?>
-                                <a class="page-link" href="index.php?action=listPosts&page=2&amp;postsPerPage=<?= $postsPerPage; ?>#posts-list" aria-label="Next">';
+                                <a class="page-link" href="index.php?action=listPosts&page=2&amp;postsPerPage=<?= $postsPerPage; ?>#posts-list" aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                     <span class="sr-only">Next</span>
                                 </a>

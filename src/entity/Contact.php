@@ -4,6 +4,10 @@ namespace src\entity;
 
 use src\entity\Entity;
 
+/**
+ * Class Contact
+ * 	Describes Contact entity 
+ */
 class Contact extends Entity
 {
 	private $name;

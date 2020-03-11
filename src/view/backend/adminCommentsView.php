@@ -11,14 +11,14 @@
 
 <div class="row mb-5">
     <div class="col-12">
-        <a href="index.php?action=adminComments">Tous (<?= $totalCommentsNb ?>)</a> | <a href="index.php?action=adminComments&sort=unapproved">Non approuvés (<?= $unapprovedCommentsNb ?>)</a>
+        <a href="index.php?action=adminComments">Tous (<?= $totalCommentsNb ?>)</a> | <a href="index.php?action=adminComments&status=1">Non approuvés (<?= $unapprovedCommentsNb ?>)</a>
     </div>
     <div class="col-12">
-        trier par date 
+        Trier par date 
 
         <?php
         if (isset($get)) {
-            if (!$get->get('sort')) {
+            if (!$get->get('status')) {
 
                 if (!$get->get('date')) {
                     echo '<a href="index.php?action=adminComments&date=asc" title="Trier du plus ancien au plus récent"><i class="fas fa-sort-down fa-2x ml-2"></i></a>';
@@ -31,13 +31,13 @@
                 }
             } else {
 
-                if ($get->get('sort') == 'unapproved') {
+                if ($get->get('status') == 1) {
 
                     if (!$get->get('date')) {
-                        echo '<a href="index.php?action=adminComments&sort=unapproved&date=asc" title="Trier du plus ancien au plus récent"><i class="fas fa-sort-down fa-2x ml-2"></i></a>';
+                        echo '<a href="index.php?action=adminComments&status=1&date=asc" title="Trier du plus ancien au plus récent"><i class="fas fa-sort-down fa-2x ml-2"></i></a>';
                     } else {
                         if ($get->get('date') == 'asc') {
-                            echo '<a href="index.php?action=adminComments&sort=unapproved" title="Trier du plus récent au plus ancien"><i class="fas fa-sort-up fa-2x ml-2 mb-0"></i></a>';
+                            echo '<a href="index.php?action=adminComments&status=1" title="Trier du plus récent au plus ancien"><i class="fas fa-sort-up fa-2x ml-2 mb-0"></i></a>';
                         }
                     }
                 }
@@ -70,7 +70,7 @@
                 <?php
 
                 foreach($allComments as $comment) {
-                    if ($comment->getStatus() == 1) {
+                    if ($comment->getStatus() == 2) {
                         echo '<tr>';
                     } else {
                         echo '<tr class="table-success-custom">';
@@ -87,7 +87,7 @@
                         </a>
 
                         <?php
-                        if ($comment->getStatus() == 0) {
+                        if ($comment->getStatus() == 1) {
                             ?>
 
                             <a href="index.php?action=approveComment&amp;id=<?= htmlspecialchars($comment->getId()); ?>" class="btn btn-outline-dark btn-sm" title="Approuver">

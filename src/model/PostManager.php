@@ -4,8 +4,17 @@ namespace src\model;
 
 use config\Parameter;
 
+/**
+ * Class PostManager
+ * Manage database requests related to posts
+ */
 class PostManager extends Manager
 {
+	/**
+	 * Get posts number according to status
+	 * @param  int $status [optional status : published (2) or not (1)]
+	 * @return int         [posts number]
+	 */
 	public function getPostsNb($status = null)
 	{
 		$sql = 'SELECT COUNT(*) AS postsNb FROM post';
@@ -24,19 +33,14 @@ class PostManager extends Manager
 		return $postsNb;
 	}
 
-	public function getPagination($postsPerPage, $postsNb)
-	{
-		// required page number
-		$page_number = ceil((int)$postsNb/$postsPerPage);
- 		return $page_number;
-	}
-
-	public function getFirstPost($current_page, $postsPerPage)
-	{
-		$first_post = $current_page*$postsPerPage-$postsPerPage;
-		return $first_post;
-	}
-
+	/**
+	 * Get posts from database according to their status or sorting informations
+	 * @param  int $status       [optional post status published = 2, unpublished = 1]
+	 * @param  int $first_post   [optional first post of page to display]
+	 * @param  int $postsPerPage [optionnal number of posts per page]
+	 * @param  string $sortingDate  [optional sorting by date ASC]
+	 * @return objects Post
+	 */
 	public function getPosts($status = null, $first_post = null, $postsPerPage = null, $sortingDate = null)
 	{
 		$sql = 'SELECT post.id AS id, 
@@ -48,7 +52,7 @@ class PostManager extends Manager
 			post.main_image AS mainImage,
 			user.pseudo AS pseudo,
 			user.avatar AS avatar,
-			(SELECT COUNT(*) FROM comment WHERE post.id = comment.post_id AND comment.status = 1) AS approvedCommentsNb,
+			(SELECT COUNT(*) FROM comment WHERE post.id = comment.post_id AND comment.status = 2) AS approvedCommentsNb,
             (SELECT COUNT(*) FROM comment WHERE post.id = comment.post_id) AS commentsNb
             FROM post 
 			JOIN user ON post.user_id = user.id';
@@ -80,6 +84,11 @@ class PostManager extends Manager
 		return $posts;
 	}
 
+	/**
+	 * Get last published posts
+	 * @param  int $status [optional status : published = 2, unpublished = 1]
+	 * @return objects Post
+	 */
 	public function getRecentPosts($status = null)
 	{
 		$sql = 'SELECT post.id AS id, 
@@ -107,6 +116,11 @@ class PostManager extends Manager
 		return $posts;
 	}
 
+	/**
+	 * Get single post
+	 * @param  int $postId 
+	 * @return object Post
+	 */
 	public function getPostInfos($postId)
 	{
 		$sql = 'SELECT post.id AS id,
@@ -130,6 +144,11 @@ class PostManager extends Manager
 		return $post;
 	}
 
+	/**
+	 * Get posts categories optionaly related to single post
+	 * @param  int $postId [optional]
+	 * @return array
+	 */
 	public function getPostsCategories($postId = null)
 	{
 		$sql = 'SELECT post_category.post_id AS postId,
@@ -153,6 +172,12 @@ class PostManager extends Manager
 		return $categories;
 	}
 
+	/**
+	 * Add new post in database
+	 * @param  Parameter $post      [title, chapo]
+	 * @param  string    $mainImage [optional main_image url]
+	 * @return int $postId 
+	 */
 	public function newPostInfos(Parameter $post, $mainImage)
 	{
 		$sql = 'INSERT INTO post 
@@ -172,9 +197,14 @@ class PostManager extends Manager
 		return $postId;
 	}
 
+	/**
+	 * Update post status (published = 2, unpublished = 1)
+	 * @param  Parameter $get [current status]
+	 * @return void
+	 */
 	public function publishPost(Parameter $get)
 	{
-		if ($get->get('status') == 1) {
+		if ($get->get('currstatus') == 1) {
 			$sql = 'UPDATE post SET status=2 WHERE post.id = :postId';
 		
 		} else {
@@ -186,6 +216,11 @@ class PostManager extends Manager
 		$req->execute();
 	}
 
+	/**
+	 * Delete post in database
+	 * @param  int $postId 
+	 * @return void
+	 */
 	public function deletePost($postId)
 	{
 		$sql = 'DELETE FROM post WHERE post.id = :postId';
@@ -195,6 +230,11 @@ class PostManager extends Manager
 		$req->execute();
 	}
 
+	/**
+	 * Update post last update date in database
+	 * @param  int $postId 
+	 * @return void
+	 */
 	public function dateUpdate($postId)
 	{
 		$sql = 'UPDATE post SET post.date_update = NOW() WHERE post.id = :postId';
@@ -204,6 +244,12 @@ class PostManager extends Manager
 		$req->execute();
 	}
 
+	/**
+	 * Update main post picture url in database
+	 * @param  int $postId 
+	 * @param  string $url   
+	 * @return void
+	 */
 	public function updateMainPostPicture($postId, $url)
 	{
 		$sql = 'UPDATE post SET post.main_image = :url WHERE post.id = :postId';
@@ -214,6 +260,11 @@ class PostManager extends Manager
 		$req->execute();
 	}
 
+	/**
+	 * Delete main post picture in database
+	 * @param  int $postId 
+	 * @return void         
+	 */
 	public function deleteMainPostPicture($postId)
 	{
 		$sql = 'UPDATE post SET post.main_image = NULL WHERE post.id = :postId';
@@ -223,12 +274,15 @@ class PostManager extends Manager
 		$req->execute();
 	}
 
+	/**
+	 * Check if category is not already associated to this post. If not, check if category already exists in category table. Add category to category table if new category and associate category to post.
+	 * @param int $postId  
+	 * @param string $category [category name]
+	 * @return  string $message [confirmation or error message]
+	 */
 	public function addCategory($postId, $category)
 	{
-		//Récupération des catégories du post
 		$postCategories = $this->getPostsCategories($postId);
-
-		// Récupération de l'id de la catégorie 
 
 		$sql = 'SELECT category.id AS categoryId FROM category WHERE category.name = :category';
 			$req = $this->dbRequest($sql, array($category));
@@ -269,6 +323,11 @@ class PostManager extends Manager
 		return $message; 
 	}
 
+	/**
+	 * Delete single (if category name provided) or all categories from post
+	 * @param  Parameter $get [postId, optional category name]
+	 * @return void
+	 */
 	public function deleteCategory(Parameter $get)
 	{
 		$sql = 'DELETE FROM post_category WHERE post_id = :postId';
@@ -286,6 +345,11 @@ class PostManager extends Manager
 		$req->execute();
 	}
 
+	/**
+	 * Update post informations in database
+	 * @param  Parameter $post [title, chapo, optional main_image]
+	 * @return void
+	 */
 	public function editPostInfos(Parameter $post)
 	{
 		$sql = 'UPDATE post SET post.title = :title, post.chapo = :chapo, ';

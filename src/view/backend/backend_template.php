@@ -209,8 +209,8 @@
                             echo $contentTitle . '</h1>';
                         }
 
-                        if (isset($message)) {
-                            echo '<div class="adminMessage text-center">' . $message . '</div>';
+                        if ($session->get('message')) {
+                            echo '<div class="adminMessage text-center">' . $session->get('message') . '</div>';
                         }
 
                         ?>

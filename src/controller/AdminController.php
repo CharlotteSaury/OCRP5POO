@@ -10,24 +10,30 @@ use config\Parameter;
 use config\File;
 use Exception;
 
+/**
+ * Class AdminController
+ * Manage router to appropriate manager redirection associated with backend actions
+ */
 class AdminController extends Controller
 
 {
-	public function dashboardView($message = null)
+	/**
+	 * Generate admin dashboard view
+	 * @return void
+	 */
+	public function dashboardView()
 	{
 		$publishedPostsNb = $this->postManager->getPostsNb(2);
 		$totalPostsNb = $this->postManager->getPostsNb();
-		$approvedCommentsNb = $this->commentManager->getCommentsNb(1);
+		$approvedCommentsNb = $this->commentManager->getCommentsNb(2);
 		$totalCommentsNb = $this->commentManager->getCommentsNb();
 		$usersNb = $this->userManager->getUserNb();
 		$recentPosts = $this->postManager->getRecentPosts();
 		$recentComments = $this->commentManager->getComments(5);
 		$users = $this->userManager->getUsers(5);
-		$unreadContactsNb = $this->contactManager->getUnreadContactsNb();
+		$unreadContactsNb = $this->contactManager->getContactsNb(1);
 
-		return $this->view->render('backend', 'dashboardView', 
-			['message' => $message,
-			'publishedPostsNb' => $publishedPostsNb,
+		return $this->view->render('backend', 'dashboardView', ['publishedPostsNb' => $publishedPostsNb,
 			'totalPostsNb' => $totalPostsNb,
 			'approvedCommentsNb' => $approvedCommentsNb,
 			'totalCommentsNb' => $totalCommentsNb,
@@ -39,46 +45,30 @@ class AdminController extends Controller
 			'session' => $this->request->getSession()]);
 	}
 
-	public function adminPostsView($message = null, Parameter $get = null)
+	/**
+	 * Generate admin posts list view
+	 * @param  Parameter $get     [optionnal sorting informations (date, published/unpublished)]
+	 * @return void 
+	 */
+	public function adminPostsView(Parameter $get = null)
 	{
 		$totalPostsNb = $this->postManager->getPostsNb();
 		$publishedPostsNb = $this->postManager->getPostsNb(2);
 		$unpublishedPostsNb = $totalPostsNb - $publishedPostsNb;
-		$unreadContactsNb = $this->contactManager->getUnreadContactsNb();
+		$unreadContactsNb = $this->contactManager->getContactsNb(1);
 
 		if ($get != null) {
-
-			if ($get->get('sort') || $get->get('date')) {
-
-				$sorting = $this->getSortingResults($get, 'unpublished');
-
-				if ($message == null) {
-
-					$message = $sorting[0];
-				}		
-
-				if ($sorting[1] != null) {
-
-					$contentTitle = 'Articles non publiés';
-					$posts = $this->postManager->getPosts(1, $first_post = null, $postsPerPage = null, $sorting[2]);
-				
-				} else {
-					$contentTitle = 'Tous les articles';
-					$posts = $this->postManager->getPosts($status = null, $first_post = null, $postsPerPage = null, $sorting[2]);
-				}
-			
-			} else {
-
-				$contentTitle = 'Tous les articles';
-				$posts = $this->postManager->getPosts($status = null, $first_post = null, $postsPerPage = null);
-			}
-		
+			$sorting = $this->getSortingResults($get, 'Articles');
+			var_dump($sorting);
+			$status = $sorting[0];
+			$sortingDate = $sorting[1];
+			$contentTitle = $sorting[2];
 		} else {
-
 			$contentTitle = 'Tous les articles';
-			$posts = $this->postManager->getPosts($status = null, $first_post = null, $postsPerPage = null);
+			$status = null;
+			$sortingDate = null;
 		}
-		
+		$posts = $this->postManager->getPosts($status, $first_post = null, $postsPerPage = null, $sortingDate);
 
 		$allPostsCategories = $this->postManager->getPostsCategories();
 
@@ -94,8 +84,7 @@ class AdminController extends Controller
 		}
 
 		return $this->view->render('backend', 'adminPostsView',
-			['message' => $message,
-			'contentTitle' => $contentTitle, 
+			['contentTitle' => $contentTitle, 
 			'totalPostsNb' => $totalPostsNb,
 			'unpublishedPostsNb' => $unpublishedPostsNb,
 			'posts' => $posts,
@@ -105,7 +94,12 @@ class AdminController extends Controller
 
 	}
 
-	public function adminPostView($postId, $message = null)
+	/**
+	 * Check validity of postId and generate admin single post page
+	 * @param  int $postId 
+	 * @return void
+	 */
+	public function adminPostView($postId)
 	{
 		$errors = $this->validation->exists('postId', $postId);
 
@@ -113,13 +107,12 @@ class AdminController extends Controller
 
 			$post = $this->postManager->getPostInfos($postId);
 			$post->setCategories($this->postManager->getPostsCategories($postId));
-			$contents = $this->contentManager->getPostContents($postId);
+			$contents = $this->contentManager->getContents($postId);
 			$postComments = $this->commentManager->getPostComments($postId);	
-			$unreadContactsNb = $this->contactManager->getUnreadContactsNb();
+			$unreadContactsNb = $this->contactManager->getContactsNb(1);
 
 			return $this->view->render('backend', 'adminPostView', 
 				['postId' => $postId,
-				'message' => $message,
 				'post' => $post,
 				'contents' => $contents,
 				'postComments' => $postComments,
@@ -129,15 +122,26 @@ class AdminController extends Controller
 		throw new Exception('Identifiant de post non valide');
 	}
 
-	public function adminNewPostView($message = null, $errors = null)
+	/**
+	 * Generate admin new post page
+	 * @param  array $errors  [optional error messages of form input validity]
+	 * @return void 
+	 */
+	public function adminNewPostView($errors = null)
 	{
-		$unreadContactsNb = $this->contactManager->getUnreadContactsNb();
+		$unreadContactsNb = $this->contactManager->getContactsNb(1);
 		return $this->view->render('backend', 'newPostInfosView',
 			['unreadContactsNb' => $unreadContactsNb,
 			'session' => $this->request->getSession(),
 			'errors' => $errors]);
 	}
 
+	/**
+	 * Check validity of inputs of new post form and redirect to postManager to add new post infos (chapo, title, main_image) to database
+	 * @param  Parameter $post [title, chapo]
+	 * @param  File $file [optional file datas for main_image uploading]
+	 * @return void
+	 */
 	public function newPostInfos(Parameter $post, File $file = null)
 	{
 		$errors = $this->validation->validate($post, 'Post');
@@ -151,8 +155,8 @@ class AdminController extends Controller
 
 				if (strrpos($uploadResults, 'uploads') === false) {
 
-					$message = $uploadResults;
-					$this->adminNewPostView($message);
+					$this->request->getSession()->set('message', $uploadResults);
+					$this->adminNewPostView();
 
 				} else {
 
@@ -169,27 +173,38 @@ class AdminController extends Controller
 
 		} else {
 
-			$this->adminNewPostView($message = null, $errors);
+			$this->adminNewPostView($errors);
 		}
 		
 	}
 
+	/**
+	 * Redirect to postManager to update post status (published 2, unpublished 1)
+	 * @param  Parameter $get [$postId]
+	 * @return void [redirect to dashboard view or adminPostsView regarding initial page]
+	 */
 	public function publishPost(Parameter $get)
 	{
 		$this->postManager->publishPost($get);
-		$message = "Statut du post modifié ! ";
+		$this->request->getSession()->set('message', 'Statut du post modifié ! ');
 
 		if ($get->get('action') === 'publishPostDashboard') {
 
-			$this->dashboardView($message);
+			$this->dashboardView();
 
 		} else {
 
-			$this->adminPostsView($message);
+			$this->adminPostsView();
 		}
 	}
 
-	public function editPostView($postId, $message = null, $errors = null)
+	/**
+	 * Check if required postId exists in database and enerate admin edit post page
+	 * @param  int $postId  
+	 * @param  array $errors  [optional error messages related to post edition form inputs (content, post infos)]
+	 * @return void         
+	 */
+	public function editPostView($postId, $errors = null)
 	{
 		$errorExists = $this->validation->exists('postId', $postId);
 
@@ -197,12 +212,11 @@ class AdminController extends Controller
 
 			$post = $this->postManager->getPostInfos($postId);
 			$post->setCategories($this->postManager->getPostsCategories($postId));
-			$contents = $this->contentManager->getPostContents($postId);
-			$unreadContactsNb = $this->contactManager->getUnreadContactsNb();
+			$contents = $this->contentManager->getContents($postId);
+			$unreadContactsNb = $this->contactManager->getContactsNb(1);
 
 			return $this->view->render('backend', 'editPostView', 
-				['message' => $message,
-				'postId' => $postId,
+				['postId' => $postId,
 				'post' => $post,
 				'contents' => $contents,
 				'unreadContactsNb' => $unreadContactsNb,
@@ -212,6 +226,11 @@ class AdminController extends Controller
 		throw new Exception('Identifiant de billet non valide.');
 	}
 
+	/**
+	 * Redirect to postManager to delete main post picture in database and update post last update date
+	 * @param  int $postId 
+	 * @return void        
+	 */
 	public function deleteMainPostPicture($postId)
 	{
 		$post = $this->postManager->getPostInfos($postId);
@@ -220,10 +239,15 @@ class AdminController extends Controller
 
 		$this->postManager->deleteMainPostPicture($postId);
 		$this->postManager->dateUpdate($postId);
-		$message = 'Photo supprimée ! ';
-		$this->editPostView($postId, $message);
+		$this->request->getSession()->set('message', 'Photo supprimée ! ');
+		$this->editPostView($postId);
 	}
 
+	/**
+	 * Upload post picture and call contentManager to update post picture url in database
+	 * @param  Parameter $post [$postId]
+	 * @return void          
+	 */
 	public function editPostPicture(Parameter $post)
 	{
 		foreach ($_FILES AS $key => $value) {
@@ -238,21 +262,26 @@ class AdminController extends Controller
 
 		if (strrpos($uploadResults, 'uploads') === false) {
 
-			$message = $uploadResults;
+			$this->request->getSession()->set('message', $uploadResults);
 
 		} else {
 
 			$content = $this->contentManager->getContent($contentId);
 			$oldImgUrl = $content->getContent();
-			$this->contentManager->updatePostPicture($contentId, $uploadResults);
+			$this->contentManager->editContent($contentId, $uploadResults);
 			$this->postManager->dateUpdate($post->get('postId'));
 			unlink($oldImgUrl);
-			$message = 'Image modifiée !';
+			$this->request->getSession()->set('message', 'Image modifiée !');
 		}
-		$this->editPostView($post->get('postId'), $message);
+		$this->editPostView($post->get('postId'));
 
 	}
 
+	/**
+	 * Call contenttManager to delete content (picture or paragraph) from database. If picture, delete picture from upload folder.
+	 * @param  Parameter $get [type of content, content, id]
+	 * @return void         
+	 */
 	public function deleteContent(Parameter $get)
 	{
 		if ($get->get('type') == 1) {
@@ -264,18 +293,28 @@ class AdminController extends Controller
 
 		$this->contentManager->deleteContent($get->get('content'));
 		$this->postManager->dateUpdate($get->get('id'));
-		$message = 'Contenu supprimé ! ';
-		$this->editPostView($get->get('id'), $message);
+		$this->request->getSession()->set('message', 'Contenu supprimé ! ');
+		$this->editPostView($get->get('id'));
 	}
 
+	/**
+	 * Call contentManager to add new content to database, and call postManager to update last update date
+	 * @param int $postId
+	 * @return  void 
+	 */
 	public function addParagraph($postId)
 	{
 		$this->contentManager->addContent($postId);
 		$this->postManager->dateUpdate($postId);
-		$message = 'Bloc paragraphe ajouté ! ';
-		$this->editPostView($postId, $message);
+		$this->request->getSession()->set('message', 'Bloc paragraphe ajouté ! ');
+		$this->editPostView($postId);
 	}
 
+	/**
+	 * Call contentManager to update paragraph content in database after input validity check
+	 * @param  Parameter $post [contentId, content, postId]
+	 * @return void          
+	 */
 	public function editParagraph(Parameter $post)
 	{
 		$errors = $this->validation->validate($post, 'Content');
@@ -283,9 +322,9 @@ class AdminController extends Controller
 		if (!$errors) {
 
 			$contentId = $post->get('editContent');
-			$this->contentManager->editParagraph($contentId, $post->get($contentId));
+			$this->contentManager->editContent($contentId, $post->get($contentId));
 			$this->postManager->dateUpdate($post->get('postId'));
-			$message = 'Bloc paragraphe enregistré ! ';
+			$this->request->getSession()->set('message', 'Bloc paragraphe enregistré ! ');
 		
 		} else {
 
@@ -293,10 +332,15 @@ class AdminController extends Controller
 			foreach($errors as $key => $value) {
 				$message .= '<p>' . $value . '</p>';
 			}
+			$this->request->getSession()->set('message', $message);
 		}
-		$this->editPostView($post->get('postId'), $message);
+		$this->editPostView($post->get('postId'));
 	}
 
+	/**
+	 * Upload picture and call contentManager to add new content to database 
+	 * @param Parameter $post [postId]
+	 */
 	public function addPicture(Parameter $post)
 	{
 		$homeController = new HomeController();
@@ -304,41 +348,56 @@ class AdminController extends Controller
 
 		if (strrpos($uploadResults, 'uploads') === false) {
 
-			$message = $uploadResults;
+			$this->request->getSession()->set('message', $uploadResults);
 		
 		} else {
 			$this->contentManager->addContent($post->get('postId'), $uploadResults);
 			$this->postManager->dateUpdate($post->get('postId'));
-			$message = 'Image ajoutée !';
+			$this->request->getSession()->set('message', 'Image ajoutée !');
 		}
-		$this->editPostView($post->get('postId'), $message);
+		$this->editPostView($post->get('postId'));
 	}
 
+	/**
+	 * Call postManager to add new category to database after input validity check
+	 * @param Parameter $post [$postId, $categoryName]
+	 * @return  void
+	 */
 	public function addCategory(Parameter $post)
 	{
 		$errors = $this->validation->validate($post, 'Category');
 
 		if (!$errors) {
 
-			$message = $this->postManager->addCategory($post->get('postId'), $post->get('categoryName'));
+			$this->request->getSession()->set('message', $this->postManager->addCategory($post->get('postId'), $post->get('categoryName')));
 			$this->postManager->dateUpdate($post->get('postId'));
 		
 		} else {
 
-			$message = $errors['categoryName'];
+			$this->request->getSession()->set('message', $errors['categoryName']);
 		}
-		$this->editPostView($post->get('postId'), $message);
+		$this->editPostView($post->get('postId'));
 		
 	}
 
+	/**
+	 * Call postManager to delete association of category with post in post_category table
+	 * @param  Parameter $get [postId, $categoryId]
+	 * @return void         
+	 */
 	public function deleteCategory(Parameter $get)
 	{
 		$this->postManager->deleteCategory($get);
 		$this->postManager->dateUpdate($get->get('id'));
-		$message = 'Catégorie supprimée ! ';
-		$this->editPostView($get->get('id'), $message);
+		$this->request->getSession()->set('message', 'Catégorie supprimée ! ');
+		$this->editPostView($get->get('id'));
 	}
 
+	/**
+	 * Upload main post picture if provided and call postManager to edit post infos in database after input validity check
+	 * @param  Parameter $post [title, chapo]
+	 * @return void          
+	 */
 	public function editPostInfos(Parameter $post)
 	{
 		$file = $this->request->getFile();
@@ -350,18 +409,18 @@ class AdminController extends Controller
 
 			if (strrpos($uploadResults, 'uploads') === false) {
 
-				$message = "Information(s) modifiée(s) \n 
-				/!\ Erreur de téléchargement de l'image principale : " . $uploadResults;
+				$this->request->getSession()->set('message', "Information(s) modifiée(s) \n 
+				/!\ Erreur de téléchargement de l'image principale : " . $uploadResults);
 			
 			} else {
 
 				$post->set('main_image', $uploadResults);
-				$message = "Information(s) modifiée(s) ! ";
+				$this->request->getSession()->set('message', "Information(s) modifiée(s) ! ");
 			}
 		
 		} else {
 
-			$message = "Information(s) modifiée(s) ! ";
+			$this->request->getSession()->set('message', "Information(s) modifiée(s) ! ");
 		}
 
 		$errors = $this->validation->validate($post, 'Post');
@@ -370,7 +429,7 @@ class AdminController extends Controller
 
 			$this->postManager->editPostInfos($post);
 			$this->postManager->dateUpdate($post->get('postId'));
-			$this->editPostView($post->get('postId'), $message);
+			$this->editPostView($post->get('postId'));
 		
 		} else {
 
@@ -378,63 +437,58 @@ class AdminController extends Controller
 			foreach($errors as $key => $value) {
 				$message .= '<p>' . $value . '</p>';
 			}
-			$this->editPostView($post->get('postId'), $message);
+			$this->request->getSession()->set('message', $message);
+			$this->editPostView($post->get('postId'));
 		}
 	}
 
+	/**
+	 * Call postManager, commentManager and contentManager to respectively delete post, and associated comments, categories and contents from database
+	 * @param  Parameter $get       [postId]
+	 * @param  int $dashboard [optional dashboard parameter to redirect to the initial page =1 if dashboard view]
+	 * @return void
+	 */
 	public function deletePost(Parameter $get, $dashboard = null)
 	{
 		$this->postManager->deletePost($get->get('id'));
 		$this->commentManager->deleteCommentsFromPost($get->get('id'));
+		$this->contentManager->deleteContentsFromPost($get->get('id'));
 		$this->postManager->deleteCategory($get);
-		$message = "Post supprimé ! ";
+		$this->request->getSession()->set('message', "Post supprimé ! ");
 
 		if ($dashboard != null) {
-			$this->dashboardView($message);
+			$this->dashboardView();
 		} else {
-			$this->adminPostsView($message);
+			$this->adminPostsView();
 		}
 	}
 
-	public function adminCommentsView($message = null, Parameter $get = null)
+	/**
+	 * Generate admin comments view with optional sorting preferences
+	 * @param  Parameter $get     [optional sorting preferences]
+	 * @return void
+	 */
+	public function adminCommentsView(Parameter $get = null)
 	{
 		$totalCommentsNb = $this->commentManager->getCommentsNb();
-		$approvedCommentsNb = $this->commentManager->getCommentsNb(1);
+		$approvedCommentsNb = $this->commentManager->getCommentsNb(2);
 		$unapprovedCommentsNb = $totalCommentsNb - $approvedCommentsNb;
-		$unreadContactsNb = $this->contactManager->getUnreadContactsNb();
-
-		if ($get != null) {
-			if ($get->get('sort') || $get->get('date')) {
-				$sorting = $this->getSortingResults($get, 'unapproved');
-
-				if ($message == null) {
-					$message = $sorting[0];
-				}
-
-				if ($sorting[1] != null) {
-					$contentTitle = 'Commentaires non approuvés';
-					$status = 0;
-					$allComments = $this->commentManager->getComments($commentsNb = null, $status, $sorting[2]);
-				
-				} else {
-					$contentTitle = 'Tous les Commentaires';
-					$allComments = $this->commentManager->getComments($commentsNb = null, $status = null, $sorting[2]);
-				}
-			
-			} else {
-				$contentTitle = 'Tous les Commentaires';
-				$allComments = $this->commentManager->getComments($commentsNb = null, $status = null);
-			}
+		$unreadContactsNb = $this->contactManager->getContactsNb(1);
 		
+		if ($get != null) {
+			$sorting = $this->getSortingResults($get, 'Commentaires');
+			$status = $sorting[0];
+			$sortingDate = $sorting[1];
+			$contentTitle = $sorting[2];
 		} else {
 			$contentTitle = 'Tous les Commentaires';
-				$allComments = $this->commentManager->getComments($commentsNb = null, $status = null);
+			$status = $sortingDate = null;
 		}
-		
+
+		$allComments = $this->commentManager->getComments($commentsNb = null, $status, $sortingDate);
 		
 		return $this->view->render('backend', 'adminCommentsView', 
-			['message' => $message,
-			'totalCommentsNb' => $totalCommentsNb,
+			['totalCommentsNb' => $totalCommentsNb,
 			'unapprovedCommentsNb' => $unapprovedCommentsNb,
 			'contentTitle' => $contentTitle,
 			'status' => $status,
@@ -444,34 +498,50 @@ class AdminController extends Controller
 			'get' => $get]);
 	}
 
+	/**
+	 * Call commentManager to update comment status in database
+	 * @param  Parameter $get [commentId]
+	 * @return void         
+	 */
 	public function approveComment(Parameter $get)
 	{
 		$this->commentManager->approveComment($get->get('id'));
-		$message = "Commentaire approuvé ! ";
+		$this->request->getSession()->set('message', "Commentaire approuvé ! ");
 
 		if ($get->get('action') == 'approveCommentDashboard') {
-			$this->dashboardView($message);
+			$this->dashboardView();
 		
 		} elseif ($get->get('action') == 'approveCommentView') {
-			$this->adminPostView($get->get('post'), $message);
+			$this->adminPostView($get->get('post'));
 
 		} else {
-			$this->adminCommentsView($message);		
+			$this->adminCommentsView();		
 		}		
 	}
 
+	/**
+	 * Call commentManager to delete comment from database
+	 * @param  int $commentId 
+	 * @param  int $dashboard [optional dashboard parameter to redirect to the initial page =1 if dashboard view]
+	 * @return void            
+	 */
 	public function deleteComment($commentId, $dashboard = null)
 	{
 		$this->commentManager->deleteComment($commentId);
-		$message = "Commentaire supprimé ! ";
+		$this->request->getSession()->set('message', "Commentaire supprimé ! ");
 
 		if ($dashboard != null) {
-			$this->dashboardView($message);
+			$this->dashboardView();
 		} else {
-			$this->adminCommentsView($message);
+			$this->adminCommentsView();
 		}
 	}
 
+	/**
+	 * Generate admin users list page with role sorting
+	 * @param  int $userRoleId 
+	 * @return void             
+	 */
 	public function adminUsersView($userRoleId = null)
 	{
 		if ($userRoleId != null) {
@@ -500,7 +570,7 @@ class AdminController extends Controller
 
 		
 		$users = $this->userManager->getUsers(null, $userRoleId);
-		$unreadContactsNb = $this->contactManager->getUnreadContactsNb();
+		$unreadContactsNb = $this->contactManager->getContactsNb(1);
 		
 		return $this->view->render('backend', 'adminUsersView',
 			['allUsersNb' => $allUsersNb,
@@ -513,38 +583,52 @@ class AdminController extends Controller
 			'session' => $this->request->getSession()]);
 	}
 
-	public function profileUserView($userId, $message = null)
+	/**
+	 * Generate profile user view 
+	 * @param  int $userId  
+	 * @return void          
+	 */
+	public function profileUserView($userId)
 	{
 		$errorExists = $this->validation->exists('userId', $userId);
 
 		if (!$errorExists) {
 			$user = $this->userManager->getUser($userId);
-			$unreadContactsNb = $this->contactManager->getUnreadContactsNb();
+			$unreadContactsNb = $this->contactManager->getContactsNb(1);
 
 			return $this->view->render('backend', 'profileUserView',
 				['user' => $user,
 				'unreadContactsNb' => $unreadContactsNb,
 				'userId' => $userId,
-				'message' => $message,
 				'session' => $this->request->getSession()]);
 		}
 		throw new Exception('Le profil demandé n\'existe pas');	
 	}
 
-	public function editUserView($userId, $message = null, $errors = null)
+	/**
+	 * Generate user profile edition page
+	 * @param  int $userId  
+	 * @param  array $errors  [optional error messages from input validity checking]
+	 * @return void
+	 */
+	public function editUserView($userId, $errors = null)
 	{
 		$user = $this->userManager->getUser($userId);
-		$unreadContactsNb = $this->contactManager->getUnreadContactsNb();
+		$unreadContactsNb = $this->contactManager->getContactsNb(1);
 
 		return $this->view->render('backend', 'editUserView',
 			['user' => $user,
 			'unreadContactsNb' => $unreadContactsNb,
 			'userId' => $userId,
-			'message' => $message,
 			'session' => $this->request->getSession(),
 			'errors' => $errors]);
 	}
 
+	/**
+	 * Check if required user exists in database and redirect to edit user view
+	 * @param  int $userId 
+	 * @return void
+	 */
 	public function editUser($userId)
 	{
 		$errorExists = $this->validation->exists('userId', $userId);
@@ -565,6 +649,11 @@ class AdminController extends Controller
 		}
 	}
 
+	/**
+	 * Call userManager to update user informations after input validity check. Update session variables if user updated its own profile
+	 * @param  Parameter $post [pseudo, email, first_name, last_name, home, website...]
+	 * @return void
+	 */
 	public function editUserInfos(Parameter $post)
 	{
 		$errors = $this->validation->validate($post, 'User');
@@ -586,34 +675,42 @@ class AdminController extends Controller
 
 			$currentUserId = $this->request->getSession()->get('id');
 			$this->userManager->editUserInfos($post);
-			$message = "Profil modifié ! ";
-			$this->profileUserView($post->get('id'), $message);
-
-			// Si l'utilisateur a modifié son propre profil, alors on modifie les variables de session
+			$this->request->getSession()->set('message', "Profil modifié ! ");
+			$this->profileUserView($post->get('id'));
 
 			if ($currentUserId == $post->get('id')) {
 				$userController->newUserSession($post->get('email'));
 			}
 		
 		} else {
-			$message = 'Le profil n\'a pas pu être modifié.';
-			$this->editUserView($post->get('id'), $message, $errors);
+			$this->request->getSession()->set('message', 'Le profil n\'a pas pu être modifié.');
+			$this->editUserView($post->get('id'), $errors);
 		}
 	}
 
+	/**
+	 * Call userManager to delete user birth date in database
+	 * @param  int $userId 
+	 * @return void         
+	 */
 	public function deleteBirthDate($userId)
 	{
 		$this->userManager->deleteBirthDate($userId);
 	}
 
+	/**
+	 * Upload new profile picture and delete old one from upload folder and call userManager to update user profile picture in database
+	 * @param  int $userId
+	 * @return void       
+	 */
 	public function updateProfilePicture($userId)
 	{
 		$homeController = new HomeController();
 		$uploadResults = $homeController->pictureUpload($namePicture = 'picture');
 
 		if (strrpos($uploadResults, 'uploads') === false) {
-			$message = $uploadResults;
-			$this->profileUserView($userId, $message);
+			$this->request->getSession()->set('message', $uploadResults);
+			$this->profileUserView($userId);
 		
 		} else {
 			$user = $this->userManager->getUser($userId);
@@ -624,8 +721,8 @@ class AdminController extends Controller
 			}
 
 			$this->userManager->updateProfilePicture($userId, $uploadResults);
-			$message = 'Photo de profil modifiée !';
-			$this->profileUserView($userId, $message);
+			$this->request->getSession()->set('message', 'Photo de profil modifiée !');
+			$this->profileUserView($userId);
 
 			// Si l'utilisateur a modifié son propre profil, alors on modifie les variables de session
 
@@ -636,51 +733,45 @@ class AdminController extends Controller
 		}
 	}
 
-	public function adminContactsView($message = null, Parameter $get = null)
+	/**
+	 * Generate admin contacts list page with optionnal sorting preferences
+	 * @param  Parameter $get     [optional sorting preferences]
+	 * @return void                  
+	 */
+	public function adminContactsView(Parameter $get = null)
 	{
-		$allContactsNb = $this->contactManager->getTotalContactsNb();
-		$unreadContactsNb = $this->contactManager->getUnreadContactsNb();
+		$allContactsNb = $this->contactManager->getContactsNb();
+		$unreadContactsNb = $this->contactManager->getContactsNb(1);
 
 		if ($get != null) {
-
-			if ($get->get('sort') || $get->get('date')) {
-				$sorting = $this->getSortingResults($get, 'unread');
-
-				if ($message == null) {
-					$message = $sorting[0];
-				}
-
-				if ($sorting[1] != null) {
-					$contentTitle = 'Contacts non lus';
-					$status = 1;
-					$allContacts = $this->contactManager->getContacts($contactId = null, $status, $sorting[2]);
-				
-				} else {
-					$contentTitle = 'Tous les contacts';
-					$allContacts = $this->contactManager->getContacts($contactId = null, $status = null, $sorting[2]);
-				}
-
-			} else {
-				$contentTitle = 'Tous les contacts';
-				$allContacts = $this->contactManager->getContacts($contactId = null, $status = null);
-			}
-		
+			$sorting = $this->getSortingResults($get, 'Contacts');
+			$status = $sorting[0];
+			$sortingDate = $sorting[1];
+			$contentTitle = $sorting[2];
 		} else {
 			$contentTitle = 'Tous les contacts';
-			$allContacts = $this->contactManager->getContacts($contactId = null, $status = null);
+			$status = 1;
+			$sortingDate = null;
 		}
+		$allContacts = $this->contactManager->getContacts($contactId = null, $status, $sortingDate);
+		
 		
 		return $this->view->render('backend', 'adminContactsView', 
 			['allContactsNb' => $allContactsNb,
 			'unreadContactsNb' => $unreadContactsNb,
 			'contentTitle' => $contentTitle,
 			'allContacts' => $allContacts,
-			'message' => $message,
 			'session' => $this->request->getSession(),
 			'get' => $get]);
 	}
 
-	public function adminContactView($contactId, $message = null, $errors = null)
+	/**
+	 * Generate admin single contact page and associated optional answer
+	 * @param  int $contactId 
+	 * @param  array $errors    [optional error messages generated by answer input validity check]
+	 * @return void            
+	 */
+	public function adminContactView($contactId, $errors = null)
 	{
 		$errorExists = $this->validation->exists('contactId', $contactId);
 
@@ -697,11 +788,10 @@ class AdminController extends Controller
 				$answer = $this->contactManager->getAnswer($contactId);
 			}
 
-			$unreadContactsNb = $this->contactManager->getUnreadContactsNb();
+			$unreadContactsNb = $this->contactManager->getContactsNb(1);
 
 			return $this->view->render('backend', 'adminContactView', 
 				['contactId' => $contactId,
-				'message' => $message,
 				'contact' => $contact,
 				'currentStatus' => $currentStatus,
 				'answer' => $answer,
@@ -714,14 +804,25 @@ class AdminController extends Controller
 		}
 	}
 
+	/**
+	 * Call contactManager to delete contact from database
+	 * @param  int $contactId
+	 * @param  int $dashboard [optional dashboard parameter to redirect to the initial page =1 if dashboard view]
+	 * @return void            
+	 */
 	public function deleteContact($contactId, $dashboard = null)
 	{
 		$this->contactManager->deleteContact($contactId);
-		$message = "Message supprimé ! ";
-		$this->adminContactsView($message);
+		$this->request->getSession()->set('message', "Message supprimé ! ");
+		$this->adminContactsView();
 		
 	}
 
+	/**
+	 * Send email to user with admin answer email to previous contact
+	 * @param  Parameter $post [answerSubject, answerContent, email, contactId]
+	 * @return void          
+	 */
 	public function adminAnswerEmail(Parameter $post)
 	{
 		$contact = $this->contactManager->getContacts($post->get('contactId'));
@@ -741,6 +842,11 @@ class AdminController extends Controller
 		mail($post->get('email'), $subject, $message, $headers);	     
 	}
 
+	/**
+	 * Call contactManager to add contact answer to database
+	 * @param Parameter $post [contactId, answerSubject, answerContent]
+	 * @return  void
+	 */
 	public function addAnswer(Parameter $post)
 	{
 		$errors = $this->validation->validate($post, 'Answer');
@@ -751,8 +857,8 @@ class AdminController extends Controller
 			$this->contactManager->updateStatus($post->get('contactId'), 3);   
 			$this->contactManager->addAnswer($post);
 			$this->adminAnswerEmail($post);
-			$message = "La réponse a bien été envoyée.";
-			$this->adminContactView($post->get('contactId'), $message);  
+			$this->request->getSession()->set('message', "La réponse a bien été envoyée.");
+			$this->adminContactView($post->get('contactId'));  
 		
 		} else {
 
@@ -763,48 +869,58 @@ class AdminController extends Controller
 				throw new Exception($errors['email']);
 			}
 
-			$this->adminContactView($post->get('contactId'), $message = null, $errors);
+			$this->adminContactView($post->get('contactId'), $errors);
 		}
 	}
 
-	public function getSortingResults(Parameter $get, $sortingTitle)
+	/**
+	 * Get sorting results from url
+	 * @param  Parameter $get          [optional sorting by status (sort) or date]
+	 * @param  string $name [entities to sort : Articles, Commentaires, Contacts]
+	 * @return array[$status of entity to display, sorting date, content title]
+	 */
+	public function getSortingResults(Parameter $get, $name)
 	{
-		$sort = $get->get('sort');
+		$type = ['Articles' => ' non publiés', 'Commentaires' => ' non approuvés', 'Contacts' => ' non lus'];
+		
+		$status = $get->get('status');
 		$date = $get->get('date');
 
-		if ($sort && !$date) {
+		if ($status || $date) {
+			if ($status && !$date) {
+				foreach ($type as $key => $value) {
+					if ($key == $name) {
+						$contentTitle = $key . $value;
+					}
+				}
+				$sortingDate = null;
 
-			if ($sort == $sortingTitle) {
-				$message = $sortingDate = null;
-			
-			} else {
-				$message = 'Le choix de tri n\'est pas valide';
-				$sort = $sortingDate = null;
-			}
-		
-		} elseif (!$sort && $date) {
-
-			if ($date == 'asc') {
-				$message = $sort = null;
+			} elseif (!$status && $date) {
+				foreach ($type as $key => $value) {
+					if ($key == $name) {
+						$contentTitle = 'Tous les ' . strtolower($name);
+					}
+				}
+				$status = null;
 				$sortingDate = $date;
-			
+
 			} else {
-				$message = 'Le choix de tri n\'est pas valide';
-				$sort = $sortingDate = null;
-			}
-		
+				foreach ($type as $key => $value) {
+					if ($key == $name) {
+						$contentTitle = $key . $value;
+					}
+				}
+				$sortingDate = $date;
+			} 	
 		} else {
-
-			if ($sort == $sortingTitle && $date == 'asc') {
-				$message = null;
-				$sortingDate = $date;
-			
-			} else {
-				$message = 'Le choix de tri n\'est pas valide';
-				$sort = $sortingDate = null;
-			}
+			foreach ($type as $key => $value) {
+					if ($key == $name) {
+						$contentTitle = 'Tous les ' . strtolower($name);
+					}
+				}
+			$status = $sortingDate = null;
 		}
-		return [$message, $sort, $sortingDate];
+		return $sorting = [$status, $sortingDate, $contentTitle];
 	}
 	
 }

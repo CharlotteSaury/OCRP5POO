@@ -13,14 +13,14 @@
     <div class="col-12">
         <a href="index.php?action=adminContacts">Tous (<?= $allContactsNb ?>)</a>
          | 
-         <a href="index.php?action=adminContacts&sort=unread">Non lus (<?= $unreadContactsNb ?>)</a>
+         <a href="index.php?action=adminContacts&status=1">Non lus (<?= $unreadContactsNb ?>)</a>
      </div>
      <div class="col-12 mb-3">
         Trier par date 
         
         <?php
         if (isset($get)) {
-            if (!$get->get('sort')) {
+            if (!$get->get('status')) {
                 if (!$get->get('date')) {
                     echo '<a href="index.php?action=adminContacts&date=asc" title="Trier du plus ancien au plus récent"><i class="fas fa-sort-down fa-2x ml-2"></i></a>';
                 } else {
@@ -29,12 +29,12 @@
                     }
                 }
             } else {
-                if ($get->get('sort') == 'unread') {
+                if ($get->get('status') == 1) {
                     if (!$get->get('date')) {
-                        echo '<a href="index.php?action=adminContacts&sort=unread&date=asc" title="Trier du plus ancien au plus récent"><i class="fas fa-sort-down fa-2x ml-2"></i></a>';
+                        echo '<a href="index.php?action=adminContacts&status=1&date=asc" title="Trier du plus ancien au plus récent"><i class="fas fa-sort-down fa-2x ml-2"></i></a>';
                     } else {
                         if ($get->get('date') == 'asc') {
-                        echo '<a href="index.php?action=adminContacts&sort=unread" title="Trier du plus récent au plus ancien"><i class="fas fa-sort-up fa-2x ml-2 mb-0"></i></a>';
+                        echo '<a href="index.php?action=adminContacts&status=1" title="Trier du plus récent au plus ancien"><i class="fas fa-sort-up fa-2x ml-2 mb-0"></i></a>';
                         }
                     }
                 }
@@ -51,7 +51,7 @@
 <div class="row">
 
     <div class="col-12">
-        <table class="table table-hover table-responsive">
+        <table class="table table-hover table-md-responsive">
             <thead>
                 <tr>
                     <th scope="col">Id</th>
@@ -84,7 +84,7 @@
                     } elseif ($contact->getStatusId() == 2) {
                         echo '<td title="Lu"><i class="fas fa-envelope-open-text"></i></td>';
                     } else {
-                        echo '<td title="Répondu"><i class="fas fa-envelope-open-text"></i><i class="fas fa-reply"></i></td>';
+                        echo '<td title="Répondu"><i class="fas fa-reply"></i></td>';
                     }
                     ?>
 

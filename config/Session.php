@@ -2,6 +2,10 @@
 
 namespace config;
 
+/**
+ * Class Session
+ * Manage $_SESSION variables 
+ */
 class Session
 {
     private $session;

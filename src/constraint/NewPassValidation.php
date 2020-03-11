@@ -1,44 +1,16 @@
 <?php
 
 namespace src\constraint;
+
 use config\Parameter;
 
-
+/**
+ * Class NewPassValidation
+ * Manage input validity for new pass form
+ */
 class NewPassValidation extends Validation
 {
-    private $errors = [];
-    private $constraint;
-
-    public function __construct()
-    {
-        $this->constraint = new Constraint();
-    }
-
-    public function check(Parameter $post)
-    {
-        foreach ($post->all() as $key => $value) {
-            $this->checkField($key, $value);
-        }
-        return $this->errors;
-    }
-
-    private function checkField($name, $value)
-    {
-        if ($name === 'pass1') {
-            $error = $this->checkPass1($name, $value);
-            $this->addError($name, $error);
-        }
-    }
-
-    private function addError($name, $error) {
-        if ($error) {
-            $this->errors += [
-                $name => $error
-            ];
-        }
-    }
-
-    private function checkPass1($name, $value)
+    protected function checkPass1($name, $value)
     {
         if ($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('mot de passe', $value);

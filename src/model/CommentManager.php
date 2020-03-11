@@ -4,8 +4,19 @@ namespace src\model;
 
 use config\Parameter;
 
+/**
+ * Class CommentManager
+ * Manage database requests related to comments
+ */
 class CommentManager extends Manager
 {
+	/**
+	 * Get comments according to status
+	 * @param  int $commentsNb  [optional number of comments to provide]
+	 * @param  int $status      [optional comment status (approved (1)/unapproved (0))]
+	 * @param  string $sortingDate [optional sorting by date ASC]
+	 * @return objects Comment
+	 */
 	public function getComments($commentsNb = null, $status = null, $sortingDate = null)
 	{
 		$sql = 'SELECT comment.id AS id, 
@@ -19,7 +30,7 @@ class CommentManager extends Manager
 			JOIN user on comment.user_id = user.id
 			JOIN post on comment.post_id = post.id';
 
-		if (isset($status) && $status == 0) {
+		if ($status != null) {
 			$sql.= ' WHERE comment.status = ' . $status;
 		}
 
@@ -40,6 +51,12 @@ class CommentManager extends Manager
 		return $comments;
 	}
 
+	/**
+	 * Get comments related to single post according to comment status
+	 * @param  int $postId 
+	 * @param  int $status [optional comment status (approved (1)/unapproved (0))]
+	 * @return objects Comment 
+	 */
 	public function getPostComments($postId, $status = null)
 	{
 		$sql = 'SELECT post.id AS postId, 
@@ -71,10 +88,16 @@ class CommentManager extends Manager
 		return $comments;
 	}
 
+	/**
+	 * Add new comment in database
+	 * @param Parameter $post   [postId, comment content]
+	 * @param int  $userId
+	 * @return void
+	 */
 	public function addComment(Parameter $post, $userId)
 	{
-		$sql = 'INSERT INTO comment (post_id, user_id, content, comment_date) 
-				VALUES (:postId, :userId, :content, NOW())';
+		$sql = 'INSERT INTO comment (post_id, user_id, content, comment_date, status) 
+				VALUES (:postId, :userId, :content, NOW(), 1)';
 
 		$req = $this->dbRequest($sql, array($post->get('postId'), $userId, $post->get('content')));
 		$req->bindValue('postId', $post->get('postId'), \PDO::PARAM_INT);
@@ -83,6 +106,11 @@ class CommentManager extends Manager
 		$req->execute();
 	}
 
+	/**
+	 * Get comments number according to status (approved (1)/unapproved (0))
+	 * @param  int $status [optional status approved (1)/unapproved (0)]
+	 * @return int commentsNb         [comments number]
+	 */
 	public function getCommentsNb($status = null)
 	{
 		$sql = 'SELECT COUNT(*) AS commentsNb FROM comment';
@@ -101,15 +129,25 @@ class CommentManager extends Manager
 		return $commentsNb;
 	}
 
+	/**
+	 * Update comment status in database
+	 * @param  int $commentId 
+	 * @return void           
+	 */
 	public function approveComment($commentId)
 	{
-		$sql = 'UPDATE comment SET status=1	WHERE comment.id = :commentId';
+		$sql = 'UPDATE comment SET status=2	WHERE comment.id = :commentId';
 
 		$req = $this->dbRequest($sql, array($commentId));
 		$req->bindValue('commentId', $commentId, \PDO::PARAM_INT);
 		$req->execute();
 	}
 
+	/**
+	 * Delete comment in database
+	 * @param  int $commentId
+	 * @return void            
+	 */
 	public function deleteComment($commentId)
 	{
 		$sql = 'DELETE FROM comment	WHERE comment.id = :commentId';
@@ -119,6 +157,11 @@ class CommentManager extends Manager
 		$req->execute();
 	}
 
+	/**
+	 * Delete all comments from a single post
+	 * @param  int $postId
+	 * @return void
+	 */
 	public function deleteCommentsFromPost($postId)
 	{
 		$sql = 'DELETE FROM comment	WHERE post_id = :postId';

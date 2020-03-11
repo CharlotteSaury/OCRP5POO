@@ -5,6 +5,9 @@
     	"src\\": "src/",
     	"config\\": "config/"
     	}
-  	}
+  	},
+  	"require-dev": {
+        "phpdocumentor/phpdocumentor": "2.*"
+    }
 
 }

@@ -1,29 +1,43 @@
 <?php
 
 namespace src\model;
+
 use config\Parameter;
 
+/**
+ * Class ContentManager
+ * Manage database requests related to contact form
+ */
 class ContactManager extends Manager
 {
-	public function getTotalContactsNb()
+	/**
+	 * Get contacts number (all unread if $status provided)
+	 * @return int [contact number]
+	 */
+	public function getContactsNb($status = null)
 	{
 		$sql = 'SELECT COUNT(*) AS contactsNb FROM contact_form';
 
-		$req = $this->dbRequest($sql);
-		$totalContactNb = $req->fetch(\PDO::FETCH_COLUMN);
-		return $totalContactNb;
+		if ($status != null) {
+			$sql .= ' WHERE contact_status_id = :status';
+			$req = $this->dbRequest($sql, array($status));
+			$req->bindValue('status', $status, \PDO::PARAM_INT);
+			$req->execute();
+		} else {
+			$req = $this->dbRequest($sql);
+		}
+		
+		$ContactNb = $req->fetch(\PDO::FETCH_COLUMN);
+		return $ContactNb;
 	}
 
-	public function getUnreadContactsNb()
-	{
-		$sql = 'SELECT COUNT(*) AS contactsNb FROM contact_form
-				WHERE contact_status_id = 1';
-
-		$req = $this->dbRequest($sql);
-		$unreadContactsNb = $req->fetch(\PDO::FETCH_COLUMN);
-		return $unreadContactsNb;
-	}
-	
+	/**
+	 * Get all contacts or single contacts informations
+	 * @param  int $contactId   [optional $contactId]
+	 * @param  int $status      [optional]
+	 * @param  $sortingDate [optional sorting by date ASC]
+	 * @return object(s) Contact
+	 */
 	public function getContacts($contactId = null, $status = null, $sortingDate = null)
 	{
 		$sql = 'SELECT contact_form.id AS id, 
@@ -65,6 +79,11 @@ class ContactManager extends Manager
 		return $contacts;
 	}
 
+	/**
+	 * Add new contact form in database
+	 * @param Parameter $post [user name, email, subject, content]
+	 * @return  int $contactId
+	 */
 	public function addNewContact(Parameter $post)
 	{
 		$sql = 'INSERT INTO contact_form 
@@ -84,6 +103,12 @@ class ContactManager extends Manager
 		return $contactId;
 	}
 
+	/**
+	 * Upsate contact status (unread, read, sent) in database
+	 * @param  int $contactId
+	 * @param  int $status
+	 * @return void
+	 */
 	public function updateStatus($contactId, $status)
 	{
 		$sql = 'UPDATE contact_form SET contact_status_id = :status WHERE contact_form.id = :contactId';
@@ -93,6 +118,11 @@ class ContactManager extends Manager
 		$req->execute();
 	}
 
+	/**
+	 * Delete contact in database
+	 * @param  int $contactId
+	 * @return void
+	 */
 	public function deleteContact($contactId)
 	{
 		$sql = 'DELETE FROM contact_form WHERE contact_form.id = :contactId';
@@ -102,6 +132,11 @@ class ContactManager extends Manager
 		$req->execute();
 	}
 
+	/**
+	 * Add new answer in database
+	 * @param Parameter $post [subject, content]
+	 * @return  void
+	 */
 	public function addAnswer(Parameter $post)
 	{
 		$sql = 'INSERT INTO answer 
@@ -127,6 +162,11 @@ class ContactManager extends Manager
 		$req->execute();
 	}
 
+	/**
+	 * Get answer related to contact form from database
+	 * @param  int $contactId
+	 * @return object Answer 
+	 */
 	public function getAnswer($contactId)
 	{
 		$sql = 'SELECT answer.id AS id,

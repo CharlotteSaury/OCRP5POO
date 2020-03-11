@@ -109,8 +109,8 @@
                 <h2 class="text-white mb-5">Me contacter !</h2>
 
                 <?php
-                if (isset($message)) {
-                    echo '<div class="adminMessage text-white-50 text-center">' . $message . '</div>';
+                if ($session->get('message')) {
+                    echo '<div class="adminMessage text-white-50 text-center">' . $session->get('message') . '</div>';
                 }
 
                 if (isset($errors)) {

@@ -1,52 +1,16 @@
 <?php
 
 namespace src\constraint;
+
 use config\Parameter;
 
-
+/**
+ * Class InscriptionValidation
+ * Manage input validity for inscription form
+ */
 class InscriptionValidation extends Validation
 {
-    private $errors = [];
-    private $constraint;
-
-    public function __construct()
-    {
-        $this->constraint = new Constraint();
-    }
-
-    public function check(Parameter $post)
-    {
-        foreach ($post->all() as $key => $value) {
-            $this->checkField($key, $value);
-        }
-        return $this->errors;
-    }
-
-    private function checkField($name, $value)
-    {
-        if ($name === 'pseudo') {
-            $error = $this->checkPSeudo($name, $value);
-            $this->addError($name, $error);
-        
-        } elseif ($name === 'email') {
-            $error = $this->checkEmail($name, $value);
-            $this->addError($name, $error);
-        
-        } elseif ($name === 'pass1') {
-            $error = $this->checkPass1($name, $value);
-            $this->addError($name, $error);
-        }
-    }
-
-    private function addError($name, $error) {
-        if ($error) {
-            $this->errors += [
-                $name => $error
-            ];
-        }
-    }
-
-    private function checkPseudo($name, $value)
+    protected function checkPseudo($name, $value)
     {
         if ($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('pseudo', $value);
@@ -65,11 +29,11 @@ class InscriptionValidation extends Validation
         }
 
         if ($this->constraint->containsLetter($name, $value)) {
-            return $this->constraint->containsLetter('mot de passe', $value);
+            return $this->constraint->containsLetter('pseudo', $value);
         }
     }
 
-    private function checkEmail($name, $value)
+    protected function checkEmail($name, $value)
     {
         if ($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('email', $value);
@@ -84,7 +48,7 @@ class InscriptionValidation extends Validation
         }
     }
 
-    private function checkPass1($name, $value)
+    protected function checkPass1($name, $value)
     {
         if ($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('mot de passe', $value);
