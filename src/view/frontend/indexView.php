@@ -64,7 +64,7 @@
         <!-- Project One Row -->
         <div class="row justify-content-center no-gutters my-5 mb-lg-0">
             <div class="col-lg-6">
-                <img class="img-fluid" src="public/vendor/startbootstrap-grayscale-gh-pages/img/demo-image-01.jpg" alt="">
+                <img class="img-fluid" src="public/images/bill-oxford-tR0PPLuN6Pw-unsplash.jpg" alt="">
             </div>
             <div class="col-lg-6">
                 <div class="bg-black text-center h-100 project">
@@ -82,7 +82,7 @@
         <!-- Project Two Row -->
         <div class="row justify-content-center no-gutters">
             <div class="col-lg-6">
-                <img class="img-fluid" src="public/vendor/startbootstrap-grayscale-gh-pages/img/demo-image-02.jpg" alt="">
+                <img class="img-fluid" src="public/images/maik-jonietz-_yMciiStJyY-unsplash.jpg" alt="">
             </div>
             <div class="col-lg-6 order-lg-first">
                 <div class="bg-black text-center h-100 project">
