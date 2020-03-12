@@ -1,11 +1,11 @@
 <?php
 
-namespace src\controller;
+namespace Src\Controller;
 
-use src\controller\Controller;
-use config\Request;
-use config\Parameter;
-use config\File;
+use Src\Controller\Controller;
+use Config\Request;
+use Config\Parameter;
+use Config\File;
 
 /**
  * Class HomeController

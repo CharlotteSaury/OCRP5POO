@@ -1,9 +1,9 @@
 <?php
 
-namespace config;
+namespace Config;
 
-use config\Parameter;
-use config\Session;
+use Config\Parameter;
+use Config\Session;
 
 /**
  * Class Request

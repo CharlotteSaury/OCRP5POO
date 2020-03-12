@@ -1,8 +1,8 @@
 <?php
 
-namespace src\model;
+namespace Src\Model;
 
-use config\Parameter;
+use Config\Parameter;
 
 /**
  * Class UserManager
@@ -39,7 +39,7 @@ class UserManager extends Manager
 		}
 
 		$req = $this->dbRequest($sql);
-		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\src\entity\User');
+		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Src\Entity\User');
 		$users = $req->fetchAll();
 		return $users;
 	}
@@ -86,7 +86,7 @@ class UserManager extends Manager
 		}
 		
 		$req->execute();
-		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\src\entity\User');
+		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Src\Entity\User');
 		$user = $req->fetch();
 		return $user;
 	}

@@ -1,8 +1,6 @@
 <?php
 
-namespace src\entity;
-
-use src\entity\Entity;
+namespace Src\Entity;
 
 /**
  * Abstract class Entity

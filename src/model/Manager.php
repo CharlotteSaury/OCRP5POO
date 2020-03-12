@@ -1,14 +1,14 @@
 <?php
 
-namespace src\model;
+namespace Src\Model;
 
-use src\entity\Post;
-use src\entity\Content;
-use src\entity\User;
-use src\entity\Contact;
-use src\entity\Answer;
-use src\entity\Comment;
-use config\Parameter;
+use Src\Entity\Post;
+use Src\Entity\Content;
+use Src\Entity\User;
+use Src\Entity\Contact;
+use Src\Entity\Answer;
+use Src\Entity\Comment;
+use Config\Parameter;
 
 
 /**

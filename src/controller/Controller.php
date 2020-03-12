@@ -1,16 +1,16 @@
 <?php
 
-namespace src\controller;
+namespace Src\Controller;
 
-use src\model\PostManager;
-use src\model\CommentManager;
-use src\model\UserManager;
-use src\model\ContactManager;
-use src\model\ContentManager;
-use src\view\View;
-use config\Request;
-use config\Parameter;
-use src\constraint\Validation;
+use Src\Model\PostManager;
+use Src\Model\CommentManager;
+use Src\Model\UserManager;
+use Src\Model\ContactManager;
+use Src\Model\ContentManager;
+use Src\View\View;
+use Config\Request;
+use Config\Parameter;
+use Src\Constraint\Validation;
 use Exception;
 
 /**

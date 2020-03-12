@@ -1,13 +1,13 @@
 <?php
 
-namespace src\controller;
+namespace Src\Controller;
 
-use src\controller\Controller;
-use src\controller\HomeController;
-use src\controller\UserController;
-use config\Request;
-use config\Parameter;
-use config\File;
+use Src\Controller\Controller;
+use Src\Controller\HomeController;
+use Src\Controller\UserController;
+use Config\Request;
+use Config\Parameter;
+use Config\File;
 use Exception;
 
 /**
@@ -59,7 +59,6 @@ class AdminController extends Controller
 
 		if ($get != null) {
 			$sorting = $this->getSortingResults($get, 'Articles');
-			var_dump($sorting);
 			$status = $sorting[0];
 			$sortingDate = $sorting[1];
 			$contentTitle = $sorting[2];
@@ -206,17 +205,20 @@ class AdminController extends Controller
 	 */
 	public function editPostView($postId, $errors = null)
 	{
+
 		$errorExists = $this->validation->exists('postId', $postId);
 
 		if (!$errorExists) {
 
 			$post = $this->postManager->getPostInfos($postId);
+			$users = $this->userManager->getUsers();
 			$post->setCategories($this->postManager->getPostsCategories($postId));
 			$contents = $this->contentManager->getContents($postId);
 			$unreadContactsNb = $this->contactManager->getContactsNb(1);
 
 			return $this->view->render('backend', 'editPostView', 
 				['postId' => $postId,
+				'users' => $users,
 				'post' => $post,
 				'contents' => $contents,
 				'unreadContactsNb' => $unreadContactsNb,

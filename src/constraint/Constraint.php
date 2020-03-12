@@ -1,12 +1,12 @@
 <?php
 
-namespace src\constraint;
+namespace Src\Constraint;
 
-use src\model\PostManager;
-use src\model\CommentManager;
-use src\model\ContactManager;
-use src\model\UserManager;
-use src\model\ContentManager;
+use Src\Model\PostManager;
+use Src\Model\CommentManager;
+use Src\Model\ContactManager;
+use Src\Model\UserManager;
+use Src\Model\ContentManager;
 
 /**
  * Class Constraint

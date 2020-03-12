@@ -1,8 +1,8 @@
 <?php
 
-namespace src\constraint;
+namespace Src\Constraint;
 
-use config\Parameter;
+use Config\Parameter;
 
 /**
  * Class PostValidation
@@ -37,6 +37,13 @@ class PostValidation extends Validation
 
         if ($this->constraint->maxLength($name, $value, 350)) {
             return $this->constraint->maxLength('chapo', $value, 350);
+        }
+    }
+
+    protected function checkUserId($name, $value)
+    {
+        if ($this->constraint->exists($name, $value)) {
+            return $this->constraint->exists('pseudo', $value);
         }
     }
 

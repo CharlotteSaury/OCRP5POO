@@ -1,13 +1,13 @@
 <?php
 
-namespace src\controller;
+namespace Src\Controller;
 
-use src\controller\HomeController;
-use src\controller\PostController;
-use src\controller\AdminController;
-use src\controller\UserController;
-use src\controller\ErrorController;
-use config\Request;
+use Src\Controller\HomeController;
+use Src\Controller\PostController;
+use Src\Controller\AdminController;
+use Src\Controller\UserController;
+use Src\Controller\ErrorController;
+use Config\Request;
 
 use Exception;
 
@@ -201,7 +201,6 @@ class Router
 						$this->adminController->addCategory($post);
 					
 					} elseif ($post->get('updatePostInfos')) {
-						var_dump($post);
 						$this->adminController->editPostInfos($post);
 					
 					} elseif ($post->get('editContent')) {

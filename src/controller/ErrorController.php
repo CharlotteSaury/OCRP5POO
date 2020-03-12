@@ -1,8 +1,8 @@
 <?php
 
-namespace src\controller;
+namespace Src\Controller;
 
-use src\controller\Controller;
+use Src\Controller\Controller;
 
 
 /**

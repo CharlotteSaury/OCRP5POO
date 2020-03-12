@@ -16,14 +16,6 @@ class ComposerStaticInit910807a095391365cfdf5b32406455f6
     );
 
     public static $prefixLengthsPsr4 = array (
-        's' => 
-        array (
-            'src\\' => 4,
-        ),
-        'c' => 
-        array (
-            'config\\' => 7,
-        ),
         'Z' => 
         array (
             'Zend\\Stdlib\\' => 12,
@@ -59,6 +51,11 @@ class ComposerStaticInit910807a095391365cfdf5b32406455f6
             'Symfony\\Component\\Debug\\' => 24,
             'Symfony\\Component\\Console\\' => 26,
             'Symfony\\Component\\Config\\' => 25,
+            'Src\\View\\' => 9,
+            'Src\\Model\\' => 10,
+            'Src\\Entity\\' => 11,
+            'Src\\Controller\\' => 15,
+            'Src\\Constraint\\' => 15,
         ),
         'P' => 
         array (
@@ -93,19 +90,12 @@ class ComposerStaticInit910807a095391365cfdf5b32406455f6
         ),
         'C' => 
         array (
+            'Config\\' => 7,
             'Composer\\CaBundle\\' => 18,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'src\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/src',
-        ),
-        'config\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/config',
-        ),
         'Zend\\Stdlib\\' => 
         array (
             0 => __DIR__ . '/..' . '/zendframework/zend-stdlib/src',
@@ -202,6 +192,26 @@ class ComposerStaticInit910807a095391365cfdf5b32406455f6
         array (
             0 => __DIR__ . '/..' . '/symfony/config',
         ),
+        'Src\\View\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/view',
+        ),
+        'Src\\Model\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/model',
+        ),
+        'Src\\Entity\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/entity',
+        ),
+        'Src\\Controller\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/controller',
+        ),
+        'Src\\Constraint\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/constraint',
+        ),
         'Psr\\SimpleCache\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/simple-cache/src',
@@ -253,6 +263,10 @@ class ComposerStaticInit910807a095391365cfdf5b32406455f6
         'Doctrine\\Common\\Annotations\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations',
+        ),
+        'Config\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/config',
         ),
         'Composer\\CaBundle\\' => 
         array (
@@ -351,6 +365,10 @@ class ComposerStaticInit910807a095391365cfdf5b32406455f6
         'Cilex\\Provider\\ValidatorServiceProvider' => __DIR__ . '/..' . '/cilex/cilex/src/Cilex/Provider/ValidatorServiceProvider.php',
         'Cilex\\ServiceProviderInterface' => __DIR__ . '/..' . '/cilex/cilex/src/Cilex/ServiceProviderInterface.php',
         'Composer\\CaBundle\\CaBundle' => __DIR__ . '/..' . '/composer/ca-bundle/src/CaBundle.php',
+        'Config\\File' => __DIR__ . '/../..' . '/config/File.php',
+        'Config\\Parameter' => __DIR__ . '/../..' . '/config/Parameter.php',
+        'Config\\Request' => __DIR__ . '/../..' . '/config/Request.php',
+        'Config\\Session' => __DIR__ . '/../..' . '/config/Session.php',
         'Doctrine\\Common\\Annotations\\Annotation' => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations/Annotation.php',
         'Doctrine\\Common\\Annotations\\AnnotationException' => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations/AnnotationException.php',
         'Doctrine\\Common\\Annotations\\AnnotationReader' => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations/AnnotationReader.php',
@@ -689,6 +707,39 @@ class ComposerStaticInit910807a095391365cfdf5b32406455f6
         'Psr\\SimpleCache\\CacheException' => __DIR__ . '/..' . '/psr/simple-cache/src/CacheException.php',
         'Psr\\SimpleCache\\CacheInterface' => __DIR__ . '/..' . '/psr/simple-cache/src/CacheInterface.php',
         'Psr\\SimpleCache\\InvalidArgumentException' => __DIR__ . '/..' . '/psr/simple-cache/src/InvalidArgumentException.php',
+        'Src\\Constraint\\AnswerValidation' => __DIR__ . '/../..' . '/src/constraint/AnswerValidation.php',
+        'Src\\Constraint\\CategoryValidation' => __DIR__ . '/../..' . '/src/constraint/CategoryValidation.php',
+        'Src\\Constraint\\CommentValidation' => __DIR__ . '/../..' . '/src/constraint/CommentValidation.php',
+        'Src\\Constraint\\Constraint' => __DIR__ . '/../..' . '/src/constraint/Constraint.php',
+        'Src\\Constraint\\ContactValidation' => __DIR__ . '/../..' . '/src/constraint/ContactValidation.php',
+        'Src\\Constraint\\ContentValidation' => __DIR__ . '/../..' . '/src/constraint/ContentValidation.php',
+        'Src\\Constraint\\ExistsValidation' => __DIR__ . '/../..' . '/src/constraint/ExistsValidation.php',
+        'Src\\Constraint\\InscriptionValidation' => __DIR__ . '/../..' . '/src/constraint/InscriptionValidation.php',
+        'Src\\Constraint\\NewPassValidation' => __DIR__ . '/../..' . '/src/constraint/NewPassValidation.php',
+        'Src\\Constraint\\PostValidation' => __DIR__ . '/../..' . '/src/constraint/PostValidation.php',
+        'Src\\Constraint\\UserValidation' => __DIR__ . '/../..' . '/src/constraint/UserValidation.php',
+        'Src\\Constraint\\Validation' => __DIR__ . '/../..' . '/src/constraint/Validation.php',
+        'Src\\Controller\\AdminController' => __DIR__ . '/../..' . '/src/controller/AdminController.php',
+        'Src\\Controller\\Controller' => __DIR__ . '/../..' . '/src/controller/Controller.php',
+        'Src\\Controller\\ErrorController' => __DIR__ . '/../..' . '/src/controller/ErrorController.php',
+        'Src\\Controller\\HomeController' => __DIR__ . '/../..' . '/src/controller/HomeController.php',
+        'Src\\Controller\\PostController' => __DIR__ . '/../..' . '/src/controller/PostController.php',
+        'Src\\Controller\\Router' => __DIR__ . '/../..' . '/src/controller/Router.php',
+        'Src\\Controller\\UserController' => __DIR__ . '/../..' . '/src/controller/UserController.php',
+        'Src\\Entity\\Answer' => __DIR__ . '/../..' . '/src/entity/Answer.php',
+        'Src\\Entity\\Comment' => __DIR__ . '/../..' . '/src/entity/Comment.php',
+        'Src\\Entity\\Contact' => __DIR__ . '/../..' . '/src/entity/Contact.php',
+        'Src\\Entity\\Content' => __DIR__ . '/../..' . '/src/entity/Content.php',
+        'Src\\Entity\\Entity' => __DIR__ . '/../..' . '/src/entity/Entity.php',
+        'Src\\Entity\\Post' => __DIR__ . '/../..' . '/src/entity/Post.php',
+        'Src\\Entity\\User' => __DIR__ . '/../..' . '/src/entity/User.php',
+        'Src\\Model\\CommentManager' => __DIR__ . '/../..' . '/src/model/CommentManager.php',
+        'Src\\Model\\ContactManager' => __DIR__ . '/../..' . '/src/model/ContactManager.php',
+        'Src\\Model\\ContentManager' => __DIR__ . '/../..' . '/src/model/ContentManager.php',
+        'Src\\Model\\Manager' => __DIR__ . '/../..' . '/src/model/Manager.php',
+        'Src\\Model\\PostManager' => __DIR__ . '/../..' . '/src/model/PostManager.php',
+        'Src\\Model\\UserManager' => __DIR__ . '/../..' . '/src/model/UserManager.php',
+        'Src\\View\\View' => __DIR__ . '/../..' . '/src/view/View.php',
         'Symfony\\Component\\Config\\ConfigCache' => __DIR__ . '/..' . '/symfony/config/ConfigCache.php',
         'Symfony\\Component\\Config\\ConfigCacheFactory' => __DIR__ . '/..' . '/symfony/config/ConfigCacheFactory.php',
         'Symfony\\Component\\Config\\ConfigCacheFactoryInterface' => __DIR__ . '/..' . '/symfony/config/ConfigCacheFactoryInterface.php',
@@ -2053,10 +2104,6 @@ class ComposerStaticInit910807a095391365cfdf5b32406455f6
         'Zend\\Stdlib\\StringWrapper\\MbString' => __DIR__ . '/..' . '/zendframework/zend-stdlib/src/StringWrapper/MbString.php',
         'Zend\\Stdlib\\StringWrapper\\Native' => __DIR__ . '/..' . '/zendframework/zend-stdlib/src/StringWrapper/Native.php',
         'Zend\\Stdlib\\StringWrapper\\StringWrapperInterface' => __DIR__ . '/..' . '/zendframework/zend-stdlib/src/StringWrapper/StringWrapperInterface.php',
-        'config\\File' => __DIR__ . '/../..' . '/config/File.php',
-        'config\\Parameter' => __DIR__ . '/../..' . '/config/Parameter.php',
-        'config\\Request' => __DIR__ . '/../..' . '/config/Request.php',
-        'config\\Session' => __DIR__ . '/../..' . '/config/Session.php',
         'ezcBase' => __DIR__ . '/..' . '/zetacomponents/base/src/base.php',
         'ezcBaseAutoloadException' => __DIR__ . '/..' . '/zetacomponents/base/src/exceptions/autoload.php',
         'ezcBaseAutoloadOptions' => __DIR__ . '/..' . '/zetacomponents/base/src/options/autoload.php',
@@ -2977,39 +3024,6 @@ class ComposerStaticInit910807a095391365cfdf5b32406455f6
         'phpDocumentor\\Translator\\Configuration' => __DIR__ . '/..' . '/phpdocumentor/phpdocumentor/src/phpDocumentor/Translator/Configuration.php',
         'phpDocumentor\\Translator\\ServiceProvider' => __DIR__ . '/..' . '/phpdocumentor/phpdocumentor/src/phpDocumentor/Translator/ServiceProvider.php',
         'phpDocumentor\\Translator\\Translator' => __DIR__ . '/..' . '/phpdocumentor/phpdocumentor/src/phpDocumentor/Translator/Translator.php',
-        'src\\Model\\Manager' => __DIR__ . '/../..' . '/src/model/Manager.php',
-        'src\\constraint\\AnswerValidation' => __DIR__ . '/../..' . '/src/constraint/AnswerValidation.php',
-        'src\\constraint\\CategoryValidation' => __DIR__ . '/../..' . '/src/constraint/CategoryValidation.php',
-        'src\\constraint\\CommentValidation' => __DIR__ . '/../..' . '/src/constraint/CommentValidation.php',
-        'src\\constraint\\Constraint' => __DIR__ . '/../..' . '/src/constraint/Constraint.php',
-        'src\\constraint\\ContactValidation' => __DIR__ . '/../..' . '/src/constraint/ContactValidation.php',
-        'src\\constraint\\ContentValidation' => __DIR__ . '/../..' . '/src/constraint/ContentValidation.php',
-        'src\\constraint\\ExistsValidation' => __DIR__ . '/../..' . '/src/constraint/ExistsValidation.php',
-        'src\\constraint\\InscriptionValidation' => __DIR__ . '/../..' . '/src/constraint/InscriptionValidation.php',
-        'src\\constraint\\NewPassValidation' => __DIR__ . '/../..' . '/src/constraint/NewPassValidation.php',
-        'src\\constraint\\PostValidation' => __DIR__ . '/../..' . '/src/constraint/PostValidation.php',
-        'src\\constraint\\UserValidation' => __DIR__ . '/../..' . '/src/constraint/UserValidation.php',
-        'src\\constraint\\Validation' => __DIR__ . '/../..' . '/src/constraint/Validation.php',
-        'src\\controller\\AdminController' => __DIR__ . '/../..' . '/src/controller/AdminController.php',
-        'src\\controller\\Controller' => __DIR__ . '/../..' . '/src/controller/Controller.php',
-        'src\\controller\\ErrorController' => __DIR__ . '/../..' . '/src/controller/ErrorController.php',
-        'src\\controller\\HomeController' => __DIR__ . '/../..' . '/src/controller/HomeController.php',
-        'src\\controller\\PostController' => __DIR__ . '/../..' . '/src/controller/PostController.php',
-        'src\\controller\\Router' => __DIR__ . '/../..' . '/src/controller/Router.php',
-        'src\\controller\\UserController' => __DIR__ . '/../..' . '/src/controller/UserController.php',
-        'src\\entity\\Answer' => __DIR__ . '/../..' . '/src/entity/Answer.php',
-        'src\\entity\\Comment' => __DIR__ . '/../..' . '/src/entity/Comment.php',
-        'src\\entity\\Contact' => __DIR__ . '/../..' . '/src/entity/Contact.php',
-        'src\\entity\\Content' => __DIR__ . '/../..' . '/src/entity/Content.php',
-        'src\\entity\\Entity' => __DIR__ . '/../..' . '/src/entity/Entity.php',
-        'src\\entity\\Post' => __DIR__ . '/../..' . '/src/entity/Post.php',
-        'src\\entity\\User' => __DIR__ . '/../..' . '/src/entity/User.php',
-        'src\\model\\CommentManager' => __DIR__ . '/../..' . '/src/model/CommentManager.php',
-        'src\\model\\ContactManager' => __DIR__ . '/../..' . '/src/model/ContactManager.php',
-        'src\\model\\ContentManager' => __DIR__ . '/../..' . '/src/model/ContentManager.php',
-        'src\\model\\PostManager' => __DIR__ . '/../..' . '/src/model/PostManager.php',
-        'src\\model\\UserManager' => __DIR__ . '/../..' . '/src/model/UserManager.php',
-        'src\\view\\View' => __DIR__ . '/../..' . '/src/view/View.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

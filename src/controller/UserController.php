@@ -1,12 +1,12 @@
 <?php
 
-namespace src\controller;
+namespace Src\Controller;
 
-use src\controller\Controller;
-use src\controller\HomeController;
-use config\Request;
-use config\Parameter;
-use config\Session;
+use Src\Controller\Controller;
+use Src\Controller\HomeController;
+use Config\Request;
+use Config\Parameter;
+use Config\Session;
 
 /**
  * Class UserController
@@ -62,10 +62,10 @@ class UserController extends Controller
 	 * @param  int $userId [userId]
 	 * @return bool [return true if pseudo exists in database, false if not]
 	 */
-	public function checkPseudo($pseudo, $userId = null)
+	/*public function checkPseudo($pseudo, $userId = null)
 	{
 		return $pseudoExists = ($this->userManager->pseudoExists($pseudo, $userId) == 1) ? true : false;
-	}
+	}*/
 
 	/**
 	 * Call userManager to check if an email exists in database and if this email is associated with userId (if provided)
