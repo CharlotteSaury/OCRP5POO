@@ -74,10 +74,15 @@ class Router
 	 */
 	public function routerRequest()
 	{
+		var_dump($_SESSION);
 		$action = $this->request->getGet()->get('action');
 		try {
 			if (isset($action)) {
 
+				/*****************************************************/ 
+				/*********** Actions related to frontend *************/
+				/*****************************************************/
+				
 				if ($action === 'listPosts') {
 					$this->postController->listPostView($this->request->getGet());
 				
@@ -158,9 +163,16 @@ class Router
 					$email = $this->request->getSession()->get('email');
 					$this->userController->newPass($post, $email);
 				
+				/*****************************************************/ 
+				/*********** Actions related to backend **************/
+				/*****************************************************/
+
 				} elseif ($action === 'admin' && $this->userController->adminAccess()) {
 
 					$this->adminController->dashboardView();
+
+
+				// Actions related to Post managment
 				
 				} elseif ($action === 'adminPosts' && $this->userController->adminAccess()) {
 
@@ -244,6 +256,9 @@ class Router
 					$dashboard = ($action === 'deletePostDashboard') ? 1 : null;
 					$this->adminController->deletePost($get, $dashboard);	
 				
+
+				// Actions related to Comments managment
+				
 				} elseif ($action === 'adminComments' && $this->userController->adminAccess()) {
 
 					$get = $this->request->getGet();
@@ -268,6 +283,9 @@ class Router
 					$dashboard = ($action === 'deleteCommentDashboard') ? 1 : null;
 					$this->adminController->deleteComment($this->request->getGet()->get('id'), $dashboard);		
 				
+
+				// Actions related to Users managment
+				
 				} elseif ($action === 'adminUsers' && $this->userController->adminAccess()) {
 
 					$this->adminController->adminUsersView( $this->request->getGet()->get('sort'));					
@@ -290,6 +308,9 @@ class Router
 
 					$userId = $this->request->getGet()->get('id');
 					$this->adminController->updateProfilePicture($userId);
+
+
+				// Actions related to Contacts managment
 				
 				} elseif ($action === 'adminContacts' && $this->userController->adminAccess()) {
 

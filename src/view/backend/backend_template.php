@@ -103,8 +103,8 @@
                         <span>Contacts</span>
 
                         <?php
-                        if ($unreadContactsNb != 0) {
-                            echo '<span class="badge badge-light ml-2">' . $unreadContactsNb . '</span>';
+                        if ($session->get('unreadContactsNb') != 0) {
+                            echo '<span class="badge badge-light ml-2">' . $session->get('unreadContactsNb') . '</span>';
                         }
                         ?>
                         
