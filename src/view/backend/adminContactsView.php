@@ -13,7 +13,7 @@
     <div class="col-12">
         <a href="index.php?action=adminContacts">Tous (<?= $allContactsNb ?>)</a>
          | 
-         <a href="index.php?action=adminContacts&status=1">Non lus (<?= $unreadContactsNb ?>)</a>
+         <a href="index.php?action=adminContacts&status=1">Non lus (<?= $session->get('unreadContactsNb') ?>)</a>
      </div>
      <div class="col-12 mb-3">
         Trier par date 

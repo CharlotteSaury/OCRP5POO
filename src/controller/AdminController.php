@@ -31,7 +31,6 @@ class AdminController extends Controller
 		$recentPosts = $this->postManager->getRecentPosts();
 		$recentComments = $this->commentManager->getComments(5);
 		$users = $this->userManager->getUsers(5);
-		$unreadContactsNb = $this->contactManager->getContactsNb(1);
 
 		return $this->view->render('backend', 'dashboardView', ['publishedPostsNb' => $publishedPostsNb,
 			'totalPostsNb' => $totalPostsNb,
@@ -41,7 +40,6 @@ class AdminController extends Controller
 			'recentPosts' => $recentPosts,
 			'recentComments' => $recentComments,
 			'users' => $users,
-			'unreadContactsNb' => $unreadContactsNb,
 			'session' => $this->request->getSession()]);
 	}
 
@@ -55,7 +53,6 @@ class AdminController extends Controller
 		$totalPostsNb = $this->postManager->getPostsNb();
 		$publishedPostsNb = $this->postManager->getPostsNb(2);
 		$unpublishedPostsNb = $totalPostsNb - $publishedPostsNb;
-		$unreadContactsNb = $this->contactManager->getContactsNb(1);
 
 		if ($get != null) {
 			$sorting = $this->getSortingResults($get, 'Articles');
@@ -87,7 +84,6 @@ class AdminController extends Controller
 			'totalPostsNb' => $totalPostsNb,
 			'unpublishedPostsNb' => $unpublishedPostsNb,
 			'posts' => $posts,
-			'unreadContactsNb' => $unreadContactsNb,
 			'session' => $this->request->getSession(),
 			'get' => $get]);
 
@@ -108,14 +104,12 @@ class AdminController extends Controller
 			$post->setCategories($this->postManager->getPostsCategories($postId));
 			$contents = $this->contentManager->getContents($postId);
 			$postComments = $this->commentManager->getPostComments($postId);	
-			$unreadContactsNb = $this->contactManager->getContactsNb(1);
 
 			return $this->view->render('backend', 'adminPostView', 
 				['postId' => $postId,
 				'post' => $post,
 				'contents' => $contents,
 				'postComments' => $postComments,
-				'unreadContactsNb' => $unreadContactsNb,
 				'session' => $this->request->getSession()]);
 		}
 		throw new Exception('Identifiant de post non valide');
@@ -128,10 +122,8 @@ class AdminController extends Controller
 	 */
 	public function adminNewPostView($errors = null)
 	{
-		$unreadContactsNb = $this->contactManager->getContactsNb(1);
 		return $this->view->render('backend', 'newPostInfosView',
-			['unreadContactsNb' => $unreadContactsNb,
-			'session' => $this->request->getSession(),
+			['session' => $this->request->getSession(),
 			'errors' => $errors]);
 	}
 
@@ -214,14 +206,12 @@ class AdminController extends Controller
 			$users = $this->userManager->getUsers();
 			$post->setCategories($this->postManager->getPostsCategories($postId));
 			$contents = $this->contentManager->getContents($postId);
-			$unreadContactsNb = $this->contactManager->getContactsNb(1);
 
 			return $this->view->render('backend', 'editPostView', 
 				['postId' => $postId,
 				'users' => $users,
 				'post' => $post,
 				'contents' => $contents,
-				'unreadContactsNb' => $unreadContactsNb,
 				'session' => $this->request->getSession(),
 				'errors' => $errors]);
 		}
@@ -475,7 +465,6 @@ class AdminController extends Controller
 		$totalCommentsNb = $this->commentManager->getCommentsNb();
 		$approvedCommentsNb = $this->commentManager->getCommentsNb(2);
 		$unapprovedCommentsNb = $totalCommentsNb - $approvedCommentsNb;
-		$unreadContactsNb = $this->contactManager->getContactsNb(1);
 		
 		if ($get != null) {
 			$sorting = $this->getSortingResults($get, 'Commentaires');
@@ -495,7 +484,6 @@ class AdminController extends Controller
 			'contentTitle' => $contentTitle,
 			'status' => $status,
 			'allComments' => $allComments,
-			'unreadContactsNb' => $unreadContactsNb,
 			'session' => $this->request->getSession(),
 			'get' => $get]);
 	}
@@ -572,7 +560,6 @@ class AdminController extends Controller
 
 		
 		$users = $this->userManager->getUsers(null, $userRoleId);
-		$unreadContactsNb = $this->contactManager->getContactsNb(1);
 		
 		return $this->view->render('backend', 'adminUsersView',
 			['allUsersNb' => $allUsersNb,
@@ -581,7 +568,6 @@ class AdminController extends Controller
 			'usersNb' => $usersNb,
 			'contentTitle' => $contentTitle,
 			'users' => $users,
-			'unreadContactsNb' => $unreadContactsNb,
 			'session' => $this->request->getSession()]);
 	}
 
@@ -596,11 +582,9 @@ class AdminController extends Controller
 
 		if (!$errorExists) {
 			$user = $this->userManager->getUser($userId);
-			$unreadContactsNb = $this->contactManager->getContactsNb(1);
 
 			return $this->view->render('backend', 'profileUserView',
 				['user' => $user,
-				'unreadContactsNb' => $unreadContactsNb,
 				'userId' => $userId,
 				'session' => $this->request->getSession()]);
 		}
@@ -616,11 +600,9 @@ class AdminController extends Controller
 	public function editUserView($userId, $errors = null)
 	{
 		$user = $this->userManager->getUser($userId);
-		$unreadContactsNb = $this->contactManager->getContactsNb(1);
 
 		return $this->view->render('backend', 'editUserView',
 			['user' => $user,
-			'unreadContactsNb' => $unreadContactsNb,
 			'userId' => $userId,
 			'session' => $this->request->getSession(),
 			'errors' => $errors]);
@@ -743,7 +725,6 @@ class AdminController extends Controller
 	public function adminContactsView(Parameter $get = null)
 	{
 		$allContactsNb = $this->contactManager->getContactsNb();
-		$unreadContactsNb = $this->contactManager->getContactsNb(1);
 
 		if ($get != null) {
 			$sorting = $this->getSortingResults($get, 'Contacts');
@@ -760,7 +741,6 @@ class AdminController extends Controller
 		
 		return $this->view->render('backend', 'adminContactsView', 
 			['allContactsNb' => $allContactsNb,
-			'unreadContactsNb' => $unreadContactsNb,
 			'contentTitle' => $contentTitle,
 			'allContacts' => $allContacts,
 			'session' => $this->request->getSession(),
@@ -775,6 +755,7 @@ class AdminController extends Controller
 	 */
 	public function adminContactView($contactId, $errors = null)
 	{
+		$this->request->getSession()->set('unreadContactsNb', $this->contactManager->getContactsNb(1));
 		$errorExists = $this->validation->exists('contactId', $contactId);
 
 		if (!$errorExists) {
@@ -790,14 +771,11 @@ class AdminController extends Controller
 				$answer = $this->contactManager->getAnswer($contactId);
 			}
 
-			$unreadContactsNb = $this->contactManager->getContactsNb(1);
-
 			return $this->view->render('backend', 'adminContactView', 
 				['contactId' => $contactId,
 				'contact' => $contact,
 				'currentStatus' => $currentStatus,
 				'answer' => $answer,
-				'unreadContactsNb' => $unreadContactsNb,
 				'session' => $this->request->getSession(),
 				'errors' => $errors]);
 		

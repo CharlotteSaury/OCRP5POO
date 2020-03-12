@@ -223,6 +223,10 @@ class UserController extends Controller
         $this->request->getSession()->set('role', $user->getUserRoleId());
         $this->request->getSession()->set('avatar', $user->getAvatar());
        	$this->request->getSession()->set('email', $email);
+
+       	if ($user->getUserRoleId() == 3) {
+       		$this->request->getSession()->set('unreadContactsNb', $this->contactManager->getContactsNb(1));
+       	}
 	}
 
 	
