@@ -74,8 +74,8 @@ class Router
 	 */
 	public function routerRequest()
 	{
-		var_dump($_SESSION);
 		$action = $this->request->getGet()->get('action');
+		$this->adminController->getUnreadContactsNb();
 		try {
 			if (isset($action)) {
 
@@ -301,7 +301,6 @@ class Router
 				} elseif ($action === 'editUserInfos') {
 
 					$post = $this->request->getPost();
-					var_dump($post);
 					$this->adminController->editUserInfos($post);
 				
 				} elseif ($action === 'updateProfilePicture') {

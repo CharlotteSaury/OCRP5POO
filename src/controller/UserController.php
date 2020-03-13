@@ -142,9 +142,9 @@ class UserController extends Controller
 
 			$user = $this->userManager->getUser($userId = null, $get->get('email'));
 
-			if ($user->actCode() != null) {
+			if ($user->getActCode() != null) {
 
-				if ($user->actCode() != $get->get('key')) {
+				if ($user->getActCode() != $get->get('key')) {
 					$this->request->getSession()->set('message', 'La clé d\'activation n\'est pas bonne, veuillez retourner sur votre mail d\'activation.');
 
 				} else {

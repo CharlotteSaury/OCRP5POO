@@ -71,8 +71,8 @@ class Constraint
 
     public function containsOnlyLetter($name, $value)
     {
-        if (!preg_match('#^[a-zA-Z]+$#', $value)) {
-            return 'Le champ '. $name .' ne doit contenir que des lettres.';
+        if (!preg_match('#[a-zA-Z-]+\s*#', $value)) {
+            return 'Le champ '. $name .' ne doit contenir que des lettres (et "-").';
         }
     }
 

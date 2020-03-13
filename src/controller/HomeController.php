@@ -12,7 +12,6 @@ use Config\File;
  * Manage router to appropriate manager redirection associated with frontend actions
  */
 class HomeController extends Controller
-
 {
 	/**
 	 * Home page

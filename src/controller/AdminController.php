@@ -853,6 +853,11 @@ class AdminController extends Controller
 		}
 	}
 
+	public function getUnreadContactsNb()
+	{
+		$this->request->getSession()->set('unreadContactsNb', $this->contactManager->getContactsNb(1));
+	}
+
 	/**
 	 * Get sorting results from url
 	 * @param  Parameter $get          [optional sorting by status (sort) or date]
