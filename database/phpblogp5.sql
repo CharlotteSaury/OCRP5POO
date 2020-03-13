@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  jeu. 12 mars 2020 à 10:54
+-- Généré le :  jeu. 12 mars 2020 à 17:26
 -- Version du serveur :  5.7.24
 -- Version de PHP :  7.2.14
 
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `answer` (
   `content` text NOT NULL,
   `date_answer` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `category` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `comment` (
   PRIMARY KEY (`id`),
   KEY `blog_post_blog_comment_fk` (`post_id`),
   KEY `user_blog_comment_fk` (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=107 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -99,7 +99,7 @@ CREATE TABLE IF NOT EXISTS `contact_form` (
   `contact_status_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `contact_status_id` (`contact_status_id`) USING BTREE
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=44 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -112,7 +112,16 @@ CREATE TABLE IF NOT EXISTS `contact_status` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(25) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `contact_status`
+--
+
+INSERT INTO `contact_status` (`id`, `name`) VALUES
+(1, 'Non lu'),
+(2, 'Lu'),
+(3, 'Répondu');
 
 -- --------------------------------------------------------
 
@@ -128,7 +137,7 @@ CREATE TABLE IF NOT EXISTS `content` (
   `content` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `content_type_content_fk` (`content_type_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=176 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -141,7 +150,15 @@ CREATE TABLE IF NOT EXISTS `content_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `content_type`
+--
+
+INSERT INTO `content_type` (`id`, `name`) VALUES
+(2, 'paragraph'),
+(1, 'image');
 
 -- --------------------------------------------------------
 
@@ -160,7 +177,7 @@ CREATE TABLE IF NOT EXISTS `post` (
   `user_id` int(11) NOT NULL,
   `main_image` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=59 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -204,7 +221,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   UNIQUE KEY `pseudo` (`pseudo`),
   UNIQUE KEY `email` (`email`),
   KEY `user_role_user_fk` (`user_role_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=44 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -217,7 +234,16 @@ CREATE TABLE IF NOT EXISTS `user_role` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `role` varchar(25) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `user_role`
+--
+
+INSERT INTO `user_role` (`id`, `role`) VALUES
+(1, 'admin'),
+(2, 'user'),
+(3, 'super_admin');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
