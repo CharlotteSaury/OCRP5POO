@@ -149,6 +149,11 @@ a:focus, a:hover {
 /* /////// backend Views ////////// */
 /* //////////////////////////////// */
 
+/* /////// dashboard view //////// */
+
+.dashboard-card .h5 {
+	font-size: 1rem;
+}
 
 /* /////// Sorting row //////// */
 
