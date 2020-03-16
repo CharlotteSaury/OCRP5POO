@@ -138,28 +138,26 @@ class AdminController extends Controller
 		$errors = $this->validation->validate($post, 'Post');
 
 		if (!$errors) {
+			$errors = $this->validation->validatePicture($file, 'picture');
 
-			if ($file->get('picture') && $file->get('picture', 'error') != 4) {
+			if (!$errors) {
+				$homeController = new HomeController();
+				$mainImage = $homeController->pictureUpload($file, 'picture');
+				$postId = $this->postManager->newPostInfos($post, $mainImage);
+				$this->editPostView($postId);
 
-				$infos = new HomeController();
-				$uploadResults = $infos->pictureUpload($namePicture = 'picture');
-
-				if (strrpos($uploadResults, 'uploads') === false) {
-
-					$this->request->getSession()->set('message', $uploadResults);
-					$this->adminNewPostView();
-
-				} else {
-
-					$mainImage = $uploadResults;
-					$postId = $this->postManager->newPostInfos($post, $mainImage);
-					$this->editPostView($postId);
-				}
-			
-			} else {
-
+			} elseif ($errors['name'] === 'Aucun fichier téléchargé.') {
+				var_dump($errors);
 				$postId = $this->postManager->newPostInfos($post, $mainImage = null);
 				$this->editPostView($postId);
+
+			} else {
+				$message = '';
+				foreach ($errors as $error) {
+					$message .= '<p>' . $error . '</p>';
+				}
+				$this->request->getSession()->set('message', $message);
+				$this->adminNewPostView($errors);
 			}
 
 		} else {
@@ -219,6 +217,59 @@ class AdminController extends Controller
 	}
 
 	/**
+	 * Upload main post picture if provided and call postManager to edit post infos in database after input validity check
+	 * @param  Parameter $post [title, chapo]
+	 * @return void          
+	 */
+	public function editPostInfos(Parameter $post)
+	{
+		$errors = $this->validation->validate($post, 'Post');
+
+		if (!$errors) {
+
+			$file = $this->request->getFile();
+
+			if ($file->get('MainPicture')) {
+				$errors = $this->validation->validatePicture($file, 'MainPicture');
+
+				if (!$errors) {
+					$homeController = new HomeController();
+					$uploadResults = $homeController->pictureUpload($file, 'MainPicture');
+					$post->set('main_image', $uploadResults);
+					$this->request->getSession()->set('message', 'Informations modifiées !');
+
+				} elseif (isset($errors['name']) && $errors['name'] === 'Aucun fichier téléchargé.') {
+					$this->request->getSession()->set('message', 'Informations modifiées !');
+
+				} else {
+					$message = '';
+					foreach($errors as $key => $value) {
+						$message .= '<p>' . $value . '</p>';
+					}
+					$this->request->getSession()->set('message', '<p>Informations modifiées !</p><p>Erreur de téléchargement de l\'image principale : ' . $message . '</p>');
+				}
+
+			} else {
+				$this->request->getSession()->set('message', 'Informations modifiées !');
+			}
+
+			$this->postManager->editPostInfos($post);
+			$this->postManager->dateUpdate($post->get('postId'));
+			$this->editPostView($post->get('postId'));
+		
+		} else {
+
+			$message = '';
+			foreach($errors as $key => $value) {
+				$message .= '<p>' . $value . '</p>';
+			}
+			$this->request->getSession()->set('message', $message);
+			$this->editPostView($post->get('postId'));
+		}
+		
+	}
+
+	/**
 	 * Redirect to postManager to delete main post picture in database and update post last update date
 	 * @param  int $postId 
 	 * @return void        
@@ -236,12 +287,38 @@ class AdminController extends Controller
 	}
 
 	/**
+	 * Upload picture and call contentManager to add new content to database 
+	 * @param Parameter $post [postId]
+	 */
+	public function addPicture(Parameter $post)
+	{
+		$errors = $this->validation->validatePicture($this->request->getFile(), 'picture');
+
+		if (!$errors) {
+			$homeController = new HomeController();
+			$uploadResults = $homeController->pictureUpload($this->request->getFile(), 'picture');
+
+			$this->contentManager->addContent($post->get('postId'), $uploadResults);
+			$this->postManager->dateUpdate($post->get('postId'));
+			$this->request->getSession()->set('message', 'Image ajoutée !');
+		} else {
+			$message = '';
+			foreach ($errors as $error) {
+				$message .= '<p>' . $error . '</p>';
+			}
+			$this->request->getSession()->set('message', $message);
+		}
+		$this->editPostView($post->get('postId'));
+	}
+
+	/**
 	 * Upload post picture and call contentManager to update post picture url in database
 	 * @param  Parameter $post [$postId]
 	 * @return void          
 	 */
 	public function editPostPicture(Parameter $post)
 	{
+		$contentId = '';
 		foreach ($_FILES AS $key => $value) {
 
 			if ($value['name'] !='') {
@@ -249,24 +326,31 @@ class AdminController extends Controller
 			}
 		}
 
-		$homeController = new HomeController();
-		$uploadResults = $homeController->pictureUpload($namePicture = 'picture' . $contentId);
+		if ($contentId != null) {
+			$errors = $this->validation->validatePicture($this->request->getFile(), 'picture' . $contentId);
 
-		if (strrpos($uploadResults, 'uploads') === false) {
+			if (!$errors) {
+				$homeController = new HomeController();
+				$uploadResults = $homeController->pictureUpload($this->request->getFile(), 'picture' . $contentId);
 
-			$this->request->getSession()->set('message', $uploadResults);
+				$content = $this->contentManager->getContent($contentId);
+				$oldImgUrl = $content->getContent();
+				$this->contentManager->editContent($contentId, $uploadResults);
+				$this->postManager->dateUpdate($post->get('postId'));
+				unlink($oldImgUrl);
+				$this->request->getSession()->set('message', 'Image modifiée !');
 
+			} else {
+				$message = '';
+				foreach ($errors as $error) {
+					$message .= '<p>' . $error . '</p>';
+				}
+				$this->request->getSession()->set('message', $message);
+			}
 		} else {
-
-			$content = $this->contentManager->getContent($contentId);
-			$oldImgUrl = $content->getContent();
-			$this->contentManager->editContent($contentId, $uploadResults);
-			$this->postManager->dateUpdate($post->get('postId'));
-			unlink($oldImgUrl);
-			$this->request->getSession()->set('message', 'Image modifiée !');
+			$this->request->getSession()->set('message', 'Aucun fichier téléchargé !');
 		}
 		$this->editPostView($post->get('postId'));
-
 	}
 
 	/**
@@ -329,26 +413,6 @@ class AdminController extends Controller
 		$this->editPostView($post->get('postId'));
 	}
 
-	/**
-	 * Upload picture and call contentManager to add new content to database 
-	 * @param Parameter $post [postId]
-	 */
-	public function addPicture(Parameter $post)
-	{
-		$homeController = new HomeController();
-		$uploadResults = $homeController->pictureUpload($namePicture = 'picture');
-
-		if (strrpos($uploadResults, 'uploads') === false) {
-
-			$this->request->getSession()->set('message', $uploadResults);
-		
-		} else {
-			$this->contentManager->addContent($post->get('postId'), $uploadResults);
-			$this->postManager->dateUpdate($post->get('postId'));
-			$this->request->getSession()->set('message', 'Image ajoutée !');
-		}
-		$this->editPostView($post->get('postId'));
-	}
 
 	/**
 	 * Call postManager to add new category to database after input validity check
@@ -383,55 +447,6 @@ class AdminController extends Controller
 		$this->postManager->dateUpdate($get->get('id'));
 		$this->request->getSession()->set('message', 'Catégorie supprimée ! ');
 		$this->editPostView($get->get('id'));
-	}
-
-	/**
-	 * Upload main post picture if provided and call postManager to edit post infos in database after input validity check
-	 * @param  Parameter $post [title, chapo]
-	 * @return void          
-	 */
-	public function editPostInfos(Parameter $post)
-	{
-		$file = $this->request->getFile();
-		$homeController = new HomeController();
-
-		if ($file->get('MainPicture') && $file->get('MainPicture', 'error') != 4) {
-
-			$uploadResults = $homeController->pictureUpload($namePicture = 'MainPicture');
-
-			if (strrpos($uploadResults, 'uploads') === false) {
-
-				$this->request->getSession()->set('message', "Information(s) modifiée(s) \n 
-				/!\ Erreur de téléchargement de l'image principale : " . $uploadResults);
-			
-			} else {
-
-				$post->set('main_image', $uploadResults);
-				$this->request->getSession()->set('message', "Information(s) modifiée(s) ! ");
-			}
-		
-		} else {
-
-			$this->request->getSession()->set('message', "Information(s) modifiée(s) ! ");
-		}
-
-		$errors = $this->validation->validate($post, 'Post');
-
-		if (!$errors) {
-
-			$this->postManager->editPostInfos($post);
-			$this->postManager->dateUpdate($post->get('postId'));
-			$this->editPostView($post->get('postId'));
-		
-		} else {
-
-			$message = '';
-			foreach($errors as $key => $value) {
-				$message .= '<p>' . $value . '</p>';
-			}
-			$this->request->getSession()->set('message', $message);
-			$this->editPostView($post->get('postId'));
-		}
 	}
 
 	/**
@@ -689,17 +704,14 @@ class AdminController extends Controller
 	 */
 	public function updateProfilePicture($userId)
 	{
-		$homeController = new HomeController();
-		$uploadResults = $homeController->pictureUpload($namePicture = 'picture');
+		$user = $this->userManager->getUser($userId);
+		$errors = $this->validation->validatePicture($this->request->getFile(), 'picture');
 
-		if (strrpos($uploadResults, 'uploads') === false) {
-			$this->request->getSession()->set('message', $uploadResults);
-			$this->profileUserView($userId);
-		
-		} else {
-			$user = $this->userManager->getUser($userId);
+		if (!$errors) {
+			$homeController = new HomeController();
+			$uploadResults = $homeController->pictureUpload($this->request->getFile(), 'picture');
+
 			$oldAvatarUrl = $user->getAvatar();
-			
 			if ($oldAvatarUrl != 'public/images/profile.png') {
 				unlink($oldAvatarUrl);
 			}
@@ -708,12 +720,28 @@ class AdminController extends Controller
 			$this->request->getSession()->set('message', 'Photo de profil modifiée !');
 			$this->profileUserView($userId);
 
-			// Si l'utilisateur a modifié son propre profil, alors on modifie les variables de session
+			// if user updated its own profile, update of avatar in session
 
 			$currentUserId = $this->request->getSession()->get('id');	
 			if ($currentUserId == $userId) {
 				$this->request->getSession()->set('avatar', $uploadResults);
 			}
+		} elseif (isset($errors['name']) && $errors['name'] === 'Aucun fichier téléchargé.') {
+			$oldAvatarUrl = $user->getAvatar();
+			if ($oldAvatarUrl != 'public/images/profile.png') {
+				unlink($oldAvatarUrl);
+			}
+			$this->userManager->updateProfilePicture($userId, 'public/images/profile.png');
+			$this->request->getSession()->set('message', 'Photo de profil supprimée !');
+			$this->profileUserView($userId);
+
+		} else {
+			$message = '';
+			foreach ($errors as $error) {
+				$message .= '<p>' . $error . '</p>';
+			}
+			$this->request->getSession()->set('message', $message);
+			$this->profileUserView($userId);
 		}
 	}
 
@@ -853,6 +881,10 @@ class AdminController extends Controller
 		}
 	}
 
+	/**
+	 * Create contactManager to get unread contacts number and save number in session
+	 * @return void
+	 */
 	public function getUnreadContactsNb()
 	{
 		$this->request->getSession()->set('unreadContactsNb', $this->contactManager->getContactsNb(1));

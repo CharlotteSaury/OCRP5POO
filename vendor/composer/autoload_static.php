@@ -716,6 +716,7 @@ class ComposerStaticInit910807a095391365cfdf5b32406455f6
         'Src\\Constraint\\ExistsValidation' => __DIR__ . '/../..' . '/src/constraint/ExistsValidation.php',
         'Src\\Constraint\\InscriptionValidation' => __DIR__ . '/../..' . '/src/constraint/InscriptionValidation.php',
         'Src\\Constraint\\NewPassValidation' => __DIR__ . '/../..' . '/src/constraint/NewPassValidation.php',
+        'Src\\Constraint\\PictureValidation' => __DIR__ . '/../..' . '/src/constraint/PictureValidation.php',
         'Src\\Constraint\\PostValidation' => __DIR__ . '/../..' . '/src/constraint/PostValidation.php',
         'Src\\Constraint\\UserValidation' => __DIR__ . '/../..' . '/src/constraint/UserValidation.php',
         'Src\\Constraint\\Validation' => __DIR__ . '/../..' . '/src/constraint/Validation.php',

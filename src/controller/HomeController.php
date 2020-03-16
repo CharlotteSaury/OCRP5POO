@@ -106,52 +106,17 @@ class HomeController extends Controller
 	}
 
 	/**
-	 * Upload picture after error and size/ file extension validity check
+	 * Upload picture in public folder
+	 * @param  File $file [files informations]
 	 * @param  string $namePicture [name of file input]
-	 * @return sring $uploadResults [$uploadResults  = picture url of error message]              
+	 * @return sring $uploadResults [picture url]              
 	 *
 	 */
-	public function pictureUpload($namePicture)
+	public function pictureUpload(File $file, $namePicture)
 	{
-		$file = $this->request->getFile();
-
-		if ($file->get($namePicture)) {
-
-			if ($file->get($namePicture, 'error') == 0) {
-
-				if ($file->get($namePicture, 'size') <= 2000000) {
-
-					$fileInfos = pathinfo($file->get($namePicture, 'name'));
-					$extension_upload = $fileInfos['extension'];
-					$allowed_extensions = array('jpg', 'jpeg', 'gif', 'png');
-
-					if (in_array($extension_upload, $allowed_extensions)) {
-
-						$uploadResults = 'public/uploads/' . microtime(true) . '_' . basename($file->get($namePicture, 'name'));
-						move_uploaded_file($file->get($namePicture, 'tmp_name'), $uploadResults);
-					
-					} else {
-
-						$uploadResults = 'L\'extension du fichier n\'est pas acceptée, merci de ne charger que des fichiers .jpg, .jpeg, .gif ou .png';
-					}
-				
-				} else {
-
-					$uploadResults = 'Fichier trop volumineux, merci de ne pas dépasser 2Mo.';
-				}
-			
-			} elseif ($file->get($namePicture, 'error') == 1 || $file->get($namePicture, 'error') == 2) {
-				$uploadResults = 'Fichier trop volumineux, merci de ne pas dépasser 2Mo.';
-			
-			} else {
-				$uploadResults = 'Erreur. Le fichier n\'a pu être téléchargé.';
-			}
-		
-		} else {
-			$uploadResults = 'Aucun fichier téléchargé.';
-		}
-
-		return $uploadResults;
+		$uploadResults = 'public/uploads/' . microtime(true) . '_' . basename($file->get($namePicture, 'name'));
+		move_uploaded_file($file->get($namePicture, 'tmp_name'), $uploadResults);
+		return $uploadResults;		
 	}
 }
 

@@ -156,4 +156,25 @@ class Constraint
         }
         return 'Le champ ' . $name . ' ne correspond pas à un élément existant';
     }
+
+    public function pictureValid($value)
+    {
+        if ($value != 0) {
+            return 'Une erreur est apparue lors du chargement de l\'image.';
+        }
+    }
+
+    public function pictureMaxSize($value, $maxSize)
+    {
+        if ($value > $maxSize) {
+            return 'Le fichier est trop lourd. La taille ne doit pas dépasser 1Mo.';
+        }
+    }
+
+    public function pictureExtension($pictureExtension)
+    {
+        if (!in_array($pictureExtension, array('jpg', 'jpeg', 'gif', 'png'))) {
+            return 'L\'extension du fichier n\'est pas acceptée, merci de ne charger que des fichiers .jpg, .jpeg, .gif ou .png';
+        }
+    }
 }

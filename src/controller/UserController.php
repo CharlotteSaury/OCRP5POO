@@ -193,8 +193,7 @@ class UserController extends Controller
 					}
 
 					$this->newUserSession($post->get('email'));
-					$infos = new HomeController();
-					$infos->indexView();
+					header('Location: index.php');
 				
 				} else {
 					$this->request->getSession()->set('message', "L'identifiant et/ou le mot de passe sont erronés.");

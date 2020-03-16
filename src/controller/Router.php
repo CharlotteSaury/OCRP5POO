@@ -74,8 +74,10 @@ class Router
 	 */
 	public function routerRequest()
 	{
-		$action = $this->request->getGet()->get('action');
+		$this->request->getSession()->remove('message');
 		$this->adminController->getUnreadContactsNb();
+		$action = $this->request->getGet()->get('action');
+		
 		try {
 			if (isset($action)) {
 
@@ -349,7 +351,6 @@ class Router
 			$errorMessage = $e->getMessage();
 			$this->errorController->errorView($errorMessage);
 		}
-		$this->request->getSession()->remove('message');
 	}
 
 }
