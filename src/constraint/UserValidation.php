@@ -35,8 +35,8 @@ class UserValidation extends Validation
             return $this->constraint->maxLength('pseudo', $value, 25);
         }
 
-        if ($this->constraint->pseudoExists($name, $value, $this->userId)) {
-            return $this->constraint->pseudoExists($name, $value, $this->userId);
+        if ($this->constraint->pseudoExists($value, $this->userId)) {
+            return $this->constraint->pseudoExists($value, $this->userId);
         }
     }
 
@@ -86,8 +86,8 @@ class UserValidation extends Validation
             return $this->constraint->isEmail('email', $value);
         }
 
-        if ($this->constraint->emailExists($name, $value, $this->userId)) 
-            return $this->constraint->emailExists($name, $value, $this->userId);
+        if ($this->constraint->emailExists($value, $this->userId)) 
+            return $this->constraint->emailExists($value, $this->userId);
         }
 
     protected function checkMobile($name, $value)

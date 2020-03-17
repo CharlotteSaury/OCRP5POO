@@ -64,7 +64,7 @@ class AdminController extends Controller
 			$status = null;
 			$sortingDate = null;
 		}
-		$posts = $this->postManager->getPosts($status, $first_post = null, $postsPerPage = null, $sortingDate);
+		$posts = $this->postManager->getPosts($status, null, null, $sortingDate);
 
 		$allPostsCategories = $this->postManager->getPostsCategories();
 
@@ -491,7 +491,7 @@ class AdminController extends Controller
 			$status = $sortingDate = null;
 		}
 
-		$allComments = $this->commentManager->getComments($commentsNb = null, $status, $sortingDate);
+		$allComments = $this->commentManager->getComments(null, $status, $sortingDate);
 		
 		return $this->view->render('backend', 'adminCommentsView', 
 			['totalCommentsNb' => $totalCommentsNb,
@@ -764,7 +764,7 @@ class AdminController extends Controller
 			$status = 1;
 			$sortingDate = null;
 		}
-		$allContacts = $this->contactManager->getContacts($contactId = null, $status, $sortingDate);
+		$allContacts = $this->contactManager->getContacts(null, $status, $sortingDate);
 		
 		
 		return $this->view->render('backend', 'adminContactsView', 

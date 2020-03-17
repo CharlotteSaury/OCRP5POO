@@ -24,8 +24,8 @@ class InscriptionValidation extends Validation
             return $this->constraint->maxLength('pseudo', $value, 25);
         }
 
-        if ($this->constraint->pseudoExists($name, $value)){
-            return $this->constraint->pseudoExists($name, $value);
+        if ($this->constraint->pseudoExists($value)){
+            return $this->constraint->pseudoExists($value);
         }
 
         if ($this->constraint->containsLetter($name, $value)) {
@@ -43,8 +43,8 @@ class InscriptionValidation extends Validation
             return $this->constraint->isEmail('email', $value);
         }
 
-        if ($this->constraint->emailExists($name, $value)) {
-            return $this->constraint->emailExists($name, $value);
+        if ($this->constraint->emailExists($value)) {
+            return $this->constraint->emailExists($value);
         }
     }
 

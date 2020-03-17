@@ -113,7 +113,7 @@ class Constraint
         }
     }
 
-    public function pseudoExists($name, $value, $userId = null)
+    public function pseudoExists($value, $userId = null)
     {
         if ($userId != null) {
             if ($this->userManager->pseudoExists($value, $userId) == 1) {
@@ -127,7 +127,7 @@ class Constraint
         }
     }
 
-    public function emailExists($name, $value, $userId = null)
+    public function emailExists($value, $userId = null)
     {
         if ($userId != null) {
             if ($this->userManager->emailExists($value, $userId) == 1) {

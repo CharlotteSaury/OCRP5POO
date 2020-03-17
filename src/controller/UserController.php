@@ -75,7 +75,7 @@ class UserController extends Controller
 	 */
 	public function checkEmail($email, $userId = null)
 	{
-		return $emailExists = ($this->userManager->emailExists($email, $userId) == 1) ? true : false;
+		return ($this->userManager->emailExists($email, $userId) == 1) ? true : false;
 	}
 
 	/**
@@ -140,7 +140,7 @@ class UserController extends Controller
 	{
 		if ($this->checkEmail($get->get('email'))) {
 
-			$user = $this->userManager->getUser($userId = null, $get->get('email'));
+			$user = $this->userManager->getUser(null, $get->get('email'));
 
 			if ($user->getActCode() != null) {
 
@@ -216,7 +216,7 @@ class UserController extends Controller
 	 */
 	public function newUserSession($email)
 	{
-		$user = $this->userManager->getUser($userId = null, $email);
+		$user = $this->userManager->getUser(null, $email);
 		$this->request->getSession()->set('id', $user->getId());
 		$this->request->getSession()->set('pseudo', $user->getPseudo());
         $this->request->getSession()->set('role', $user->getUserRoleId());
@@ -303,7 +303,7 @@ class UserController extends Controller
 
 		if ($this->checkEmail($get->get('email'))) {
 
-			$user_reinit_code = $this->userManager->getUser($userId = null, $get->get('email'))->getReinitCode();
+			$user_reinit_code = $this->userManager->getUser(null, $get->get('email'))->getReinitCode();
 
 			if ($get->get('key') != $user_reinit_code) {
 

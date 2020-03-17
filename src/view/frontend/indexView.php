@@ -197,13 +197,13 @@
         </div>
 
         <div class="social d-flex justify-content-center">
-            <a href="www.linkedin.com/in/charlotte-saury-654a834a" class="mx-2">
+            <a href="https://www.linkedin.com/in/charlotte-saury-654a834a" class="mx-2" target="_blank">
                 <i class="fab fa-linkedin"></i>
             </a>
-            <a href="https://www.facebook.com/charlotte.saury.1" class="mx-2">
+            <a href="https://www.facebook.com/charlotte.saury.1" class="mx-2" target="_blank">
                 <i class="fab fa-facebook-f"></i>
             </a>
-            <a href="https://github.com/CharlotteSaury" class="mx-2">
+            <a href="https://github.com/CharlotteSaury" class="mx-2" target="_blank">
                 <i class="fab fa-github"></i>
             </a>
         </div>
