@@ -50,9 +50,9 @@
                 <div class="featured-text text-center text-lg-left">
                     <h4>Charlotte SAURY</h4>
                     <p class="text-black-50 mb-0">Née le 12 avril 1990</p>
-                    <p class="text-black-50 mb-0 text-justify" id="about-me-text">Fusce egestas elit eget lorem. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Sed augue ipsum, egestas nec, vestibulum et, malesuada adipiscing, dui. Curabitur ullamcorper ultricies nisi. Nunc sed turpis.</br>
-                    Cras dapibus. Phasellus nec sem in justo pellentesque facilisis. Pellentesque libero tortor, tincidunt et, tincidunt eget, semper nec, quam. Aenean commodo ligula eget dolor.</br>
-                    Sed in libero ut nibh placerat accumsan. Quisque ut nisi. Sed cursus turpis vitae tortor. Sed consequat, leo eget bibendum sodales.</p>
+                    <p class="text-black-50 mb-0 text-justify" id="about-me-text">
+                    Après une formation d’ingénieur et un doctorat dans le développement de thérapies innovantes qui m’ont permis d’appréhender la gestion de projets de recherche et développer, outre des compétences techniques, rigueur, méthode et autonomie, je me suis envolée pour un voyage en itinérance de 8 mois en Asie du Sud Est. </br> 
+                    A mon retour, j’ai décidé de changer de cap professionnellement. Suite à un stage découverte passionnant en agence web, je suis actuellement le parcours « Développeur d’applications option PHP Symfony » de la plateforme de formation en ligne OpenClassrooms, afin d’acquérir de nouvelles compétences dans ce nouveau métier.</p>
                 </div>
                 <div class="featured-btn text-center">
                     <a href="#contact-form" class="btn btn-primary-custom js-scroll-trigger">Me contacter</a>
@@ -197,13 +197,13 @@
         </div>
 
         <div class="social d-flex justify-content-center">
-            <a href="www.linkedin.com/in/charlotte-saury-654a834a" class="mx-2">
+            <a href="https://www.linkedin.com/in/charlotte-saury-654a834a" class="mx-2" target="_blank">
                 <i class="fab fa-linkedin"></i>
             </a>
-            <a href="https://www.facebook.com/charlotte.saury.1" class="mx-2">
+            <a href="https://www.facebook.com/charlotte.saury.1" class="mx-2" target="_blank">
                 <i class="fab fa-facebook-f"></i>
             </a>
-            <a href="https://github.com/CharlotteSaury" class="mx-2">
+            <a href="https://github.com/CharlotteSaury" class="mx-2" target="_blank">
                 <i class="fab fa-github"></i>
             </a>
         </div>

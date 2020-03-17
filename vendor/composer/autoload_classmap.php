@@ -373,6 +373,7 @@ return array(
     'Src\\Constraint\\ExistsValidation' => $baseDir . '/src/constraint/ExistsValidation.php',
     'Src\\Constraint\\InscriptionValidation' => $baseDir . '/src/constraint/InscriptionValidation.php',
     'Src\\Constraint\\NewPassValidation' => $baseDir . '/src/constraint/NewPassValidation.php',
+    'Src\\Constraint\\PictureValidation' => $baseDir . '/src/constraint/PictureValidation.php',
     'Src\\Constraint\\PostValidation' => $baseDir . '/src/constraint/PostValidation.php',
     'Src\\Constraint\\UserValidation' => $baseDir . '/src/constraint/UserValidation.php',
     'Src\\Constraint\\Validation' => $baseDir . '/src/constraint/Validation.php',

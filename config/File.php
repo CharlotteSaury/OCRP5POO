@@ -38,4 +38,9 @@ class File
         }
         
     }
+
+    public function all()
+    {
+        return $this->file;
+    }
 }

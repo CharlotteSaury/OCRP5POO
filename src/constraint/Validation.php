@@ -4,6 +4,7 @@ namespace Src\Constraint;
 
 use Src\Constraint\Constraint;
 use Config\Parameter;
+use Config\File;
 
 
 /**
@@ -99,6 +100,18 @@ class Validation
             $validation = new UserValidation();
         }
         $errors = $validation->check($data);
+        return $errors;
+    }
+
+    /**
+     * Create PictureValidation and redirect to adequate validation tests
+     * @param  object $data [File $file]
+     * @param  string $name [$_FILES['name']]
+     * @return array [potential errors]
+     */
+    public function validatePicture($data, $name) {
+        $validation = new PictureValidation();
+        $errors = $validation->checkPicture($data, $name);
         return $errors;
     }
 

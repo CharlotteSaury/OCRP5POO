@@ -16,7 +16,7 @@
 
     <!-- Post number card -->
     <div class="col-xl-4 col-md-12 mb-4">
-        <div class="card border-left-primary-custom shadow h-100 py-2">
+        <div class="card border-left-primary-custom shadow h-100 py-2 dashboard-card">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
@@ -33,7 +33,7 @@
 
     <!-- Comment number card -->
     <div class="col-xl-4 col-md-12 mb-4">
-        <div class="card border-left-primary-custom shadow h-100 py-2">
+        <div class="card border-left-primary-custom shadow h-100 py-2 dashboard-card">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
@@ -50,7 +50,7 @@
 
     <!-- User number card -->
     <div class="col-xl-4 col-md-12 mb-4">
-        <div class="card border-left-primary-custom shadow h-100 py-2">
+        <div class="card border-left-primary-custom shadow h-100 py-2 dashboard-card">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
@@ -71,7 +71,7 @@
 <div class="row">
 
     <div class="col-12">
-        <div class="card shadow mb-4">
+        <div class="card shadow mb-4 dashboard-recent-cards">
             <!-- Card Header - Accordion -->
             <a href="#recentPostsCard" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="recentPostsCard">
                 <h6 class="m-0 font-weight-bold text-primary-custom">Articles récents</h6>
@@ -79,7 +79,7 @@
             <!-- Card Content - Collapse -->
             <div class="collapse show" id="recentPostsCard">
                 <div class="card-body">
-                    <table class="table table-hover table-md-responsive">
+                    <table class="table table-hover table-responsive">
                         <thead>
                          <tr>
                             <th scope="col" class="responsive-table-custom">Id</th>
@@ -172,7 +172,7 @@
     <!-- Comments panel -->
 
     <div class="col-lg-6">
-        <div class="card shadow mb-4">
+        <div class="card shadow mb-4 dashboard-recent-cards">
 
             <!-- Card Header - Accordion -->
             <a href="#recentCommentsCard" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="recentCommentsCard">
@@ -182,13 +182,13 @@
             <!-- Card Content - Collapse -->
             <div class="collapse show" id="recentCommentsCard">
                 <div class="card-body">
-                    <table class="table table-hover table-md-responsive">
+                    <table class="table table-hover table-responsive">
                         <thead>
                             <tr>
                                 <th scope="col" class="responsive-table-custom">Id</th>
                                 <th scope="col">Auteur</th>
                                 <th scope="col">Contenu</th>
-                                <th scope="col" class="responsive-table-custom">Date</th>
+                                <th scope="col">Date</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
@@ -204,8 +204,8 @@
                             ?>
                                 <th scope="row" class="responsive-table-custom"><?= htmlspecialchars($comment->getId()); ?></th>
                                 <td><?= htmlspecialchars($comment->getUserPseudo()); ?></td>
-                                <td><?= substr(htmlspecialchars($comment->getContent()), 0, 50); ?></td>
-                                <td class="responsive-table-custom"><?= $comment->getCommentDate(); ?></td>
+                                <td><?= substr(htmlspecialchars($comment->getContent()), 0, 50); ?>...</td>
+                                <td><?= $comment->getCommentDate(); ?></td>
                                 <td>
                                     <a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($comment->getPostId()); ?>"class="btn btn-outline-dark btn-sm" title="Voir l'article concerné">
                                         <i class="fas fa-eye"></i>
@@ -264,7 +264,7 @@
     <!-- Users panel -->
 
     <div class="col-lg-6">
-        <div class="card shadow mb-4">
+        <div class="card shadow mb-4 dashboard-recent-cards">
             <!-- Card Header - Accordion -->
             <a href="#recentUsersCard" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="recentUsersCard">
                 <h6 class="m-0 font-weight-bold text-primary-custom">Utilisateurs</h6>
@@ -272,13 +272,13 @@
             <!-- Card Content - Collapse -->
             <div class="collapse show" id="recentUsersCard">
                 <div class="card-body">
-                    <table class="table table-hover table-md-responsive">
+                    <table class="table table-hover table-responsive">
                         <thead>
                          <tr>
                             <th scope="col" class="responsive-table-custom">Id</th>
                             <th scope="col">Pseudo</th>
                             <th scope="col">Email</th>
-                            <th scope="col" class="responsive-table-custom">Rôle</th>
+                            <th scope="col">Rôle</th>
                             <th scope="col">Action</th>
                         </tr>
                         </thead>
@@ -291,7 +291,7 @@
                                 <th scope="row" class="responsive-table-custom"><?= htmlspecialchars($user->getId()); ?></th>
                                 <td><?= htmlspecialchars($user->getPseudo()); ?></td>
                                 <td><?= htmlspecialchars($user->getEmail()); ?></td>
-                                <td class="responsive-table-custom"><?= htmlspecialchars($user->getRole()); ?></td>
+                                <td><?= htmlspecialchars($user->getRole()); ?></td>
                                 <td>
                                     <a href="index.php?action=profileUser&amp;id=<?= htmlspecialchars($user->getId()); ?>" class="btn btn-outline-dark btn-sm" title="Voir">
                                         <i class="fas fa-eye"></i>

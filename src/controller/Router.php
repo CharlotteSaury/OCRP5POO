@@ -74,8 +74,10 @@ class Router
 	 */
 	public function routerRequest()
 	{
-		var_dump($_SESSION);
+		$this->request->getSession()->remove('message');
+		$this->adminController->getUnreadContactsNb();
 		$action = $this->request->getGet()->get('action');
+		
 		try {
 			if (isset($action)) {
 
@@ -301,7 +303,6 @@ class Router
 				} elseif ($action === 'editUserInfos') {
 
 					$post = $this->request->getPost();
-					var_dump($post);
 					$this->adminController->editUserInfos($post);
 				
 				} elseif ($action === 'updateProfilePicture') {
@@ -350,7 +351,6 @@ class Router
 			$errorMessage = $e->getMessage();
 			$this->errorController->errorView($errorMessage);
 		}
-		$this->request->getSession()->remove('message');
 	}
 
 }

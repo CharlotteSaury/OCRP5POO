@@ -75,7 +75,7 @@ class UserController extends Controller
 	 */
 	public function checkEmail($email, $userId = null)
 	{
-		return $emailExists = ($this->userManager->emailExists($email, $userId) == 1) ? true : false;
+		return ($this->userManager->emailExists($email, $userId) == 1) ? true : false;
 	}
 
 	/**
@@ -140,11 +140,11 @@ class UserController extends Controller
 	{
 		if ($this->checkEmail($get->get('email'))) {
 
-			$user = $this->userManager->getUser($userId = null, $get->get('email'));
+			$user = $this->userManager->getUser(null, $get->get('email'));
 
-			if ($user->actCode() != null) {
+			if ($user->getActCode() != null) {
 
-				if ($user->actCode() != $get->get('key')) {
+				if ($user->getActCode() != $get->get('key')) {
 					$this->request->getSession()->set('message', 'La clé d\'activation n\'est pas bonne, veuillez retourner sur votre mail d\'activation.');
 
 				} else {
@@ -193,8 +193,7 @@ class UserController extends Controller
 					}
 
 					$this->newUserSession($post->get('email'));
-					$infos = new HomeController();
-					$infos->indexView();
+					header('Location: index.php');
 				
 				} else {
 					$this->request->getSession()->set('message', "L'identifiant et/ou le mot de passe sont erronés.");
@@ -217,7 +216,7 @@ class UserController extends Controller
 	 */
 	public function newUserSession($email)
 	{
-		$user = $this->userManager->getUser($userId = null, $email);
+		$user = $this->userManager->getUser(null, $email);
 		$this->request->getSession()->set('id', $user->getId());
 		$this->request->getSession()->set('pseudo', $user->getPseudo());
         $this->request->getSession()->set('role', $user->getUserRoleId());
@@ -304,7 +303,7 @@ class UserController extends Controller
 
 		if ($this->checkEmail($get->get('email'))) {
 
-			$user_reinit_code = $this->userManager->getUser($userId = null, $get->get('email'))->getReinitCode();
+			$user_reinit_code = $this->userManager->getUser(null, $get->get('email'))->getReinitCode();
 
 			if ($get->get('key') != $user_reinit_code) {
 
