@@ -10,15 +10,15 @@ Ce blog a été développé par Charlotte SAURY dans le cadre du 5e projet OpenC
 
 <h2>Installation</h2><br>
 <ul>
-  <li><b>Etape 1 :</b> Transférer les fichiers dans le dossier racine de votre serveur web (en général "www/").</li>
-  <li><b>Etape 2 :</b> Créer une base données sur votre SGDB (MySQL) et importer le fichier DB/phpblogp5.sql pour charger les tables du blog.</li>
-  <li><b>Etape 3 :</b> Dans le fichier config/dev.php, modifiez les paramètres suivants en fonction de vos accès :</li>
+  <li><b>Etape 1 :</b> Télécharger les fichiers dans le dossier racine de votre serveur web (en général "www/") par téléchargement ou via la commande git clone https://github.com/CharlotteSaury/OCRP5POO.git.</li>
+  <li><b>Etape 2 :</b> Créer une base données sur votre SGDB (MySQL) et importer le fichier database/phpblogp5.sql pour charger les tables du blog.</li>
+  <li><b>Etape 3 :</b> Dans le fichier config/dev.php, modifiez les paramètres suivants en fonction de vos accès à votre base de données :</li>
 </ul>
 <ul>
   <li>define('DB_HOST', 'localhost');</li>
-  <li>define('DB_USER', 'root');</li>
-  <li>define('DB_PASS', '');</li>
-  <li>define('DB_NAME', 'phpblogp5');</li>
+  <li>define('DB_USER', 'root');</li> // Nom d'utilisateur
+  <li>define('DB_PASS', '');</li> // Mot de passe
+  <li>define('DB_NAME', 'phpblogp5');</li> // Nom de la base de données
 </ul>
 
 <h2>Paramétrage du formulaire de contact</h2><br>
