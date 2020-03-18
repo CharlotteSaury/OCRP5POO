@@ -48,18 +48,18 @@
                 foreach ($users as $user) {
                     ?> 
                     <tr>
-                        <th scope="row"><?= htmlspecialchars($user->getId()); ?></th>
-                        <td><a href="index.php?action=profileUser&amp;id=<?= htmlspecialchars($user->getId()); ?>"><?= htmlspecialchars($user->getPseudo()); ?></a></td>
-                        <td><?= htmlspecialchars($user->getEmail()); ?></td>
-                        <td><?= htmlspecialchars($user->getRole()); ?></td>
-                        <td><?= htmlspecialchars($user->getRegisterDate()); ?></td>
-                        <td><?= htmlspecialchars($user->getPostsNb()); ?></td>
-                        <td><?= htmlspecialchars($user->getCommentsNb()); ?></td>
+                        <th scope="row"><?= htmlspecialchars($user->getId(), ENT_QUOTES); ?></th>
+                        <td><a href="index.php?action=profileUser&amp;id=<?= htmlspecialchars($user->getId(), ENT_QUOTES); ?>"><?= htmlspecialchars($user->getPseudo(), ENT_QUOTES); ?></a></td>
+                        <td><?= htmlspecialchars($user->getEmail(), ENT_QUOTES); ?></td>
+                        <td><?= htmlspecialchars($user->getRole(), ENT_QUOTES); ?></td>
+                        <td><?= htmlspecialchars($user->getRegisterDate(), ENT_QUOTES); ?></td>
+                        <td><?= htmlspecialchars($user->getPostsNb(), ENT_QUOTES); ?></td>
+                        <td><?= htmlspecialchars($user->getCommentsNb(), ENT_QUOTES); ?></td>
                         <td>
-                            <a href="index.php?action=profileUser&amp;id=<?= htmlspecialchars($user->getId()); ?>" class="btn btn-outline-dark btn-sm" title="Voir">
+                            <a href="index.php?action=profileUser&amp;id=<?= htmlspecialchars($user->getId(), ENT_QUOTES); ?>" class="btn btn-outline-dark btn-sm" title="Voir">
                                 <i class="fas fa-eye"></i>
                             </a>
-                            <a href="index.php?action=editUser&amp;id=<?= htmlspecialchars($user->getId()); ?>" class="btn btn-outline-dark btn-sm" title="Modifier">
+                            <a href="index.php?action=editUser&amp;id=<?= htmlspecialchars($user->getId(), ENT_QUOTES); ?>" class="btn btn-outline-dark btn-sm" title="Modifier">
                                 <i class="fas fa-pencil-alt"></i>
                             </a>
                         </td>

@@ -8,7 +8,7 @@ use Src\Entity\User;
 use Src\Entity\Contact;
 use Src\Entity\Answer;
 use Src\Entity\Comment;
-use Config\Parameter;
+use Src\Config\Parameter;
 
 
 /**

@@ -35,6 +35,7 @@ return array(
     'Src\\Entity\\' => array($baseDir . '/src/entity'),
     'Src\\Controller\\' => array($baseDir . '/src/controller'),
     'Src\\Constraint\\' => array($baseDir . '/src/constraint'),
+    'Src\\Config\\' => array($baseDir . '/src/config'),
     'Psr\\SimpleCache\\' => array($vendorDir . '/psr/simple-cache/src'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
     'Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
@@ -48,6 +49,5 @@ return array(
     'Doctrine\\Instantiator\\' => array($vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator'),
     'Doctrine\\Common\\Lexer\\' => array($vendorDir . '/doctrine/lexer/lib/Doctrine/Common/Lexer'),
     'Doctrine\\Common\\Annotations\\' => array($vendorDir . '/doctrine/annotations/lib/Doctrine/Common/Annotations'),
-    'Config\\' => array($baseDir . '/config'),
     'Composer\\CaBundle\\' => array($vendorDir . '/composer/ca-bundle/src'),
 );

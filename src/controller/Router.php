@@ -7,7 +7,7 @@ use Src\Controller\PostController;
 use Src\Controller\AdminController;
 use Src\Controller\UserController;
 use Src\Controller\ErrorController;
-use Config\Request;
+use Src\Config\Request;
 
 use Exception;
 

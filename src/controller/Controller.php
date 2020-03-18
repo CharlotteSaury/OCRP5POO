@@ -8,8 +8,8 @@ use Src\Model\UserManager;
 use Src\Model\ContactManager;
 use Src\Model\ContentManager;
 use Src\View\View;
-use Config\Request;
-use Config\Parameter;
+use Src\Config\Request;
+use Src\Config\Parameter;
 use Src\Constraint\Validation;
 use Exception;
 

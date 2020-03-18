@@ -3,9 +3,9 @@
 namespace Src\Controller;
 
 use Src\Controller\Controller;
-use Config\Request;
-use Config\Parameter;
-use Config\File;
+use Src\Config\Request;
+use Src\Config\Parameter;
+use Src\Config\File;
 
 /**
  * Class HomeController
@@ -114,7 +114,13 @@ class HomeController extends Controller
 	 */
 	public function pictureUpload(File $file, $namePicture)
 	{
-		$uploadResults = 'public/uploads/' . microtime(true) . '_' . basename($file->get($namePicture, 'name'));
+		var_dump($file->get($namePicture, 'name'));
+		var_dump($file->get($namePicture, 'tmp_name'));
+		$permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz';
+		$random_code = substr(str_shuffle($permitted_chars), 0, 10);
+		$extension = pathinfo($file->get($namePicture, 'name'), PATHINFO_EXTENSION);
+		$uploadResults = 'public/uploads/' . microtime(true) . '_' . $random_code . '.' . $extension;
+		var_dump($uploadResults);
 		move_uploaded_file($file->get($namePicture, 'tmp_name'), $uploadResults);
 		return $uploadResults;		
 	}

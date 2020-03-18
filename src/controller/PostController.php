@@ -4,7 +4,7 @@ namespace Src\Controller;
 
 use Src\Controller\Controller;
 use Src\Constraint\Validation;
-use Config\Parameter;
+use Src\Config\Parameter;
 use Exception;
 
 /**

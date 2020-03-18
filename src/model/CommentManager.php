@@ -2,7 +2,7 @@
 
 namespace Src\Model;
 
-use Config\Parameter;
+use Src\Config\Parameter;
 
 /**
  * Class CommentManager

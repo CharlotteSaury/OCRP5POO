@@ -1,6 +1,6 @@
 <?php
 
-namespace Config;
+namespace Src\Config;
 
 use Exception;
 
@@ -21,7 +21,7 @@ class Parameter
 	{
 		if (isset($this->parameter[$name]))
 		{
-			return htmlspecialchars($this->parameter[$name]);
+			return $this->parameter[$name];
 		}
 	}
 

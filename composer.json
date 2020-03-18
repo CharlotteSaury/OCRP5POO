@@ -2,12 +2,12 @@
    	"autoload": {
     "psr-4": {
     	"OCRP5POO\\": "OCRP5POO/",
-      "Src\\Model\\": "src/model",
-      "Src\\View\\": "src/view",
-      "Src\\Controller\\": "src/controller",
-      "Src\\Entity\\": "src/entity",
-      "Src\\Constraint\\": "src/constraint",
-    	"Config\\": "config/"
+      "Src\\Model\\": "src/model/",
+      "Src\\View\\": "src/view/",
+      "Src\\Controller\\": "src/controller/",
+      "Src\\Entity\\": "src/entity/",
+      "Src\\Constraint\\": "src/constraint/",
+    	"Src\\Config\\": "src/config/"
     	}
   	},
   	"require-dev": {

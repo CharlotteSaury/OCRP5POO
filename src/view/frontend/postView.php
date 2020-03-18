@@ -1,4 +1,4 @@
-<?php $this->_title = htmlspecialchars($post->getTitle()); ?>
+<?php $this->_title = htmlspecialchars($post->getTitle(), ENT_QUOTES); ?>
 
 
 <!-- $header definition -->
@@ -9,12 +9,12 @@
     <div class="container d-flex h-100 align-items-end">
         <div class="mx-auto text-center">
 
-            <h1 class="mx-auto my-0 text-uppercase"><?= htmlspecialchars($post->getTitle()); ?></h1>
+            <h1 class="mx-auto my-0 text-uppercase"><?= htmlspecialchars($post->getTitle(), ENT_QUOTES); ?></h1>
             <div class="d-flex mt-4 align-items-center">
-                <div class="avatar mr-3" style="background-image: url('<?= htmlspecialchars($post->getAvatar()); ?>');">
+                <div class="avatar mr-3" style="background-image: url('<?= htmlspecialchars($post->getAvatar(), ENT_QUOTES); ?>');">
                 </div>
                 <div class="text-white-50 posts-informations">
-                    <p class="mb-0">Posté par <strong><?= htmlspecialchars($post->getPseudo()); ?></strong>
+                    <p class="mb-0">Posté par <strong><?= htmlspecialchars($post->getPseudo(), ENT_QUOTES); ?></strong>
                     </p>
                     <p class="mb-0">le <?= $post->getDateCreation(); ?></p>
                     <p class="mb-0">Dernière modification le <?= $post->getDateUpdate(); ?></p>
@@ -45,16 +45,16 @@
             <!-- Post  content -->
             <div class="post-content px-4 px-md-5 mb-5">
                
-                <h2 class="mb-4"><?= htmlspecialchars($post->getTitle()); ?></h2>
+                <h2 class="mb-4"><?= htmlspecialchars($post->getTitle(), ENT_QUOTES); ?></h2>
                 <hr class="d-none d-lg-block ml-0">
 
-                <p><?= htmlspecialchars($post->getChapo()); ?></p>
+                <p><?= htmlspecialchars($post->getChapo(), ENT_QUOTES); ?></p>
 
                 <?php
 
                     if ($post->getMainImage() != null) {
                         ?>
-                        <div class="post-picture my-3" style="background-image: url('<?= htmlspecialchars($post->getMainImage()); ?>');">     
+                        <div class="post-picture my-3" style="background-image: url('<?= htmlspecialchars($post->getMainImage(), ENT_QUOTES); ?>');">     
                         </div>
                         <?php
                     } 
@@ -63,14 +63,14 @@
 
                     if ($content->getContentTypeId() == 1) {
                         ?>
-                        <div class="post-picture my-3" style="background-image: url('<?= htmlspecialchars($content->getContent()); ?>');">     
+                        <div class="post-picture my-3" style="background-image: url('<?= htmlspecialchars($content->getContent(), ENT_QUOTES); ?>');">     
                         </div>
 
                         <?php
                     } else {
                         ?> 
                         <div class="post-content post-content-text text-black-50 text-justify">
-                            <p><?= htmlspecialchars($content->getContent()); ?></p>
+                            <p><?= htmlspecialchars($content->getContent(), ENT_QUOTES); ?></p>
                         </div>                        
                         <?php
                     }
@@ -123,14 +123,14 @@
                     ?>
                     <div class="comments mt-3">
                         <div class="comment d-flex flex-column flex-sm-row align-items-center mb-4">
-                            <div class="avatar mr-md-4 ml-md-2 mx-auto mb-4 mb-md-0" style="background-image: url('<?= htmlspecialchars($postComment->getUserAvatar()); ?>');">
+                            <div class="avatar mr-md-4 ml-md-2 mx-auto mb-4 mb-md-0" style="background-image: url('<?= htmlspecialchars($postComment->getUserAvatar(), ENT_QUOTES); ?>');">
                             </div>
                             <div class="comment-content text-black-50 text-justify">
                                 <div class="comment-infos">
-                                    <p class=""><strong><?= htmlspecialchars($postComment->getUserPseudo()); ?></strong> - le <?= $postComment->getCommentDate(); ?></p>
+                                    <p class=""><strong><?= htmlspecialchars($postComment->getUserPseudo(), ENT_QUOTES); ?></strong> - le <?= $postComment->getCommentDate(); ?></p>
                                 </div>
                                 <div class="comment-text">
-                                    <p class="mb-0"><?= htmlspecialchars($postComment->getContent()); ?></p>
+                                    <p class="mb-0"><?= htmlspecialchars($postComment->getContent(), ENT_QUOTES); ?></p>
                                 </div>
                             </div>
                         </div>
@@ -158,7 +158,7 @@
                     <?php
                         foreach($post->getCategories() as $category) {
                             ?>
-                            <a class="btn btn-outline-secondary" href="#"><?= htmlspecialchars($category['name']); ?></a>
+                            <a class="btn btn-outline-secondary" href="#"><?= htmlspecialchars($category['name'], ENT_QUOTES); ?></a>
                             <?php
                         }
                     ?> 
@@ -177,8 +177,8 @@
                     <?php
                     foreach ($recentPosts as $post) {
                     ?>
-                        <h5><?= htmlspecialchars($post->getTitle()); ?><em> (posté le <?= $post->getDateCreation(); ?>)</em></h5>
-                        <p><?= substr(htmlspecialchars($post->getChapo()), 0, 30);?>... - <a href="index.php?action=postView&amp;id=<?= htmlspecialchars($post->getId()); ?>">En savoir plus</a></p>
+                        <h5><?= htmlspecialchars($post->getTitle(), ENT_QUOTES); ?><em> (posté le <?= $post->getDateCreation(); ?>)</em></h5>
+                        <p><?= substr(htmlspecialchars($post->getChapo(), ENT_QUOTES), 0, 30);?>... - <a href="index.php?action=postView&amp;id=<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>">En savoir plus</a></p>
 
                     <?php
                     }

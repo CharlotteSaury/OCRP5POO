@@ -13,7 +13,7 @@
             
             <?php
             if ($session->get('message')) {
-                echo '<div class="adminMessage text-white-50 text-center">' . $session->get('message') . '</div>';
+                echo '<div class="adminMessage text-white-50 text-center">' . htmlspecialchars($session->get('message'), ENT_QUOTES) . '</div>';
             
             } else {
             ?>
@@ -23,7 +23,7 @@
                 <?php
                 if (isset($_COOKIE['email'])) {
                     ?>
-                    <input type="email" name="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" value="<?= htmlspecialchars($_COOKIE['email']); ?>" required>
+                    <input type="email" name="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" value="<?= htmlspecialchars($_COOKIE['email'], ENT_QUOTES); ?>" required>
                     <?php
                 
                 } else {

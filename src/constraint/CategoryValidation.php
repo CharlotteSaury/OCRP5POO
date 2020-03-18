@@ -2,7 +2,7 @@
 
 namespace Src\Constraint;
 
-use Config\Parameter;
+use Src\Config\Parameter;
 
 /**
  * Class CategoryValidation

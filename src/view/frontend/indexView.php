@@ -136,7 +136,7 @@
           
                     <?php
                     if ($session->get('email')) {
-                        echo '<input type="email" name="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="contactEmail" value="' . htmlspecialchars($session->get('email')) . '" required/>'; 
+                        echo '<input type="email" name="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="contactEmail" value="' . htmlspecialchars($session->get('email'), ENT_QUOTES) . '" required/>'; 
 
                     } else {
                         echo '<input type="email" name="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="contactEmail" placeholder="Votre adresse email" required/>'; 
