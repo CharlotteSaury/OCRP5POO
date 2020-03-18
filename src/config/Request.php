@@ -1,9 +1,9 @@
 <?php
 
-namespace Config;
+namespace Src\Config;
 
-use Config\Parameter;
-use Config\Session;
+use Src\Config\Parameter;
+use Src\Config\Session;
 
 /**
  * Class Request

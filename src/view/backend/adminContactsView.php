@@ -76,7 +76,7 @@
                     }
                 ?>
                 
-                    <th scope="row"><?= htmlspecialchars($contact->getId()); ?></th>
+                    <th scope="row"><?= htmlspecialchars($contact->getId(), ENT_QUOTES); ?></th>
 
                     <?php
                     if ($contact->getStatusId() == 1) {
@@ -89,17 +89,17 @@
                     ?>
 
                     
-                    <td><?= htmlspecialchars($contact->getName()); ?></td>
-                    <td><?= htmlspecialchars($contact->getEmail()); ?></td>
-                    <td><a href="index.php?action=contactView&amp;id=<?= htmlspecialchars($contact->getId()); ?>" ><?= htmlspecialchars($contact->getSubject()); ?></a></td>
-                    <td><a href="index.php?action=contactView&amp;id=<?= htmlspecialchars($contact->getId()); ?>" ><?= substr(htmlspecialchars($contact->getContent()), 0, 50); ?>...</a></td>
+                    <td><?= htmlspecialchars($contact->getName(), ENT_QUOTES); ?></td>
+                    <td><?= htmlspecialchars($contact->getEmail(), ENT_QUOTES); ?></td>
+                    <td><a href="index.php?action=contactView&amp;id=<?= htmlspecialchars($contact->getId(), ENT_QUOTES); ?>" ><?= htmlspecialchars($contact->getSubject(), ENT_QUOTES); ?></a></td>
+                    <td><a href="index.php?action=contactView&amp;id=<?= htmlspecialchars($contact->getId(), ENT_QUOTES); ?>" ><?= substr(htmlspecialchars($contact->getContent(), ENT_QUOTES), 0, 50); ?>...</a></td>
                     <td><?= $contact->getDateMessage(); ?></td>
                     <td>
 
                         <?php
                         if ($contact->getStatusId() != 3) {
                             ?>
-                            <a href="index.php?action=contactView&amp;id=<?= htmlspecialchars($contact->getId()); ?>" class="btn btn-outline-dark btn-sm" title="Répondre">
+                            <a href="index.php?action=contactView&amp;id=<?= htmlspecialchars($contact->getId(), ENT_QUOTES); ?>" class="btn btn-outline-dark btn-sm" title="Répondre">
                                 <i class="fas fa-arrow-circle-right"></i>
                             </a>
 
@@ -107,7 +107,7 @@
                         }
                         ?>
                         
-                        <a data-toggle="modal" data-target="#deleteContactModal<?= htmlspecialchars($contact->getId()); ?>" class="btn btn-outline-dark btn-sm" title="Supprimer">
+                        <a data-toggle="modal" data-target="#deleteContactModal<?= htmlspecialchars($contact->getId(), ENT_QUOTES); ?>" class="btn btn-outline-dark btn-sm" title="Supprimer">
                             <i class="fas fa-trash-alt"></i>
                         </a>
                     </td>
@@ -115,7 +115,7 @@
                     
                 </tr>
                 <!-- deleteContact Modal-->
-                <div class="modal fade" id="deleteContactModal<?= htmlspecialchars($contact->getId()); ?>" tabindex="-1" role="dialog" aria-labelledby="deleteContactLabel" aria-hidden="true">
+                <div class="modal fade" id="deleteContactModal<?= htmlspecialchars($contact->getId(), ENT_QUOTES); ?>" tabindex="-1" role="dialog" aria-labelledby="deleteContactLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -127,7 +127,7 @@
                             <div class="modal-body">Cliquez sur "Valider" pour supprimer définitivement ce message</div>
                             <div class="modal-footer">
                                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                <a class="btn btn-primary-custom" href="index.php?action=deleteContact&amp;id=<?= htmlspecialchars($contact->getId()); ?>">Valider</a>
+                                <a class="btn btn-primary-custom" href="index.php?action=deleteContact&amp;id=<?= htmlspecialchars($contact->getId(), ENT_QUOTES); ?>">Valider</a>
                             </div>
                         </div>
                     </div>

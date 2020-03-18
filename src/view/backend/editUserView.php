@@ -22,7 +22,7 @@
                     </div>
                     <div class="form-group">
                         <label for="pseudo" hidden>Pseudo : </label>
-                        <input type="text" class="form-control" name="pseudo" value="<?= htmlspecialchars($user->getPseudo()); ?>"/>
+                        <input type="text" class="form-control" name="pseudo" value="<?= htmlspecialchars($user->getPseudo(), ENT_QUOTES); ?>"/>
                         
                         <?= isset($errors['pseudo']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $errors['pseudo'] . '</small>': '' ?>
 
@@ -32,7 +32,7 @@
                 <div class="card-body editProfileView">
 
                     <div class="profile-card-avatar text-center mb-3">
-                        <img class="img-thumbnail" src="<?= htmlspecialchars($user->getAvatar()); ?>" alt="User profil picture" />
+                        <img class="img-thumbnail" src="<?= htmlspecialchars($user->getAvatar(), ENT_QUOTES); ?>" alt="User profil picture" />
                     </div>
 
 
@@ -40,13 +40,13 @@
                         <div class="card-title">
                             <div class="form-group">
                                 <label for="firstname">Prénom : </label>
-                                <input type="text" class="form-control" name="first_name" value="<?= htmlspecialchars($user->getFirstName()); ?>"/>
+                                <input type="text" class="form-control" name="first_name" value="<?= htmlspecialchars($user->getFirstName(), ENT_QUOTES); ?>"/>
 
                                 <?= isset($errors['first_name']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $errors['first_name'] . '</small>': '' ?>
                             </div>
                             <div class="form-group">
                                 <label for="lastname">Nom : </label>
-                                <input type="text" class="form-control" name="last_name" value="<?= htmlspecialchars($user->getLastName()); ?>"/>
+                                <input type="text" class="form-control" name="last_name" value="<?= htmlspecialchars($user->getLastName(), ENT_QUOTES); ?>"/>
 
                                 <?= isset($errors['last_name']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $errors['last_name'] . '</small>': '' ?>
                             </div>
@@ -62,27 +62,27 @@
                             </div>
                             <div class="form-group">
                                 <label for="home">Habite à : </label>
-                                <input type="text" class="form-control" name="home" value="<?= htmlspecialchars($user->getHome()); ?>"/>
+                                <input type="text" class="form-control" name="home" value="<?= htmlspecialchars($user->getHome(), ENT_QUOTES); ?>"/>
                                 <?= isset($errors['home']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $errors['home'] . '</small>': '' ?>
                             </div>
                             <div class="form-group">
                                 <label for="user_about">A propos de moi : </label>
-                                <textarea type="text" class="form-control" name="user_about"><?= htmlspecialchars($user->getUserAbout()); ?></textarea>
+                                <textarea type="text" class="form-control" name="user_about"><?= htmlspecialchars($user->getUserAbout(), ENT_QUOTES); ?></textarea>
                                 <?= isset($errors['user_about']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $errors['user_about'] . '</small>': '' ?>                               
                             </div>
                             <div class="form-group">
                                 <label for="email">Email : </label>
-                                <input type="text" class="form-control" name="email" value="<?= htmlspecialchars($user->getEmail()); ?>"/>
+                                <input type="text" class="form-control" name="email" value="<?= htmlspecialchars($user->getEmail(), ENT_QUOTES); ?>"/>
                                 <?= isset($errors['email']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $errors['email'] . '</small>': '' ?>
                             </div>
                             <div class="form-group">
                                 <label for="mobile">Tel : </label>
-                                <input type="text" class="form-control" name="mobile" value="<?= htmlspecialchars($user->getMobile()); ?>"/>
+                                <input type="text" class="form-control" name="mobile" value="<?= htmlspecialchars($user->getMobile(), ENT_QUOTES); ?>"/>
                                 <?= isset($errors['mobile']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $errors['mobile'] . '</small>': '' ?>
                             </div>
                             <div class="form-group">
                                 <label for="website">Site internet : </label>
-                                <input type="text" class="form-control" name="website" value="<?= htmlspecialchars($user->getWebsite()); ?>"/>
+                                <input type="text" class="form-control" name="website" value="<?= htmlspecialchars($user->getWebsite(), ENT_QUOTES); ?>"/>
                                 <?= isset($errors['website']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $errors['website'] . '</small>': '' ?>
                             </div>
                             

@@ -101,10 +101,10 @@
                                     echo '<tr class="table-success-custom">';
                                 }
                             ?>
-                                <th scope="row"  class="responsive-table-custom"><?= htmlspecialchars($post->getId()); ?></th>
-                                <td><?= htmlspecialchars($post->getPseudo()); ?></td>
-                                <td><?= htmlspecialchars($post->getTitle()); ?></td>
-                                <td><?= substr(htmlspecialchars($post->getChapo()), 0, 50); ?>...</td>
+                                <th scope="row"  class="responsive-table-custom"><?= htmlspecialchars($post->getId(), ENT_QUOTES); ?></th>
+                                <td><?= htmlspecialchars($post->getPseudo(), ENT_QUOTES); ?></td>
+                                <td><?= htmlspecialchars($post->getTitle(), ENT_QUOTES); ?></td>
+                                <td><?= substr(htmlspecialchars($post->getChapo(), ENT_QUOTES), 0, 50); ?>...</td>
                                 <td class="responsive-table-custom"><?= $post->getDateCreation(); ?></td>
                                 <td>
                                     
@@ -112,30 +112,30 @@
                                 if ($post->getStatus() == 2) {
                                     ?>
 
-                                    <a href="index.php?action=publishPostDashboard&amp;id=<?= htmlspecialchars($post->getId()); ?>&amp;currstatus=<?= htmlspecialchars($post->getStatus()); ?>" class="mr-2" title="Ne plus publier"><i class="fas fa-toggle-on"></i></a>
+                                    <a href="index.php?action=publishPostDashboard&amp;id=<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>&amp;currstatus=<?= htmlspecialchars($post->getStatus(), ENT_QUOTES); ?>" class="mr-2" title="Ne plus publier"><i class="fas fa-toggle-on"></i></a>
 
                                     <?php
                                 } else {
                                     ?>
 
-                                    <a href="index.php?action=publishPostDashboard&amp;id=<?= htmlspecialchars($post->getId()); ?>&amp;currstatus=<?= htmlspecialchars($post->getStatus()); ?>" class="mr-2"><i class="fas fa-toggle-off" title="Publier"></i></a>
+                                    <a href="index.php?action=publishPostDashboard&amp;id=<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>&amp;currstatus=<?= htmlspecialchars($post->getStatus(), ENT_QUOTES); ?>" class="mr-2"><i class="fas fa-toggle-off" title="Publier"></i></a>
 
                                     <?php
                                 }
                                 ?>
-                                    <a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($post->getId()); ?>" class="btn btn-outline-dark btn-sm" title="Voir">
+                                    <a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>" class="btn btn-outline-dark btn-sm" title="Voir">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="index.php?action=editPostView&amp;id=<?= htmlspecialchars($post->getId()); ?>" class="btn btn-outline-dark btn-sm" title="Modifier">
+                                    <a href="index.php?action=editPostView&amp;id=<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>" class="btn btn-outline-dark btn-sm" title="Modifier">
                                         <i class="fas fa-pencil-alt"></i>
                                     </a>
-                                    <a data-toggle="modal" data-target="#deletePostModal<?= htmlspecialchars($post->getId()); ?>" class="btn btn-outline-dark btn-sm" title="Supprimer">
+                                    <a data-toggle="modal" data-target="#deletePostModal<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>" class="btn btn-outline-dark btn-sm" title="Supprimer">
                                         <i class="fas fa-trash-alt"></i>
                                     </a>
                                 </td>
                             </tr>
                             <!-- deletePost Modal-->
-                            <div class="modal fade" id="deletePostModal<?= htmlspecialchars($post->getId()); ?>" tabindex="-1" role="dialog" aria-labelledby="deletePostLabel" aria-hidden="true">
+                            <div class="modal fade" id="deletePostModal<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>" tabindex="-1" role="dialog" aria-labelledby="deletePostLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -147,7 +147,7 @@
                                         <div class="modal-body">Cliquez sur "Valider" pour supprimer définitivement ce post.</div>
                                         <div class="modal-footer">
                                             <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                            <a class="btn btn-primary-custom" href="index.php?action=deletePostDashboard&amp;id=<?= htmlspecialchars($post->getId()); ?>">Valider</a>
+                                            <a class="btn btn-primary-custom" href="index.php?action=deletePostDashboard&amp;id=<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>">Valider</a>
                                         </div>
                                     </div>
                                 </div>
@@ -202,12 +202,12 @@
                                     echo '<tr class="table-success-custom">';
                                 }
                             ?>
-                                <th scope="row" class="responsive-table-custom"><?= htmlspecialchars($comment->getId()); ?></th>
-                                <td><?= htmlspecialchars($comment->getUserPseudo()); ?></td>
-                                <td><?= substr(htmlspecialchars($comment->getContent()), 0, 50); ?>...</td>
+                                <th scope="row" class="responsive-table-custom"><?= htmlspecialchars($comment->getId(), ENT_QUOTES); ?></th>
+                                <td><?= htmlspecialchars($comment->getUserPseudo(), ENT_QUOTES); ?></td>
+                                <td><?= substr(htmlspecialchars($comment->getContent(), ENT_QUOTES), 0, 50); ?>...</td>
                                 <td><?= $comment->getCommentDate(); ?></td>
                                 <td>
-                                    <a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($comment->getPostId()); ?>"class="btn btn-outline-dark btn-sm" title="Voir l'article concerné">
+                                    <a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($comment->getPostId(), ENT_QUOTES); ?>"class="btn btn-outline-dark btn-sm" title="Voir l'article concerné">
                                         <i class="fas fa-eye"></i>
                                     </a>
                                     
@@ -215,7 +215,7 @@
                                     if ($comment->getStatus() == 1) {
                                         ?>
 
-                                        <a href="index.php?action=approveCommentDashboard&amp;id=<?= htmlspecialchars($comment->getId()); ?>" class="btn btn-outline-dark btn-sm" title="Approuver">
+                                        <a href="index.php?action=approveCommentDashboard&amp;id=<?= htmlspecialchars($comment->getId(), ENT_QUOTES); ?>" class="btn btn-outline-dark btn-sm" title="Approuver">
                                             <i class="fas fa-check"></i>
                                         </a>
                                     
@@ -223,13 +223,13 @@
                                     }
                                     ?>
                                     
-                                    <a data-toggle="modal" data-target="#deleteCommentModal<?= htmlspecialchars($comment->getId()); ?>" class="btn btn-outline-dark btn-sm" title="Supprimer">
+                                    <a data-toggle="modal" data-target="#deleteCommentModal<?= htmlspecialchars($comment->getId(), ENT_QUOTES); ?>" class="btn btn-outline-dark btn-sm" title="Supprimer">
                                         <i class="fas fa-times"></i>
                                     </a>
                                 </td>
                             </tr>
                             <!-- deleteComment Modal-->
-                            <div class="modal fade" id="deleteCommentModal<?= htmlspecialchars($comment->getId()); ?>" tabindex="-1" role="dialog" aria-labelledby="deleteCommentLabel" aria-hidden="true">
+                            <div class="modal fade" id="deleteCommentModal<?= htmlspecialchars($comment->getId(), ENT_QUOTES); ?>" tabindex="-1" role="dialog" aria-labelledby="deleteCommentLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -241,7 +241,7 @@
                                         <div class="modal-body">Cliquez sur "Valider" pour supprimer définitivement ce commentaire</div>
                                         <div class="modal-footer">
                                             <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                            <a class="btn btn-primary-custom" href="index.php?action=deleteCommentDashboard&amp;id=<?= htmlspecialchars($comment->getId()); ?>">Valider</a>
+                                            <a class="btn btn-primary-custom" href="index.php?action=deleteCommentDashboard&amp;id=<?= htmlspecialchars($comment->getId(), ENT_QUOTES); ?>">Valider</a>
                                         </div>
                                     </div>
                                 </div>
@@ -288,15 +288,15 @@
                             foreach ($users as $user) {
                             ?>
                             <tr>
-                                <th scope="row" class="responsive-table-custom"><?= htmlspecialchars($user->getId()); ?></th>
-                                <td><?= htmlspecialchars($user->getPseudo()); ?></td>
-                                <td><?= htmlspecialchars($user->getEmail()); ?></td>
-                                <td><?= htmlspecialchars($user->getRole()); ?></td>
+                                <th scope="row" class="responsive-table-custom"><?= htmlspecialchars($user->getId(), ENT_QUOTES); ?></th>
+                                <td><?= htmlspecialchars($user->getPseudo(), ENT_QUOTES); ?></td>
+                                <td><?= htmlspecialchars($user->getEmail(), ENT_QUOTES); ?></td>
+                                <td><?= htmlspecialchars($user->getRole(), ENT_QUOTES); ?></td>
                                 <td>
-                                    <a href="index.php?action=profileUser&amp;id=<?= htmlspecialchars($user->getId()); ?>" class="btn btn-outline-dark btn-sm" title="Voir">
+                                    <a href="index.php?action=profileUser&amp;id=<?= htmlspecialchars($user->getId(), ENT_QUOTES); ?>" class="btn btn-outline-dark btn-sm" title="Voir">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="index.php?action=editUser&amp;id=<?= htmlspecialchars($user->getId()); ?>" class="btn btn-outline-dark btn-sm" title="Modifier">
+                                    <a href="index.php?action=editUser&amp;id=<?= htmlspecialchars($user->getId(), ENT_QUOTES); ?>" class="btn btn-outline-dark btn-sm" title="Modifier">
                                         <i class="fas fa-pencil-alt"></i>
                                     </a>
                                 </td>

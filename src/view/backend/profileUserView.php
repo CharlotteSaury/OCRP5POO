@@ -16,7 +16,7 @@
 
         <div class="card profile-user-card mb-5 text-md-center">
 
-            <h5 class="card-header text-primary-custom"><?= htmlspecialchars($user->getPseudo()); ?></h5>
+            <h5 class="card-header text-primary-custom"><?= htmlspecialchars($user->getPseudo(), ENT_QUOTES); ?></h5>
 
             <div class="card-body profileView">
                 <div class="profile-card-avatar">
@@ -24,7 +24,7 @@
                     <?php
                     if ($user->getAvatar() != null) {
                         ?>
-                        <img class="img-thumbnail" src="<?= htmlspecialchars($user->getAvatar()); ?>" alt="User profil picture" />
+                        <img class="img-thumbnail" src="<?= htmlspecialchars($user->getAvatar(), ENT_QUOTES); ?>" alt="User profil picture" />
                         <?php
                     } else {
                         ?>
@@ -34,12 +34,12 @@
                     ?>
                     
                     <div class="form-group mt-2">
-                        <a data-toggle="modal" data-target="#updateProfilePictureModal<?= htmlspecialchars($user->getId()); ?>" class="d-inline-block btn btn-sm btn-primary-custom shadow-sm ml-1 text-white updateBtn"><i class="fas fa-upload mr-1"></i> Modifier la photo de profil</a>
+                        <a data-toggle="modal" data-target="#updateProfilePictureModal<?= htmlspecialchars($user->getId(), ENT_QUOTES); ?>" class="d-inline-block btn btn-sm btn-primary-custom shadow-sm ml-1 text-white updateBtn"><i class="fas fa-upload mr-1"></i> Modifier la photo de profil</a>
                     </div>
                 </div>
 
                 <!-- updateProfilePicture Modal-->
-                    <div class="modal fade" id="updateProfilePictureModal<?= htmlspecialchars($user->getId()); ?>" tabindex="-1" role="dialog" aria-labelledby="updateProfilePictureLabel" aria-hidden="true">
+                    <div class="modal fade" id="updateProfilePictureModal<?= htmlspecialchars($user->getId(), ENT_QUOTES); ?>" tabindex="-1" role="dialog" aria-labelledby="updateProfilePictureLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -49,7 +49,7 @@
                                     </button>
                                 </div>
                                 
-                                <form enctype="multipart/form-data" action="index.php?action=updateProfilePicture&amp;id=<?= htmlspecialchars($user->getId()); ?>" method="POST">
+                                <form enctype="multipart/form-data" action="index.php?action=updateProfilePicture&amp;id=<?= htmlspecialchars($user->getId(), ENT_QUOTES); ?>" method="POST">
                                     <div class="modal-body">
                                         <input name="picture" type="file" />
                                     </div>
@@ -64,22 +64,22 @@
                     </div>
 
                 <div class="profile-card-info">
-                    <h5 class="card-title"><?= htmlspecialchars($user->getFirstName()); ?> <?= htmlspecialchars($user->getLastName()); ?></h5>
+                    <h5 class="card-title"><?= htmlspecialchars($user->getFirstName(), ENT_QUOTES); ?> <?= htmlspecialchars($user->getLastName(), ENT_QUOTES); ?></h5>
                     
                     <?= $user->getBirthDate() ? '<p class="card-text">Née le ' . $user->getBirthDate() . ' </p>' : ''; ?>
 
-                    <?= $user->getHome() ? '<p class="card-text">Habite à ' . $user->getHome() . ' </p>' : ''; ?>
+                    <?= $user->getHome() ? '<p class="card-text">Habite à ' . htmlspecialchars($user->getHome(), ENT_QUOTES) . ' </p>' : ''; ?>
 
-                    <?= $user->getUserAbout() ? '<p class="card-text"><strong>A propos de moi : </strong>' . $user->getUserAbout() . ' </p>' : ''; ?>
+                    <?= $user->getUserAbout() ? '<p class="card-text"><strong>A propos de moi : </strong>' . htmlspecialchars($user->getUserAbout(), ENT_QUOTES) . ' </p>' : ''; ?>
                     <hr>
-                    <p class="card-text"><strong>Email : </strong><?= htmlspecialchars($user->getEmail()); ?></p>
+                    <p class="card-text"><strong>Email : </strong><?= htmlspecialchars($user->getEmail(), ENT_QUOTES); ?></p>
 
-                    <?= $user->getMobile() ? '<p class="card-text"><strong>Tel : </strong>' . $user->getMobile() . ' </p>' : ''; ?>
+                    <?= $user->getMobile() ? '<p class="card-text"><strong>Tel : </strong>' . htmlspecialchars($user->getMobile(), ENT_QUOTES) . ' </p>' : ''; ?>
 
-                    <?= $user->getWebsite() ? '<p class="card-text"><strong>Website : </strong>' . $user->getWebsite() . ' </p>' : ''; ?>
+                    <?= $user->getWebsite() ? '<p class="card-text"><strong>Website : </strong>' . htmlspecialchars($user->getWebsite(), ENT_QUOTES) . ' </p>' : ''; ?>
                     
                     <hr>
-                    <p class="card-text"><strong>Rôle : </strong><?= htmlspecialchars($user->getRole()); ?></p>
+                    <p class="card-text"><strong>Rôle : </strong><?= htmlspecialchars($user->getRole(), ENT_QUOTES); ?></p>
                     <p class="card-text"><strong>Date de création : </strong><?= $user->getRegisterDate(); ?></p>
                     <hr>
 

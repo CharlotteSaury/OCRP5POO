@@ -5,9 +5,9 @@ namespace Src\Controller;
 use Src\Controller\Controller;
 use Src\Controller\HomeController;
 use Src\Controller\UserController;
-use Config\Request;
-use Config\Parameter;
-use Config\File;
+use Src\Config\Request;
+use Src\Config\Parameter;
+use Src\Config\File;
 use Exception;
 
 /**

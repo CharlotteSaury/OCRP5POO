@@ -4,9 +4,9 @@ namespace Src\Controller;
 
 use Src\Controller\Controller;
 use Src\Controller\HomeController;
-use Config\Request;
-use Config\Parameter;
-use Config\Session;
+use Src\Config\Request;
+use Src\Config\Parameter;
+use Src\Config\Session;
 
 /**
  * Class UserController

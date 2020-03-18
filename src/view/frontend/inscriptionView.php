@@ -14,7 +14,7 @@
 
             <?php
             if ($session->get('message')) {
-                echo '<div class="adminMessage text-white text-center">' . $session->get('message') . '</div>';
+                echo '<div class="adminMessage text-white text-center">' . htmlspecialchars($session->get('message'), ENT_QUOTES) . '</div>';
             }
             ?>
             

@@ -5,9 +5,9 @@
       
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="description" content="">
-        <meta name="author" content="">
-        <meta name="keywords" content="">
+        <meta name="description" content="Blog professionnel de Charlotte SAURY développé en PHP dans le cadre du projet 5 du parcours de formation OpenClassrooms 'développeur d\'applications PHP/Symfony'">
+        <meta name="author" content="Charlotte SAURY">
+        <meta name="keywords" content="PHP, OpenClassrooms, Charlotte SAURY">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
 
         <title><?= $this->_title ?></title>
@@ -60,12 +60,12 @@
                             ?>
                             <li class="nav-item dropdown no-arrow nav-avatar">
                                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                  Bonjour, <?= htmlspecialchars($session->get('pseudo')); ?><img class="img-profile rounded-circle ml-2" src="<?= htmlspecialchars($session->get('avatar')); ?>" />
+                                  Bonjour, <?= htmlspecialchars($session->get('pseudo'), ENT_QUOTES); ?><img class="img-profile rounded-circle ml-2" src="<?= htmlspecialchars($session->get('avatar'), ENT_QUOTES); ?>" />
                                 </a>
                               
                                 <!-- Dropdown - User Information -->
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                    <a class="dropdown-item" href="index.php?action=profileUser&id=<?= $session->get('id'); ?>">
+                                    <a class="dropdown-item" href="index.php?action=profileUser&id=<?= htmlspecialchars($session->get('id'), ENT_QUOTES); ?>">
                                         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Mon profil
                                     </a>

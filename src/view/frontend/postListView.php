@@ -47,21 +47,21 @@
                             <?php
                             if ($post->getMainImage() != null) {
                                 ?>
-                                <div class="post-list-picture col-md-4 col-12" style="background-image: url('<?= htmlspecialchars($post->getMainImage()); ?>')"><a href="index.php?action=postView&amp;id=<?= $post->getId(); ?>"></a>     
+                                <div class="post-list-picture col-md-4 col-12" style="background-image: url('<?= htmlspecialchars($post->getMainImage(), ENT_QUOTES); ?>')"><a href="index.php?action=postView&amp;id=<?= $post->getId(); ?>"></a>     
                                 </div>
                                 <?php
                             }
                             ?>
                             
                             <div class="post-chapo col-md-8 col-12 text-center text-lg-left pl-md-4 pt-2 px-0">
-                                <h4 class="text-white"><a href="index.php?action=postView&amp;id=<?= $post->getId(); ?>"><?= htmlspecialchars($post->getTitle()); ?></a></h4>
-                                <p class="mb-3 text-white-50 text-justify"><?= substr(htmlspecialchars($post->getChapo()), 0, 200); ?>... - <a href="index.php?action=postView&amp;id=<?= $post->getId(); ?>">En savoir plus</a></p>
+                                <h4 class="text-white"><a href="index.php?action=postView&amp;id=<?= $post->getId(); ?>"><?= htmlspecialchars($post->getTitle(), ENT_QUOTES); ?></a></h4>
+                                <p class="mb-3 text-white-50 text-justify"><?= substr(htmlspecialchars($post->getChapo(), ENT_QUOTES), 0, 200); ?>... - <a href="index.php?action=postView&amp;id=<?= $post->getId(); ?>">En savoir plus</a></p>
                                 <hr class="d-none d-lg-block mb-4 ml-0">
 
                                 <?php
                                 if ($post->getCategories() != null) {
                                     foreach ($post->getCategories() as $category) {
-                                        echo '<span class="btn btn-outline-secondary mx-1 my-1">' . htmlspecialchars($category['name']) . '</span>';
+                                        echo '<span class="btn btn-outline-secondary mx-1 my-1">' . htmlspecialchars($category['name'], ENT_QUOTES) . '</span>';
                                     }
                                 }
                                 ?>
@@ -69,10 +69,10 @@
                         </div>
                             
                         <div class="post-author d-flex mt-4 align-items-center">
-                            <div class="avatar mr-3" style="background-image: url('<?= htmlspecialchars($post->getAvatar()); ?>')">
+                            <div class="avatar mr-3" style="background-image: url('<?= htmlspecialchars($post->getAvatar(), ENT_QUOTES); ?>')">
                             </div>
                             <div class="text-white-50 posts-informations">
-                                <p class="mb-0">Posté par <strong><?= htmlspecialchars($post->getPseudo()); ?></strong></p>
+                                <p class="mb-0">Posté par <strong><?= htmlspecialchars($post->getPseudo(), ENT_QUOTES); ?></strong></p>
                                 <p class="mb-0">le <?= $post->getDateCreation(); ?></p>
                                 <p class="mb-0">Dernière modification le <?= $post->getDateUpdate(); ?></p>
                             </div>
@@ -94,7 +94,7 @@
                             <?php 
                             if ($get->get('page') && ($get->get('page') > 1)) {
                                 ?>
-                                <a class="page-link" href="index.php?action=listPosts&page=<?= (int)htmlspecialchars($get->get('page'))-1; ?>&amp;postsPerPage=<?= $postsPerPage; ?>#posts-list" aria-label="Previous">
+                                <a class="page-link" href="index.php?action=listPosts&page=<?= (int)htmlspecialchars($get->get('page'), ENT_QUOTES)-1; ?>&amp;postsPerPage=<?= $postsPerPage; ?>#posts-list" aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                     <span class="sr-only">Previous</span>
                                 </a>
@@ -122,7 +122,7 @@
                             <?php 
                             if ($get->get('page') && ($get->get('page') < $page_number)) {
                                 ?>
-                                <a class="page-link" href="index.php?action=listPosts&page=<?= (int)htmlspecialchars($get->get('page'))+1; ?>&amp;postsPerPage=<?= $postsPerPage; ?>#posts-list" aria-label="Next">
+                                <a class="page-link" href="index.php?action=listPosts&page=<?= (int)htmlspecialchars($get->get('page'), ENT_QUOTES)+1; ?>&amp;postsPerPage=<?= $postsPerPage; ?>#posts-list" aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                     <span class="sr-only">Next</span>
                                 </a>
@@ -166,7 +166,7 @@
                         <?php
                         if ($get->get('postsPerPage')) {
 
-                            echo '<option selected disabled>' . htmlspecialchars($get->get('postsPerPage')) . '</option>';
+                            echo '<option selected disabled>' . htmlspecialchars($get->get('postsPerPage'), ENT_QUOTES) . '</option>';
                             switch ($get->get('postsPerPage')) {
                                 case 3:
                                     echo '<option value="5">5</option>';
@@ -201,8 +201,8 @@
                     <?php
                     foreach ($recentPosts as $post) {
                         ?>
-                        <h5><?= htmlspecialchars($post->getTitle()); ?><em> (posté le <?= $post->getDateCreation(); ?>)</em></h5>
-                        <p><?= substr(htmlspecialchars($post->getChapo()), 0, 50);?>... - <a href="index.php?action=postView&amp;id=<?= htmlspecialchars($post->getId()); ?>">En savoir plus</a></p>
+                        <h5><?= htmlspecialchars($post->getTitle(), ENT_QUOTES); ?><em> (posté le <?= $post->getDateCreation(); ?>)</em></h5>
+                        <p><?= substr(htmlspecialchars($post->getChapo(), ENT_QUOTES), 0, 50);?>... - <a href="index.php?action=postView&amp;id=<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>">En savoir plus</a></p>
                         <?php
                     }
                     ?>                      

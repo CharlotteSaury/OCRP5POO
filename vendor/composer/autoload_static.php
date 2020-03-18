@@ -56,6 +56,7 @@ class ComposerStaticInit910807a095391365cfdf5b32406455f6
             'Src\\Entity\\' => 11,
             'Src\\Controller\\' => 15,
             'Src\\Constraint\\' => 15,
+            'Src\\Config\\' => 11,
         ),
         'P' => 
         array (
@@ -90,7 +91,6 @@ class ComposerStaticInit910807a095391365cfdf5b32406455f6
         ),
         'C' => 
         array (
-            'Config\\' => 7,
             'Composer\\CaBundle\\' => 18,
         ),
     );
@@ -212,6 +212,10 @@ class ComposerStaticInit910807a095391365cfdf5b32406455f6
         array (
             0 => __DIR__ . '/../..' . '/src/constraint',
         ),
+        'Src\\Config\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/config',
+        ),
         'Psr\\SimpleCache\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/simple-cache/src',
@@ -263,10 +267,6 @@ class ComposerStaticInit910807a095391365cfdf5b32406455f6
         'Doctrine\\Common\\Annotations\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations',
-        ),
-        'Config\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/config',
         ),
         'Composer\\CaBundle\\' => 
         array (
@@ -365,10 +365,6 @@ class ComposerStaticInit910807a095391365cfdf5b32406455f6
         'Cilex\\Provider\\ValidatorServiceProvider' => __DIR__ . '/..' . '/cilex/cilex/src/Cilex/Provider/ValidatorServiceProvider.php',
         'Cilex\\ServiceProviderInterface' => __DIR__ . '/..' . '/cilex/cilex/src/Cilex/ServiceProviderInterface.php',
         'Composer\\CaBundle\\CaBundle' => __DIR__ . '/..' . '/composer/ca-bundle/src/CaBundle.php',
-        'Config\\File' => __DIR__ . '/../..' . '/config/File.php',
-        'Config\\Parameter' => __DIR__ . '/../..' . '/config/Parameter.php',
-        'Config\\Request' => __DIR__ . '/../..' . '/config/Request.php',
-        'Config\\Session' => __DIR__ . '/../..' . '/config/Session.php',
         'Doctrine\\Common\\Annotations\\Annotation' => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations/Annotation.php',
         'Doctrine\\Common\\Annotations\\AnnotationException' => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations/AnnotationException.php',
         'Doctrine\\Common\\Annotations\\AnnotationReader' => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations/AnnotationReader.php',
@@ -707,6 +703,10 @@ class ComposerStaticInit910807a095391365cfdf5b32406455f6
         'Psr\\SimpleCache\\CacheException' => __DIR__ . '/..' . '/psr/simple-cache/src/CacheException.php',
         'Psr\\SimpleCache\\CacheInterface' => __DIR__ . '/..' . '/psr/simple-cache/src/CacheInterface.php',
         'Psr\\SimpleCache\\InvalidArgumentException' => __DIR__ . '/..' . '/psr/simple-cache/src/InvalidArgumentException.php',
+        'Src\\Config\\File' => __DIR__ . '/../..' . '/src/config/File.php',
+        'Src\\Config\\Parameter' => __DIR__ . '/../..' . '/src/config/Parameter.php',
+        'Src\\Config\\Request' => __DIR__ . '/../..' . '/src/config/Request.php',
+        'Src\\Config\\Session' => __DIR__ . '/../..' . '/src/config/Session.php',
         'Src\\Constraint\\AnswerValidation' => __DIR__ . '/../..' . '/src/constraint/AnswerValidation.php',
         'Src\\Constraint\\CategoryValidation' => __DIR__ . '/../..' . '/src/constraint/CategoryValidation.php',
         'Src\\Constraint\\CommentValidation' => __DIR__ . '/../..' . '/src/constraint/CommentValidation.php',

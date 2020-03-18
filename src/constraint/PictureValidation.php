@@ -2,8 +2,8 @@
 
 namespace Src\Constraint;
 
-use Config\Parameter;
-use Config\File;
+use Src\Config\Parameter;
+use Src\Config\File;
 
 /**
  * Class PictureValidation

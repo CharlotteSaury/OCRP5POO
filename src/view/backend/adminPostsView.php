@@ -80,41 +80,41 @@
                     }
                 ?>
                 
-                    <th scope="row"><?= htmlspecialchars($post->getId()); ?></th>
+                    <th scope="row"><?= htmlspecialchars($post->getId(), ENT_QUOTES); ?></th>
 
                     <?php 
                     if ($post->getStatus() == 2) {
                         ?>
 
-                        <td><a href="index.php?action=publishPost&amp;id=<?= htmlspecialchars($post->getId()); ?>&amp;currstatus=<?= htmlspecialchars($post->getStatus()); ?>" title="Ne plus publier"><i class="fas fa-toggle-on"></i></a></td>
+                        <td><a href="index.php?action=publishPost&amp;id=<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>&amp;currstatus=<?= htmlspecialchars($post->getStatus(), ENT_QUOTES); ?>" title="Ne plus publier"><i class="fas fa-toggle-on"></i></a></td>
                         
                         <?php
                     
                     } else {
                         ?>
 
-                        <td><a href="index.php?action=publishPost&amp;id=<?= htmlspecialchars($post->getId()); ?>&amp;currstatus=<?= htmlspecialchars($post->getStatus()); ?>" title="Publier"><i class="fas fa-toggle-off"></i></a></td>
+                        <td><a href="index.php?action=publishPost&amp;id=<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>&amp;currstatus=<?= htmlspecialchars($post->getStatus(), ENT_QUOTES); ?>" title="Publier"><i class="fas fa-toggle-off"></i></a></td>
                         
                         <?php
                     }
                     ?>
 
                     <td>
-                        <a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($post->getId()); ?>"><?= htmlspecialchars($post->getTitle()); ?></a>
+                        <a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>"><?= htmlspecialchars($post->getTitle(), ENT_QUOTES); ?></a>
                         <hr class="postlist-divider">
-                        <a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($post->getId()); ?>" class="btn btn-outline-dark btn-sm" title="Voir">
+                        <a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>" class="btn btn-outline-dark btn-sm" title="Voir">
                             <i class="fas fa-eye"></i>
                         </a>
-                        <a href="index.php?action=editPostView&amp;id=<?= htmlspecialchars($post->getId()); ?>" class="btn btn-outline-dark btn-sm" title="Modifier">
+                        <a href="index.php?action=editPostView&amp;id=<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>" class="btn btn-outline-dark btn-sm" title="Modifier">
                             <i class="fas fa-pencil-alt"></i>
                         </a>
-                        <a data-toggle="modal" data-target="#deletePostModal<?= htmlspecialchars($post->getId()); ?>" class="btn btn-outline-dark btn-sm" title="Supprimer">
+                        <a data-toggle="modal" data-target="#deletePostModal<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>" class="btn btn-outline-dark btn-sm" title="Supprimer">
                             <i class="fas fa-trash-alt"></i>
                         </a>
                     </td>
-                    <td><?= htmlspecialchars($post->getPseudo()); ?></td>
+                    <td><?= htmlspecialchars($post->getPseudo(), ENT_QUOTES); ?></td>
                     <td>
-                        <?= substr(htmlspecialchars($post->getChapo()), 0, 40); ?>...
+                        <?= substr(htmlspecialchars($post->getChapo(), ENT_QUOTES), 0, 40); ?>...
                         
                     <?php
                     if ($post->getCategories() != null) {
@@ -124,19 +124,19 @@
                     
                         <?php
                         foreach ($post->getCategories() as $category) {
-                            echo '<a class="btn btn-outline-secondary ml-2" href="">' . $category['name'] . '</a>';
+                            echo '<a class="btn btn-outline-secondary ml-2" href="">' . htmlspecialchars($category['name'], ENT_QUOTES) . '</a>';
                         }
                     }
                     ?>
 
                         
                     </td>
-                    <td  class="responsive-table-custom"><?= htmlspecialchars($post->getDateCreation()); ?></td>
-                    <td><?= htmlspecialchars($post->getApprovedCommentsNb()); ?>/<?= htmlspecialchars($post->getCommentsNb()); ?></td>
+                    <td  class="responsive-table-custom"><?= htmlspecialchars($post->getDateCreation(), ENT_QUOTES); ?></td>
+                    <td><?= htmlspecialchars($post->getApprovedCommentsNb(), ENT_QUOTES); ?>/<?= htmlspecialchars($post->getCommentsNb(), ENT_QUOTES); ?></td>
                     
                 </tr>
                 <!-- deletePost Modal-->
-                <div class="modal fade" id="deletePostModal<?= htmlspecialchars($post->getId()); ?>" tabindex="-1" role="dialog" aria-labelledby="deletePostLabel" aria-hidden="true">
+                <div class="modal fade" id="deletePostModal<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>" tabindex="-1" role="dialog" aria-labelledby="deletePostLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -148,7 +148,7 @@
                             <div class="modal-body">Cliquez sur "Valider" pour supprimer définitivement ce post</div>
                             <div class="modal-footer">
                                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                <a class="btn btn-primary-custom" href="index.php?action=deletePost&amp;id=<?= htmlspecialchars($post->getId()); ?>">Valider</a>
+                                <a class="btn btn-primary-custom" href="index.php?action=deletePost&amp;id=<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>">Valider</a>
                             </div>
                         </div>
                     </div>

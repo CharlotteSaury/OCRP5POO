@@ -17,12 +17,12 @@
 
                 <div class="col-md-8">
                     <div class="form-group">
-                        <input type="hidden" class="form-control" name="postId" value="<?= htmlspecialchars($post->getId()); ?>"/>
+                        <input type="hidden" class="form-control" name="postId" value="<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>"/>
                     </div>
 
                     <div class="form-group">
                         <label for="post-title">Titre : </label>
-                        <input type="text" class="form-control"  id="post-title" name="title" value="<?= htmlspecialchars($post->getTitle()); ?>" required/>
+                        <input type="text" class="form-control"  id="post-title" name="title" value="<?= htmlspecialchars($post->getTitle(), ENT_QUOTES); ?>" required/>
                     </div>
                     <div class="form-group">
                         <label for="post-author">Auteur : </label>
@@ -30,9 +30,9 @@
                         <?php
                             foreach ($users as $user) {
                                 if ($user->getPseudo() == $post->getPseudo()) {
-                                    echo '<option value="' . $user->getId() . '" selected>' . $user->getPseudo() . ' - ' . $user->getRole() . '</option>';
+                                    echo '<option value="' . htmlspecialchars($user->getId(), ENT_QUOTES) . '" selected>' . htmlspecialchars($user->getPseudo(), ENT_QUOTES) . ' - ' . htmlspecialchars($user->getRole(), ENT_QUOTES) . '</option>';
                                 } else {
-                                    echo '<option value="' . $user->getId() . '"">' . $user->getPseudo() . ' - ' . $user->getRole() . '</option>';
+                                    echo '<option value="' . htmlspecialchars($user->getId(), ENT_QUOTES) . '"">' . htmlspecialchars($user->getPseudo(), ENT_QUOTES) . ' - ' . htmlspecialchars($user->getRole(), ENT_QUOTES) . '</option>';
                                 }
                             }
                         ?>
@@ -42,15 +42,15 @@
                     <hr class="d-none d-lg-block ml-0">
 
                     <div class="post-content post-content-text text-black-50 text-justify">
-                        <p class="mb-0">le <?= htmlspecialchars($post->getDateCreation()); ?></p>
-                        <p class="mb-0">Dernière modification le <?= htmlspecialchars($post->getDateUpdate()); ?></p>
+                        <p class="mb-0">le <?= $post->getDateCreation(); ?></p>
+                        <p class="mb-0">Dernière modification le <?= $post->getDateUpdate(); ?></p>
                     </div>
 
                     <hr class="d-none d-lg-block ml-0">
 
                     <div class="form-group mt-3">
                         <label for="post-chapo"><strong>Chapô : </strong></label>
-                        <textarea class="form-control" name="chapo" rows="5" required><?= htmlspecialchars($post->getChapo()); ?></textarea>   
+                        <textarea class="form-control" name="chapo" rows="5" required><?= htmlspecialchars($post->getChapo(), ENT_QUOTES); ?></textarea>   
                     </div>
                     <button type="submit" name="updatePostInfos" class="d-sm-inline-block btn btn-sm btn-primary-custom shadow-sm ml-1 btnUpdate" value="Enregistrer">Enregistrer</button> 
                 </div>
@@ -65,7 +65,7 @@
                                 <a data-toggle="modal" data-target="#deleteMainPictureModal" class="btn btn-outline-dark btn-sm mr-2" title="Supprimer"><i class="fas fa-trash-alt"></i>
                                 </a>
                             </p>
-                            <img class="admin-post-img mb-4" src="<?= htmlspecialchars($post->getMainImage()); ?>"/>
+                            <img class="admin-post-img mb-4" src="<?= htmlspecialchars($post->getMainImage(), ENT_QUOTES); ?>"/>
                         </div>
 
                         <?php
@@ -119,11 +119,11 @@
                     if ($content->getContentTypeId() == 1) {
                         ?>
                         <div class="my-4 text-center d-flex flex-column align-items-center">  
-                            <img class="admin-post-img mb-4" src="<?= htmlspecialchars($content->getContent()); ?>" /> 
+                            <img class="admin-post-img mb-4" src="<?= htmlspecialchars($content->getContent(), ENT_QUOTES); ?>" /> 
                             <div>
 
-                                <a data-toggle="modal" data-target="#updatePictureModal<?= htmlspecialchars($content->getId()); ?>" class="btn btn-outline-dark btn-sm mr-2" title="Modifier l'image"><i class="fas fa-pencil-alt mr-1"></i></a> 
-                                <a data-toggle="modal" data-target="#deleteContentModal<?= htmlspecialchars($content->getId()); ?>" class="btn btn-outline-dark btn-sm mr-2" title="Supprimer">
+                                <a data-toggle="modal" data-target="#updatePictureModal<?= htmlspecialchars($content->getId(), ENT_QUOTES); ?>" class="btn btn-outline-dark btn-sm mr-2" title="Modifier l'image"><i class="fas fa-pencil-alt mr-1"></i></a> 
+                                <a data-toggle="modal" data-target="#deleteContentModal<?= htmlspecialchars($content->getId(), ENT_QUOTES); ?>" class="btn btn-outline-dark btn-sm mr-2" title="Supprimer">
                                     <i class="fas fa-trash-alt"></i>
                                 </a>
                             </div> 
@@ -131,7 +131,7 @@
 
                         <!-- updatePicture Modal-->
 
-                        <div class="modal fade" id="updatePictureModal<?= htmlspecialchars($content->getId()); ?>" tabindex="-1" role="dialog" aria-labelledby="updatePictureLabel" aria-hidden="true">
+                        <div class="modal fade" id="updatePictureModal<?= htmlspecialchars($content->getId(), ENT_QUOTES); ?>" tabindex="-1" role="dialog" aria-labelledby="updatePictureLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -142,7 +142,7 @@
                                     </div>
                                     <div class="modal-body">
                                         <p><em>Veuillez enregistrer les autres modifications avant de modifier ce contenu au risque que les informations soient perdues.</em></p>
-                                        <input name="picture<?= htmlspecialchars($content->getId()); ?>" type="file" />
+                                        <input name="picture<?= htmlspecialchars($content->getId(), ENT_QUOTES); ?>" type="file" />
                                     </div>
                                     <div class="modal-footer">
                                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
@@ -154,7 +154,7 @@
                         </div>
                         
                         <!-- deleteContent Modal-->
-                        <div class="modal fade" id="deleteContentModal<?= htmlspecialchars($content->getId()); ?>" tabindex="-1" role="dialog" aria-labelledby="deleteContentLabel" aria-hidden="true">
+                        <div class="modal fade" id="deleteContentModal<?= htmlspecialchars($content->getId(), ENT_QUOTES); ?>" tabindex="-1" role="dialog" aria-labelledby="deleteContentLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -162,13 +162,13 @@
                                         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">×</span>
                                         </button>
-                                        <input type="hidden" name="postId" value="<?= htmlspecialchars($content->getPostId()); ?>"/>
-                                        <input type="hidden" name="contentId" value="<?= htmlspecialchars($content->getId()); ?>"/>
+                                        <input type="hidden" name="postId" value="<?= htmlspecialchars($content->getPostId(), ENT_QUOTES); ?>"/>
+                                        <input type="hidden" name="contentId" value="<?= htmlspecialchars($content->getId(), ENT_QUOTES); ?>"/>
                                     </div>
                                     <div class="modal-body">Cliquez sur "Valider" pour supprimer définitivement ce contenu</div>
                                     <div class="modal-footer">
                                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                        <a href="index.php?action=deleteContent&amp;id=<?= htmlspecialchars($content->getPostId()); ?>&amp;content=<?= htmlspecialchars($content->getId()); ?>&amp;type=<?= htmlspecialchars($content->getContentTypeId()); ?>" class="btn btn-primary-custom" >Valider</a>
+                                        <a href="index.php?action=deleteContent&amp;id=<?= htmlspecialchars($content->getPostId(), ENT_QUOTES); ?>&amp;content=<?= htmlspecialchars($content->getId(), ENT_QUOTES); ?>&amp;type=<?= htmlspecialchars($content->getContentTypeId(), ENT_QUOTES); ?>" class="btn btn-primary-custom" >Valider</a>
                                     </div>
                                 </div>
                             </div>
@@ -180,18 +180,18 @@
 
                         <div class="form-group d-flex flex-column flex-md-row">                        
 
-                            <textarea class="form-control" name="<?= htmlspecialchars($content->getId()); ?>" rows="5"><?= htmlspecialchars($content->getContent()); ?></textarea>
+                            <textarea class="form-control" name="<?= htmlspecialchars($content->getId(), ENT_QUOTES); ?>" rows="5"><?= htmlspecialchars($content->getContent(), ENT_QUOTES); ?></textarea>
                             
-                            <button type="submit" name="editContent" class="btn btn-outline-success btn-sm mx-md-2 mt-2 mt-md-0" title="Enregistrer les modifications" value="<?= htmlspecialchars($content->getId()); ?>">Enregistrer</button>
+                            <button type="submit" name="editContent" class="btn btn-outline-success btn-sm mx-md-2 mt-2 mt-md-0" title="Enregistrer les modifications" value="<?= htmlspecialchars($content->getId(), ENT_QUOTES); ?>">Enregistrer</button>
                             
-                            <a data-toggle="modal" data-target="#deleteContentModal<?= htmlspecialchars($content->getId()); ?>" class="btn btn-outline-dark btn-sm mr-md-2 mt-2 mt-md-0" title="Supprimer">
+                            <a data-toggle="modal" data-target="#deleteContentModal<?= htmlspecialchars($content->getId(), ENT_QUOTES); ?>" class="btn btn-outline-dark btn-sm mr-md-2 mt-2 mt-md-0" title="Supprimer">
                                 <i class="fas fa-trash-alt"></i>
                             </a>
 
                         </div>
 
                         <!-- deleteContent Modal-->
-                        <div class="modal fade" id="deleteContentModal<?= htmlspecialchars($content->getId()); ?>" tabindex="-1" role="dialog" aria-labelledby="deleteContentLabel" aria-hidden="true">
+                        <div class="modal fade" id="deleteContentModal<?= htmlspecialchars($content->getId(), ENT_QUOTES); ?>" tabindex="-1" role="dialog" aria-labelledby="deleteContentLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -203,7 +203,7 @@
                                     <div class="modal-body">Cliquez sur "Valider" pour supprimer définitivement ce contenu</div>
                                     <div class="modal-footer">
                                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                        <a href="index.php?action=deleteContent&amp;id=<?= htmlspecialchars($content->getPostId()); ?>&amp;content=<?= htmlspecialchars($content->getId()); ?>&amp;type=<?= htmlspecialchars($content->getContentTypeId()); ?>" class="btn btn-primary-custom" >Valider</a>
+                                        <a href="index.php?action=deleteContent&amp;id=<?= htmlspecialchars($content->getPostId(), ENT_QUOTES); ?>&amp;content=<?= htmlspecialchars($content->getId(), ENT_QUOTES); ?>&amp;type=<?= htmlspecialchars($content->getContentTypeId(), ENT_QUOTES); ?>" class="btn btn-primary-custom" >Valider</a>
                                     </div>
                                 </div>
                             </div>
@@ -252,7 +252,7 @@
                     if ($post->getCategories() != null) {
                         foreach($post->getCategories() as $category) {
                             ?>
-                            <a href="index.php?action=deleteCategory&amp;id=<?= htmlspecialchars($category['postId']); ?>&amp;cat=<?= htmlspecialchars($category['id']); ?>" class="btn btn-outline-secondary mr-2 mb-2"><?= htmlspecialchars($category['name']); ?> <i class="ml-1 fas fa-times"></i></a>
+                            <a href="index.php?action=deleteCategory&amp;id=<?= htmlspecialchars($category['postId'], ENT_QUOTES); ?>&amp;cat=<?= htmlspecialchars($category['id'], ENT_QUOTES); ?>" class="btn btn-outline-secondary mr-2 mb-2"><?= htmlspecialchars($category['name'], ENT_QUOTES); ?> <i class="ml-1 fas fa-times"></i></a>
                             <?php 
                         }
                     } else {

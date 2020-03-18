@@ -76,13 +76,13 @@
                         echo '<tr class="table-success-custom">';
                     }
                 ?>
-                    <th scope="row"><?= htmlspecialchars($comment->getId()); ?></th>
-                    <td><?= htmlspecialchars($comment->getUserPseudo()); ?></td>
-                    <td><?= htmlspecialchars($comment->getContent()); ?></td>
-                    <td><a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($comment->getPostId()); ?>"><?= htmlspecialchars($comment->getPostTitle()); ?></a></td>
-                    <td><?= htmlspecialchars($comment->getCommentDate()); ?></td>
+                    <th scope="row"><?= htmlspecialchars($comment->getId(), ENT_QUOTES); ?></th>
+                    <td><?= htmlspecialchars($comment->getUserPseudo(), ENT_QUOTES); ?></td>
+                    <td><?= htmlspecialchars($comment->getContent(), ENT_QUOTES); ?></td>
+                    <td><a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($comment->getPostId(), ENT_QUOTES); ?>"><?= htmlspecialchars($comment->getPostTitle(), ENT_QUOTES); ?></a></td>
+                    <td><?= htmlspecialchars($comment->getCommentDate(), ENT_QUOTES); ?></td>
                     <td>
-                        <a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($comment->getPostId()); ?>" class="btn btn-outline-dark btn-sm" title="Voir l'article">
+                        <a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($comment->getPostId(), ENT_QUOTES); ?>" class="btn btn-outline-dark btn-sm" title="Voir l'article">
                             <i class="fas fa-eye"></i>
                         </a>
 
@@ -90,7 +90,7 @@
                         if ($comment->getStatus() == 1) {
                             ?>
 
-                            <a href="index.php?action=approveComment&amp;id=<?= htmlspecialchars($comment->getId()); ?>" class="btn btn-outline-dark btn-sm" title="Approuver">
+                            <a href="index.php?action=approveComment&amp;id=<?= htmlspecialchars($comment->getId(), ENT_QUOTES); ?>" class="btn btn-outline-dark btn-sm" title="Approuver">
                                 <i class="fas fa-check"></i>
                             </a>
 
@@ -98,13 +98,13 @@
                         }
                         ?>
 
-                        <a data-toggle="modal" data-target="#deleteCommentModal<?= htmlspecialchars($comment->getId()); ?>" class="btn btn-outline-dark btn-sm" title="Supprimer">
+                        <a data-toggle="modal" data-target="#deleteCommentModal<?= htmlspecialchars($comment->getId(), ENT_QUOTES); ?>" class="btn btn-outline-dark btn-sm" title="Supprimer">
                             <i class="fas fa-times"></i>
                         </a>
                     </td>
                 </tr>
                 <!-- deleteComment Modal-->
-                <div class="modal fade" id="deleteCommentModal<?= htmlspecialchars($comment->getId()); ?>" tabindex="-1" role="dialog" aria-labelledby="deleteCommentLabel" aria-hidden="true">
+                <div class="modal fade" id="deleteCommentModal<?= htmlspecialchars($comment->getId(), ENT_QUOTES); ?>" tabindex="-1" role="dialog" aria-labelledby="deleteCommentLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -116,7 +116,7 @@
                             <div class="modal-body">Cliquez sur "Valider" pour supprimer définitivement ce commentaire</div>
                             <div class="modal-footer">
                                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                <a class="btn btn-primary-custom" href="index.php?action=deleteComment&amp;id=<?= htmlspecialchars($comment->getId()); ?>">Valider</a>
+                                <a class="btn btn-primary-custom" href="index.php?action=deleteComment&amp;id=<?= htmlspecialchars($comment->getId(), ENT_QUOTES); ?>">Valider</a>
                             </div>
                         </div>
                     </div>
