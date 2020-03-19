@@ -92,7 +92,7 @@ class Router
 
 					$this->postController->postView($this->request->getGet()->get('id'));
 				
-				} elseif ($action === "addComment") {
+				} elseif ($action === "addComment" && $this->userController->checkCsrfToken()) {
 
 					$post = $this->request->getPost();
 					$userId = $this->request->getSession()->get('id');
@@ -135,11 +135,7 @@ class Router
 
 					if ($session->get('id')) {
 
-						$session->remove('id');
-						$session->remove('pseudo');
-						$session->remove('role');
-						$session->remove('avatar');
-						$session->remove('email');
+						$session->removeAll();
 						$session->stop();
 						setcookie('auth', '', time()-3600, null, null, false, true);
 					}
@@ -188,18 +184,18 @@ class Router
 
 					$this->adminController->adminNewPostView();
 				
-				} elseif ($action === 'newPostInfos' && $this->userController->adminAccess()) {
+				} elseif ($action === 'newPostInfos' && $this->userController->adminAccess() && $this->userController->checkCsrfToken()) {
 
 					$post = $this->request->getPost();
 					$post->set('userId', $this->request->getSession()->get('id'));
 					$file = $this->request->getFile();
 					$this->adminController->newPostInfos($post, $file);
 				
-				} elseif ($action === 'editPostView' && $this->userController->adminAccess()) {
+				} elseif ($action === 'editPostView' && $this->userController->adminAccess() && $this->userController->checkCsrfToken()) {
 
 					$this->adminController->editPostView($this->request->getGet()->get('id'));
 
-				} elseif ($action === 'editPost' && $this->userController->adminAccess()) {
+				} elseif ($action === 'editPost' && $this->userController->adminAccess() && $this->userController->checkCsrfToken()) {
 
 					$post = $this->request->getPost();
 
@@ -231,27 +227,29 @@ class Router
 						$this->adminController->editPostPicture($post);
 					}
 				
-				} elseif ($action === 'deleteContent' && $this->userController->adminAccess()) {
+				} elseif ($action === 'deleteContent' && $this->userController->adminAccess() && $this->userController->checkCsrfToken()) {
 
-					$this->adminController->deleteContent($this->request->getGet());
+					$this->adminController->deleteContent($this->request->getGet() && $this->userController->checkCsrfToken());
 				
-				} elseif ($action === 'deleteCategory' && $this->userController->adminAccess()) {
+				} elseif ($action === 'deleteCategory' && $this->userController->adminAccess() && $this->userController->checkCsrfToken()) {
 
 					$this->adminController->deleteCategory($this->request->getGet());
 				
 				} elseif (
-					$action === 'publishPost' 
-					|| $action === 'publishPostDashboard' 
-					&& $this->userController->adminAccess()
+					($action === 'publishPost' 
+					|| $action === 'publishPostDashboard')
+					&& $this->userController->adminAccess() 
+					&& $this->userController->checkCsrfToken()
 				) {
 
 					$get = $this->request->getGet();
 					$this->adminController->publishPost($get);
 				
 				} elseif (
-					$action === 'deletePost' 
-					|| $action === 'deletePostDashboard' 
+					($action === 'deletePost' 
+					|| $action === 'deletePostDashboard') 
 					&& $this->userController->adminAccess()
+					&& $this->userController->checkCsrfToken()
 				) {
 
 					$get = $this->request->getGet();
@@ -267,19 +265,21 @@ class Router
 					$this->adminController->adminCommentsView($get);
 				
 				} elseif (
-					$action === 'approveComment'
+					($action === 'approveComment'
 					|| $action === 'approveCommentDashboard'
-					|| $action === 'approveCommentView' 
+					|| $action === 'approveCommentView') 
 					&& $this->userController->adminAccess()
+					&& $this->userController->checkCsrfToken()
 				) {
 
 					$get = $this->request->getGet();
 					$this->adminController->approveComment($get);
 				
 				} elseif (
-					$action === 'deleteComment'
-					|| $action === 'deleteCommentDashboard'
-					&& $this->userController->adminAccess()
+					($action === 'deleteComment'
+					|| $action === 'deleteCommentDashboard')
+					&& $this->userController->adminAccess() 
+					&& $this->userController->checkCsrfToken()
 				) {
 
 					$dashboard = ($action === 'deleteCommentDashboard') ? 1 : null;
@@ -296,16 +296,16 @@ class Router
 
 					$this->adminController->profileUserView($this->request->getGet()->get('id'));
 				
-				} elseif ($action === 'editUser') {
+				} elseif ($action === 'editUser' && $this->userController->checkCsrfToken()) {
 
 					$this->adminController->editUser($this->request->getGet()->get('id'));
 				
-				} elseif ($action === 'editUserInfos') {
+				} elseif ($action === 'editUserInfos' && $this->userController->checkCsrfToken()) {
 
 					$post = $this->request->getPost();
 					$this->adminController->editUserInfos($post);
 				
-				} elseif ($action === 'updateProfilePicture') {
+				} elseif ($action === 'updateProfilePicture' && $this->userController->checkCsrfToken()) {
 
 					$userId = $this->request->getGet()->get('id');
 					$this->adminController->updateProfilePicture($userId);
@@ -313,7 +313,7 @@ class Router
 
 				// Actions related to Contacts managment
 				
-				} elseif ($action === 'adminContacts' && $this->userController->adminAccess()) {
+				} elseif ($action === 'adminContacts' && $this->userController->adminAccess(3)) {
 
 					$this->adminController->adminContactsView($this->request->getGet());
 				
@@ -321,15 +321,15 @@ class Router
 
 					$this->homeController->newContactForm($this->request->getPost());
 				
-				} elseif ($action === 'contactView' && $this->userController->adminAccess()) {
+				} elseif ($action === 'contactView' && $this->userController->adminAccess(3)) {
 
 					$this->adminController->adminContactView($this->request->getGet()->get('id'));				
 				
-				} elseif (($action === 'deleteContact') && $this->userController->adminAccess()) {
+				} elseif (($action === 'deleteContact') && $this->userController->adminAccess(3) && $this->userController->checkCsrfToken()) {
 
-					$this->adminController->deleteContact($this->request->getGet()->get('id'));				
+					$this->adminController->deleteContact($this->request->getGet()->get('id') && $this->userController->checkCsrfToken());				
 				
-				} elseif (($action === 'answer') && $this->userController->adminAccess()) {
+				} elseif (($action === 'answer') && $this->userController->adminAccess(3) && $this->userController->checkCsrfToken()) {
 
 					$this->adminController->addAnswer($this->request->getPost());
 				

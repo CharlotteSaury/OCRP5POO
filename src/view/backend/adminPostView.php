@@ -18,19 +18,19 @@
                 <?php 
                 if ($post->getStatus() == 2) {
                     ?>
-                    <a href="index.php?action=publishPost&amp;id=<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>&amp;currstatus=<?= htmlspecialchars($post->getStatus(), ENT_QUOTES); ?>" title="Ne plus publier" class="mr-2"><i class="fas fa-toggle-on"></i></a>
+                    <a href="index.php?action=publishPost&amp;id=<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>&amp;currstatus=<?= htmlspecialchars($post->getStatus(), ENT_QUOTES); ?>&amp;ct=<?= $session->get('csrf_token'); ?>" title="Ne plus publier" class="mr-2"><i class="fas fa-toggle-on"></i></a>
                     <?php
 
                 } else {
                     ?>
-                    <a href="index.php?action=publishPost&amp;id=<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>&amp;currstatus=<?= htmlspecialchars($post->getStatus(), ENT_QUOTES); ?>" title="Publier"  class="mr-2"><i class="fas fa-toggle-off"></i></a>
+                    <a href="index.php?action=publishPost&amp;id=<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>&amp;currstatus=<?= htmlspecialchars($post->getStatus(), ENT_QUOTES); ?>&amp;ct=<?= $session->get('csrf_token'); ?>" title="Publier"  class="mr-2"><i class="fas fa-toggle-off"></i></a>
                     <?php
                 }
                 ?>
                 <a href="index.php?action=editPostView&amp;id=<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>" class="btn btn-outline-dark btn-sm" title="Modifier">
                     <i class="fas fa-pencil-alt"></i>
                 </a>
-                <a href="index.php?action=deletePost&amp;id=<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>" class="btn btn-outline-dark btn-sm" title="Supprimer">
+                <a href="index.php?action=deletePost&amp;id=<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>&amp;ct=<?= $session->get('csrf_token'); ?>" class="btn btn-outline-dark btn-sm" title="Supprimer">
                     <i class="fas fa-trash-alt"></i>
                 </a>
             </div>
@@ -144,10 +144,10 @@
                 if ($comment->getStatus() == 1) {
                     ?>
                     <div class="mt-2">
-                        <a href='index.php?action=approveCommentView&id=<?= htmlspecialchars($comment->getId(), ENT_QUOTES); ?>&post=<?= htmlspecialchars($comment->getPostId(), ENT_QUOTES); ?>' class="btn btn-outline-dark btn-sm" title="Approuver">
+                        <a href='index.php?action=approveCommentView&id=<?= htmlspecialchars($comment->getId(), ENT_QUOTES); ?>&post=<?= htmlspecialchars($comment->getPostId(), ENT_QUOTES); ?>&amp;ct=<?= $session->get('csrf_token'); ?>' class="btn btn-outline-dark btn-sm" title="Approuver">
                             <i class="fas fa-check"></i>
                         </a>
-                        <a href='index.php?action=deleteComment&id=<?= htmlspecialchars($comment->getId(), ENT_QUOTES); ?>' class="btn btn-outline-dark btn-sm" title="Supprimer">
+                        <a href='index.php?action=deleteComment&id=<?= htmlspecialchars($comment->getId(), ENT_QUOTES); ?>&amp;ct=<?= $session->get('csrf_token'); ?>' class="btn btn-outline-dark btn-sm" title="Supprimer">
                             <i class="fas fa-times"></i>
                         </a>
                     </div>   

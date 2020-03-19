@@ -210,7 +210,7 @@
                         }
 
                         if ($session->get('message')) {
-                            echo '<div class="adminMessage text-center">' . htmlspecialchars($session->get('message'), ENT_QUOTES) . '</div>';
+                            echo '<div class="adminMessage text-center">' . $session->get('message') . '</div>';
                         }
 
                         ?>

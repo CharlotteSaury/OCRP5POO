@@ -148,7 +148,7 @@
                             <div class="modal-body">Cliquez sur "Valider" pour supprimer définitivement ce post</div>
                             <div class="modal-footer">
                                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                <a class="btn btn-primary-custom" href="index.php?action=deletePost&amp;id=<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>">Valider</a>
+                                <a class="btn btn-primary-custom" href="index.php?action=deletePost&amp;id=<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>&amp;ct=<?= $session->get('csrf_token'); ?>">Valider</a>
                             </div>
                         </div>
                     </div>

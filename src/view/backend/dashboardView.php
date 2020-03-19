@@ -112,13 +112,13 @@
                                 if ($post->getStatus() == 2) {
                                     ?>
 
-                                    <a href="index.php?action=publishPostDashboard&amp;id=<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>&amp;currstatus=<?= htmlspecialchars($post->getStatus(), ENT_QUOTES); ?>" class="mr-2" title="Ne plus publier"><i class="fas fa-toggle-on"></i></a>
+                                    <a href="index.php?action=publishPostDashboard&amp;id=<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>&amp;currstatus=<?= htmlspecialchars($post->getStatus(), ENT_QUOTES); ?>&amp;ct=<?= $session->get('csrf_token'); ?>" class="mr-2" title="Ne plus publier"><i class="fas fa-toggle-on"></i></a>
 
                                     <?php
                                 } else {
                                     ?>
 
-                                    <a href="index.php?action=publishPostDashboard&amp;id=<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>&amp;currstatus=<?= htmlspecialchars($post->getStatus(), ENT_QUOTES); ?>" class="mr-2"><i class="fas fa-toggle-off" title="Publier"></i></a>
+                                    <a href="index.php?action=publishPostDashboard&amp;id=<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>&amp;currstatus=<?= htmlspecialchars($post->getStatus(), ENT_QUOTES); ?>&amp;ct=<?= $session->get('csrf_token'); ?>" class="mr-2"><i class="fas fa-toggle-off" title="Publier"></i></a>
 
                                     <?php
                                 }
@@ -147,7 +147,7 @@
                                         <div class="modal-body">Cliquez sur "Valider" pour supprimer définitivement ce post.</div>
                                         <div class="modal-footer">
                                             <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                            <a class="btn btn-primary-custom" href="index.php?action=deletePostDashboard&amp;id=<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>">Valider</a>
+                                            <a class="btn btn-primary-custom" href="index.php?action=deletePostDashboard&amp;id=<?= htmlspecialchars($post->getId(), ENT_QUOTES); ?>&amp;ct=<?= $session->get('csrf_token'); ?>">Valider</a>
                                         </div>
                                     </div>
                                 </div>
@@ -215,7 +215,7 @@
                                     if ($comment->getStatus() == 1) {
                                         ?>
 
-                                        <a href="index.php?action=approveCommentDashboard&amp;id=<?= htmlspecialchars($comment->getId(), ENT_QUOTES); ?>" class="btn btn-outline-dark btn-sm" title="Approuver">
+                                        <a href="index.php?action=approveCommentDashboard&amp;id=<?= htmlspecialchars($comment->getId(), ENT_QUOTES); ?>&amp;ct=<?= $session->get('csrf_token'); ?>" class="btn btn-outline-dark btn-sm" title="Approuver">
                                             <i class="fas fa-check"></i>
                                         </a>
                                     
@@ -241,7 +241,7 @@
                                         <div class="modal-body">Cliquez sur "Valider" pour supprimer définitivement ce commentaire</div>
                                         <div class="modal-footer">
                                             <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                            <a class="btn btn-primary-custom" href="index.php?action=deleteCommentDashboard&amp;id=<?= htmlspecialchars($comment->getId(), ENT_QUOTES); ?>">Valider</a>
+                                            <a class="btn btn-primary-custom" href="index.php?action=deleteCommentDashboard&amp;id=<?= htmlspecialchars($comment->getId(), ENT_QUOTES); ?>&amp;ct=<?= $session->get('csrf_token'); ?>">Valider</a>
                                         </div>
                                     </div>
                                 </div>
