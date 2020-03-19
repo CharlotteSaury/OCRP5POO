@@ -147,7 +147,6 @@ class AdminController extends Controller
 				$this->editPostView($postId);
 
 			} elseif ($errors['name'] === 'Aucun fichier téléchargé.') {
-				var_dump($errors);
 				$postId = $this->postManager->newPostInfos($post, $mainImage = null);
 				$this->editPostView($postId);
 
@@ -636,7 +635,7 @@ class AdminController extends Controller
 		if(!$errorExists) {
 			$currentUserId = $this->request->getSession()->get('id');
 			
-			if ($currentUserId == $userId || $userController->adminAccess()) {
+			if ($currentUserId == $userId || $userController->adminAccess(3)) {
 				$this->editUserView($userId);
 			
 			} else {
@@ -708,24 +707,32 @@ class AdminController extends Controller
 		$errors = $this->validation->validatePicture($this->request->getFile(), 'picture');
 
 		if (!$errors) {
-			$homeController = new HomeController();
-			$uploadResults = $homeController->pictureUpload($this->request->getFile(), 'picture');
+			$currentUserId = $this->request->getSession()->get('id');
+			$userController = new UserController;
 
-			$oldAvatarUrl = $user->getAvatar();
-			if ($oldAvatarUrl != 'public/images/profile.png') {
-				unlink($oldAvatarUrl);
-			}
+			if ($currentUserId == $user->getId() || $userController->adminAccess()) {
+				$homeController = new HomeController();
+				$uploadResults = $homeController->pictureUpload($this->request->getFile(), 'picture');
 
-			$this->userManager->updateProfilePicture($userId, $uploadResults);
-			$this->request->getSession()->set('message', 'Photo de profil modifiée !');
-			$this->profileUserView($userId);
+				$oldAvatarUrl = $user->getAvatar();
+				if ($oldAvatarUrl != 'public/images/profile.png') {
+					unlink($oldAvatarUrl);
+				}
+
+				$this->userManager->updateProfilePicture($userId, $uploadResults);
+				$this->request->getSession()->set('message', 'Photo de profil modifiée !');
+				$this->profileUserView($userId);
 
 			// if user updated its own profile, update of avatar in session
 
-			$currentUserId = $this->request->getSession()->get('id');	
-			if ($currentUserId == $userId) {
-				$this->request->getSession()->set('avatar', $uploadResults);
+				$currentUserId = $this->request->getSession()->get('id');	
+				if ($currentUserId == $userId) {
+					$this->request->getSession()->set('avatar', $uploadResults);
+				}
+			} else {
+				throw new Exception ('Vous n\'avez pas accès à cette page');
 			}
+			
 		} elseif (isset($errors['name']) && $errors['name'] === 'Aucun fichier téléchargé.') {
 			$oldAvatarUrl = $user->getAvatar();
 			if ($oldAvatarUrl != 'public/images/profile.png') {
@@ -761,8 +768,7 @@ class AdminController extends Controller
 			$contentTitle = $sorting[2];
 		} else {
 			$contentTitle = 'Tous les contacts';
-			$status = 1;
-			$sortingDate = null;
+			$status = $sortingDate = null;
 		}
 		$allContacts = $this->contactManager->getContacts(null, $status, $sortingDate);
 		
@@ -861,7 +867,6 @@ class AdminController extends Controller
 
 		if(!$errors) {
 
-			$contact = $this->contactManager->getContacts($post->get('contactId'));
 			$this->contactManager->updateStatus($post->get('contactId'), 3);   
 			$this->contactManager->addAnswer($post);
 			$this->adminAnswerEmail($post);
@@ -937,7 +942,7 @@ class AdminController extends Controller
 				}
 			$status = $sortingDate = null;
 		}
-		return $sorting = [$status, $sortingDate, $contentTitle];
+		return [$status, $sortingDate, $contentTitle];
 	}
 	
 }

@@ -5,6 +5,9 @@ require_once 'vendor/autoload.php';
 
 use Src\Controller\Router;
 
+session_start();
+$router = new Router();
+
 if (
 	isset($_COOKIE['auth']) 
 	&& isset($_COOKIE['email']) 
@@ -17,20 +20,13 @@ if (
 	$ip = $_SERVER['REMOTE_ADDR'];
 
 	if (password_verify($email, $auth[0]) && password_verify($ip, $auth[1])) {
-		session_start();
-		$router = new Router();
 		$router->connexionAuto($email);
 
 	} else {
-		session_start();
-		$router = new Router();
 		$router->routerRequest();
-
 	}
 
 } else {
-	session_start();
-	$router = new Router();
 	$router->routerRequest();
 }
 

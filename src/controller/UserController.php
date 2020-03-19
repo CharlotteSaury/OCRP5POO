@@ -7,6 +7,7 @@ use Src\Controller\HomeController;
 use Src\Config\Request;
 use Src\Config\Parameter;
 use Src\Config\Session;
+use Exception;
 
 /**
  * Class UserController
@@ -17,21 +18,44 @@ class UserController extends Controller
 {
 	/**
 	 * Check if user is admin or super-admin
+	 * @param  int $userRole [optional userRoleId]
 	 * @return bool [return false if user is neither admin nor super-admin or unlogged]
 	 */
-	public function adminAccess()
+	public function adminAccess($userRole = null)
 	{
 		if ($this->request->getSession()->get('id')) {
-
 			$userId = $this->request->getSession()->get('id');
 			$user = $this->userManager->getUser($userId);
 
-			if ($user->getUserRoleId() == 1 || $user->getUserRoleId() == 3) {
-				return true;
+			if ($userRole == null) {
+				if ($user->getUserRoleId() == 1 || $user->getUserRoleId() == 3) {
+					return true;
+				}
+				throw new Exception("Vous n'avez pas accès à cette page.");
+
+			} elseif ($userRole == 3) {
+				if ($user->getUserRoleId() == 3) {
+					return true;
+				}
+				throw new Exception("Vous n'avez pas accès à cette page.");
 			}
-			return false;
+		} 
+		throw new Exception("Vous n'avez pas accès à cette page.");
+	}
+
+	/**
+	 * Check if action csrf token is identical to session csrf token
+	 * @return bool [True if action accepted, error if not]
+	 */
+	public function checkCsrfToken() 
+	{
+		if (
+			empty($this->request->getGet()->get('ct')) 
+			|| ($this->request->getGet()->get('ct') == $this->request->getSession()->get('csrf_token'))
+		) {
+			return true;
 		}
-		return false;
+		throw new Exception("Erreur, session périmée");
 	}
 
 	/**
@@ -222,6 +246,9 @@ class UserController extends Controller
         $this->request->getSession()->set('role', $user->getUserRoleId());
         $this->request->getSession()->set('avatar', $user->getAvatar());
        	$this->request->getSession()->set('email', $email);
+
+       	$csrf_token = bin2hex(random_bytes(32));
+       	$this->request->getSession()->set('csrf_token', $csrf_token);
 
        	if ($user->getUserRoleId() == 3) {
        		$this->request->getSession()->set('unreadContactsNb', $this->contactManager->getContactsNb(1));

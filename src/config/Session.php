@@ -42,6 +42,11 @@ class Session
         unset($_SESSION[$name]);
     }
 
+    public function removeAll()
+    {
+        $_SESSION = array();
+    }
+
     public function stop()
     {
         session_destroy();

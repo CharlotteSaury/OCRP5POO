@@ -57,7 +57,7 @@
             ?>
             <h2 class="mb-5">Répondre</h2>
 
-            <form method="POST" action="index.php?action=answer" class="answer-form form-inline d-flex flex-column align-items-start">
+            <form method="POST" action="index.php?action=answer&amp;ct=<?= $session->get('csrf_token'); ?>" class="answer-form form-inline d-flex flex-column align-items-start">
                 <input type="text" name="answerSubject" class="answer-form form-control mr-0 mr-sm-2 mb-2" placeholder="Objet" value="Re: <?= htmlspecialchars($contact->getSubject(), ENT_QUOTES); ?>" required/>
 
                 <?= isset($errors['answerSubject']) ? '<p class="form-error">' . $errors['answerSubject'] . '</p>' : ''; ?>

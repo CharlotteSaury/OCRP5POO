@@ -82,7 +82,7 @@
                     <td><a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($comment->getPostId(), ENT_QUOTES); ?>"><?= htmlspecialchars($comment->getPostTitle(), ENT_QUOTES); ?></a></td>
                     <td><?= htmlspecialchars($comment->getCommentDate(), ENT_QUOTES); ?></td>
                     <td>
-                        <a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($comment->getPostId(), ENT_QUOTES); ?>" class="btn btn-outline-dark btn-sm" title="Voir l'article">
+                        <a href="index.php?action=adminPostView&amp;id=<?= htmlspecialchars($comment->getPostId(), ENT_QUOTES); ?>&amp;ct=<?= $session->get('csrf_token'); ?>" class="btn btn-outline-dark btn-sm" title="Voir l'article">
                             <i class="fas fa-eye"></i>
                         </a>
 
@@ -90,7 +90,7 @@
                         if ($comment->getStatus() == 1) {
                             ?>
 
-                            <a href="index.php?action=approveComment&amp;id=<?= htmlspecialchars($comment->getId(), ENT_QUOTES); ?>" class="btn btn-outline-dark btn-sm" title="Approuver">
+                            <a href="index.php?action=approveComment&amp;id=<?= htmlspecialchars($comment->getId(), ENT_QUOTES); ?>&amp;ct=<?= $session->get('csrf_token'); ?>" class="btn btn-outline-dark btn-sm" title="Approuver">
                                 <i class="fas fa-check"></i>
                             </a>
 
@@ -116,7 +116,7 @@
                             <div class="modal-body">Cliquez sur "Valider" pour supprimer définitivement ce commentaire</div>
                             <div class="modal-footer">
                                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                <a class="btn btn-primary-custom" href="index.php?action=deleteComment&amp;id=<?= htmlspecialchars($comment->getId(), ENT_QUOTES); ?>">Valider</a>
+                                <a class="btn btn-primary-custom" href="index.php?action=deleteComment&amp;id=<?= htmlspecialchars($comment->getId(), ENT_QUOTES); ?>&amp;ct=<?= $session->get('csrf_token'); ?>">Valider</a>
                             </div>
                         </div>
                     </div>

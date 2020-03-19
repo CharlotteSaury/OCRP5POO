@@ -10,7 +10,7 @@
 
 <?php ob_start(); ?>
 
-<form class="form" method="POST" action="index.php?action=editUserInfos">
+<form class="form" method="POST" action="index.php?action=editUserInfos&amp;ct=<?= $session->get('csrf_token'); ?>">
 
     <div class="row">
         <div class="col-11 mx-auto">

@@ -10,7 +10,7 @@
 
 <?php ob_start(); ?>
 
-    <form class="form" enctype="multipart/form-data"  method="POST" action="index.php?action=editPost">
+    <form class="form" enctype="multipart/form-data"  method="POST" action="index.php?action=editPost&amp;ct=<?= $session->get('csrf_token'); ?>">
         <div class="row adminPostView">
 
             <div class="col-11 mx-auto d-flex flex-column flex-md-row justify-content-between">
@@ -168,7 +168,7 @@
                                     <div class="modal-body">Cliquez sur "Valider" pour supprimer définitivement ce contenu</div>
                                     <div class="modal-footer">
                                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                        <a href="index.php?action=deleteContent&amp;id=<?= htmlspecialchars($content->getPostId(), ENT_QUOTES); ?>&amp;content=<?= htmlspecialchars($content->getId(), ENT_QUOTES); ?>&amp;type=<?= htmlspecialchars($content->getContentTypeId(), ENT_QUOTES); ?>" class="btn btn-primary-custom" >Valider</a>
+                                        <a href="index.php?action=deleteContent&amp;id=<?= htmlspecialchars($content->getPostId(), ENT_QUOTES); ?>&amp;content=<?= htmlspecialchars($content->getId(), ENT_QUOTES); ?>&amp;type=<?= htmlspecialchars($content->getContentTypeId(), ENT_QUOTES); ?>&amp;ct=<?= $session->get('csrf_token'); ?>" class="btn btn-primary-custom" >Valider</a>
                                     </div>
                                 </div>
                             </div>
@@ -203,7 +203,7 @@
                                     <div class="modal-body">Cliquez sur "Valider" pour supprimer définitivement ce contenu</div>
                                     <div class="modal-footer">
                                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                        <a href="index.php?action=deleteContent&amp;id=<?= htmlspecialchars($content->getPostId(), ENT_QUOTES); ?>&amp;content=<?= htmlspecialchars($content->getId(), ENT_QUOTES); ?>&amp;type=<?= htmlspecialchars($content->getContentTypeId(), ENT_QUOTES); ?>" class="btn btn-primary-custom" >Valider</a>
+                                        <a href="index.php?action=deleteContent&amp;id=<?= htmlspecialchars($content->getPostId(), ENT_QUOTES); ?>&amp;content=<?= htmlspecialchars($content->getId(), ENT_QUOTES); ?>&amp;type=<?= htmlspecialchars($content->getContentTypeId(), ENT_QUOTES); ?>&amp;ct=<?= $session->get('csrf_token'); ?>" class="btn btn-primary-custom" >Valider</a>
                                     </div>
                                 </div>
                             </div>
@@ -252,7 +252,7 @@
                     if ($post->getCategories() != null) {
                         foreach($post->getCategories() as $category) {
                             ?>
-                            <a href="index.php?action=deleteCategory&amp;id=<?= htmlspecialchars($category['postId'], ENT_QUOTES); ?>&amp;cat=<?= htmlspecialchars($category['id'], ENT_QUOTES); ?>" class="btn btn-outline-secondary mr-2 mb-2"><?= htmlspecialchars($category['name'], ENT_QUOTES); ?> <i class="ml-1 fas fa-times"></i></a>
+                            <a href="index.php?action=deleteCategory&amp;id=<?= htmlspecialchars($category['postId'], ENT_QUOTES); ?>&amp;cat=<?= htmlspecialchars($category['id'], ENT_QUOTES); ?>&amp;ct=<?= $session->get('csrf_token'); ?>" class="btn btn-outline-secondary mr-2 mb-2"><?= htmlspecialchars($category['name'], ENT_QUOTES); ?> <i class="ml-1 fas fa-times"></i></a>
                             <?php 
                         }
                     } else {

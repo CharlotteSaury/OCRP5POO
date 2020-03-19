@@ -13,7 +13,7 @@
 <!-- New post form Row -->
 <div class="row">
     <div class="col-12">
-        <form enctype="multipart/form-data" action="index.php?action=newPostInfos" method="post">
+        <form enctype="multipart/form-data" action="index.php?action=newPostInfos&amp;ct=<?= $session->get('csrf_token'); ?>" method="post">
             <div class="form-group">
                 <label for="new-post-title" hidden>Titre</label>
                 <input type="text" class="form-control" name="title" placeholder="Titre de l'article *" required/>

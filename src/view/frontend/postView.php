@@ -96,7 +96,7 @@
                 if ($session->get('id')) {
                     ?>
                     <div class="comment-form">
-                        <form method="POST" action="index.php?action=addComment#comments-section">
+                        <form method="POST" action="index.php?action=addComment&amp;ct=<?= $session->get('csrf_token'); ?>#comments-section">
                             <div class="form-row">
                                 <textarea class="form-control mt-4 mb-4 pb-5" name="content" placeholder="Votre commentaire"></textarea>
                             </div>

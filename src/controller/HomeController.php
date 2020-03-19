@@ -114,13 +114,10 @@ class HomeController extends Controller
 	 */
 	public function pictureUpload(File $file, $namePicture)
 	{
-		var_dump($file->get($namePicture, 'name'));
-		var_dump($file->get($namePicture, 'tmp_name'));
 		$permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz';
 		$random_code = substr(str_shuffle($permitted_chars), 0, 10);
 		$extension = pathinfo($file->get($namePicture, 'name'), PATHINFO_EXTENSION);
 		$uploadResults = 'public/uploads/' . microtime(true) . '_' . $random_code . '.' . $extension;
-		var_dump($uploadResults);
 		move_uploaded_file($file->get($namePicture, 'tmp_name'), $uploadResults);
 		return $uploadResults;		
 	}

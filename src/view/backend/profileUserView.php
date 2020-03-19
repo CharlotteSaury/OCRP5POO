@@ -31,11 +31,17 @@
                         <img class="img-thumbnail" src="public/images/profile.jpg" alt="User profil picture" />
                         <?php
                     }
+
+                    if ($user->getId() == $session->get('id')) {
+                        ?>
+                        <div class="form-group mt-2">
+                            <a data-toggle="modal" data-target="#updateProfilePictureModal<?= htmlspecialchars($user->getId(), ENT_QUOTES); ?>" class="d-inline-block btn btn-sm btn-primary-custom shadow-sm ml-1 text-white updateBtn"><i class="fas fa-upload mr-1"></i> Modifier la photo de profil</a>
+                        </div>
+                        <?php
+                    }
                     ?>
                     
-                    <div class="form-group mt-2">
-                        <a data-toggle="modal" data-target="#updateProfilePictureModal<?= htmlspecialchars($user->getId(), ENT_QUOTES); ?>" class="d-inline-block btn btn-sm btn-primary-custom shadow-sm ml-1 text-white updateBtn"><i class="fas fa-upload mr-1"></i> Modifier la photo de profil</a>
-                    </div>
+                    
                 </div>
 
                 <!-- updateProfilePicture Modal-->
@@ -49,7 +55,7 @@
                                     </button>
                                 </div>
                                 
-                                <form enctype="multipart/form-data" action="index.php?action=updateProfilePicture&amp;id=<?= htmlspecialchars($user->getId(), ENT_QUOTES); ?>" method="POST">
+                                <form enctype="multipart/form-data" action="index.php?action=updateProfilePicture&amp;id=<?= htmlspecialchars($user->getId(), ENT_QUOTES); ?>&amp;ct=<?= $session->get('csrf_token'); ?>" method="POST">
                                     <div class="modal-body">
                                         <input name="picture" type="file" />
                                     </div>
@@ -86,9 +92,16 @@
 
                     <p class="card-text"><i class="fas fa-newspaper"> <?= $user->getPostsNb(); ?></i> - <i class="fas fa-comments"> <?= $user->getCommentsNb(); ?></i></p>
                     <hr>
-                    <a href="index.php?action=editUser&amp;id=<?= htmlspecialchars($user->getId()); ?>" class="btn btn-outline-dark btn-sm" title="Modifier">
-                        <i class="fas fa-pencil-alt"></i>
-                    </a>
+
+                    <?php
+                    if ($user->getId() == $session->get('id') || $session->get('role') == 3) {
+                        ?>
+                        <a href="index.php?action=editUser&amp;id=<?= htmlspecialchars($user->getId()); ?>" class="btn btn-outline-dark btn-sm" title="Modifier">
+                            <i class="fas fa-pencil-alt"></i>
+                        </a>
+                        <?php
+                    }
+                    ?>
 
                 </div>
 

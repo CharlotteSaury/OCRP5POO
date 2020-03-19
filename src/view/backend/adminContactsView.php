@@ -99,7 +99,7 @@
                         <?php
                         if ($contact->getStatusId() != 3) {
                             ?>
-                            <a href="index.php?action=contactView&amp;id=<?= htmlspecialchars($contact->getId(), ENT_QUOTES); ?>" class="btn btn-outline-dark btn-sm" title="Répondre">
+                            <a href="index.php?action=contactView&amp;id=<?= htmlspecialchars($contact->getId(), ENT_QUOTES); ?>&amp;ct=<?= $session->get('csrf_token'); ?>" class="btn btn-outline-dark btn-sm" title="Répondre">
                                 <i class="fas fa-arrow-circle-right"></i>
                             </a>
 
@@ -127,7 +127,7 @@
                             <div class="modal-body">Cliquez sur "Valider" pour supprimer définitivement ce message</div>
                             <div class="modal-footer">
                                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                                <a class="btn btn-primary-custom" href="index.php?action=deleteContact&amp;id=<?= htmlspecialchars($contact->getId(), ENT_QUOTES); ?>">Valider</a>
+                                <a class="btn btn-primary-custom" href="index.php?action=deleteContact&amp;id=<?= htmlspecialchars($contact->getId(), ENT_QUOTES); ?>&amp;ct=<?= $session->get('csrf_token'); ?>">Valider</a>
                             </div>
                         </div>
                     </div>
