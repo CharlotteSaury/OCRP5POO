@@ -74,7 +74,6 @@ class Router
 	 */
 	public function routerRequest()
 	{
-		$this->request->getSession()->remove('message');
 		$this->adminController->getUnreadContactsNb();
 		$action = $this->request->getGet()->get('action');
 		
@@ -131,15 +130,7 @@ class Router
 
 				} elseif ($action === 'deconnexion')	{
 
-					$session = $this->request->getSession();
-
-					if ($session->get('id')) {
-
-						$session->removeAll();
-						$session->stop();
-						setcookie('auth', '', time()-3600, null, null, false, true);
-					}
-					$this->homeController->indexView();
+					$this->userController->deconnexion($this->request->getSession());
 
 				} elseif ($action === 'forgotPassView') {
 
@@ -161,6 +152,7 @@ class Router
 					$email = $this->request->getSession()->get('email');
 					$this->userController->newPass($post, $email);
 				
+
 				/*****************************************************/ 
 				/*********** Actions related to backend **************/
 				/*****************************************************/
@@ -229,7 +221,7 @@ class Router
 				
 				} elseif ($action === 'deleteContent' && $this->userController->adminAccess() && $this->userController->checkCsrfToken()) {
 
-					$this->adminController->deleteContent($this->request->getGet() && $this->userController->checkCsrfToken());
+					$this->adminController->deleteContent($this->request->getGet());
 				
 				} elseif ($action === 'deleteCategory' && $this->userController->adminAccess() && $this->userController->checkCsrfToken()) {
 
@@ -325,9 +317,13 @@ class Router
 
 					$this->adminController->adminContactView($this->request->getGet()->get('id'));				
 				
-				} elseif (($action === 'deleteContact') && $this->userController->adminAccess(3) && $this->userController->checkCsrfToken()) {
+				} elseif (
+					($action === 'deleteContact') 
+					&& $this->userController->adminAccess(3) 
+					&& $this->userController->checkCsrfToken()
+				) {
 
-					$this->adminController->deleteContact($this->request->getGet()->get('id') && $this->userController->checkCsrfToken());				
+					$this->adminController->deleteContact($this->request->getGet()->get('id'));				
 				
 				} elseif (($action === 'answer') && $this->userController->adminAccess(3) && $this->userController->checkCsrfToken()) {
 

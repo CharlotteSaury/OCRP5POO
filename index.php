@@ -5,6 +5,7 @@ require_once 'vendor/autoload.php';
 
 use Src\Controller\Router;
 
+session_name('blog');
 session_start();
 $router = new Router();
 

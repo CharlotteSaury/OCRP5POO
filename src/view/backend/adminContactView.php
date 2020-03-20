@@ -60,13 +60,13 @@
             <form method="POST" action="index.php?action=answer&amp;ct=<?= $session->get('csrf_token'); ?>" class="answer-form form-inline d-flex flex-column align-items-start">
                 <input type="text" name="answerSubject" class="answer-form form-control mr-0 mr-sm-2 mb-2" placeholder="Objet" value="Re: <?= htmlspecialchars($contact->getSubject(), ENT_QUOTES); ?>" required/>
 
-                <?= isset($errors['answerSubject']) ? '<p class="form-error">' . $errors['answerSubject'] . '</p>' : ''; ?>
+                <?= isset($session->get('errors')['answerSubject']) ? '<p class="form-error">' . $session->get('errors')['answerSubject'] . '</p>' : ''; ?>
 
                 <input type="hidden" name="contactId" class="answer-form form-control flex-fill mr-0 mr-sm-2 mb-2" value="<?= htmlspecialchars($contact->getId(), ENT_QUOTES); ?>"/>
                 <input type="hidden" name="email" class="answer-form form-control flex-fill mr-0 mr-sm-2 mb-2" value="<?= htmlspecialchars($contact->getEmail(), ENT_QUOTES); ?>"/>
                 <textarea name="answerContent" class="answer-form form-control flex-fill mr-0 mr-sm-2 mb-2" rows="8" required></textarea>
 
-                <?= isset($errors['answerContent']) ? '<p class="form-error">' . $errors['answerContent'] . '</p>' : ''; ?>
+                <?= isset($session->get('errors')['answerContent']) ? '<p class="form-error">' . $session->get('errors')['answerContent'] . '</p>' : ''; ?>
 
                 <button type="submit" class="btn btn-primary-custom">Répondre</button>
             </form>

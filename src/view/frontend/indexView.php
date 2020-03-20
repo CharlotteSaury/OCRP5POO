@@ -113,14 +113,14 @@
                     echo '<div class="adminMessage text-white-50 text-center">' . $session->get('message') . '</div>';
                 }
 
-                if (isset($errors)) {
+                if ($session->get('errors')) {
                 ?>
 
                     <div class="adminMessage text-white-50 text-center">
 
                     <?php
 
-                    foreach ($errors as $key => $value) {
+                    foreach ($session->get('errors') as $key => $value) {
                         echo '<p>' . $value . '</p>';
                     }
                     ?>

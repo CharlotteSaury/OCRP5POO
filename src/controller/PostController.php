@@ -53,7 +53,7 @@ class PostController extends Controller
 
 	/**
 	 * Generate posts list page
-	 * @param  Parameter|null $get [optional sorting informations]
+	 * @param  Parameter $get [optional sorting informations]
 	 * @return void
 	 */
 	public function listPostView(Parameter $get = null)
@@ -89,11 +89,10 @@ class PostController extends Controller
 
 	/**
 	 * Generate single post page
-	 * @param  int $postId 
-	 * @param  array $errors [optional error messages after comment sending]
+	 * @param  int $postId
 	 * @return void
 	 */
-	public function postView($postId, $errors = null)
+	public function postView($postId)
 	{
 		$errorExists = $this->validation->exists('postId', $postId);
 
@@ -111,8 +110,7 @@ class PostController extends Controller
 				'contents' => $contents,
 				'postComments' => $postComments,
 				'recentPosts' => $recentPosts,
-				'session' => $this->request->getSession(),
-				'errors' => $errors]);
+				'session' => $this->request->getSession()]);
 		
 		} else {
 			throw new Exception('Identifiant de billet non valide.');
@@ -134,7 +132,7 @@ class PostController extends Controller
 
 			$this->commentManager->addComment($post, $userId);
 			$this->request->getSession()->set('message', 'Votre commentaire a bien été envoyé, et est en attente de validation.');
-			$this->postView($post->get('postId'));
+			header('Location: index.php?action=postView&id=' . $post->get('postId'));
 		
 		} else {
 			
@@ -142,7 +140,8 @@ class PostController extends Controller
 				throw new Exception($errors['postId']);
 			
 			} else {
-				$this->postView($post->get('postId'), $errors);
+				$this->request->getSession()->set('errors', $errors);
+				header('Location: index.php?action=postView&id=' . $post->get('postId'));
 			}
 		}
 	}
