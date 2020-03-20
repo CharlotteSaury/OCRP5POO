@@ -24,7 +24,7 @@
                         <label for="pseudo" hidden>Pseudo : </label>
                         <input type="text" class="form-control" name="pseudo" value="<?= htmlspecialchars($user->getPseudo(), ENT_QUOTES); ?>"/>
                         
-                        <?= isset($errors['pseudo']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $errors['pseudo'] . '</small>': '' ?>
+                        <?= isset($session->get('errors')['pseudo']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $session->get('errors')['pseudo'] . '</small>': '' ?>
 
                     </div>
                 </div>
@@ -42,13 +42,13 @@
                                 <label for="firstname">Prénom : </label>
                                 <input type="text" class="form-control" name="first_name" value="<?= htmlspecialchars($user->getFirstName(), ENT_QUOTES); ?>"/>
 
-                                <?= isset($errors['first_name']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $errors['first_name'] . '</small>': '' ?>
+                                <?= isset($session->get('errors')['first_name']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $session->get('errors')['first_name'] . '</small>': '' ?>
                             </div>
                             <div class="form-group">
                                 <label for="lastname">Nom : </label>
                                 <input type="text" class="form-control" name="last_name" value="<?= htmlspecialchars($user->getLastName(), ENT_QUOTES); ?>"/>
 
-                                <?= isset($errors['last_name']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $errors['last_name'] . '</small>': '' ?>
+                                <?= isset($session->get('errors')['last_name']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $session->get('errors')['last_name'] . '</small>': '' ?>
                             </div>
                         </div>
 
@@ -58,32 +58,32 @@
                                 <label for="birthdate">Né(e) le : </label>
                                     <input type="text" class="form-control" name="birth_date" value="<?= $user->getBirthDate(); ?>"/>
                                     <small id="birthDateHelpBlock" class="form-text text-muted">La date doit être au format JJ-MM-AAAA.</small>
-                                    <?= isset($errors['birth_date']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $errors['birth_date'] . '</small>': '' ?>
+                                    <?= isset($session->get('errors')['birth_date']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $session->get('errors')['birth_date'] . '</small>': '' ?>
                             </div>
                             <div class="form-group">
                                 <label for="home">Habite à : </label>
                                 <input type="text" class="form-control" name="home" value="<?= htmlspecialchars($user->getHome(), ENT_QUOTES); ?>"/>
-                                <?= isset($errors['home']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $errors['home'] . '</small>': '' ?>
+                                <?= isset($session->get('errors')['home']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $session->get('errors')['home'] . '</small>': '' ?>
                             </div>
                             <div class="form-group">
                                 <label for="user_about">A propos de moi : </label>
                                 <textarea type="text" class="form-control" name="user_about"><?= htmlspecialchars($user->getUserAbout(), ENT_QUOTES); ?></textarea>
-                                <?= isset($errors['user_about']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $errors['user_about'] . '</small>': '' ?>                               
+                                <?= isset($session->get('errors')['user_about']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $session->get('errors')['user_about'] . '</small>': '' ?>                               
                             </div>
                             <div class="form-group">
                                 <label for="email">Email : </label>
                                 <input type="text" class="form-control" name="email" value="<?= htmlspecialchars($user->getEmail(), ENT_QUOTES); ?>"/>
-                                <?= isset($errors['email']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $errors['email'] . '</small>': '' ?>
+                                <?= isset($session->get('errors')['email']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $session->get('errors')['email'] . '</small>': '' ?>
                             </div>
                             <div class="form-group">
                                 <label for="mobile">Tel : </label>
                                 <input type="text" class="form-control" name="mobile" value="<?= htmlspecialchars($user->getMobile(), ENT_QUOTES); ?>"/>
-                                <?= isset($errors['mobile']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $errors['mobile'] . '</small>': '' ?>
+                                <?= isset($session->get('errors')['mobile']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $session->get('errors')['mobile'] . '</small>': '' ?>
                             </div>
                             <div class="form-group">
                                 <label for="website">Site internet : </label>
                                 <input type="text" class="form-control" name="website" value="<?= htmlspecialchars($user->getWebsite(), ENT_QUOTES); ?>"/>
-                                <?= isset($errors['website']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $errors['website'] . '</small>': '' ?>
+                                <?= isset($session->get('errors')['website']) ? '<small id="pseudoHelpBlock" class="form-text text-muted">' . $session->get('errors')['website'] . '</small>': '' ?>
                             </div>
                             
                             <hr>

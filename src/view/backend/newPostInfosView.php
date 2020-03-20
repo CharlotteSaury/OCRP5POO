@@ -17,13 +17,13 @@
             <div class="form-group">
                 <label for="new-post-title" hidden>Titre</label>
                 <input type="text" class="form-control" name="title" placeholder="Titre de l'article *" required/>
-                <?= isset($errors['title']) ? '<p>' . $errors['title'] . '</p>' : ''; ?>
+                <?= isset($session->get('errors')['title']) ? '<p>' . $session->get('errors')['title'] . '</p>' : ''; ?>
 
             </div>
             <div class="form-group">
                 <label for="new-post-chapo" hidden>Chapô</label>
                 <textarea class="form-control" name="chapo" required>Chapo *</textarea>
-                <?= isset($errors['chapo']) ? '<p>' . $errors['chapo'] . '</p>' : ''; ?>
+                <?= isset($session->get('errors')['chapo']) ? '<p>' . $session->get('errors')['chapo'] . '</p>' : ''; ?>
                 
             </div>
              

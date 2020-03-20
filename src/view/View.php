@@ -3,6 +3,7 @@
 namespace Src\View;
 
 use Exception;
+use Src\Config\request;
 
 /**
  * Class View
@@ -25,6 +26,9 @@ class View
 		$this->renderFile($this->file, $data);
 		$view = $this->renderFile('src/view/' . $app . '/' . $app . '_template.php', $data);
 		echo $view;
+		$request = new Request();
+		$request->getSession()->remove('message');
+		$request->getSession()->remove('errors');
 	}
 
 	/**

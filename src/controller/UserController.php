@@ -81,17 +81,6 @@ class UserController extends Controller
 	}
 
 	/**
-	 * Call userManager to check if a pseudo exists in database and if this pseudo is associated with userId (if provided)
-	 * @param  string $pseudo [pseudo]
-	 * @param  int $userId [userId]
-	 * @return bool [return true if pseudo exists in database, false if not]
-	 */
-	/*public function checkPseudo($pseudo, $userId = null)
-	{
-		return $pseudoExists = ($this->userManager->pseudoExists($pseudo, $userId) == 1) ? true : false;
-	}*/
-
-	/**
 	 * Call userManager to check if an email exists in database and if this email is associated with userId (if provided)
 	 * @param  string $email [email]
 	 * @param  int $userId [userId]
@@ -212,8 +201,8 @@ class UserController extends Controller
 
 					if ($post->get('rememberme')) {
 
-						setcookie('email', $post->get('email'), time() + 365*24*3600, null, null, false, true);
-						setcookie('auth', password_hash($post->get('email'), PASSWORD_DEFAULT) . '-----' . password_hash($_SERVER['REMOTE_ADDR'], PASSWORD_DEFAULT), time() + 365*24*3600, null, null, false, true);
+						setcookie('email', $post->get('email'), time() + 7*24*3600, null, null, false, true);
+						setcookie('auth', password_hash($post->get('email'), PASSWORD_DEFAULT) . '-----' . password_hash($_SERVER['REMOTE_ADDR'], PASSWORD_DEFAULT), time() + 7*24*3600, null, null, false, true);
 					}
 
 					$this->newUserSession($post->get('email'));
@@ -221,13 +210,13 @@ class UserController extends Controller
 				
 				} else {
 					$this->request->getSession()->set('message', "L'identifiant et/ou le mot de passe sont erronés.");
-					$this->connexionView();
+					header('Location: index.php?action=connexionView');
 				}
 			}
 
 		} else {
 			$this->request->getSession()->set('message', "L'identifiant et/ou le mot de passe sont erronés.");
-			$this->connexionView();
+			header('Location: index.php?action=connexionView');
 		}
 
 	}
@@ -241,6 +230,7 @@ class UserController extends Controller
 	public function newUserSession($email)
 	{
 		$user = $this->userManager->getUser(null, $email);
+		session_regenerate_id();
 		$this->request->getSession()->set('id', $user->getId());
 		$this->request->getSession()->set('pseudo', $user->getPseudo());
         $this->request->getSession()->set('role', $user->getUserRoleId());
@@ -255,7 +245,21 @@ class UserController extends Controller
        	}
 	}
 
-	
+	/**
+	 * Deconnect user by deletion of all session variables and session_destroy. Also delete autoconnexion cookie auth.
+	 * @param  Session $Session
+	 * @return void  
+	 */
+	public function deconnexion(Session $session)
+	{
+		if ($session->get('id')) {			
+			session_regenerate_id();
+			$session->removeAll();
+			$session->stop();
+			setcookie('auth', '', time()-3600, null, null, false, true);	
+		}
+		header('Location: index.php');
+	}
 
 	/**
 	 * If user clicked on "Mot de passe oublié" link, return forgot password page
@@ -280,7 +284,7 @@ class UserController extends Controller
 		$this->userManager->newPassCode($email, $reinit_code);
 		$this->forgotPassMail($email, $reinit_code);
 		$this->request->getSession()->set('message', "Un email contenant un lien de réinitialisation de mot de passe a été envoyé à votre adresse email.");
-		$this->forgotPassView();
+		header('Location: index.php?action=forgotPassView');
 	}
 
 	/**
@@ -302,7 +306,6 @@ class UserController extends Controller
 
 		$content = wordwrap($content, 70, "\r\n");
 		mail($email, $subject, $content, $headers);
-
 	}
 
 	/**
@@ -368,7 +371,7 @@ class UserController extends Controller
 				$newPass = password_hash($post->get('pass1'), PASSWORD_DEFAULT);
 				$this->userManager->newUserPass($email, $newPass);
 				$this->request->getSession()->set('message', 'Votre mot de passe a été réinitialisé. Vous pouvez maintenant vous connecter ! ');
-				$this->connexionView();
+				header('Location: index.php?action=connexionView');
 
 			} else {
 

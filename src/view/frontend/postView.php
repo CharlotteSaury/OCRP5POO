@@ -89,8 +89,8 @@
                     echo '<div class="adminMessage text-dark-50 text-center">' . $session->get('message') . '</div>';
                 }
 
-                if (isset($errors['content'])) {
-                    echo '<div class="adminMessage text-dark-50 text-center">' . $errors['content'] . '</div>';                    
+                if ($session->get('errors')['content']) {
+                    echo '<div class="adminMessage text-dark-50 text-center">' . $session->get('errors')['content'] . '</div>';                    
                 }
 
                 if ($session->get('id')) {

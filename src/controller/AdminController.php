@@ -117,14 +117,12 @@ class AdminController extends Controller
 
 	/**
 	 * Generate admin new post page
-	 * @param  array $errors  [optional error messages of form input validity]
 	 * @return void 
 	 */
-	public function adminNewPostView($errors = null)
+	public function adminNewPostView()
 	{
 		return $this->view->render('backend', 'newPostInfosView',
-			['session' => $this->request->getSession(),
-			'errors' => $errors]);
+			['session' => $this->request->getSession()]);
 	}
 
 	/**
@@ -144,11 +142,11 @@ class AdminController extends Controller
 				$homeController = new HomeController();
 				$mainImage = $homeController->pictureUpload($file, 'picture');
 				$postId = $this->postManager->newPostInfos($post, $mainImage);
-				$this->editPostView($postId);
+				header('Location: index.php?action=editPostView&id=' . $postId);
 
 			} elseif ($errors['name'] === 'Aucun fichier téléchargé.') {
 				$postId = $this->postManager->newPostInfos($post, $mainImage = null);
-				$this->editPostView($postId);
+				header('Location: index.php?action=editPostView&id=' . $postId);
 
 			} else {
 				$message = '';
@@ -156,12 +154,12 @@ class AdminController extends Controller
 					$message .= '<p>' . $error . '</p>';
 				}
 				$this->request->getSession()->set('message', $message);
-				$this->adminNewPostView($errors);
+				header('Location: index.php?action=adminNewPost');
 			}
 
 		} else {
-
-			$this->adminNewPostView($errors);
+			$this->request->getSession()->set('errors', $errors);
+			header('Location: index.php?action=adminNewPost');
 		}
 		
 	}
@@ -177,22 +175,17 @@ class AdminController extends Controller
 		$this->request->getSession()->set('message', 'Statut du post modifié ! ');
 
 		if ($get->get('action') === 'publishPostDashboard') {
-
-			$this->dashboardView();
-
-		} else {
-
-			$this->adminPostsView();
+			header('Location: index.php?action=admin');
 		}
+		header('Location: index.php?action=adminPosts');
 	}
 
 	/**
 	 * Check if required postId exists in database and enerate admin edit post page
-	 * @param  int $postId  
-	 * @param  array $errors  [optional error messages related to post edition form inputs (content, post infos)]
+	 * @param  int $postId
 	 * @return void         
 	 */
-	public function editPostView($postId, $errors = null)
+	public function editPostView($postId)
 	{
 
 		$errorExists = $this->validation->exists('postId', $postId);
@@ -209,10 +202,9 @@ class AdminController extends Controller
 				'users' => $users,
 				'post' => $post,
 				'contents' => $contents,
-				'session' => $this->request->getSession(),
-				'errors' => $errors]);
+				'session' => $this->request->getSession()]);
 		}
-		throw new Exception('Identifiant de billet non valide.');
+		throw new Exception('Identifiant d\'article non valide.');
 	}
 
 	/**
@@ -254,7 +246,7 @@ class AdminController extends Controller
 
 			$this->postManager->editPostInfos($post);
 			$this->postManager->dateUpdate($post->get('postId'));
-			$this->editPostView($post->get('postId'));
+			header('Location: index.php?action=editPostView&id=' . $post->get('postId'));
 		
 		} else {
 
@@ -263,7 +255,7 @@ class AdminController extends Controller
 				$message .= '<p>' . $value . '</p>';
 			}
 			$this->request->getSession()->set('message', $message);
-			$this->editPostView($post->get('postId'));
+			header('Location: index.php?action=editPostView&id=' . $post->get('postId'));
 		}
 		
 	}
@@ -282,7 +274,7 @@ class AdminController extends Controller
 		$this->postManager->deleteMainPostPicture($postId);
 		$this->postManager->dateUpdate($postId);
 		$this->request->getSession()->set('message', 'Photo supprimée ! ');
-		$this->editPostView($postId);
+		header('Location: index.php?action=editPostView&id=' . $postId);
 	}
 
 	/**
@@ -307,7 +299,7 @@ class AdminController extends Controller
 			}
 			$this->request->getSession()->set('message', $message);
 		}
-		$this->editPostView($post->get('postId'));
+		header('Location: index.php?action=editPostView&id=' . $post->get('postId'));
 	}
 
 	/**
@@ -349,7 +341,7 @@ class AdminController extends Controller
 		} else {
 			$this->request->getSession()->set('message', 'Aucun fichier téléchargé !');
 		}
-		$this->editPostView($post->get('postId'));
+		header('Location: index.php?action=editPostView&id=' . $post->get('postId'));
 	}
 
 	/**
@@ -369,7 +361,7 @@ class AdminController extends Controller
 		$this->contentManager->deleteContent($get->get('content'));
 		$this->postManager->dateUpdate($get->get('id'));
 		$this->request->getSession()->set('message', 'Contenu supprimé ! ');
-		$this->editPostView($get->get('id'));
+		header('Location: index.php?action=editPostView&id=' . $get->get('id'));
 	}
 
 	/**
@@ -382,7 +374,7 @@ class AdminController extends Controller
 		$this->contentManager->addContent($postId);
 		$this->postManager->dateUpdate($postId);
 		$this->request->getSession()->set('message', 'Bloc paragraphe ajouté ! ');
-		$this->editPostView($postId);
+		header('Location: index.php?action=editPostView&id=' . $postId);
 	}
 
 	/**
@@ -409,7 +401,7 @@ class AdminController extends Controller
 			}
 			$this->request->getSession()->set('message', $message);
 		}
-		$this->editPostView($post->get('postId'));
+		header('Location: index.php?action=editPostView&id=' . $post->get('postId'));
 	}
 
 
@@ -431,7 +423,7 @@ class AdminController extends Controller
 
 			$this->request->getSession()->set('message', $errors['categoryName']);
 		}
-		$this->editPostView($post->get('postId'));
+		header('Location: index.php?action=editPostView&id=' . $post->get('postId'));
 		
 	}
 
@@ -445,7 +437,7 @@ class AdminController extends Controller
 		$this->postManager->deleteCategory($get);
 		$this->postManager->dateUpdate($get->get('id'));
 		$this->request->getSession()->set('message', 'Catégorie supprimée ! ');
-		$this->editPostView($get->get('id'));
+		header('Location: index.php?action=editPostView&id=' . $get->get('id'));
 	}
 
 	/**
@@ -463,9 +455,9 @@ class AdminController extends Controller
 		$this->request->getSession()->set('message', "Post supprimé ! ");
 
 		if ($dashboard != null) {
-			$this->dashboardView();
+			header('Location: index.php?action=admin');
 		} else {
-			$this->adminPostsView();
+			header('Location: index.php?action=adminPosts');
 		}
 	}
 
@@ -513,13 +505,13 @@ class AdminController extends Controller
 		$this->request->getSession()->set('message', "Commentaire approuvé ! ");
 
 		if ($get->get('action') == 'approveCommentDashboard') {
-			$this->dashboardView();
+			header('Location: index.php?action=admin');
 		
 		} elseif ($get->get('action') == 'approveCommentView') {
-			$this->adminPostView($get->get('post'));
+			header('Location: index.php?action=adminPostView&id=' . $get->get('post'));
 
 		} else {
-			$this->adminCommentsView();		
+			header('Location: index.php?action=adminComments');		
 		}		
 	}
 
@@ -535,9 +527,9 @@ class AdminController extends Controller
 		$this->request->getSession()->set('message', "Commentaire supprimé ! ");
 
 		if ($dashboard != null) {
-			$this->dashboardView();
+			header('Location: index.php?action=admin');
 		} else {
-			$this->adminCommentsView();
+			header('Location: index.php?action=adminComments');
 		}
 	}
 
@@ -560,7 +552,7 @@ class AdminController extends Controller
 				$contentTitle = 'Super Admin';
 
 			} else {
-				throw new Exception("La page que vous recherchez n'existe pas. ");
+				throw new Exception("La page que vous recherchez n'existe pas.");
 			}
 
 		} else {
@@ -608,18 +600,16 @@ class AdminController extends Controller
 	/**
 	 * Generate user profile edition page
 	 * @param  int $userId  
-	 * @param  array $errors  [optional error messages from input validity checking]
 	 * @return void
 	 */
-	public function editUserView($userId, $errors = null)
+	public function editUserView($userId)
 	{
 		$user = $this->userManager->getUser($userId);
 
 		return $this->view->render('backend', 'editUserView',
 			['user' => $user,
 			'userId' => $userId,
-			'session' => $this->request->getSession(),
-			'errors' => $errors]);
+			'session' => $this->request->getSession()]);
 	}
 
 	/**
@@ -674,7 +664,7 @@ class AdminController extends Controller
 			$currentUserId = $this->request->getSession()->get('id');
 			$this->userManager->editUserInfos($post);
 			$this->request->getSession()->set('message', "Profil modifié ! ");
-			$this->profileUserView($post->get('id'));
+			header('Location: index.php?action=profileUser&id=' . $post->get('id'));
 
 			if ($currentUserId == $post->get('id')) {
 				$userController->newUserSession($post->get('email'));
@@ -682,7 +672,8 @@ class AdminController extends Controller
 		
 		} else {
 			$this->request->getSession()->set('message', 'Le profil n\'a pas pu être modifié.');
-			$this->editUserView($post->get('id'), $errors);
+			$this->request->getSession()->set('errors', $errors);
+			header('Location: index.php?action=editUser&id=' . $post->get('id'));
 		}
 	}
 
@@ -721,7 +712,7 @@ class AdminController extends Controller
 
 				$this->userManager->updateProfilePicture($userId, $uploadResults);
 				$this->request->getSession()->set('message', 'Photo de profil modifiée !');
-				$this->profileUserView($userId);
+				header('Location: index.php?action=profileUser&id=' . $userId);
 
 			// if user updated its own profile, update of avatar in session
 
@@ -740,7 +731,7 @@ class AdminController extends Controller
 			}
 			$this->userManager->updateProfilePicture($userId, 'public/images/profile.png');
 			$this->request->getSession()->set('message', 'Photo de profil supprimée !');
-			$this->profileUserView($userId);
+			header('Location: index.php?action=profileUser&id=' . $userId);
 
 		} else {
 			$message = '';
@@ -748,7 +739,7 @@ class AdminController extends Controller
 				$message .= '<p>' . $error . '</p>';
 			}
 			$this->request->getSession()->set('message', $message);
-			$this->profileUserView($userId);
+			header('Location: index.php?action=profileUser&id=' . $userId);
 		}
 	}
 
@@ -783,11 +774,10 @@ class AdminController extends Controller
 
 	/**
 	 * Generate admin single contact page and associated optional answer
-	 * @param  int $contactId 
-	 * @param  array $errors    [optional error messages generated by answer input validity check]
+	 * @param  int $contactId
 	 * @return void            
 	 */
-	public function adminContactView($contactId, $errors = null)
+	public function adminContactView($contactId)
 	{
 		$this->request->getSession()->set('unreadContactsNb', $this->contactManager->getContactsNb(1));
 		$errorExists = $this->validation->exists('contactId', $contactId);
@@ -810,8 +800,7 @@ class AdminController extends Controller
 				'contact' => $contact,
 				'currentStatus' => $currentStatus,
 				'answer' => $answer,
-				'session' => $this->request->getSession(),
-				'errors' => $errors]);
+				'session' => $this->request->getSession()]);
 		
 		} else {
 			throw new Exception('L\'identifiant du contact n\'est pas valide.');
@@ -821,14 +810,13 @@ class AdminController extends Controller
 	/**
 	 * Call contactManager to delete contact from database
 	 * @param  int $contactId
-	 * @param  int $dashboard [optional dashboard parameter to redirect to the initial page =1 if dashboard view]
 	 * @return void            
 	 */
-	public function deleteContact($contactId, $dashboard = null)
+	public function deleteContact($contactId)
 	{
 		$this->contactManager->deleteContact($contactId);
 		$this->request->getSession()->set('message', "Message supprimé ! ");
-		$this->adminContactsView();
+		header('Location: index.php?action=adminContacts');
 		
 	}
 
@@ -871,7 +859,7 @@ class AdminController extends Controller
 			$this->contactManager->addAnswer($post);
 			$this->adminAnswerEmail($post);
 			$this->request->getSession()->set('message', "La réponse a bien été envoyée.");
-			$this->adminContactView($post->get('contactId'));  
+			header('Location: index.php?action=contactView&id=' . $post->get('contactId'));
 		
 		} else {
 
@@ -881,8 +869,8 @@ class AdminController extends Controller
 			} elseif (isset($errors['email'])) {
 				throw new Exception($errors['email']);
 			}
-
-			$this->adminContactView($post->get('contactId'), $errors);
+			$this->request->getSession()->set('errors', $errors);
+			header('Location: index.php?action=contactView&id=' . $post->get('contactId'));
 		}
 	}
 

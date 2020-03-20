@@ -15,14 +15,12 @@ class HomeController extends Controller
 {
 	/**
 	 * Home page
-	 * @param  array $errors  [optionnal error message]
 	 * @return void          [return home page view]
 	 */
-	public function indexView($errors = null) 
+	public function indexView() 
 	{
 		return $this->view->render('frontend', 'indexView', 
-			['session' => $this->request->getSession(),
-			'errors' => $errors]); 
+			['session' => $this->request->getSession()]); 
 	}
 	
 	/**
@@ -48,7 +46,7 @@ class HomeController extends Controller
 	/**
 	 * Check validity of contact form input, call contactManager to add new contact in database and call mailContactForm method to send a confirmation email to user and notification to administrator.
 	 * @param  Parameter $post [user name, email, subject and message]
-	 * @return void [Redirect to indexView with confirmation or error message]
+	 * @return void [Redirect to indexView with confirmation]
 	 */
 	public function newContactForm(Parameter $post)
 	{
@@ -62,7 +60,8 @@ class HomeController extends Controller
 			$this->indexView();
 		
 		} else {
-			$this->indexView($errors);
+			$this->request->getSession()->set('errors', $errors);
+			header('Location: index.php#contact-form');
 		}
 		
 	}
