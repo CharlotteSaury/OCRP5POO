@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  sam. 21 mars 2020 à 14:37
+-- Généré le :  sam. 21 mars 2020 à 15:01
 -- Version du serveur :  5.7.24
 -- Version de PHP :  7.2.14
 
@@ -139,6 +139,14 @@ CREATE TABLE `content_type` (
   `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `content_type`
+--
+
+INSERT INTO `content_type` (`id`, `name`) VALUES
+(2, 'paragraph'),
+(1, 'image');
 
 -- --------------------------------------------------------
 
@@ -345,7 +353,7 @@ ALTER TABLE `content`
 -- AUTO_INCREMENT pour la table `content_type`
 --
 ALTER TABLE `content_type`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pour la table `post`
