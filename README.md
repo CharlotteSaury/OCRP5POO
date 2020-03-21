@@ -1,6 +1,5 @@
 <h1>Projet 5 OpenClassrooms parcours "Développeur d'applications PHP/Symfony"</h1>
 
-<p>Le site est disponible en ligne à l'adresse suivante : http://blogphp.charlottesaury.fr/.</p>
 <hr>
 <a href="https://www.codacy.com/manual/CharlotteSaury/OCRP5POO?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=CharlotteSaury/OCRP5POO&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/908dff149a924213986556bde63c713d"/></a>
 
