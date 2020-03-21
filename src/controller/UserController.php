@@ -192,6 +192,7 @@ class UserController extends Controller
 			if ($user->getActCode() != null) {
 
 				$this->request->getSession()->set('message', 'Votre compte n\'est pas activé. Veuillez cliquer sur le lien d\'activation qui vous a été envoyé sur votre adresse email lors de votre inscription.');
+				header('Location: index.php?action=connexionView');
 			
 			} else {
 

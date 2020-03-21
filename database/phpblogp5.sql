@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  jeu. 12 mars 2020 à 17:26
+-- Généré le :  sam. 21 mars 2020 à 14:37
 -- Version du serveur :  5.7.24
 -- Version de PHP :  7.2.14
 
@@ -29,13 +29,12 @@ SET time_zone = "+00:00";
 --
 
 DROP TABLE IF EXISTS `answer`;
-CREATE TABLE IF NOT EXISTS `answer` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `answer` (
+  `id` int(11) NOT NULL,
   `subject` varchar(255) NOT NULL,
   `content` text NOT NULL,
-  `date_answer` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
+  `date_answer` datetime NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -44,11 +43,10 @@ CREATE TABLE IF NOT EXISTS `answer` (
 --
 
 DROP TABLE IF EXISTS `category`;
-CREATE TABLE IF NOT EXISTS `category` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+CREATE TABLE `category` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -57,17 +55,14 @@ CREATE TABLE IF NOT EXISTS `category` (
 --
 
 DROP TABLE IF EXISTS `comment`;
-CREATE TABLE IF NOT EXISTS `comment` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `comment` (
+  `id` int(11) NOT NULL,
   `post_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `content` text NOT NULL,
   `comment_date` datetime NOT NULL,
-  `status` tinyint(1) DEFAULT '0',
-  PRIMARY KEY (`id`),
-  KEY `blog_post_blog_comment_fk` (`post_id`),
-  KEY `user_blog_comment_fk` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=107 DEFAULT CHARSET=utf8;
+  `status` tinyint(1) DEFAULT '0'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -76,10 +71,9 @@ CREATE TABLE IF NOT EXISTS `comment` (
 --
 
 DROP TABLE IF EXISTS `contact_answer`;
-CREATE TABLE IF NOT EXISTS `contact_answer` (
+CREATE TABLE `contact_answer` (
   `contact_id` int(11) NOT NULL,
-  `answer_id` int(11) NOT NULL,
-  UNIQUE KEY `contact_id` (`contact_id`,`answer_id`)
+  `answer_id` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -89,17 +83,15 @@ CREATE TABLE IF NOT EXISTS `contact_answer` (
 --
 
 DROP TABLE IF EXISTS `contact_form`;
-CREATE TABLE IF NOT EXISTS `contact_form` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `contact_form` (
+  `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `subject` varchar(255) NOT NULL,
   `content` text NOT NULL,
   `date_message` datetime NOT NULL,
-  `contact_status_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `contact_status_id` (`contact_status_id`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=44 DEFAULT CHARSET=utf8;
+  `contact_status_id` int(11) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -108,11 +100,10 @@ CREATE TABLE IF NOT EXISTS `contact_form` (
 --
 
 DROP TABLE IF EXISTS `contact_status`;
-CREATE TABLE IF NOT EXISTS `contact_status` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(25) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+CREATE TABLE `contact_status` (
+  `id` int(11) NOT NULL,
+  `name` varchar(25) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `contact_status`
@@ -130,14 +121,12 @@ INSERT INTO `contact_status` (`id`, `name`) VALUES
 --
 
 DROP TABLE IF EXISTS `content`;
-CREATE TABLE IF NOT EXISTS `content` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `content` (
+  `id` int(11) NOT NULL,
   `post_id` int(11) NOT NULL,
   `content_type_id` int(11) NOT NULL,
-  `content` text NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `content_type_content_fk` (`content_type_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=176 DEFAULT CHARSET=utf8;
+  `content` text NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -146,19 +135,10 @@ CREATE TABLE IF NOT EXISTS `content` (
 --
 
 DROP TABLE IF EXISTS `content_type`;
-CREATE TABLE IF NOT EXISTS `content_type` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
-
---
--- Déchargement des données de la table `content_type`
---
-
-INSERT INTO `content_type` (`id`, `name`) VALUES
-(2, 'paragraph'),
-(1, 'image');
+CREATE TABLE `content_type` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -167,17 +147,16 @@ INSERT INTO `content_type` (`id`, `name`) VALUES
 --
 
 DROP TABLE IF EXISTS `post`;
-CREATE TABLE IF NOT EXISTS `post` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `post` (
+  `id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
   `chapo` text NOT NULL,
   `status` tinyint(1) NOT NULL,
   `date_creation` datetime NOT NULL,
   `date_update` datetime NOT NULL,
   `user_id` int(11) NOT NULL,
-  `main_image` text,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=59 DEFAULT CHARSET=utf8;
+  `main_image` text
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -186,11 +165,9 @@ CREATE TABLE IF NOT EXISTS `post` (
 --
 
 DROP TABLE IF EXISTS `post_category`;
-CREATE TABLE IF NOT EXISTS `post_category` (
+CREATE TABLE `post_category` (
   `post_id` int(11) NOT NULL,
-  `category_id` int(11) NOT NULL,
-  PRIMARY KEY (`post_id`,`category_id`),
-  KEY `keyword_post_keyword_fk` (`category_id`)
+  `category_id` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -200,8 +177,8 @@ CREATE TABLE IF NOT EXISTS `post_category` (
 --
 
 DROP TABLE IF EXISTS `user`;
-CREATE TABLE IF NOT EXISTS `user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL,
   `pseudo` varchar(25) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password` varchar(255) NOT NULL,
@@ -216,12 +193,8 @@ CREATE TABLE IF NOT EXISTS `user` (
   `avatar` varchar(255) DEFAULT NULL,
   `user_about` text,
   `activation_code` varchar(255) DEFAULT NULL,
-  `reinitialization_code` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `pseudo` (`pseudo`),
-  UNIQUE KEY `email` (`email`),
-  KEY `user_role_user_fk` (`user_role_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=44 DEFAULT CHARSET=utf8;
+  `reinitialization_code` varchar(255) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -230,11 +203,10 @@ CREATE TABLE IF NOT EXISTS `user` (
 --
 
 DROP TABLE IF EXISTS `user_role`;
-CREATE TABLE IF NOT EXISTS `user_role` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `role` varchar(25) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+CREATE TABLE `user_role` (
+  `id` int(11) NOT NULL,
+  `role` varchar(25) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `user_role`
@@ -244,6 +216,154 @@ INSERT INTO `user_role` (`id`, `role`) VALUES
 (1, 'admin'),
 (2, 'user'),
 (3, 'super_admin');
+
+--
+-- Index pour les tables déchargées
+--
+
+--
+-- Index pour la table `answer`
+--
+ALTER TABLE `answer`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `category`
+--
+ALTER TABLE `category`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `comment`
+--
+ALTER TABLE `comment`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `blog_post_blog_comment_fk` (`post_id`),
+  ADD KEY `user_blog_comment_fk` (`user_id`);
+
+--
+-- Index pour la table `contact_answer`
+--
+ALTER TABLE `contact_answer`
+  ADD UNIQUE KEY `contact_id` (`contact_id`,`answer_id`);
+
+--
+-- Index pour la table `contact_form`
+--
+ALTER TABLE `contact_form`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `contact_status_id` (`contact_status_id`) USING BTREE;
+
+--
+-- Index pour la table `contact_status`
+--
+ALTER TABLE `contact_status`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `content`
+--
+ALTER TABLE `content`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `content_type_content_fk` (`content_type_id`);
+
+--
+-- Index pour la table `content_type`
+--
+ALTER TABLE `content_type`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `post`
+--
+ALTER TABLE `post`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `post_category`
+--
+ALTER TABLE `post_category`
+  ADD PRIMARY KEY (`post_id`,`category_id`),
+  ADD KEY `keyword_post_keyword_fk` (`category_id`);
+
+--
+-- Index pour la table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `pseudo` (`pseudo`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD KEY `user_role_user_fk` (`user_role_id`);
+
+--
+-- Index pour la table `user_role`
+--
+ALTER TABLE `user_role`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT pour les tables déchargées
+--
+
+--
+-- AUTO_INCREMENT pour la table `answer`
+--
+ALTER TABLE `answer`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `category`
+--
+ALTER TABLE `category`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `comment`
+--
+ALTER TABLE `comment`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `contact_form`
+--
+ALTER TABLE `contact_form`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `contact_status`
+--
+ALTER TABLE `contact_status`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT pour la table `content`
+--
+ALTER TABLE `content`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `content_type`
+--
+ALTER TABLE `content_type`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `post`
+--
+ALTER TABLE `post`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `user`
+--
+ALTER TABLE `user`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `user_role`
+--
+ALTER TABLE `user_role`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
