@@ -8,6 +8,5 @@
   </transformer>
   <files>
     <directory>src</directory>
-    <directory>config</directory>
   </files>
 </phpdoc>
