@@ -26,7 +26,7 @@
     <div class="post-section row container-fluid text-justify">
         <div class="blog-post col-lg-9 col-sm-12 mx-auto">
 
-            <p>Merci de lire avec attention les différentes modalités d’utilisation du présent site avant d’y parcourir ses pages. En vous connectant sur ce site, vous acceptez sans réserves les présentes modalités. Aussi, conformément à l’article n°6 de la Loi n°2004-575 du 21 Juin 2004 pour la confiance dans l’économie numérique, les responsables du présent site internet <a href="http://wwww.charlottesaury.fr">wwww.charlottesaury.fr</a> sont :</p>
+            <p>Merci de lire avec attention les différentes modalités d’utilisation du présent site avant d’y parcourir ses pages. En vous connectant sur ce site, vous acceptez sans réserves les présentes modalités. Aussi, conformément à l’article n°6 de la Loi n°2004-575 du 21 Juin 2004 pour la confiance dans l’économie numérique, les responsables du présent site internet <a href="http://blogphp.charlottesaury.fr">blogphp.charlottesaury.fr</a> sont :</p>
 
             <h4>Editeur du Site :</h4>
             Nom : Saury

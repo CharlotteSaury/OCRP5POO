@@ -133,12 +133,8 @@ class UserController extends Controller
 	{
 		$subject = "Bienvenue sur mon blog";
 		$headers = "From: " . BLOG_AUTHOR . "\r\n";
-		$message = "Bonjour " . $post->get('pseudo') . ", bienvenue sur mon blog !\r\n
-					Pour activer votre compte, veuillez cliquer sur le lien ci-dessous
-					ou copier/coller dans votre navigateur Internet.\r\n
-					http://blogphp.charlottesaury.fr/index.php?action=activation&email=" . $post->get('email') . "&key=" . $activation_code . "\r\n\r\n
-					----------------------\r\n
-					Ceci est un mail automatique, Merci de ne pas y répondre.";
+		$headers .= "Content-type: text; charset=UTF-8\r\n";
+		$message = "Bonjour " . $post->get('pseudo') . ", bienvenue sur mon blog !\r\n\r\nPour activer votre compte, veuillez cliquer sur le lien ci-dessous ou copier/coller dans votre navigateur Internet.\r\n\r\nhttp://blogphp.charlottesaury.fr/index.php?action=activation&email=" . $post->get('email') . "&key=" . $activation_code . "\r\n\r\n----------------------\r\n\r\nCeci est un mail automatique, Merci de ne pas y répondre.";
 
 		$message = wordwrap($message, 70, "\r\n");
 		mail($post->get('email'), $subject, $message, $headers);
@@ -298,12 +294,8 @@ class UserController extends Controller
 	{
 		$subject = "Réinitialisation mot de passe";
 		$headers = "From: " . BLOG_AUTHOR . "\r\n";
-		$content = "Bonjour, \r\n
-					Pour réinitialiser le mot de passe du compte " . $email . ", veuillez cliquer sur le lien ci-dessous
-					ou copier/coller dans votre navigateur Internet.\r\n
-					http://www.blogphp.charlottesaury.fr/index.php?action=newPassView&email=" . $email . "&key=" . $reinit_code . "\r\n\r\n
-					----------------------\r\n
-					Ceci est un mail automatique, Merci de ne pas y répondre.";
+		$headers .= "Content-type: text; charset=UTF-8\r\n";
+		$content = "Bonjour, \r\n\r\nPour réinitialiser le mot de passe du compte " . $email . ", veuillez cliquer sur le lien ci-dessous ou copier/coller dans votre navigateur Internet.\r\n\r\nhttp://www.blogphp.charlottesaury.fr/index.php?action=newPassView&email=" . $email . "&key=" . $reinit_code . "\r\n\r\n----------------------\r\n\r\nCeci est un mail automatique, Merci de ne pas y répondre.";
 
 		$content = wordwrap($content, 70, "\r\n");
 		mail($email, $subject, $content, $headers);

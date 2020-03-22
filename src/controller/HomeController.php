@@ -77,28 +77,19 @@ class HomeController extends Controller
 		// Notification email sent to administrator
 
 		$mailSubject = "Blog : Nouveau message via le formulaire de contact.";
-		$mailMessage = "De : " . $post->get('name') . " <" . $post->get('email') . ">\r\n
-					Objet : " . $post->get('subject') . "\r\n
-					Message : " . $post->get('content') . "\r\n\r\n
-					Pour y répondre, cliquez sur le lien suivant : http://www.blogphp.charlottesaury.fr/index.php?action=contactView&id=" . $contactId . "\r\n\r\n
-					----------------------\r\n
-					Ceci est un mail automatique, Merci de ne pas y répondre.";
+		$headers = "Content-type: text; charset=UTF-8\r\n";
+		$mailMessage = "De : " . $post->get('name') . " <" . $post->get('email') . ">\r\nObjet : " . $post->get('subject') . "\r\nMessage : " . $post->get('content') . "\r\n\r\nPour y répondre, cliquez sur le lien suivant : http://www.blogphp.charlottesaury.fr/index.php?action=contactView&id=" . $contactId . "\r\n\r\n---------------------\r\n\r\nCeci est un mail automatique, Merci de ne pas y répondre.";
 
 		$mailMessage = wordwrap($mailMessage, 70, "\r\n");
-		mail(CF_EMAIL, $mailSubject, $mailMessage);
+		mail(CF_EMAIL, $mailSubject, $mailMessage, $headers);
 
 
-		// Confitmation email sent to sender
+		// Confirmation email sent to sender
 
 		$mailSubject = "Votre message sur le blog de Charlotte SAURY";
 		$headers = "From: " . BLOG_AUTHOR . "\r\n";
-		$mailMessage = "Bonjour " . $post->get('name') .  ",\r\n
-					Votre message ci-dessous a bien été envoyé à l'auteur du blog. Nous vous remercions pour ce contact et tâcherons d'y répondre dans les plus brefs délais.\r\n
-					----------------------\r\n
-					Objet : " . $post->get('subject') . "\r\n
-					Message : " . $post->get('content') . "\r\n\r\n
-					----------------------\r\n
-					Ceci est un mail automatique, Merci de ne pas y répondre.";
+		$headers .= "Content-type: text; charset=UTF-8\r\n";
+		$mailMessage = "Bonjour " . $post->get('name') .  ",\r\n\r\nVotre message ci-dessous a bien été envoyé à l'auteur du blog. Nous vous remercions pour ce contact et tâcherons d'y répondre dans les plus brefs délais.\r\n\r\n----------------------\r\n\r\nObjet : " . $post->get('subject') . "\r\n\r\nMessage : " . $post->get('content') . "\r\n\r\n----------------------\r\n\r\nCeci est un mail automatique, Merci de ne pas y répondre.";
 
 		$mailMessage = wordwrap($mailMessage, 70, "\r\n");
 		mail($post->get('email'), $mailSubject, $mailMessage, $headers);

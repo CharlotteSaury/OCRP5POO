@@ -830,14 +830,9 @@ class AdminController extends Controller
 		$contact = $this->contactManager->getContacts($post->get('contactId'));
 
 		$subject = $post->get('answerSubject');
-		$headers = "From: " . BLOG_AUTHOR . "/r/n";
-		$message = $post->get('answerContent') . 
-					" /r/n
-					----------------/r/n/r/n
-					De: " . $contact->getName() . " <" . $post->get('email') . ">/r/n
-					Le: " . $contact->getDateMessage() . "/r/n
-					Objet: " . $contact->getSubject() . "/r/n/r/n"
-					. $contact->getContent();
+		$headers = "From: " . BLOG_AUTHOR . "\r\n";
+		$headers .= "Content-type: text; charset=UTF-8\r\n";
+		$message = $post->get('answerContent') . "\r\n----------------\r\n\r\nDe: " . $contact->getName() . " <" . $post->get('email') . ">\r\n\r\nLe: " . $contact->getDateMessage() . "\r\n\r\nObjet: " . $contact->getSubject() . "\r\n\r\n". $contact->getContent();
 			
 
 		$message = wordwrap($message, 70, "\r\n");
