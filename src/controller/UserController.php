@@ -133,6 +133,7 @@ class UserController extends Controller
 	{
 		$subject = "Bienvenue sur mon blog";
 		$headers = "From: " . BLOG_AUTHOR . "\r\n";
+		$headers .= "Content-type: text/html; charset=UTF-8\r\n";
 		$message = "Bonjour " . $post->get('pseudo') . ", bienvenue sur mon blog !\r\n
 					Pour activer votre compte, veuillez cliquer sur le lien ci-dessous
 					ou copier/coller dans votre navigateur Internet.\r\n
@@ -298,6 +299,7 @@ class UserController extends Controller
 	{
 		$subject = "Réinitialisation mot de passe";
 		$headers = "From: " . BLOG_AUTHOR . "\r\n";
+		$headers .= "Content-type: text/html; charset=UTF-8\r\n";
 		$content = "Bonjour, \r\n
 					Pour réinitialiser le mot de passe du compte " . $email . ", veuillez cliquer sur le lien ci-dessous
 					ou copier/coller dans votre navigateur Internet.\r\n
@@ -305,7 +307,7 @@ class UserController extends Controller
 					----------------------\r\n
 					Ceci est un mail automatique, Merci de ne pas y répondre.";
 
-		$content = wordwrap($content, 70, "\r\n");
+		//$content = wordwrap($content, 70, "\r\n");
 		mail($email, $subject, $content, $headers);
 	}
 

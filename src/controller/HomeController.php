@@ -77,6 +77,8 @@ class HomeController extends Controller
 		// Notification email sent to administrator
 
 		$mailSubject = "Blog : Nouveau message via le formulaire de contact.";
+		$headers = "From: " . BLOG_AUTHOR . "\r\n";
+		$headers .= "Content-type: text/html; charset=UTF-8\r\n";
 		$mailMessage = "De : " . $post->get('name') . " <" . $post->get('email') . ">\r\n
 					Objet : " . $post->get('subject') . "\r\n
 					Message : " . $post->get('content') . "\r\n\r\n
@@ -85,13 +87,14 @@ class HomeController extends Controller
 					Ceci est un mail automatique, Merci de ne pas y répondre.";
 
 		$mailMessage = wordwrap($mailMessage, 70, "\r\n");
-		mail(CF_EMAIL, $mailSubject, $mailMessage);
+		mail(CF_EMAIL, $mailSubject, $mailMessage, $headers);
 
 
 		// Confitmation email sent to sender
 
 		$mailSubject = "Votre message sur le blog de Charlotte SAURY";
 		$headers = "From: " . BLOG_AUTHOR . "\r\n";
+		$headers .= "Content-type: text/html; charset=UTF-8\r\n";
 		$mailMessage = "Bonjour " . $post->get('name') .  ",\r\n
 					Votre message ci-dessous a bien été envoyé à l'auteur du blog. Nous vous remercions pour ce contact et tâcherons d'y répondre dans les plus brefs délais.\r\n
 					----------------------\r\n
